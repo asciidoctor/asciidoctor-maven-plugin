@@ -1,0 +1,849 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+
+  <title>Class: CodeRay::Tokens</title>
+
+  <link rel="stylesheet" href="../rdoc.css" type="text/css" media="screen" />
+
+  <script src="../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/thickbox-compressed.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/quicksearch.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/darkfish.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body id="top" class="class">
+
+  <div id="metadata">
+    <div id="home-metadata">
+      <div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+      </div>
+    </div>
+
+    <div id="file-metadata">
+      <div id="file-list-section" class="section">
+        <h3 class="section-header">In Files</h3>
+        <div class="section-body">
+          <ul>
+          
+            <li><a href="../lib/coderay/tokens_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+              class="thickbox" title="lib/coderay/tokens.rb">lib/coderay/tokens.rb</a></li>
+          
+          </ul>
+        </div>
+      </div>
+
+      
+    </div>
+
+    <div id="class-metadata">
+      
+      <!-- Parent Class -->
+      <div id="parent-class-section" class="section">
+        <h3 class="section-header">Parent</h3>
+        
+        <p class="link">Array</p>
+        
+      </div>
+      
+
+      
+
+      
+      <!-- Namespace Contents -->
+      <div id="namespace-list-section" class="section">
+        <h3 class="section-header">Namespace</h3>
+        <ul class="link-list">
+          
+          <li><span class="type">MODULE</span> <a href="Tokens/Undumping.html">CodeRay::Tokens::Undumping</a></li>
+          
+        </ul>
+      </div>
+      
+
+      
+      <!-- Method Quickref -->
+      <div id="method-list-section" class="section">
+        <h3 class="section-header">Methods</h3>
+        <ul class="link-list">
+          
+          <li><a href="#method-c-load">::load</a></li>
+          
+          <li><a href="#method-i-begin_group">#begin_group</a></li>
+          
+          <li><a href="#method-i-begin_line">#begin_line</a></li>
+          
+          <li><a href="#method-i-count">#count</a></li>
+          
+          <li><a href="#method-i-dump">#dump</a></li>
+          
+          <li><a href="#method-i-encode">#encode</a></li>
+          
+          <li><a href="#method-i-end_group">#end_group</a></li>
+          
+          <li><a href="#method-i-end_line">#end_line</a></li>
+          
+          <li><a href="#method-i-method_missing">#method_missing</a></li>
+          
+          <li><a href="#method-i-split_into_parts">#split_into_parts</a></li>
+          
+          <li><a href="#method-i-to_s">#to_s</a></li>
+          
+        </ul>
+      </div>
+      
+
+      
+    </div>
+
+    <div id="project-metadata">
+      
+      
+      <div id="fileindex-section" class="section project-section">
+        <h3 class="section-header">Files</h3>
+        <ul>
+        
+          <li class="file"><a href="../README_INDEX_rdoc.html">README_INDEX.rdoc</a></li>
+        
+        </ul>
+      </div>
+      
+
+      <div id="classindex-section" class="section project-section">
+        <h3 class="section-header">Class/Module Index
+          <span class="search-toggle"><img src="../images/find.png"
+            height="16" width="16" alt="[+]"
+            title="show/hide quicksearch" /></span></h3>
+        <form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+        <fieldset>
+          <legend>Quicksearch</legend>
+          <input type="text" name="quicksearch" value=""
+            class="quicksearch-field" />
+        </fieldset>
+        </form>
+
+        <ul class="link-list">
+        
+          <li><a href="../CodeRay.html">CodeRay</a></li>
+        
+          <li><a href="../CodeRay/Duo.html">CodeRay::Duo</a></li>
+        
+          <li><a href="../CodeRay/Encoders.html">CodeRay::Encoders</a></li>
+        
+          <li><a href="../CodeRay/Encoders/CommentFilter.html">CodeRay::Encoders::CommentFilter</a></li>
+        
+          <li><a href="../CodeRay/Encoders/Count.html">CodeRay::Encoders::Count</a></li>
+        
+          <li><a href="../CodeRay/Encoders/Debug.html">CodeRay::Encoders::Debug</a></li>
+        
+          <li><a href="../CodeRay/Encoders/Div.html">CodeRay::Encoders::Div</a></li>
+        
+          <li><a href="../CodeRay/Encoders/Encoder.html">CodeRay::Encoders::Encoder</a></li>
+        
+          <li><a href="../CodeRay/Encoders/Filter.html">CodeRay::Encoders::Filter</a></li>
+        
+          <li><a href="../CodeRay/Encoders/HTML.html">CodeRay::Encoders::HTML</a></li>
+        
+          <li><a href="../CodeRay/Encoders/HTML/Output.html">CodeRay::Encoders::HTML::Output</a></li>
+        
+          <li><a href="../CodeRay/Encoders/JSON.html">CodeRay::Encoders::JSON</a></li>
+        
+          <li><a href="../CodeRay/Encoders/LinesOfCode.html">CodeRay::Encoders::LinesOfCode</a></li>
+        
+          <li><a href="../CodeRay/Encoders/Null.html">CodeRay::Encoders::Null</a></li>
+        
+          <li><a href="../CodeRay/Encoders/Page.html">CodeRay::Encoders::Page</a></li>
+        
+          <li><a href="../CodeRay/Encoders/Span.html">CodeRay::Encoders::Span</a></li>
+        
+          <li><a href="../CodeRay/Encoders/Statistic.html">CodeRay::Encoders::Statistic</a></li>
+        
+          <li><a href="../CodeRay/Encoders/Terminal.html">CodeRay::Encoders::Terminal</a></li>
+        
+          <li><a href="../CodeRay/Encoders/Text.html">CodeRay::Encoders::Text</a></li>
+        
+          <li><a href="../CodeRay/Encoders/TokenKindFilter.html">CodeRay::Encoders::TokenKindFilter</a></li>
+        
+          <li><a href="../CodeRay/Encoders/XML.html">CodeRay::Encoders::XML</a></li>
+        
+          <li><a href="../CodeRay/Encoders/YAML.html">CodeRay::Encoders::YAML</a></li>
+        
+          <li><a href="../CodeRay/FileType.html">CodeRay::FileType</a></li>
+        
+          <li><a href="../CodeRay/ForRedCloth.html">CodeRay::ForRedCloth</a></li>
+        
+          <li><a href="../CodeRay/GZip.html">CodeRay::GZip</a></li>
+        
+          <li><a href="../CodeRay/Plugin.html">CodeRay::Plugin</a></li>
+        
+          <li><a href="../CodeRay/PluginHost.html">CodeRay::PluginHost</a></li>
+        
+          <li><a href="../CodeRay/Scanners.html">CodeRay::Scanners</a></li>
+        
+          <li><a href="../CodeRay/Scanners/C.html">CodeRay::Scanners::C</a></li>
+        
+          <li><a href="../CodeRay/Scanners/CPlusPlus.html">CodeRay::Scanners::CPlusPlus</a></li>
+        
+          <li><a href="../CodeRay/Scanners/CSS.html">CodeRay::Scanners::CSS</a></li>
+        
+          <li><a href="../CodeRay/Scanners/Clojure.html">CodeRay::Scanners::Clojure</a></li>
+        
+          <li><a href="../CodeRay/Scanners/Debug.html">CodeRay::Scanners::Debug</a></li>
+        
+          <li><a href="../CodeRay/Scanners/Delphi.html">CodeRay::Scanners::Delphi</a></li>
+        
+          <li><a href="../CodeRay/Scanners/Diff.html">CodeRay::Scanners::Diff</a></li>
+        
+          <li><a href="../CodeRay/Scanners/ERB.html">CodeRay::Scanners::ERB</a></li>
+        
+          <li><a href="../CodeRay/Scanners/Groovy.html">CodeRay::Scanners::Groovy</a></li>
+        
+          <li><a href="../CodeRay/Scanners/HAML.html">CodeRay::Scanners::HAML</a></li>
+        
+          <li><a href="../CodeRay/Scanners/HTML.html">CodeRay::Scanners::HTML</a></li>
+        
+          <li><a href="../CodeRay/Scanners/JSON.html">CodeRay::Scanners::JSON</a></li>
+        
+          <li><a href="../CodeRay/Scanners/Java.html">CodeRay::Scanners::Java</a></li>
+        
+          <li><a href="../CodeRay/Scanners/JavaScript.html">CodeRay::Scanners::JavaScript</a></li>
+        
+          <li><a href="../CodeRay/Scanners/PHP.html">CodeRay::Scanners::PHP</a></li>
+        
+          <li><a href="../CodeRay/Scanners/Python.html">CodeRay::Scanners::Python</a></li>
+        
+          <li><a href="../CodeRay/Scanners/Raydebug.html">CodeRay::Scanners::Raydebug</a></li>
+        
+          <li><a href="../CodeRay/Scanners/Ruby.html">CodeRay::Scanners::Ruby</a></li>
+        
+          <li><a href="../CodeRay/Scanners/SQL.html">CodeRay::Scanners::SQL</a></li>
+        
+          <li><a href="../CodeRay/Scanners/Scanner.html">CodeRay::Scanners::Scanner</a></li>
+        
+          <li><a href="../CodeRay/Scanners/Text.html">CodeRay::Scanners::Text</a></li>
+        
+          <li><a href="../CodeRay/Scanners/XML.html">CodeRay::Scanners::XML</a></li>
+        
+          <li><a href="../CodeRay/Scanners/YAML.html">CodeRay::Scanners::YAML</a></li>
+        
+          <li><a href="../CodeRay/Styles.html">CodeRay::Styles</a></li>
+        
+          <li><a href="../CodeRay/Styles/Alpha.html">CodeRay::Styles::Alpha</a></li>
+        
+          <li><a href="../CodeRay/Styles/Style.html">CodeRay::Styles::Style</a></li>
+        
+          <li><a href="../CodeRay/Tokens.html">CodeRay::Tokens</a></li>
+        
+          <li><a href="../CodeRay/Tokens/Undumping.html">CodeRay::Tokens::Undumping</a></li>
+        
+          <li><a href="../CodeRay/TokensProxy.html">CodeRay::TokensProxy</a></li>
+        
+          <li><a href="../CodeRay/WordList.html">CodeRay::WordList</a></li>
+        
+          <li><a href="../CodeRay/WordList/CaseIgnoring.html">CodeRay::WordList::CaseIgnoring</a></li>
+        
+        </ul>
+        <div id="no-class-search-results" style="display: none;">No matching classes.</div>
+      </div>
+
+      
+    </div>
+  </div>
+
+  <div id="documentation">
+    <h1 class="class">CodeRay::Tokens</h1>
+
+    <div id="description" class="description">
+      
+<h1><a href="Tokens.html">Tokens</a>  TODO: Rewrite!</h1>
+
+<p>The <a href="Tokens.html">Tokens</a> class represents a list of tokens
+returnd from a Scanner.</p>
+
+<p>A token is not a special object, just a two-element Array consisting of</p>
+<ul><li>
+<p>the <em>token</em> <em>text</em> (the original source of the token in a
+String) or a <em>token</em> <em>action</em> (<a
+href="Tokens.html#method-i-begin_group">begin_group</a>, <a
+href="Tokens.html#method-i-end_group">end_group</a>, <a
+href="Tokens.html#method-i-begin_line">begin_line</a>, <a
+href="Tokens.html#method-i-end_line">end_line</a>)</p>
+</li><li>
+<p>the <em>token</em> <em>kind</em> (a Symbol representing the type of the
+token)</p>
+</li></ul>
+
+<p>A token looks like this:</p>
+
+<pre>['# It looks like this', :comment]
+['3.1415926', :float]
+['$^', :error]</pre>
+
+<p>Some scanners also yield sub-tokens, represented by special token actions,
+namely <a href="Tokens.html#method-i-begin_group">begin_group</a> and
+end_group.</p>
+
+<p>The Ruby scanner, for example, splits “a string” into:</p>
+
+<pre>[
+ [:begin_group, :string],
+ ['&quot;', :delimiter],
+ ['a string', :content],
+ ['&quot;', :delimiter],
+ [:end_group, :string]
+]</pre>
+
+<p><a href="Tokens.html">Tokens</a> is the interface between <a
+href="Scanners.html">Scanners</a> and Encoders: The input is split and
+saved into a <a href="Tokens.html">Tokens</a> object. The Encoder then
+builds the output from this object.</p>
+
+<p>Thus, the syntax below becomes clear:</p>
+
+<pre>CodeRay.scan('price = 2.59', :ruby).html
+# the Tokens object is here -------^</pre>
+
+<p>See how small it is? ;)</p>
+
+<p><a href="Tokens.html">Tokens</a> gives you the power to handle pre-scanned
+code very easily: You can convert it to a webpage, a YAML file, or dump it
+into a gzip'ed string that you put in your DB.</p>
+
+<p>It also allows you to generate tokens directly (without using a scanner),
+to load them from a file, and still use any Encoder that <a
+href="../CodeRay.html">CodeRay</a> provides.</p>
+
+    </div><!-- description -->
+
+    
+    
+    
+    <div id="5Buntitled-5D" class="documentation-section">
+      
+
+      
+
+      
+
+      
+      <!-- Attributes -->
+      <div id="attribute-method-details" class="method-section section">
+        <h3 class="section-header">Attributes</h3>
+
+        
+        <div id="scanner-attribute-method" class="method-detail">
+          <a name="scanner"></a>
+          
+          <a name="scanner="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">scanner</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          <p>The Scanner instance that created the tokens.</p>
+          
+          </div>
+        </div>
+        
+      </div><!-- attribute-method-details -->
+      
+
+      <!-- Methods -->
+      
+      <div id="public-class-method-details" class="method-section section">
+        <h3 class="section-header">Public Class Methods</h3>
+
+      
+        <div id="load-method" class="method-detail ">
+          <a name="method-c-load"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">load</span><span
+              class="method-args">(dump)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Undump the object using Marshal.load, then unzip it using <a
+href="GZip.html#method-c-gunzip">GZip.gunzip</a>.</p>
+
+<p>The result is commonly a <a href="Tokens.html">Tokens</a> object, but this
+is not guaranteed.</p>
+            
+
+            
+            <div class="method-source-code" id="load-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/tokens.rb, line 201</span>
+<span class="ruby-keyword">def</span> <span class="ruby-constant">Tokens</span>.<span class="ruby-identifier">load</span> <span class="ruby-identifier">dump</span>
+  <span class="ruby-identifier">dump</span> = <span class="ruby-constant">GZip</span>.<span class="ruby-identifier">gunzip</span> <span class="ruby-identifier">dump</span>
+  <span class="ruby-ivar">@dump</span> = <span class="ruby-constant">Marshal</span>.<span class="ruby-identifier">load</span> <span class="ruby-identifier">dump</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- load-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- load-method -->
+
+      
+      </div><!-- public-class-method-details -->
+    
+      <div id="public-instance-method-details" class="method-section section">
+        <h3 class="section-header">Public Instance Methods</h3>
+
+      
+        <div id="begin_group-method" class="method-detail ">
+          <a name="method-i-begin_group"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">begin_group</span><span
+              class="method-args">(kind;)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="begin_group-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/tokens.rb, line 207</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">begin_group</span> <span class="ruby-identifier">kind</span>; <span class="ruby-identifier">push</span> <span class="ruby-value">:begin_group</span>, <span class="ruby-identifier">kind</span> <span class="ruby-keyword">end</span></pre>
+            </div><!-- begin_group-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- begin_group-method -->
+
+      
+        <div id="begin_line-method" class="method-detail ">
+          <a name="method-i-begin_line"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">begin_line</span><span
+              class="method-args">(kind;)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="begin_line-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/tokens.rb, line 209</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">begin_line</span> <span class="ruby-identifier">kind</span>; <span class="ruby-identifier">push</span> <span class="ruby-value">:begin_line</span>, <span class="ruby-identifier">kind</span> <span class="ruby-keyword">end</span></pre>
+            </div><!-- begin_line-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- begin_line-method -->
+
+      
+        <div id="count-method" class="method-detail ">
+          <a name="method-i-count"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">count</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Return the actual number of tokens.</p>
+            
+
+            
+            <div class="method-source-code" id="count-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/tokens.rb, line 181</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">count</span>
+  <span class="ruby-identifier">size</span> <span class="ruby-operator">/</span> <span class="ruby-value">2</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- count-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- count-method -->
+
+      
+        <div id="dump-method" class="method-detail ">
+          <a name="method-i-dump"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">dump</span><span
+              class="method-args">(gzip_level = 7)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Dumps the object into a String that can be saved in files or databases.</p>
+
+<p>The dump is created with Marshal.dump; In addition, it is gzipped using <a
+href="GZip.html#method-c-gzip">GZip.gzip</a>.</p>
+
+<p>The returned String object includes <a
+href="Tokens/Undumping.html">Undumping</a> so it has an undump method. See
+<a href="Tokens.html#method-c-load">Tokens.load</a>.</p>
+
+<p>You can configure the level of compression, but the default value 7 should
+be what you want in most cases as it is a good compromise between speed and
+compression rate.</p>
+
+<p>See <a href="GZip.html">GZip</a> module.</p>
+            
+
+            
+            <div class="method-source-code" id="dump-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/tokens.rb, line 174</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">dump</span> <span class="ruby-identifier">gzip_level</span> = <span class="ruby-value">7</span>
+  <span class="ruby-identifier">dump</span> = <span class="ruby-constant">Marshal</span>.<span class="ruby-identifier">dump</span> <span class="ruby-keyword">self</span>
+  <span class="ruby-identifier">dump</span> = <span class="ruby-constant">GZip</span>.<span class="ruby-identifier">gzip</span> <span class="ruby-identifier">dump</span>, <span class="ruby-identifier">gzip_level</span>
+  <span class="ruby-identifier">dump</span>.<span class="ruby-identifier">extend</span> <span class="ruby-constant">Undumping</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- dump-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- dump-method -->
+
+      
+        <div id="encode-method" class="method-detail ">
+          <a name="method-i-encode"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">encode</span><span
+              class="method-args">(encoder, options = {})</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Encode the tokens using encoder.</p>
+
+<p>encoder can be</p>
+<ul><li>
+<p>a symbol like :html oder :statistic</p>
+</li><li>
+<p>an Encoder class</p>
+</li><li>
+<p>an Encoder object</p>
+</li></ul>
+
+<p>options are passed to the encoder.</p>
+            
+
+            
+            <div class="method-source-code" id="encode-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/tokens.rb, line 66</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">encode</span> <span class="ruby-identifier">encoder</span>, <span class="ruby-identifier">options</span> = {}
+  <span class="ruby-identifier">encoder</span> = <span class="ruby-constant">Encoders</span>[<span class="ruby-identifier">encoder</span>].<span class="ruby-identifier">new</span> <span class="ruby-identifier">options</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">encoder</span>.<span class="ruby-identifier">respond_to?</span> <span class="ruby-value">:to_sym</span>
+  <span class="ruby-identifier">encoder</span>.<span class="ruby-identifier">encode_tokens</span> <span class="ruby-keyword">self</span>, <span class="ruby-identifier">options</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- encode-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- encode-method -->
+
+      
+        <div id="end_group-method" class="method-detail ">
+          <a name="method-i-end_group"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">end_group</span><span
+              class="method-args">(kind;)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="end_group-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/tokens.rb, line 208</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">end_group</span> <span class="ruby-identifier">kind</span>; <span class="ruby-identifier">push</span> <span class="ruby-value">:end_group</span>, <span class="ruby-identifier">kind</span> <span class="ruby-keyword">end</span></pre>
+            </div><!-- end_group-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- end_group-method -->
+
+      
+        <div id="end_line-method" class="method-detail ">
+          <a name="method-i-end_line"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">end_line</span><span
+              class="method-args">(kind;)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="end_line-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/tokens.rb, line 210</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">end_line</span> <span class="ruby-identifier">kind</span>; <span class="ruby-identifier">push</span> <span class="ruby-value">:end_line</span>, <span class="ruby-identifier">kind</span> <span class="ruby-keyword">end</span></pre>
+            </div><!-- end_line-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- end_line-method -->
+
+      
+        <div id="method_missing-method" class="method-detail ">
+          <a name="method-i-method_missing"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">method_missing</span><span
+              class="method-args">(meth, options = {})</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Redirects unknown methods to encoder calls.</p>
+
+<p>For example, if you call <tt>tokens.html</tt>, the HTML encoder is used to
+highlight the tokens.</p>
+            
+
+            
+            <div class="method-source-code" id="method_missing-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/tokens.rb, line 80</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">method_missing</span> <span class="ruby-identifier">meth</span>, <span class="ruby-identifier">options</span> = {}
+  <span class="ruby-identifier">encode</span> <span class="ruby-identifier">meth</span>, <span class="ruby-identifier">options</span>
+<span class="ruby-keyword">rescue</span> <span class="ruby-constant">PluginHost</span><span class="ruby-operator">::</span><span class="ruby-constant">PluginNotFound</span>
+  <span class="ruby-keyword">super</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- method_missing-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- method_missing-method -->
+
+      
+        <div id="split_into_parts-method" class="method-detail ">
+          <a name="method-i-split_into_parts"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">split_into_parts</span><span
+              class="method-args">(*sizes)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Split the tokens into parts of the given <tt>sizes</tt>.</p>
+
+<p>The result will be an Array of <a href="Tokens.html">Tokens</a> objects.
+The parts have the text size specified by the parameter. In addition, each
+part closes all opened tokens. This is useful to insert tokens betweem
+them.</p>
+
+<p>This method is used by @Scanner#tokenize@ when called with an Array of
+source strings. The Diff encoder uses it for inline highlighting.</p>
+            
+
+            
+            <div class="method-source-code" id="split_into_parts-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/tokens.rb, line 95</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">split_into_parts</span> *<span class="ruby-identifier">sizes</span>
+  <span class="ruby-identifier">parts</span> = []
+  <span class="ruby-identifier">opened</span> = []
+  <span class="ruby-identifier">content</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-identifier">part</span> = <span class="ruby-constant">Tokens</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-identifier">part_size</span> = <span class="ruby-value">0</span>
+  <span class="ruby-identifier">size</span> = <span class="ruby-identifier">sizes</span>.<span class="ruby-identifier">first</span>
+  <span class="ruby-identifier">i</span> = <span class="ruby-value">0</span>
+  <span class="ruby-keyword">for</span> <span class="ruby-identifier">item</span> <span class="ruby-keyword">in</span> <span class="ruby-keyword">self</span>
+    <span class="ruby-keyword">case</span> <span class="ruby-identifier">content</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-keyword">nil</span>
+      <span class="ruby-identifier">content</span> = <span class="ruby-identifier">item</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-constant">String</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">part_size</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">content</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">size</span>  <span class="ruby-comment"># token must be cut</span>
+        <span class="ruby-keyword">if</span> <span class="ruby-identifier">part_size</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">size</span>  <span class="ruby-comment"># some part of the token goes into this part</span>
+          <span class="ruby-identifier">content</span> = <span class="ruby-identifier">content</span>.<span class="ruby-identifier">dup</span>  <span class="ruby-comment"># content may no be safe to change</span>
+          <span class="ruby-identifier">part</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">content</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span>, <span class="ruby-identifier">size</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">part_size</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">item</span>
+        <span class="ruby-keyword">end</span>
+        <span class="ruby-comment"># close all open groups and lines...</span>
+        <span class="ruby-identifier">closing</span> = <span class="ruby-identifier">opened</span>.<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">content_or_kind</span><span class="ruby-operator">|</span>
+          <span class="ruby-keyword">case</span> <span class="ruby-identifier">content_or_kind</span>
+          <span class="ruby-keyword">when</span> <span class="ruby-value">:begin_group</span>
+            <span class="ruby-value">:end_group</span>
+          <span class="ruby-keyword">when</span> <span class="ruby-value">:begin_line</span>
+            <span class="ruby-value">:end_line</span>
+          <span class="ruby-keyword">else</span>
+            <span class="ruby-identifier">content_or_kind</span>
+          <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+        <span class="ruby-identifier">part</span>.<span class="ruby-identifier">concat</span> <span class="ruby-identifier">closing</span>
+        <span class="ruby-keyword">begin</span>
+          <span class="ruby-identifier">parts</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">part</span>
+          <span class="ruby-identifier">part</span> = <span class="ruby-constant">Tokens</span>.<span class="ruby-identifier">new</span>
+          <span class="ruby-identifier">size</span> = <span class="ruby-identifier">sizes</span>[<span class="ruby-identifier">i</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>]
+        <span class="ruby-keyword">end</span> <span class="ruby-keyword">until</span> <span class="ruby-identifier">size</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+        <span class="ruby-comment"># ...and open them again.</span>
+        <span class="ruby-identifier">part</span>.<span class="ruby-identifier">concat</span> <span class="ruby-identifier">opened</span>.<span class="ruby-identifier">flatten</span>
+        <span class="ruby-identifier">part_size</span> = <span class="ruby-value">0</span>
+        <span class="ruby-keyword">redo</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">content</span>.<span class="ruby-identifier">empty?</span>
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">part</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">content</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">item</span>
+        <span class="ruby-identifier">part_size</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">content</span>.<span class="ruby-identifier">size</span>
+      <span class="ruby-keyword">end</span>
+      <span class="ruby-identifier">content</span> = <span class="ruby-keyword">nil</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-constant">Symbol</span>
+      <span class="ruby-keyword">case</span> <span class="ruby-identifier">content</span>
+      <span class="ruby-keyword">when</span> <span class="ruby-value">:begin_group</span>, <span class="ruby-value">:begin_line</span>
+        <span class="ruby-identifier">opened</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">content</span>, <span class="ruby-identifier">item</span>]
+      <span class="ruby-keyword">when</span> <span class="ruby-value">:end_group</span>, <span class="ruby-value">:end_line</span>
+        <span class="ruby-identifier">opened</span>.<span class="ruby-identifier">pop</span>
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-string">'Unknown token action: %p, kind = %p'</span> <span class="ruby-operator">%</span> [<span class="ruby-identifier">content</span>, <span class="ruby-identifier">item</span>]
+      <span class="ruby-keyword">end</span>
+      <span class="ruby-identifier">part</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">content</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">item</span>
+      <span class="ruby-identifier">content</span> = <span class="ruby-keyword">nil</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-string">'Token input junk: %p, kind = %p'</span> <span class="ruby-operator">%</span> [<span class="ruby-identifier">content</span>, <span class="ruby-identifier">item</span>]
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">parts</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">part</span>
+  <span class="ruby-identifier">parts</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Tokens</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword">while</span> <span class="ruby-identifier">parts</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">sizes</span>.<span class="ruby-identifier">size</span>
+  <span class="ruby-identifier">parts</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- split_into_parts-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- split_into_parts-method -->
+
+      
+        <div id="to_s-method" class="method-detail ">
+          <a name="method-i-to_s"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">to_s</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Turn tokens into a string by concatenating them.</p>
+            
+
+            
+            <div class="method-source-code" id="to_s-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/tokens.rb, line 72</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">to_s</span>
+  <span class="ruby-identifier">encode</span> <span class="ruby-constant">CodeRay</span><span class="ruby-operator">::</span><span class="ruby-constant">Encoders</span><span class="ruby-operator">::</span><span class="ruby-constant">Encoder</span>.<span class="ruby-identifier">new</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- to_s-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- to_s-method -->
+
+      
+      </div><!-- public-instance-method-details -->
+    
+    </div><!-- 5Buntitled-5D -->
+  
+
+  </div><!-- documentation -->
+
+  <div id="validator-badges">
+    <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+    <p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+      Rdoc Generator</a> 2</small>.</p>
+  </div>
+
+</body>
+</html>
+

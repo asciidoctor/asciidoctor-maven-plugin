@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+
+  <title>Module: CodeRay::Encoders::HTML::Output</title>
+
+  <link rel="stylesheet" href="../../../rdoc.css" type="text/css" media="screen" />
+
+  <script src="../../../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../../../js/thickbox-compressed.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../../../js/quicksearch.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../../../js/darkfish.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body id="top" class="module">
+
+  <div id="metadata">
+    <div id="home-metadata">
+      <div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../../../index.html">Home</a>
+          <a href="../../../index.html#classes">Classes</a>
+          <a href="../../../index.html#methods">Methods</a>
+        </h3>
+      </div>
+    </div>
+
+    <div id="file-metadata">
+      <div id="file-list-section" class="section">
+        <h3 class="section-header">In Files</h3>
+        <div class="section-body">
+          <ul>
+          
+            <li><a href="../../../lib/coderay/encoders/html/output_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+              class="thickbox" title="lib/coderay/encoders/html/output.rb">lib/coderay/encoders/html/output.rb</a></li>
+          
+          </ul>
+        </div>
+      </div>
+
+      
+    </div>
+
+    <div id="class-metadata">
+      
+
+      
+
+      
+
+      
+      <!-- Method Quickref -->
+      <div id="method-list-section" class="section">
+        <h3 class="section-header">Methods</h3>
+        <ul class="link-list">
+          
+          <li><a href="#method-i-apply_title-21">#apply_title!</a></li>
+          
+          <li><a href="#method-i-stylesheet">#stylesheet</a></li>
+          
+          <li><a href="#method-i-wrap-21">#wrap!</a></li>
+          
+          <li><a href="#method-i-wrap_in-21">#wrap_in!</a></li>
+          
+          <li><a href="#method-i-wrapped_in">#wrapped_in</a></li>
+          
+          <li><a href="#method-i-wrapped_in-3F">#wrapped_in?</a></li>
+          
+        </ul>
+      </div>
+      
+
+      
+    </div>
+
+    <div id="project-metadata">
+      
+      
+      <div id="fileindex-section" class="section project-section">
+        <h3 class="section-header">Files</h3>
+        <ul>
+        
+          <li class="file"><a href="../../../README_INDEX_rdoc.html">README_INDEX.rdoc</a></li>
+        
+        </ul>
+      </div>
+      
+
+      <div id="classindex-section" class="section project-section">
+        <h3 class="section-header">Class/Module Index
+          <span class="search-toggle"><img src="../../../images/find.png"
+            height="16" width="16" alt="[+]"
+            title="show/hide quicksearch" /></span></h3>
+        <form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+        <fieldset>
+          <legend>Quicksearch</legend>
+          <input type="text" name="quicksearch" value=""
+            class="quicksearch-field" />
+        </fieldset>
+        </form>
+
+        <ul class="link-list">
+        
+          <li><a href="../../../CodeRay.html">CodeRay</a></li>
+        
+          <li><a href="../../../CodeRay/Duo.html">CodeRay::Duo</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders.html">CodeRay::Encoders</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/CommentFilter.html">CodeRay::Encoders::CommentFilter</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/Count.html">CodeRay::Encoders::Count</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/Debug.html">CodeRay::Encoders::Debug</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/Div.html">CodeRay::Encoders::Div</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/Encoder.html">CodeRay::Encoders::Encoder</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/Filter.html">CodeRay::Encoders::Filter</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/HTML.html">CodeRay::Encoders::HTML</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/HTML/Output.html">CodeRay::Encoders::HTML::Output</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/JSON.html">CodeRay::Encoders::JSON</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/LinesOfCode.html">CodeRay::Encoders::LinesOfCode</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/Null.html">CodeRay::Encoders::Null</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/Page.html">CodeRay::Encoders::Page</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/Span.html">CodeRay::Encoders::Span</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/Statistic.html">CodeRay::Encoders::Statistic</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/Terminal.html">CodeRay::Encoders::Terminal</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/Text.html">CodeRay::Encoders::Text</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/TokenKindFilter.html">CodeRay::Encoders::TokenKindFilter</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/XML.html">CodeRay::Encoders::XML</a></li>
+        
+          <li><a href="../../../CodeRay/Encoders/YAML.html">CodeRay::Encoders::YAML</a></li>
+        
+          <li><a href="../../../CodeRay/FileType.html">CodeRay::FileType</a></li>
+        
+          <li><a href="../../../CodeRay/ForRedCloth.html">CodeRay::ForRedCloth</a></li>
+        
+          <li><a href="../../../CodeRay/GZip.html">CodeRay::GZip</a></li>
+        
+          <li><a href="../../../CodeRay/Plugin.html">CodeRay::Plugin</a></li>
+        
+          <li><a href="../../../CodeRay/PluginHost.html">CodeRay::PluginHost</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners.html">CodeRay::Scanners</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/C.html">CodeRay::Scanners::C</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/CPlusPlus.html">CodeRay::Scanners::CPlusPlus</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/CSS.html">CodeRay::Scanners::CSS</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/Clojure.html">CodeRay::Scanners::Clojure</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/Debug.html">CodeRay::Scanners::Debug</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/Delphi.html">CodeRay::Scanners::Delphi</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/Diff.html">CodeRay::Scanners::Diff</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/ERB.html">CodeRay::Scanners::ERB</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/Groovy.html">CodeRay::Scanners::Groovy</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/HAML.html">CodeRay::Scanners::HAML</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/HTML.html">CodeRay::Scanners::HTML</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/JSON.html">CodeRay::Scanners::JSON</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/Java.html">CodeRay::Scanners::Java</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/JavaScript.html">CodeRay::Scanners::JavaScript</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/PHP.html">CodeRay::Scanners::PHP</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/Python.html">CodeRay::Scanners::Python</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/Raydebug.html">CodeRay::Scanners::Raydebug</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/Ruby.html">CodeRay::Scanners::Ruby</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/SQL.html">CodeRay::Scanners::SQL</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/Scanner.html">CodeRay::Scanners::Scanner</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/Text.html">CodeRay::Scanners::Text</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/XML.html">CodeRay::Scanners::XML</a></li>
+        
+          <li><a href="../../../CodeRay/Scanners/YAML.html">CodeRay::Scanners::YAML</a></li>
+        
+          <li><a href="../../../CodeRay/Styles.html">CodeRay::Styles</a></li>
+        
+          <li><a href="../../../CodeRay/Styles/Alpha.html">CodeRay::Styles::Alpha</a></li>
+        
+          <li><a href="../../../CodeRay/Styles/Style.html">CodeRay::Styles::Style</a></li>
+        
+          <li><a href="../../../CodeRay/Tokens.html">CodeRay::Tokens</a></li>
+        
+          <li><a href="../../../CodeRay/Tokens/Undumping.html">CodeRay::Tokens::Undumping</a></li>
+        
+          <li><a href="../../../CodeRay/TokensProxy.html">CodeRay::TokensProxy</a></li>
+        
+          <li><a href="../../../CodeRay/WordList.html">CodeRay::WordList</a></li>
+        
+          <li><a href="../../../CodeRay/WordList/CaseIgnoring.html">CodeRay::WordList::CaseIgnoring</a></li>
+        
+        </ul>
+        <div id="no-class-search-results" style="display: none;">No matching classes.</div>
+      </div>
+
+      
+    </div>
+  </div>
+
+  <div id="documentation">
+    <h1 class="module">CodeRay::Encoders::HTML::Output</h1>
+
+    <div id="description" class="description">
+      
+<p>This module is included in the output String of the <a
+href="../HTML.html">HTML</a> <a href="../Encoder.html">Encoder</a>.</p>
+
+<p>It provides methods like wrap, div, page etc.</p>
+
+<p>Remember to use clone instead of dup to keep the modules the object was
+extended with.</p>
+
+<p>TODO: Rewrite this without monkey patching.</p>
+
+    </div><!-- description -->
+
+    
+    
+    
+    <div id="5Buntitled-5D" class="documentation-section">
+      
+
+      
+
+      
+      <!-- Constants -->
+      <div id="constants-list" class="section">
+        <h3 class="section-header">Constants</h3>
+        <dl>
+        
+          <dt><a name="DIV">DIV</a></dt>
+          
+          <dd class="description"></dd>
+          
+        
+          <dt><a name="PAGE">PAGE</a></dt>
+          
+          <dd class="description"></dd>
+          
+        
+          <dt><a name="SPAN">SPAN</a></dt>
+          
+          <dd class="description"></dd>
+          
+        
+          <dt><a name="TABLE">TABLE</a></dt>
+          
+          <dd class="description"></dd>
+          
+        
+        </dl>
+      </div>
+      
+
+      
+      <!-- Attributes -->
+      <div id="attribute-method-details" class="method-section section">
+        <h3 class="section-header">Attributes</h3>
+
+        
+        <div id="css-attribute-method" class="method-detail">
+          <a name="css"></a>
+          
+          <a name="css="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">css</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="wrapped_in-attribute-method" class="method-detail">
+          <a name="wrapped_in"></a>
+          
+          <a name="wrapped_in="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">wrapped_in</span><span
+              class="attribute-access-type">[W]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+      </div><!-- attribute-method-details -->
+      
+
+      <!-- Methods -->
+      
+      <div id="public-instance-method-details" class="method-section section">
+        <h3 class="section-header">Public Instance Methods</h3>
+
+      
+        <div id="apply_title-21-method" class="method-detail ">
+          <a name="method-i-apply_title-21"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">apply_title!</span><span
+              class="method-args">(title)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="apply_title-21-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/encoders/html/output.rb, line 57</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">apply_title!</span> <span class="ruby-identifier">title</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">sub!</span>(<span class="ruby-regexp">/(&lt;title&gt;)(&lt;\/title&gt;)/</span>) { <span class="ruby-node">$1</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">title</span> <span class="ruby-operator">+</span> <span class="ruby-node">$2</span> }
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- apply_title-21-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- apply_title-21-method -->
+
+      
+        <div id="stylesheet-method" class="method-detail ">
+          <a name="method-i-stylesheet"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">stylesheet</span><span
+              class="method-args">(in_tag = false)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="stylesheet-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/encoders/html/output.rb, line 88</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">stylesheet</span> <span class="ruby-identifier">in_tag</span> = <span class="ruby-keyword">false</span>
+  <span class="ruby-constant">Output</span>.<span class="ruby-identifier">make_stylesheet</span> <span class="ruby-ivar">@css</span>, <span class="ruby-identifier">in_tag</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- stylesheet-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- stylesheet-method -->
+
+      
+        <div id="wrap-21-method" class="method-detail ">
+          <a name="method-i-wrap-21"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">wrap!</span><span
+              class="method-args">(element, *args)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="wrap-21-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/encoders/html/output.rb, line 62</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">wrap!</span> <span class="ruby-identifier">element</span>, *<span class="ruby-identifier">args</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">not</span> <span class="ruby-identifier">element</span> <span class="ruby-keyword">or</span> <span class="ruby-identifier">element</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">wrapped_in</span>
+  <span class="ruby-keyword">case</span> <span class="ruby-identifier">element</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-value">:div</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Can't wrap %p in %p&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-identifier">wrapped_in</span>, <span class="ruby-identifier">element</span>] <span class="ruby-keyword">unless</span> <span class="ruby-identifier">wrapped_in?</span> <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">wrap_in!</span> <span class="ruby-constant">DIV</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-value">:span</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Can't wrap %p in %p&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-identifier">wrapped_in</span>, <span class="ruby-identifier">element</span>] <span class="ruby-keyword">unless</span> <span class="ruby-identifier">wrapped_in?</span> <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">wrap_in!</span> <span class="ruby-constant">SPAN</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-value">:page</span>
+    <span class="ruby-identifier">wrap!</span> <span class="ruby-value">:div</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">wrapped_in?</span> <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Can't wrap %p in %p&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-identifier">wrapped_in</span>, <span class="ruby-identifier">element</span>] <span class="ruby-keyword">unless</span> <span class="ruby-identifier">wrapped_in?</span> <span class="ruby-value">:div</span>
+    <span class="ruby-identifier">wrap_in!</span> <span class="ruby-constant">Output</span>.<span class="ruby-identifier">page_template_for_css</span>(<span class="ruby-ivar">@css</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">title</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>[<span class="ruby-value">:title</span>]
+      <span class="ruby-identifier">apply_title!</span> <span class="ruby-identifier">title</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">self</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-keyword">nil</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Unknown value %p for :wrap&quot;</span> <span class="ruby-operator">%</span> <span class="ruby-identifier">element</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@wrapped_in</span> = <span class="ruby-identifier">element</span>
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- wrap-21-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- wrap-21-method -->
+
+      
+        <div id="wrap_in-21-method" class="method-detail ">
+          <a name="method-i-wrap_in-21"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">wrap_in!</span><span
+              class="method-args">(template)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="wrap_in-21-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/encoders/html/output.rb, line 52</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">wrap_in!</span> <span class="ruby-identifier">template</span>
+  <span class="ruby-constant">Template</span>.<span class="ruby-identifier">wrap!</span> <span class="ruby-keyword">self</span>, <span class="ruby-identifier">template</span>, <span class="ruby-string">'CONTENT'</span>
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- wrap_in-21-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- wrap_in-21-method -->
+
+      
+        <div id="wrapped_in-method" class="method-detail ">
+          <a name="method-i-wrapped_in"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">wrapped_in</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="wrapped_in-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/encoders/html/output.rb, line 47</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">wrapped_in</span>
+  <span class="ruby-ivar">@wrapped_in</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword">nil</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- wrapped_in-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- wrapped_in-method -->
+
+      
+        <div id="wrapped_in-3F-method" class="method-detail ">
+          <a name="method-i-wrapped_in-3F"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">wrapped_in?</span><span
+              class="method-args">(element)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="wrapped_in-3F-source">
+<pre>
+<span class="ruby-comment"># File lib/coderay/encoders/html/output.rb, line 43</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">wrapped_in?</span> <span class="ruby-identifier">element</span>
+  <span class="ruby-identifier">wrapped_in</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">element</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- wrapped_in-3F-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- wrapped_in-3F-method -->
+
+      
+      </div><!-- public-instance-method-details -->
+    
+    </div><!-- 5Buntitled-5D -->
+  
+
+  </div><!-- documentation -->
+
+  <div id="validator-badges">
+    <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+    <p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+      Rdoc Generator</a> 2</small>.</p>
+  </div>
+
+</body>
+</html>
+
