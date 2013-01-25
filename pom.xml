@@ -36,13 +36,13 @@
     </prerequisites>
 
     <scm>
-        <url></url>
-        <connection></connection>
-        <developerConnection></developerConnection>
+        <url>https://github.com/LightGuard/asciidoctor-maven-plugin</url>
+        <connection>https://github.com/LightGuard/asciidoctor-maven-plugin.git</connection>
+        <developerConnection>git@github.com:LightGuard/asciidoctor-maven-plugin.git</developerConnection>
     </scm>
 
     <issueManagement>
-        <url></url>
+        <url>https://github.com/LightGuard/asciidoctor-maven-plugin/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
 
@@ -85,11 +85,6 @@
             <version>${spock.version}</version>
             <scope>test</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-site-plugin</artifactId>-->
-            <!--<version>3.1</version>-->
-        <!--</dependency>-->
     </dependencies>
 
     <build>
@@ -115,13 +110,12 @@
                 <groupId>org.codehaus.gmaven</groupId>
                 <artifactId>gmaven-plugin</artifactId>
                 <version>1.4</version>
-                <configuration>
-                    <providerSelection>2.0</providerSelection>
-                </configuration>
                 <executions>
                     <execution>
+                        <configuration>
+                            <providerSelection>2.0</providerSelection>
+                        </configuration>
                         <goals>
-                            <goal>compile</goal>
                             <goal>testCompile</goal>
                         </goals>
                     </execution>
