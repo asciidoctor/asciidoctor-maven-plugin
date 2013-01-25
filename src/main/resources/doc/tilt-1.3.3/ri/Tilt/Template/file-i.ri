@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"	file:EFI"Tilt::Template#file;FI"R;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"BThe name of the file where the template data was loaded from.;T:
+@file0FI"lib/tilt/template.rb;T

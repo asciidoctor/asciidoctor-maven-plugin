@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"parent:EFI"%Asciidoctor::AbstractNode#parent;FI"R;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"=Public: Get the element which is the parent of this node;T:
+@file0FI"%lib/asciidoctor/abstract_node.rb;T

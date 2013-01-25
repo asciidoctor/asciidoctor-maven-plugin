@@ -1,0 +1,1364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+
+  <title>Module: Asciidoctor::Substituters</title>
+
+  <link rel="stylesheet" href="../rdoc.css" type="text/css" media="screen" />
+
+  <script src="../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/thickbox-compressed.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/quicksearch.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/darkfish.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body id="top" class="module">
+
+  <div id="metadata">
+    <div id="home-metadata">
+      <div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+      </div>
+    </div>
+
+    <div id="file-metadata">
+      <div id="file-list-section" class="section">
+        <h3 class="section-header">In Files</h3>
+        <div class="section-body">
+          <ul>
+          
+            <li><a href="../lib/asciidoctor/substituters_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+              class="thickbox" title="lib/asciidoctor/substituters.rb">lib/asciidoctor/substituters.rb</a></li>
+          
+          </ul>
+        </div>
+      </div>
+
+      
+    </div>
+
+    <div id="class-metadata">
+      
+
+      
+
+      
+
+      
+      <!-- Method Quickref -->
+      <div id="method-list-section" class="section">
+        <h3 class="section-header">Methods</h3>
+        <ul class="link-list">
+          
+          <li><a href="#method-i-apply_header_subs">#apply_header_subs</a></li>
+          
+          <li><a href="#method-i-apply_literal_subs">#apply_literal_subs</a></li>
+          
+          <li><a href="#method-i-apply_normal_subs">#apply_normal_subs</a></li>
+          
+          <li><a href="#method-i-apply_passthrough_subs">#apply_passthrough_subs</a></li>
+          
+          <li><a href="#method-i-apply_subs">#apply_subs</a></li>
+          
+          <li><a href="#method-i-apply_title_subs">#apply_title_subs</a></li>
+          
+          <li><a href="#method-i-extract_passthroughs">#extract_passthroughs</a></li>
+          
+          <li><a href="#method-i-highlight_source">#highlight_source</a></li>
+          
+          <li><a href="#method-i-parse_attributes">#parse_attributes</a></li>
+          
+          <li><a href="#method-i-resolve_subs">#resolve_subs</a></li>
+          
+          <li><a href="#method-i-restore_passthroughs">#restore_passthroughs</a></li>
+          
+          <li><a href="#method-i-sub_attributes">#sub_attributes</a></li>
+          
+          <li><a href="#method-i-sub_callouts">#sub_callouts</a></li>
+          
+          <li><a href="#method-i-sub_macros">#sub_macros</a></li>
+          
+          <li><a href="#method-i-sub_post_replacements">#sub_post_replacements</a></li>
+          
+          <li><a href="#method-i-sub_quotes">#sub_quotes</a></li>
+          
+          <li><a href="#method-i-sub_replacements">#sub_replacements</a></li>
+          
+          <li><a href="#method-i-sub_specialcharacters">#sub_specialcharacters</a></li>
+          
+          <li><a href="#method-i-transform_quoted_text">#transform_quoted_text</a></li>
+          
+        </ul>
+      </div>
+      
+
+      
+    </div>
+
+    <div id="project-metadata">
+      
+      
+      <div id="fileindex-section" class="section project-section">
+        <h3 class="section-header">Files</h3>
+        <ul>
+        
+          <li class="file"><a href="../LICENSE.html">LICENSE</a></li>
+        
+        </ul>
+      </div>
+      
+
+      <div id="classindex-section" class="section project-section">
+        <h3 class="section-header">Class/Module Index
+          <span class="search-toggle"><img src="../images/find.png"
+            height="16" width="16" alt="[+]"
+            title="show/hide quicksearch" /></span></h3>
+        <form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+        <fieldset>
+          <legend>Quicksearch</legend>
+          <input type="text" name="quicksearch" value=""
+            class="quicksearch-field" />
+        </fieldset>
+        </form>
+
+        <ul class="link-list">
+        
+          <li><a href="../Asciidoctor.html">Asciidoctor</a></li>
+        
+          <li><a href="../Asciidoctor/AbstractBlock.html">Asciidoctor::AbstractBlock</a></li>
+        
+          <li><a href="../Asciidoctor/AbstractNode.html">Asciidoctor::AbstractNode</a></li>
+        
+          <li><a href="../Asciidoctor/AttributeList.html">Asciidoctor::AttributeList</a></li>
+        
+          <li><a href="../Asciidoctor/BaseTemplate.html">Asciidoctor::BaseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Block.html">Asciidoctor::Block</a></li>
+        
+          <li><a href="../Asciidoctor/Callouts.html">Asciidoctor::Callouts</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45.html">Asciidoctor::DocBook45</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockAdmonitionTemplate.html">Asciidoctor::DocBook45::BlockAdmonitionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockColistTemplate.html">Asciidoctor::DocBook45::BlockColistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockDlistTemplate.html">Asciidoctor::DocBook45::BlockDlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockExampleTemplate.html">Asciidoctor::DocBook45::BlockExampleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockImageTemplate.html">Asciidoctor::DocBook45::BlockImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockListingTemplate.html">Asciidoctor::DocBook45::BlockListingTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockLiteralTemplate.html">Asciidoctor::DocBook45::BlockLiteralTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockOlistTemplate.html">Asciidoctor::DocBook45::BlockOlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockOpenTemplate.html">Asciidoctor::DocBook45::BlockOpenTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockParagraphTemplate.html">Asciidoctor::DocBook45::BlockParagraphTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockPassTemplate.html">Asciidoctor::DocBook45::BlockPassTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockPreambleTemplate.html">Asciidoctor::DocBook45::BlockPreambleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockQuoteTemplate.html">Asciidoctor::DocBook45::BlockQuoteTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockRulerTemplate.html">Asciidoctor::DocBook45::BlockRulerTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockSidebarTemplate.html">Asciidoctor::DocBook45::BlockSidebarTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockTableTemplate.html">Asciidoctor::DocBook45::BlockTableTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockUlistTemplate.html">Asciidoctor::DocBook45::BlockUlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockVerseTemplate.html">Asciidoctor::DocBook45::BlockVerseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/DocumentTemplate.html">Asciidoctor::DocBook45::DocumentTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/EmbeddedTemplate.html">Asciidoctor::DocBook45::EmbeddedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineAnchorTemplate.html">Asciidoctor::DocBook45::InlineAnchorTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineBreakTemplate.html">Asciidoctor::DocBook45::InlineBreakTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineCalloutTemplate.html">Asciidoctor::DocBook45::InlineCalloutTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineImageTemplate.html">Asciidoctor::DocBook45::InlineImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineQuotedTemplate.html">Asciidoctor::DocBook45::InlineQuotedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/SectionTemplate.html">Asciidoctor::DocBook45::SectionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Document.html">Asciidoctor::Document</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5.html">Asciidoctor::HTML5</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockAdmonitionTemplate.html">Asciidoctor::HTML5::BlockAdmonitionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockColistTemplate.html">Asciidoctor::HTML5::BlockColistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockDlistTemplate.html">Asciidoctor::HTML5::BlockDlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockExampleTemplate.html">Asciidoctor::HTML5::BlockExampleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockImageTemplate.html">Asciidoctor::HTML5::BlockImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockListingTemplate.html">Asciidoctor::HTML5::BlockListingTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockLiteralTemplate.html">Asciidoctor::HTML5::BlockLiteralTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockOlistTemplate.html">Asciidoctor::HTML5::BlockOlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockOpenTemplate.html">Asciidoctor::HTML5::BlockOpenTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockParagraphTemplate.html">Asciidoctor::HTML5::BlockParagraphTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockPassTemplate.html">Asciidoctor::HTML5::BlockPassTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockPreambleTemplate.html">Asciidoctor::HTML5::BlockPreambleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockQuoteTemplate.html">Asciidoctor::HTML5::BlockQuoteTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockRulerTemplate.html">Asciidoctor::HTML5::BlockRulerTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockSidebarTemplate.html">Asciidoctor::HTML5::BlockSidebarTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockTableTemplate.html">Asciidoctor::HTML5::BlockTableTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockUlistTemplate.html">Asciidoctor::HTML5::BlockUlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockVerseTemplate.html">Asciidoctor::HTML5::BlockVerseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/DocumentTemplate.html">Asciidoctor::HTML5::DocumentTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/EmbeddedTemplate.html">Asciidoctor::HTML5::EmbeddedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineAnchorTemplate.html">Asciidoctor::HTML5::InlineAnchorTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineBreakTemplate.html">Asciidoctor::HTML5::InlineBreakTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineCalloutTemplate.html">Asciidoctor::HTML5::InlineCalloutTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineImageTemplate.html">Asciidoctor::HTML5::InlineImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineQuotedTemplate.html">Asciidoctor::HTML5::InlineQuotedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/SectionTemplate.html">Asciidoctor::HTML5::SectionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Inline.html">Asciidoctor::Inline</a></li>
+        
+          <li><a href="../Asciidoctor/Lexer.html">Asciidoctor::Lexer</a></li>
+        
+          <li><a href="../Asciidoctor/ListItem.html">Asciidoctor::ListItem</a></li>
+        
+          <li><a href="../Asciidoctor/ProjectError.html">Asciidoctor::ProjectError</a></li>
+        
+          <li><a href="../Asciidoctor/Reader.html">Asciidoctor::Reader</a></li>
+        
+          <li><a href="../Asciidoctor/Renderer.html">Asciidoctor::Renderer</a></li>
+        
+          <li><a href="../Asciidoctor/SafeMode.html">Asciidoctor::SafeMode</a></li>
+        
+          <li><a href="../Asciidoctor/Section.html">Asciidoctor::Section</a></li>
+        
+          <li><a href="../Asciidoctor/Substituters.html">Asciidoctor::Substituters</a></li>
+        
+          <li><a href="../Asciidoctor/Table.html">Asciidoctor::Table</a></li>
+        
+          <li><a href="../Asciidoctor/Table/Cell.html">Asciidoctor::Table::Cell</a></li>
+        
+          <li><a href="../Asciidoctor/Table/Column.html">Asciidoctor::Table::Column</a></li>
+        
+          <li><a href="../Asciidoctor/Table/ParserContext.html">Asciidoctor::Table::ParserContext</a></li>
+        
+        </ul>
+        <div id="no-class-search-results" style="display: none;">No matching classes.</div>
+      </div>
+
+      
+    </div>
+  </div>
+
+  <div id="documentation">
+    <h1 class="module">Asciidoctor::Substituters</h1>
+
+    <div id="description" class="description">
+      
+    </div><!-- description -->
+
+    
+    
+    
+    <div id="5Buntitled-5D" class="documentation-section">
+      
+
+      
+
+      
+      <!-- Constants -->
+      <div id="constants-list" class="section">
+        <h3 class="section-header">Constants</h3>
+        <dl>
+        
+          <dt><a name="COMPOSITE_SUBS">COMPOSITE_SUBS</a></dt>
+          
+          <dd class="description"></dd>
+          
+        
+          <dt><a name="SUB_OPTIONS">SUB_OPTIONS</a></dt>
+          
+          <dd class="description"></dd>
+          
+        
+        </dl>
+      </div>
+      
+
+      
+      <!-- Attributes -->
+      <div id="attribute-method-details" class="method-section section">
+        <h3 class="section-header">Attributes</h3>
+
+        
+        <div id="passthroughs-attribute-method" class="method-detail">
+          <a name="passthroughs"></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">passthroughs</span><span
+              class="attribute-access-type">[R]</span>
+          </div>
+
+          <div class="method-description">
+          
+          <p>Internal: A String Array of passthough (unprocessed) text captured from
+this block</p>
+          
+          </div>
+        </div>
+        
+      </div><!-- attribute-method-details -->
+      
+
+      <!-- Methods -->
+      
+      <div id="public-instance-method-details" class="method-section section">
+        <h3 class="section-header">Public Instance Methods</h3>
+
+      
+        <div id="apply_header_subs-method" class="method-detail ">
+          <a name="method-i-apply_header_subs"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">apply_header_subs</span><span
+              class="method-args">(text)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Apply substitutions for header metadata and attribute assignments</p>
+
+<p>text    - String containing the text process</p>
+
+<p>returns - A String with header substitutions performed</p>
+            
+
+            
+            <div class="method-source-code" id="apply_header_subs-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 108</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">apply_header_subs</span>(<span class="ruby-identifier">text</span>)
+  <span class="ruby-identifier">apply_subs</span>(<span class="ruby-identifier">text</span>, [<span class="ruby-value">:specialcharacters</span>, <span class="ruby-value">:attributes</span>])
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- apply_header_subs-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- apply_header_subs-method -->
+
+      
+        <div id="apply_literal_subs-method" class="method-detail ">
+          <a name="method-i-apply_literal_subs"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">apply_literal_subs</span><span
+              class="method-args">(lines)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Apply substitutions for titles</p>
+
+<p>lines  - A String Array containing the lines of text process</p>
+
+<p>returns - A String with literal (verbatim) substitutions performed</p>
+            
+
+            
+            <div class="method-source-code" id="apply_literal_subs-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 94</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">apply_literal_subs</span>(<span class="ruby-identifier">lines</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">attr</span>(<span class="ruby-string">'basebackend'</span>) <span class="ruby-operator">==</span> <span class="ruby-string">'html'</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">attr</span>(<span class="ruby-string">'style'</span>) <span class="ruby-operator">==</span> <span class="ruby-string">'source'</span> <span class="ruby-operator">&amp;&amp;</span>
+    <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">attr</span>(<span class="ruby-string">'source-highlighter'</span>) <span class="ruby-operator">==</span> <span class="ruby-string">'coderay'</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">attr?</span>(<span class="ruby-string">'language'</span>)
+    <span class="ruby-identifier">sub_callouts</span>(<span class="ruby-identifier">highlight_source</span>(<span class="ruby-identifier">lines</span>.<span class="ruby-identifier">join</span>))
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">apply_subs</span>(<span class="ruby-identifier">lines</span>.<span class="ruby-identifier">join</span>, <span class="ruby-constant">COMPOSITE_SUBS</span>[<span class="ruby-value">:verbatim</span>])
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- apply_literal_subs-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- apply_literal_subs-method -->
+
+      
+        <div id="apply_normal_subs-method" class="method-detail ">
+          <a name="method-i-apply_normal_subs"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">apply_normal_subs</span><span
+              class="method-args">(lines)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Apply normal substitutions.</p>
+
+<p>lines  - The lines of text to process. Can be a String or a String Array</p>
+
+<p>returns - A String with normal substitutions performed</p>
+            
+
+            
+            <div class="method-source-code" id="apply_normal_subs-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 76</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">apply_normal_subs</span>(<span class="ruby-identifier">lines</span>)
+  <span class="ruby-identifier">apply_subs</span>(<span class="ruby-identifier">lines</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">lines</span>.<span class="ruby-identifier">join</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">lines</span>)
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- apply_normal_subs-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- apply_normal_subs-method -->
+
+      
+        <div id="apply_passthrough_subs-method" class="method-detail ">
+          <a name="method-i-apply_passthrough_subs"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">apply_passthrough_subs</span><span
+              class="method-args">(lines)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Apply substitutions for passthrough text</p>
+
+<p>lines  - A String Array containing the lines of text process</p>
+
+<p>returns - A String Array with passthrough substitutions performed</p>
+            
+
+            
+            <div class="method-source-code" id="apply_passthrough_subs-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 117</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">apply_passthrough_subs</span>(<span class="ruby-identifier">lines</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">attr?</span> <span class="ruby-string">'subs'</span>
+    <span class="ruby-identifier">subs</span> = <span class="ruby-identifier">resolve_subs</span>(<span class="ruby-identifier">attr</span>(<span class="ruby-string">'subs'</span>))
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">subs</span> = [<span class="ruby-value">:attributes</span>, <span class="ruby-value">:macros</span>]
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">apply_subs</span>(<span class="ruby-identifier">lines</span>.<span class="ruby-identifier">join</span>, <span class="ruby-identifier">subs</span>)
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- apply_passthrough_subs-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- apply_passthrough_subs-method -->
+
+      
+        <div id="apply_subs-method" class="method-detail ">
+          <a name="method-i-apply_subs"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">apply_subs</span><span
+              class="method-args">(lines, subs = COMPOSITE_SUBS[:normal])</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Apply the specified substitutions to the lines of text</p>
+
+<p>lines   - The lines of text to process. Can be a String or a String Array 
+subs    - The substitutions to perform. Can be a Symbol or a Symbol Array
+(default: <a href="http://:normal">COMPOSITE_SUBS</a>)</p>
+
+<p>returns Either a String or String Array, whichever matches the type of the
+first argument</p>
+            
+
+            
+            <div class="method-source-code" id="apply_subs-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 24</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">apply_subs</span>(<span class="ruby-identifier">lines</span>, <span class="ruby-identifier">subs</span> = <span class="ruby-constant">COMPOSITE_SUBS</span>[<span class="ruby-value">:normal</span>])
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">subs</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">subs</span> = []
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">subs</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Symbol</span>
+    <span class="ruby-identifier">subs</span> = [<span class="ruby-identifier">subs</span>]
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">subs</span>.<span class="ruby-identifier">empty?</span>
+    <span class="ruby-comment"># QUESTION is this most efficient operation?</span>
+    <span class="ruby-identifier">subs</span> = <span class="ruby-identifier">subs</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">key</span><span class="ruby-operator">|</span>
+      <span class="ruby-constant">COMPOSITE_SUBS</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">key</span>) <span class="ruby-operator">?</span> <span class="ruby-constant">COMPOSITE_SUBS</span>[<span class="ruby-identifier">key</span>] <span class="ruby-operator">:</span> <span class="ruby-identifier">key</span>
+    }.<span class="ruby-identifier">flatten</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">lines</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">subs</span>.<span class="ruby-identifier">empty?</span>
+
+  <span class="ruby-identifier">multiline</span> = <span class="ruby-identifier">lines</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)
+  <span class="ruby-identifier">text</span> = <span class="ruby-identifier">multiline</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">lines</span>.<span class="ruby-identifier">join</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">lines</span>
+
+  <span class="ruby-identifier">passthroughs</span> = <span class="ruby-identifier">subs</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value">:macros</span>)
+  <span class="ruby-identifier">text</span> = <span class="ruby-identifier">extract_passthroughs</span>(<span class="ruby-identifier">text</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">passthroughs</span>
+  
+  <span class="ruby-identifier">subs</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">type</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">case</span> <span class="ruby-identifier">type</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-value">:specialcharacters</span>
+      <span class="ruby-identifier">text</span> = <span class="ruby-identifier">sub_specialcharacters</span>(<span class="ruby-identifier">text</span>)
+    <span class="ruby-keyword">when</span> <span class="ruby-value">:quotes</span>
+      <span class="ruby-identifier">text</span> = <span class="ruby-identifier">sub_quotes</span>(<span class="ruby-identifier">text</span>)
+    <span class="ruby-keyword">when</span> <span class="ruby-value">:attributes</span>
+      <span class="ruby-identifier">text</span> = <span class="ruby-identifier">sub_attributes</span>(<span class="ruby-identifier">text</span>.<span class="ruby-identifier">lines</span>.<span class="ruby-identifier">entries</span>).<span class="ruby-identifier">join</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-value">:replacements</span>
+      <span class="ruby-identifier">text</span> = <span class="ruby-identifier">sub_replacements</span>(<span class="ruby-identifier">text</span>)
+    <span class="ruby-keyword">when</span> <span class="ruby-value">:macros</span>
+      <span class="ruby-identifier">text</span> = <span class="ruby-identifier">sub_macros</span>(<span class="ruby-identifier">text</span>)
+    <span class="ruby-keyword">when</span> <span class="ruby-value">:callouts</span>
+      <span class="ruby-identifier">text</span> = <span class="ruby-identifier">sub_callouts</span>(<span class="ruby-identifier">text</span>)
+    <span class="ruby-keyword">when</span> <span class="ruby-value">:post_replacements</span>
+      <span class="ruby-identifier">text</span> = <span class="ruby-identifier">sub_post_replacements</span>(<span class="ruby-identifier">text</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;asciidoctor: WARNING: unknown substitution type #{type}&quot;</span>
+    <span class="ruby-keyword">end</span>
+  }
+  <span class="ruby-identifier">text</span> = <span class="ruby-identifier">restore_passthroughs</span>(<span class="ruby-identifier">text</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">passthroughs</span>
+
+  <span class="ruby-identifier">multiline</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">text</span>.<span class="ruby-identifier">lines</span>.<span class="ruby-identifier">entries</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">text</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- apply_subs-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- apply_subs-method -->
+
+      
+        <div id="apply_title_subs-method" class="method-detail ">
+          <a name="method-i-apply_title_subs"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">apply_title_subs</span><span
+              class="method-args">(title)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Apply substitutions for titles.</p>
+
+<p>title  - The String title to process</p>
+
+<p>returns - A String with title substitutions performed</p>
+            
+
+            
+            <div class="method-source-code" id="apply_title_subs-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 85</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">apply_title_subs</span>(<span class="ruby-identifier">title</span>)
+  <span class="ruby-identifier">apply_subs</span>(<span class="ruby-identifier">title</span>, [<span class="ruby-value">:specialcharacters</span>, <span class="ruby-value">:quotes</span>, <span class="ruby-value">:replacements</span>, <span class="ruby-value">:macros</span>, <span class="ruby-value">:attributes</span>, <span class="ruby-value">:post_replacements</span>])
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- apply_title_subs-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- apply_title_subs-method -->
+
+      
+        <div id="extract_passthroughs-method" class="method-detail ">
+          <a name="method-i-extract_passthroughs"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">extract_passthroughs</span><span
+              class="method-args">(text)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Internal: Extract the passthrough text from the document for reinsertion
+after processing.</p>
+
+<p>text - The String from which to extract passthrough fragements</p>
+
+<p>returns - The text with the passthrough region substituted with
+placeholders</p>
+            
+
+            
+            <div class="method-source-code" id="extract_passthroughs-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 131</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">extract_passthroughs</span>(<span class="ruby-identifier">text</span>)
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">text</span>.<span class="ruby-identifier">dup</span>
+
+  <span class="ruby-identifier">result</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-constant">REGEXP</span>[<span class="ruby-value">:pass_macro</span>]) {
+    <span class="ruby-comment"># alias match for Ruby 1.8.7 compat</span>
+    <span class="ruby-identifier">m</span> = <span class="ruby-identifier">$~</span>
+    <span class="ruby-comment"># honor the escape</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">start_with?</span> <span class="ruby-string">'\'</span>
+      <span class="ruby-keyword">next</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">0</span>][<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">==</span> <span class="ruby-string">'$$'</span>
+      <span class="ruby-identifier">subs</span> = [<span class="ruby-value">:specialcharacters</span>]
+    <span class="ruby-keyword">elsif</span> <span class="ruby-operator">!</span><span class="ruby-identifier">m</span>[<span class="ruby-value">3</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">m</span>[<span class="ruby-value">3</span>].<span class="ruby-identifier">empty?</span>
+      <span class="ruby-identifier">subs</span> = <span class="ruby-identifier">resolve_subs</span>(<span class="ruby-identifier">m</span>[<span class="ruby-value">3</span>])
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">subs</span> = []
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-ivar">@passthroughs</span> <span class="ruby-operator">&lt;&lt;</span> {<span class="ruby-value">:text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">2</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">4</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-string">'\]'</span>, <span class="ruby-string">']'</span>), <span class="ruby-value">:subs</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">subs</span>}
+    <span class="ruby-identifier">index</span> = <span class="ruby-ivar">@passthroughs</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>
+    <span class="ruby-node">&quot;\x0##{index}\x0&quot;&quot;</span>
+  } <span class="ruby-keyword">unless</span> <span class="ruby-operator">!</span>(<span class="ruby-identifier">result</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">'+++'</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">result</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">'$$'</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">result</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">'pass:'</span>))
+
+  <span class="ruby-identifier">result</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-constant">REGEXP</span>[<span class="ruby-value">:pass_lit</span>]) {
+    <span class="ruby-comment"># alias match for Ruby 1.8.7 compat</span>
+    <span class="ruby-identifier">m</span> = <span class="ruby-identifier">$~</span>
+
+    <span class="ruby-comment"># honor the escape</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">2</span>].<span class="ruby-identifier">start_with?</span> <span class="ruby-string">'\'</span>
+      <span class="ruby-keyword">next</span> <span class="ruby-node">&quot;#{m[1]}#{m[2][1..-1]}&quot;</span>
+    <span class="ruby-keyword">end</span>
+    
+    <span class="ruby-ivar">@passthroughs</span> <span class="ruby-operator">&lt;&lt;</span> {<span class="ruby-value">:text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">3</span>], <span class="ruby-value">:subs</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">:specialcharacters</span>], <span class="ruby-value">:literal</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>}
+    <span class="ruby-identifier">index</span> = <span class="ruby-ivar">@passthroughs</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>
+    <span class="ruby-node">&quot;#{m[1]}\x0##{index}\x0&quot;&quot;</span>
+  } <span class="ruby-keyword">unless</span> <span class="ruby-operator">!</span><span class="ruby-identifier">result</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">'`'</span>)
+
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- extract_passthroughs-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- extract_passthroughs-method -->
+
+      
+        <div id="highlight_source-method" class="method-detail ">
+          <a name="method-i-highlight_source"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">highlight_source</span><span
+              class="method-args">(source)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Highlight the source code if a source highlighter is defined on the
+document, otherwise return the text unprocessed</p>
+
+<p>source - the source code String to highlight</p>
+
+<p>returns the highlighted source code, if a source highlighter is defined on
+the document, otherwise the unprocessed text</p>
+            
+
+            
+            <div class="method-source-code" id="highlight_source-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 460</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">highlight_source</span>(<span class="ruby-identifier">source</span>)
+  <span class="ruby-constant">Asciidoctor</span>.<span class="ruby-identifier">require_library</span> <span class="ruby-string">'coderay'</span>
+  <span class="ruby-operator">::</span><span class="ruby-constant">CodeRay</span><span class="ruby-operator">::</span><span class="ruby-constant">Duo</span>[<span class="ruby-identifier">attr</span>(<span class="ruby-string">'language'</span>, <span class="ruby-string">'text'</span>).<span class="ruby-identifier">to_sym</span>, <span class="ruby-value">:html</span>, {
+      <span class="ruby-value">:css</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">attr</span>(<span class="ruby-string">'coderay-css'</span>, <span class="ruby-string">'class'</span>).<span class="ruby-identifier">to_sym</span>,
+      <span class="ruby-value">:line_numbers</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-identifier">attr?</span>(<span class="ruby-string">'linenums'</span>) <span class="ruby-operator">?</span> <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">attr</span>(<span class="ruby-string">'coderay-linenums-mode'</span>, <span class="ruby-string">'table'</span>).<span class="ruby-identifier">to_sym</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>),
+      <span class="ruby-value">:line_number_anchors</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>}].<span class="ruby-identifier">highlight</span>(<span class="ruby-identifier">source</span>).<span class="ruby-identifier">chomp</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- highlight_source-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- highlight_source-method -->
+
+      
+        <div id="parse_attributes-method" class="method-detail ">
+          <a name="method-i-parse_attributes"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">parse_attributes</span><span
+              class="method-args">(attrline, posattrs = ['role'])</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Internal: Parse the attributes in the attribute line</p>
+
+<p>attrline  - A String of unprocessed attributes (key/value pairs) posattrs 
+- The keys for positional attributes</p>
+
+<p>returns nil if attrline is nil, an empty Hash if attrline is empty,
+otherwise a Hash of parsed attributes</p>
+            
+
+            
+            <div class="method-source-code" id="parse_attributes-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 432</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_attributes</span>(<span class="ruby-identifier">attrline</span>, <span class="ruby-identifier">posattrs</span> = [<span class="ruby-string">'role'</span>])
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">nil</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">attrline</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-keyword">return</span> {} <span class="ruby-keyword">if</span> <span class="ruby-identifier">attrline</span>.<span class="ruby-identifier">empty?</span>
+  
+  <span class="ruby-constant">AttributeList</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">attrline</span>, <span class="ruby-keyword">self</span>).<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">posattrs</span>)
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- parse_attributes-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- parse_attributes-method -->
+
+      
+        <div id="resolve_subs-method" class="method-detail ">
+          <a name="method-i-resolve_subs"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">resolve_subs</span><span
+              class="method-args">(subs)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Internal: Resolve the list of comma-delimited subs against the possible
+options.</p>
+
+<p>subs - A comma-delimited String of substitution aliases</p>
+
+<p>returns An Array of Symbols representing the substitution operation</p>
+            
+
+            
+            <div class="method-source-code" id="resolve_subs-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 444</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">resolve_subs</span>(<span class="ruby-identifier">subs</span>)
+  <span class="ruby-identifier">candidates</span> = <span class="ruby-identifier">subs</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">','</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">sub</span><span class="ruby-operator">|</span> <span class="ruby-identifier">sub</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">to_sym</span>}
+  <span class="ruby-identifier">resolved</span> = <span class="ruby-identifier">candidates</span> &amp; <span class="ruby-constant">SUB_OPTIONS</span> 
+  <span class="ruby-keyword">if</span> (<span class="ruby-identifier">invalid</span> = <span class="ruby-identifier">candidates</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">resolved</span>).<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;asciidoctor: WARNING: invalid passthrough macro substitution operation#{invalid.size &gt; 1 ? 's' : ''}: #{invalid * ', '}&quot;</span>
+  <span class="ruby-keyword">end</span> 
+  <span class="ruby-identifier">resolved</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- resolve_subs-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- resolve_subs-method -->
+
+      
+        <div id="restore_passthroughs-method" class="method-detail ">
+          <a name="method-i-restore_passthroughs"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">restore_passthroughs</span><span
+              class="method-args">(text)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Internal: Restore the passthrough text by reinserting into the placeholder
+positions</p>
+
+<p>text - The String text into which to restore the passthrough text</p>
+
+<p>returns The String text with the passthrough text restored</p>
+            
+
+            
+            <div class="method-source-code" id="restore_passthroughs-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 177</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">restore_passthroughs</span>(<span class="ruby-identifier">text</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">text</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@passthroughs</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@passthroughs</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">||</span> <span class="ruby-operator">!</span><span class="ruby-identifier">text</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;\x0&quot;&quot;</span>)
+  
+  <span class="ruby-identifier">text</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-constant">REGEXP</span>[<span class="ruby-value">:pass_placeholder</span>]) {
+    <span class="ruby-identifier">pass</span> = <span class="ruby-ivar">@passthroughs</span>[<span class="ruby-node">$1</span>.<span class="ruby-identifier">to_i</span>];
+    <span class="ruby-identifier">text</span> = <span class="ruby-identifier">apply_subs</span>(<span class="ruby-identifier">pass</span>[<span class="ruby-value">:text</span>], <span class="ruby-identifier">pass</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:subs</span>, []))
+    <span class="ruby-identifier">pass</span>[<span class="ruby-value">:literal</span>] <span class="ruby-operator">?</span> <span class="ruby-constant">Inline</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-value">:quoted</span>, <span class="ruby-identifier">text</span>, <span class="ruby-value">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:monospaced</span>).<span class="ruby-identifier">render</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">text</span>
+  }
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- restore_passthroughs-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- restore_passthroughs-method -->
+
+      
+        <div id="sub_attributes-method" class="method-detail ">
+          <a name="method-i-sub_attributes"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">sub_attributes</span><span
+              class="method-args">(data)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Substitute attribute references</p>
+
+<p>Attribute references are in the format {name}.</p>
+
+<p>If an attribute referenced in the line is missing, the line is dropped.</p>
+
+<p>text     - The String text to process</p>
+
+<p>returns The String text with the attribute references replaced with
+attribute values</p>
+            
+
+            
+            <div class="method-source-code" id="sub_attributes-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 243</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sub_attributes</span>(<span class="ruby-identifier">data</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">data</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">data</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">data</span>.<span class="ruby-identifier">empty?</span>
+
+  <span class="ruby-comment"># normalizes data type to an array (string becomes single-element array)</span>
+  <span class="ruby-identifier">lines</span> = <span class="ruby-constant">Array</span>(<span class="ruby-identifier">data</span>)
+
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">lines</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">reject</span> = <span class="ruby-keyword">false</span>
+    <span class="ruby-identifier">subject</span> = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">dup</span>
+    <span class="ruby-identifier">subject</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-constant">REGEXP</span>[<span class="ruby-value">:attr_ref</span>]) {
+      <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-node">$1</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">||</span> <span class="ruby-operator">!</span><span class="ruby-node">$3</span>.<span class="ruby-identifier">empty?</span>
+        <span class="ruby-node">&quot;{#$2}&quot;</span>
+      <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">document</span>.<span class="ruby-identifier">attributes</span>.<span class="ruby-identifier">has_key?</span> <span class="ruby-node">$2</span>
+        <span class="ruby-identifier">document</span>.<span class="ruby-identifier">attributes</span>[<span class="ruby-node">$2</span>]
+      <span class="ruby-keyword">elsif</span> <span class="ruby-constant">INTRINSICS</span>.<span class="ruby-identifier">has_key?</span> <span class="ruby-node">$2</span>
+        <span class="ruby-constant">INTRINSICS</span>[<span class="ruby-node">$2</span>]
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-constant">Asciidoctor</span>.<span class="ruby-identifier">debug</span> { <span class="ruby-node">&quot;Missing attribute: #$2, line marked for removal&quot;</span> }
+        <span class="ruby-identifier">reject</span> = <span class="ruby-keyword">true</span>
+        <span class="ruby-keyword">break</span> <span class="ruby-string">'{undefined}'</span>
+      <span class="ruby-keyword">end</span>
+    } <span class="ruby-keyword">if</span> <span class="ruby-identifier">subject</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">'{'</span>)
+
+    <span class="ruby-operator">!</span><span class="ruby-identifier">reject</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">subject</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>
+  }.<span class="ruby-identifier">compact</span>
+
+  <span class="ruby-identifier">data</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">result</span>.<span class="ruby-identifier">join</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- sub_attributes-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- sub_attributes-method -->
+
+      
+        <div id="sub_callouts-method" class="method-detail ">
+          <a name="method-i-sub_callouts"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">sub_callouts</span><span
+              class="method-args">(text)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Substitute callout references</p>
+
+<p>text - The String text to process</p>
+
+<p>returns The String with the callout references rendered using the backend
+templates</p>
+            
+
+            
+            <div class="method-source-code" id="sub_callouts-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 388</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sub_callouts</span>(<span class="ruby-identifier">text</span>)
+  <span class="ruby-identifier">text</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-constant">REGEXP</span>[<span class="ruby-value">:callout_render</span>]) {
+    <span class="ruby-comment"># alias match for Ruby 1.8.7 compat</span>
+    <span class="ruby-identifier">m</span> = <span class="ruby-identifier">$~</span>
+    <span class="ruby-comment"># honor the escape</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">start_with?</span> <span class="ruby-string">'\'</span>
+      <span class="ruby-keyword">next</span> <span class="ruby-node">&quot;&amp;lt;#{m[1]}&amp;gt;&quot;</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-constant">Inline</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-value">:callout</span>, <span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>], <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">document</span>.<span class="ruby-identifier">callouts</span>.<span class="ruby-identifier">read_next_id</span>).<span class="ruby-identifier">render</span>
+  }
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- sub_callouts-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- sub_callouts-method -->
+
+      
+        <div id="sub_macros-method" class="method-detail ">
+          <a name="method-i-sub_macros"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">sub_macros</span><span
+              class="method-args">(text)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Substitute inline macros (e.g., links, images, etc)</p>
+
+<p>Replace inline macros, which may span multiple lines, in the provided text</p>
+
+<p>text - The String text to process</p>
+
+<p>returns The String with the inline macros rendered using the backend
+templates</p>
+            
+
+            
+            <div class="method-source-code" id="sub_macros-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 279</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sub_macros</span>(<span class="ruby-identifier">text</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">text</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">text</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">text</span>.<span class="ruby-identifier">empty?</span>
+
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">text</span>.<span class="ruby-identifier">dup</span>
+
+  <span class="ruby-comment"># inline images, image:target.ext[Alt]</span>
+  <span class="ruby-identifier">result</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-constant">REGEXP</span>[<span class="ruby-value">:image_macro</span>]) {
+    <span class="ruby-comment"># alias match for Ruby 1.8.7 compat</span>
+    <span class="ruby-identifier">m</span> = <span class="ruby-identifier">$~</span>
+    <span class="ruby-comment"># honor the escape</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">start_with?</span> <span class="ruby-string">'\'</span>
+      <span class="ruby-keyword">next</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">0</span>][<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">target</span> = <span class="ruby-identifier">sub_attributes</span>(<span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>])
+    <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">register</span>(<span class="ruby-value">:images</span>, <span class="ruby-identifier">target</span>)
+    <span class="ruby-identifier">attrs</span> = <span class="ruby-identifier">parse_attributes</span>(<span class="ruby-identifier">m</span>[<span class="ruby-value">2</span>], [<span class="ruby-string">'alt'</span>, <span class="ruby-string">'width'</span>, <span class="ruby-string">'height'</span>])
+    <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">attrs</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-string">'alt'</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">attrs</span>[<span class="ruby-string">'alt'</span>].<span class="ruby-identifier">empty?</span>
+      <span class="ruby-identifier">attrs</span>[<span class="ruby-string">'alt'</span>] = <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">target</span>, <span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">target</span>))
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-constant">Inline</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-value">:image</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-value">:target</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">target</span>, <span class="ruby-value">:attributes</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">attrs</span>).<span class="ruby-identifier">render</span>
+  } <span class="ruby-keyword">unless</span> <span class="ruby-operator">!</span><span class="ruby-identifier">result</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">'image:'</span>)
+
+  <span class="ruby-comment"># inline urls, target[text] (optionally prefixed with link: and optionally surrounded by &lt;&gt;)</span>
+  <span class="ruby-identifier">result</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-constant">REGEXP</span>[<span class="ruby-value">:link_inline</span>]) {
+    <span class="ruby-comment"># alias match for Ruby 1.8.7 compat</span>
+    <span class="ruby-identifier">m</span> = <span class="ruby-identifier">$~</span>
+    <span class="ruby-comment"># honor the escape</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">2</span>].<span class="ruby-identifier">start_with?</span> <span class="ruby-string">'\'</span>
+      <span class="ruby-keyword">next</span> <span class="ruby-node">&quot;#{m[1]}#{m[2][1..-1]}#{m[3]}&quot;</span>
+    <span class="ruby-comment"># not a valid macro syntax w/o trailing square brackets</span>
+    <span class="ruby-comment"># we probably shouldn't even get here...our regex is doing too much</span>
+    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">==</span> <span class="ruby-string">'link:'</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">3</span>].<span class="ruby-identifier">nil?</span>
+      <span class="ruby-keyword">next</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">0</span>]
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">prefix</span> = (<span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">!=</span> <span class="ruby-string">'link:'</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">:</span> <span class="ruby-string">''</span>)
+    <span class="ruby-identifier">target</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">2</span>]
+    <span class="ruby-comment"># strip the &lt;&gt; around the link</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">prefix</span>.<span class="ruby-identifier">end_with?</span> <span class="ruby-string">'&amp;lt;'</span>
+      <span class="ruby-identifier">prefix</span> = <span class="ruby-identifier">prefix</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-5</span>]
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">target</span>.<span class="ruby-identifier">end_with?</span> <span class="ruby-string">'&amp;gt;'</span>
+      <span class="ruby-identifier">target</span> = <span class="ruby-identifier">target</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-5</span>]
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">register</span>(<span class="ruby-value">:links</span>, <span class="ruby-identifier">target</span>)
+    <span class="ruby-identifier">text</span> = <span class="ruby-operator">!</span><span class="ruby-identifier">m</span>[<span class="ruby-value">3</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">sub_attributes</span>(<span class="ruby-identifier">m</span>[<span class="ruby-value">3</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-string">'\]'</span>, <span class="ruby-string">']'</span>)) <span class="ruby-operator">:</span> <span class="ruby-string">''</span>
+    <span class="ruby-node">&quot;#{prefix}#{Inline.new(self, :anchor, (!text.empty? ? text : target), :type =&gt; :link, :target =&gt; target).render}&quot;</span>
+  } <span class="ruby-keyword">unless</span> <span class="ruby-operator">!</span><span class="ruby-identifier">result</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">'http'</span>)
+
+  <span class="ruby-comment"># inline link macros, link:target[text]</span>
+  <span class="ruby-identifier">result</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-constant">REGEXP</span>[<span class="ruby-value">:link_macro</span>]) {
+    <span class="ruby-comment"># alias match for Ruby 1.8.7 compat</span>
+    <span class="ruby-identifier">m</span> = <span class="ruby-identifier">$~</span>
+    <span class="ruby-comment"># honor the escape</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">start_with?</span> <span class="ruby-string">'\'</span>
+      <span class="ruby-keyword">next</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">0</span>][<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">target</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>]
+    <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">register</span>(<span class="ruby-value">:links</span>, <span class="ruby-identifier">target</span>)
+    <span class="ruby-identifier">text</span> = <span class="ruby-identifier">sub_attributes</span>(<span class="ruby-identifier">m</span>[<span class="ruby-value">2</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-string">'\]'</span>, <span class="ruby-string">']'</span>))
+    <span class="ruby-constant">Inline</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-value">:anchor</span>, (<span class="ruby-operator">!</span><span class="ruby-identifier">text</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">text</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">target</span>), <span class="ruby-value">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:link</span>, <span class="ruby-value">:target</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">target</span>).<span class="ruby-identifier">render</span>
+  } <span class="ruby-keyword">unless</span> <span class="ruby-operator">!</span><span class="ruby-identifier">result</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">'link:'</span>)
+
+  <span class="ruby-identifier">result</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-constant">REGEXP</span>[<span class="ruby-value">:xref_macro</span>]) {
+    <span class="ruby-comment"># alias match for Ruby 1.8.7 compat</span>
+    <span class="ruby-identifier">m</span> = <span class="ruby-identifier">$~</span>
+    <span class="ruby-comment"># honor the escape</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">start_with?</span> <span class="ruby-string">'\'</span>
+      <span class="ruby-keyword">next</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">0</span>][<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">nil?</span>
+      <span class="ruby-identifier">id</span>, <span class="ruby-identifier">reftext</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">','</span>, <span class="ruby-value">2</span>)
+      <span class="ruby-identifier">id</span>.<span class="ruby-identifier">sub!</span>(<span class="ruby-regexp">/^(&quot;|)(.*)\11$$/</span>, <span class="ruby-string">'\2'</span>)
+      <span class="ruby-identifier">reftext</span>.<span class="ruby-identifier">sub!</span>(<span class="ruby-regexp">/^(&quot;|)(.*)\11$$/</span>, <span class="ruby-string">'\2'</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">reftext</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">id</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">2</span>]
+      <span class="ruby-identifier">reftext</span> = <span class="ruby-operator">!</span><span class="ruby-identifier">m</span>[<span class="ruby-value">3</span>].<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">3</span>] <span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-constant">Inline</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-value">:anchor</span>, <span class="ruby-identifier">reftext</span>, <span class="ruby-value">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:xref</span>, <span class="ruby-value">:target</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">id</span>).<span class="ruby-identifier">render</span>
+  }
+
+  <span class="ruby-identifier">result</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-constant">REGEXP</span>[<span class="ruby-value">:anchor_macro</span>]) {
+    <span class="ruby-comment"># alias match for Ruby 1.8.7 compat</span>
+    <span class="ruby-identifier">m</span> = <span class="ruby-identifier">$~</span>
+    <span class="ruby-comment"># honor the escape</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">start_with?</span> <span class="ruby-string">'\'</span>
+      <span class="ruby-keyword">next</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">0</span>][<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">id</span>, <span class="ruby-identifier">reftext</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">','</span>)
+    <span class="ruby-identifier">id</span>.<span class="ruby-identifier">sub!</span>(<span class="ruby-regexp">/^(&quot;|)(.*)\11$$/</span>, <span class="ruby-string">'\2'</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">reftext</span>.<span class="ruby-identifier">nil?</span>
+      <span class="ruby-identifier">reftext</span> = <span class="ruby-node">&quot;[#{id}]&quot;</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">reftext</span>.<span class="ruby-identifier">sub!</span>(<span class="ruby-regexp">/^(&quot;|)(.*)\11$$/</span>, <span class="ruby-string">'\2'</span>)
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-comment"># NOTE the reftext should also match what's in our references dic</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@document</span>.<span class="ruby-identifier">references</span>[<span class="ruby-value">:ids</span>].<span class="ruby-identifier">has_key?</span> <span class="ruby-identifier">id</span>
+      <span class="ruby-constant">Asciidoctor</span>.<span class="ruby-identifier">debug</span> { <span class="ruby-node">&quot;Missing reference for anchor #{id}&quot;</span> }
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-constant">Inline</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-value">:anchor</span>, <span class="ruby-identifier">reftext</span>, <span class="ruby-value">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:ref</span>, <span class="ruby-value">:target</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">id</span>).<span class="ruby-identifier">render</span>
+  } <span class="ruby-keyword">unless</span> <span class="ruby-operator">!</span><span class="ruby-identifier">result</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">'[['</span>)
+
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- sub_macros-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- sub_macros-method -->
+
+      
+        <div id="sub_post_replacements-method" class="method-detail ">
+          <a name="method-i-sub_post_replacements"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">sub_post_replacements</span><span
+              class="method-args">(text)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Substitute post replacements</p>
+
+<p>text - The String text to process</p>
+
+<p>returns The String with the post replacements rendered using the backend
+templates</p>
+            
+
+            
+            <div class="method-source-code" id="sub_post_replacements-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 405</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sub_post_replacements</span>(<span class="ruby-identifier">text</span>)
+  <span class="ruby-identifier">text</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-constant">REGEXP</span>[<span class="ruby-value">:line_break</span>]) { <span class="ruby-constant">Inline</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-value">:break</span>, <span class="ruby-node">$1</span>, <span class="ruby-value">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:line</span>).<span class="ruby-identifier">render</span> }
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- sub_post_replacements-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- sub_post_replacements-method -->
+
+      
+        <div id="sub_quotes-method" class="method-detail ">
+          <a name="method-i-sub_quotes"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">sub_quotes</span><span
+              class="method-args">(text)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Substitute quoted text (includes emphasis, strong, monospaced, etc)</p>
+
+<p>text - The String text to process</p>
+
+<p>returns The String text with quoted text rendered using the backend
+templates</p>
+            
+
+            
+            <div class="method-source-code" id="sub_quotes-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 206</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sub_quotes</span>(<span class="ruby-identifier">text</span>)
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">text</span>.<span class="ruby-identifier">dup</span>
+
+  <span class="ruby-constant">QUOTE_SUBS</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">type</span>, <span class="ruby-identifier">scope</span>, <span class="ruby-identifier">pattern</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-identifier">pattern</span>) { <span class="ruby-identifier">transform_quoted_text</span>(<span class="ruby-identifier">$~</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">scope</span>) }
+  }
+  
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- sub_quotes-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- sub_quotes-method -->
+
+      
+        <div id="sub_replacements-method" class="method-detail ">
+          <a name="method-i-sub_replacements"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">sub_replacements</span><span
+              class="method-args">(text)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Substitute replacement characters (e.g., copyright, trademark, etc)</p>
+
+<p>text - The String text to process</p>
+
+<p>returns The String text with the replacement characters substituted</p>
+            
+
+            
+            <div class="method-source-code" id="sub_replacements-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 221</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sub_replacements</span>(<span class="ruby-identifier">text</span>)
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">text</span>.<span class="ruby-identifier">dup</span>
+
+  <span class="ruby-constant">REPLACEMENTS</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">pattern</span>, <span class="ruby-identifier">replacement</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-identifier">pattern</span>, <span class="ruby-identifier">replacement</span>)
+  }
+  
+  <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- sub_replacements-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- sub_replacements-method -->
+
+      
+        <div id="sub_specialcharacters-method" class="method-detail ">
+          <a name="method-i-sub_specialcharacters"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">sub_specialcharacters</span><span
+              class="method-args">(text)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Substitute special characters (i.e., encode XML)</p>
+
+<p>Special characters are defined in the Asciidoctor::SPECIAL_CHARS Array
+constant</p>
+
+<p>text - The String text to process</p>
+
+<p>returns The String text with special characters replaced</p>
+            
+
+            
+            <div class="method-source-code" id="sub_specialcharacters-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 194</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sub_specialcharacters</span>(<span class="ruby-identifier">text</span>)
+  <span class="ruby-comment"># this syntax only available in Ruby 1.9</span>
+  <span class="ruby-comment">#text.gsub(SPECIAL_CHARS_PATTERN, SPECIAL_CHARS)</span>
+
+  <span class="ruby-identifier">text</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-constant">SPECIAL_CHARS_PATTERN</span>) { <span class="ruby-constant">SPECIAL_CHARS</span>[<span class="ruby-node">$&amp;</span>] }
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- sub_specialcharacters-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- sub_specialcharacters-method -->
+
+      
+        <div id="transform_quoted_text-method" class="method-detail ">
+          <a name="method-i-transform_quoted_text"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">transform_quoted_text</span><span
+              class="method-args">(match, type, scope)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Internal: Transform (render) a quoted text region</p>
+
+<p>match  - The MatchData for the quoted text region type   - The quoting type
+(single, double, strong, emphasis, monospaced, etc) scope  - The scope of
+the quoting (constrained or unconstrained)</p>
+
+<p>returns The rendered text for the quoted text region</p>
+            
+
+            
+            <div class="method-source-code" id="transform_quoted_text-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/substituters.rb, line 416</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">transform_quoted_text</span>(<span class="ruby-identifier">match</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">scope</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">match</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">start_with?</span> <span class="ruby-string">'\'</span>
+    <span class="ruby-identifier">match</span>[<span class="ruby-value">0</span>][<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">scope</span> <span class="ruby-operator">==</span> <span class="ruby-value">:constrained</span>
+    <span class="ruby-node">&quot;#{match[1]}#{Inline.new(self, :quoted, match[3], :type =&gt; type, :attributes =&gt; parse_attributes(match[2])).render}&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-constant">Inline</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-value">:quoted</span>, <span class="ruby-identifier">match</span>[<span class="ruby-value">2</span>], <span class="ruby-value">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">type</span>, <span class="ruby-value">:attributes</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">parse_attributes</span>(<span class="ruby-identifier">match</span>[<span class="ruby-value">1</span>])).<span class="ruby-identifier">render</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- transform_quoted_text-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- transform_quoted_text-method -->
+
+      
+      </div><!-- public-instance-method-details -->
+    
+    </div><!-- 5Buntitled-5D -->
+  
+
+  </div><!-- documentation -->
+
+  <div id="validator-badges">
+    <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+    <p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+      Rdoc Generator</a> 2</small>.</p>
+  </div>
+
+</body>
+</html>
+

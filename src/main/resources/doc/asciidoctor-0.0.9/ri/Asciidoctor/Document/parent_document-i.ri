@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"parent_document:EFI"*Asciidoctor::Document#parent_document;FI"R;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"HPublic: A reference to the parent document of this nested document.;T:
+@file0FI" lib/asciidoctor/document.rb;T

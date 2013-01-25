@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"buffer:EFI"-Asciidoctor::Table::ParserContext#buffer;FI"RW;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"9Public: The String buffer of the currently open cell;T:
+@file0FI"lib/asciidoctor/table.rb;T

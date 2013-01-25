@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"options:EFI"Tilt::Template#options;FI"R;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"HA Hash of template engine specific options. This is passed directly;TI"Eto the underlying engine and is not used by the generic template;TI"interface.;T:
+@file0FI"lib/tilt/template.rb;T

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+
+  <title>File: lexer.rb [asciidoctor-0.0.9 Documentation]</title>
+
+  <link type="text/css" media="screen" href="../../rdoc.css" rel="stylesheet" />
+
+  <script src="../../js/jquery.js" type="text/javascript"
+    charset="utf-8"></script>
+  <script src="../../js/thickbox-compressed.js" type="text/javascript"
+    charset="utf-8"></script>
+  <script src="../../js/quicksearch.js" type="text/javascript"
+    charset="utf-8"></script>
+  <script src="../../js/darkfish.js" type="text/javascript"
+    charset="utf-8"></script>
+</head>
+
+<body class="file file-popup">
+  <div id="metadata">
+    <dl>
+      <dt class="modified-date">Last Modified</dt>
+      <dd class="modified-date">2013-01-23 09:53:12 -0700</dd>
+
+      
+      <dt class="requires">Requires</dt>
+      <dd class="requires">
+        <ul>
+        
+        </ul>
+      </dd>
+      
+
+      
+    </dl>
+  </div>
+
+  <div id="documentation">
+    
+    <div class="description">
+      <h2>Description</h2>
+      
+<p>Public: Methods to parse lines of AsciiDoc into an object hierarchy
+representing the structure of the document. All methods are class methods
+and should be invoked from the Lexer class. The main entry point is
+::next_block. No Lexer instances shall be discovered running around. (Any
+attempt to instantiate a Lexer will be futile).</p>
+
+<p>The object hierarchy created by the Lexer consists of zero or more Section
+and Block objects. Section objects may be nested and a Section object
+contains zero or more Block objects. Block objects may be nested, but may
+only contain other Block objects. Block objects which represent lists may
+contain zero or more ListItem objects.</p>
+
+<p>Examples</p>
+
+<pre># Create a Reader for the AsciiDoc lines and retrieve the next block from it.
+# Lexer::next_block requires a parent, so we begin by instantiating an empty Document.
+
+doc = Document.new
+reader = Reader.new lines
+block = Lexer.next_block(reader, doc)
+block.class
+# =&gt; Asciidoctor::Block</pre>
+
+    </div>
+    
+  </div>
+</body>
+</html>
+

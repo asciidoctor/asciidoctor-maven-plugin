@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+
+  <title>Class: Asciidoctor::Callouts</title>
+
+  <link rel="stylesheet" href="../rdoc.css" type="text/css" media="screen" />
+
+  <script src="../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/thickbox-compressed.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/quicksearch.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/darkfish.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body id="top" class="class">
+
+  <div id="metadata">
+    <div id="home-metadata">
+      <div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+      </div>
+    </div>
+
+    <div id="file-metadata">
+      <div id="file-list-section" class="section">
+        <h3 class="section-header">In Files</h3>
+        <div class="section-body">
+          <ul>
+          
+            <li><a href="../lib/asciidoctor/callouts_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+              class="thickbox" title="lib/asciidoctor/callouts.rb">lib/asciidoctor/callouts.rb</a></li>
+          
+          </ul>
+        </div>
+      </div>
+
+      
+    </div>
+
+    <div id="class-metadata">
+      
+      <!-- Parent Class -->
+      <div id="parent-class-section" class="section">
+        <h3 class="section-header">Parent</h3>
+        
+        <p class="link">Object</p>
+        
+      </div>
+      
+
+      
+
+      
+
+      
+      <!-- Method Quickref -->
+      <div id="method-list-section" class="section">
+        <h3 class="section-header">Methods</h3>
+        <ul class="link-list">
+          
+          <li><a href="#method-c-new">::new</a></li>
+          
+          <li><a href="#method-i-callout_ids">#callout_ids</a></li>
+          
+          <li><a href="#method-i-current_list">#current_list</a></li>
+          
+          <li><a href="#method-i-generate_callout_id">#generate_callout_id</a></li>
+          
+          <li><a href="#method-i-generate_next_callout_id">#generate_next_callout_id</a></li>
+          
+          <li><a href="#method-i-next_list">#next_list</a></li>
+          
+          <li><a href="#method-i-read_next_id">#read_next_id</a></li>
+          
+          <li><a href="#method-i-register">#register</a></li>
+          
+          <li><a href="#method-i-rewind">#rewind</a></li>
+          
+        </ul>
+      </div>
+      
+
+      
+    </div>
+
+    <div id="project-metadata">
+      
+      
+      <div id="fileindex-section" class="section project-section">
+        <h3 class="section-header">Files</h3>
+        <ul>
+        
+          <li class="file"><a href="../LICENSE.html">LICENSE</a></li>
+        
+        </ul>
+      </div>
+      
+
+      <div id="classindex-section" class="section project-section">
+        <h3 class="section-header">Class/Module Index
+          <span class="search-toggle"><img src="../images/find.png"
+            height="16" width="16" alt="[+]"
+            title="show/hide quicksearch" /></span></h3>
+        <form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+        <fieldset>
+          <legend>Quicksearch</legend>
+          <input type="text" name="quicksearch" value=""
+            class="quicksearch-field" />
+        </fieldset>
+        </form>
+
+        <ul class="link-list">
+        
+          <li><a href="../Asciidoctor.html">Asciidoctor</a></li>
+        
+          <li><a href="../Asciidoctor/AbstractBlock.html">Asciidoctor::AbstractBlock</a></li>
+        
+          <li><a href="../Asciidoctor/AbstractNode.html">Asciidoctor::AbstractNode</a></li>
+        
+          <li><a href="../Asciidoctor/AttributeList.html">Asciidoctor::AttributeList</a></li>
+        
+          <li><a href="../Asciidoctor/BaseTemplate.html">Asciidoctor::BaseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Block.html">Asciidoctor::Block</a></li>
+        
+          <li><a href="../Asciidoctor/Callouts.html">Asciidoctor::Callouts</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45.html">Asciidoctor::DocBook45</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockAdmonitionTemplate.html">Asciidoctor::DocBook45::BlockAdmonitionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockColistTemplate.html">Asciidoctor::DocBook45::BlockColistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockDlistTemplate.html">Asciidoctor::DocBook45::BlockDlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockExampleTemplate.html">Asciidoctor::DocBook45::BlockExampleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockImageTemplate.html">Asciidoctor::DocBook45::BlockImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockListingTemplate.html">Asciidoctor::DocBook45::BlockListingTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockLiteralTemplate.html">Asciidoctor::DocBook45::BlockLiteralTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockOlistTemplate.html">Asciidoctor::DocBook45::BlockOlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockOpenTemplate.html">Asciidoctor::DocBook45::BlockOpenTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockParagraphTemplate.html">Asciidoctor::DocBook45::BlockParagraphTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockPassTemplate.html">Asciidoctor::DocBook45::BlockPassTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockPreambleTemplate.html">Asciidoctor::DocBook45::BlockPreambleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockQuoteTemplate.html">Asciidoctor::DocBook45::BlockQuoteTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockRulerTemplate.html">Asciidoctor::DocBook45::BlockRulerTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockSidebarTemplate.html">Asciidoctor::DocBook45::BlockSidebarTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockTableTemplate.html">Asciidoctor::DocBook45::BlockTableTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockUlistTemplate.html">Asciidoctor::DocBook45::BlockUlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockVerseTemplate.html">Asciidoctor::DocBook45::BlockVerseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/DocumentTemplate.html">Asciidoctor::DocBook45::DocumentTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/EmbeddedTemplate.html">Asciidoctor::DocBook45::EmbeddedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineAnchorTemplate.html">Asciidoctor::DocBook45::InlineAnchorTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineBreakTemplate.html">Asciidoctor::DocBook45::InlineBreakTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineCalloutTemplate.html">Asciidoctor::DocBook45::InlineCalloutTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineImageTemplate.html">Asciidoctor::DocBook45::InlineImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineQuotedTemplate.html">Asciidoctor::DocBook45::InlineQuotedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/SectionTemplate.html">Asciidoctor::DocBook45::SectionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Document.html">Asciidoctor::Document</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5.html">Asciidoctor::HTML5</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockAdmonitionTemplate.html">Asciidoctor::HTML5::BlockAdmonitionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockColistTemplate.html">Asciidoctor::HTML5::BlockColistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockDlistTemplate.html">Asciidoctor::HTML5::BlockDlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockExampleTemplate.html">Asciidoctor::HTML5::BlockExampleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockImageTemplate.html">Asciidoctor::HTML5::BlockImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockListingTemplate.html">Asciidoctor::HTML5::BlockListingTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockLiteralTemplate.html">Asciidoctor::HTML5::BlockLiteralTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockOlistTemplate.html">Asciidoctor::HTML5::BlockOlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockOpenTemplate.html">Asciidoctor::HTML5::BlockOpenTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockParagraphTemplate.html">Asciidoctor::HTML5::BlockParagraphTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockPassTemplate.html">Asciidoctor::HTML5::BlockPassTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockPreambleTemplate.html">Asciidoctor::HTML5::BlockPreambleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockQuoteTemplate.html">Asciidoctor::HTML5::BlockQuoteTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockRulerTemplate.html">Asciidoctor::HTML5::BlockRulerTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockSidebarTemplate.html">Asciidoctor::HTML5::BlockSidebarTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockTableTemplate.html">Asciidoctor::HTML5::BlockTableTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockUlistTemplate.html">Asciidoctor::HTML5::BlockUlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockVerseTemplate.html">Asciidoctor::HTML5::BlockVerseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/DocumentTemplate.html">Asciidoctor::HTML5::DocumentTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/EmbeddedTemplate.html">Asciidoctor::HTML5::EmbeddedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineAnchorTemplate.html">Asciidoctor::HTML5::InlineAnchorTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineBreakTemplate.html">Asciidoctor::HTML5::InlineBreakTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineCalloutTemplate.html">Asciidoctor::HTML5::InlineCalloutTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineImageTemplate.html">Asciidoctor::HTML5::InlineImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineQuotedTemplate.html">Asciidoctor::HTML5::InlineQuotedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/SectionTemplate.html">Asciidoctor::HTML5::SectionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Inline.html">Asciidoctor::Inline</a></li>
+        
+          <li><a href="../Asciidoctor/Lexer.html">Asciidoctor::Lexer</a></li>
+        
+          <li><a href="../Asciidoctor/ListItem.html">Asciidoctor::ListItem</a></li>
+        
+          <li><a href="../Asciidoctor/ProjectError.html">Asciidoctor::ProjectError</a></li>
+        
+          <li><a href="../Asciidoctor/Reader.html">Asciidoctor::Reader</a></li>
+        
+          <li><a href="../Asciidoctor/Renderer.html">Asciidoctor::Renderer</a></li>
+        
+          <li><a href="../Asciidoctor/SafeMode.html">Asciidoctor::SafeMode</a></li>
+        
+          <li><a href="../Asciidoctor/Section.html">Asciidoctor::Section</a></li>
+        
+          <li><a href="../Asciidoctor/Substituters.html">Asciidoctor::Substituters</a></li>
+        
+          <li><a href="../Asciidoctor/Table.html">Asciidoctor::Table</a></li>
+        
+          <li><a href="../Asciidoctor/Table/Cell.html">Asciidoctor::Table::Cell</a></li>
+        
+          <li><a href="../Asciidoctor/Table/Column.html">Asciidoctor::Table::Column</a></li>
+        
+          <li><a href="../Asciidoctor/Table/ParserContext.html">Asciidoctor::Table::ParserContext</a></li>
+        
+        </ul>
+        <div id="no-class-search-results" style="display: none;">No matching classes.</div>
+      </div>
+
+      
+    </div>
+  </div>
+
+  <div id="documentation">
+    <h1 class="class">Asciidoctor::Callouts</h1>
+
+    <div id="description" class="description">
+      
+<p>Public: Maintains a catalog of callouts and their associations.</p>
+
+    </div><!-- description -->
+
+    
+    
+    
+    <div id="5Buntitled-5D" class="documentation-section">
+      
+
+      
+
+      
+
+      
+
+      <!-- Methods -->
+      
+      <div id="public-class-method-details" class="method-section section">
+        <h3 class="section-header">Public Class Methods</h3>
+
+      
+        <div id="new-method" class="method-detail ">
+          <a name="method-c-new"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">new</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="new-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/callouts.rb, line 3</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>
+  <span class="ruby-ivar">@lists</span> = []
+  <span class="ruby-ivar">@list_index</span> = <span class="ruby-value">0</span>
+  <span class="ruby-identifier">next_list</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- new-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- new-method -->
+
+      
+      </div><!-- public-class-method-details -->
+    
+      <div id="public-instance-method-details" class="method-section section">
+        <h3 class="section-header">Public Instance Methods</h3>
+
+      
+        <div id="callout_ids-method" class="method-detail ">
+          <a name="method-i-callout_ids"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">callout_ids</span><span
+              class="method-args">(li_ordinal)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Get a space-separated list of callout ids for the specified list
+item</p>
+
+<p>li_ordinal - the Integer ordinal (1-based) of the list item for which to</p>
+
+<pre>retrieve the callouts</pre>
+
+<p>Returns A space-separated String of callout ids associated with the
+specified list item</p>
+            
+
+            
+            <div class="method-source-code" id="callout_ids-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/callouts.rb, line 61</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">callout_ids</span>(<span class="ruby-identifier">li_ordinal</span>)
+  <span class="ruby-identifier">current_list</span>.<span class="ruby-identifier">inject</span>([]) {<span class="ruby-operator">|</span><span class="ruby-identifier">collector</span>, <span class="ruby-identifier">element</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">collector</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">element</span>[<span class="ruby-value">:id</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">element</span>[<span class="ruby-value">:ordinal</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">li_ordinal</span>
+    <span class="ruby-identifier">collector</span>
+  } * <span class="ruby-string">' '</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- callout_ids-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- callout_ids-method -->
+
+      
+        <div id="current_list-method" class="method-detail ">
+          <a name="method-i-current_list"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">current_list</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: The current list for which callouts are being collected</p>
+
+<p>Returns The Array of callouts at the position of the list index pointer</p>
+            
+
+            
+            <div class="method-source-code" id="current_list-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/callouts.rb, line 71</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">current_list</span>
+  <span class="ruby-ivar">@lists</span>[<span class="ruby-ivar">@list_index</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>]
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- current_list-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- current_list-method -->
+
+      
+        <div id="generate_callout_id-method" class="method-detail ">
+          <a name="method-i-generate_callout_id"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">generate_callout_id</span><span
+              class="method-args">(list_index, co_index)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Internal: Generate a unique id for the callout at the specified position</p>
+
+<p>list_index - The 1-based Integer index of the callout list within the
+document co_index   - The 1-based Integer index of the callout since the
+end of the last callout list</p>
+
+<p>Returns A unique String id for a callout</p>
+            
+
+            
+            <div class="method-source-code" id="generate_callout_id-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/callouts.rb, line 114</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">generate_callout_id</span>(<span class="ruby-identifier">list_index</span>, <span class="ruby-identifier">co_index</span>)
+  <span class="ruby-node">&quot;CO#{list_index}-#{co_index}&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- generate_callout_id-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- generate_callout_id-method -->
+
+      
+        <div id="generate_next_callout_id-method" class="method-detail ">
+          <a name="method-i-generate_next_callout_id"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">generate_next_callout_id</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Internal: Generate a unique id for the callout based on the internal
+indexes</p>
+
+<p>Returns A unique String id for this callout</p>
+            
+
+            
+            <div class="method-source-code" id="generate_next_callout_id-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/callouts.rb, line 104</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">generate_next_callout_id</span>
+  <span class="ruby-identifier">generate_callout_id</span>(<span class="ruby-ivar">@list_index</span>, <span class="ruby-ivar">@co_index</span>)
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- generate_next_callout_id-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- generate_next_callout_id-method -->
+
+      
+        <div id="next_list-method" class="method-detail ">
+          <a name="method-i-next_list"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">next_list</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Advance to the next callout list in the document</p>
+
+<p>Returns nothing</p>
+            
+
+            
+            <div class="method-source-code" id="next_list-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/callouts.rb, line 78</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">next_list</span>
+  <span class="ruby-ivar">@list_index</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@lists</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&lt;</span> <span class="ruby-ivar">@list_index</span>
+    <span class="ruby-ivar">@lists</span> <span class="ruby-operator">&lt;&lt;</span> []
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-ivar">@co_index</span> = <span class="ruby-value">1</span>
+
+  <span class="ruby-keyword">nil</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- next_list-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- next_list-method -->
+
+      
+        <div id="read_next_id-method" class="method-detail ">
+          <a name="method-i-read_next_id"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">read_next_id</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Get the next callout index in the document</p>
+
+<p>Reads the next callout index in the document and advances the pointer. This
+method is used during rendering to retrieve the unique id of the callout
+that was generated during lexing.</p>
+
+<p>Returns The unique String id of the next callout in the document</p>
+            
+
+            
+            <div class="method-source-code" id="read_next_id-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/callouts.rb, line 42</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">read_next_id</span>
+  <span class="ruby-identifier">id</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-identifier">list</span> = <span class="ruby-identifier">current_list</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@co_index</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-identifier">list</span>.<span class="ruby-identifier">size</span>
+    <span class="ruby-identifier">id</span> = <span class="ruby-identifier">list</span>[<span class="ruby-ivar">@co_index</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>][<span class="ruby-value">:id</span>]
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-ivar">@co_index</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+
+  <span class="ruby-identifier">id</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- read_next_id-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- read_next_id-method -->
+
+      
+        <div id="register-method" class="method-detail ">
+          <a name="method-i-register"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">register</span><span
+              class="method-args">(li_ordinal)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Register a new callout for the given list item ordinal.</p>
+
+<p>Generates a unique id for this callout based on the index of the next
+callout list in the document and the index of this callout since the end of
+the last callout list.</p>
+
+<p>li_ordinal - the Integer ordinal (1-based) of the list item to which this</p>
+
+<pre>callout is to be associated</pre>
+
+<p>Examples</p>
+
+<pre>callouts = Asciidoctor::Callouts.new
+callouts.register(1)
+# =&gt; &quot;CO1-1&quot;
+callouts.next_list
+callouts.register(2)
+# =&gt; &quot;CO2-1&quot;</pre>
+
+<p>Returns The unique String id of this callout</p>
+            
+
+            
+            <div class="method-source-code" id="register-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/callouts.rb, line 28</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">register</span>(<span class="ruby-identifier">li_ordinal</span>)
+  <span class="ruby-identifier">current_list</span> <span class="ruby-operator">&lt;&lt;</span> {<span class="ruby-value">:ordinal</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">li_ordinal</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-identifier">id</span> = <span class="ruby-identifier">generate_next_callout_id</span>)}
+  <span class="ruby-ivar">@co_index</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+
+  <span class="ruby-identifier">id</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- register-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- register-method -->
+
+      
+        <div id="rewind-method" class="method-detail ">
+          <a name="method-i-rewind"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">rewind</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Rewind the list index pointer, intended to be used when switching
+from the parsing to rendering phase.</p>
+
+<p>Returns nothing</p>
+            
+
+            
+            <div class="method-source-code" id="rewind-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/callouts.rb, line 94</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">rewind</span>
+  <span class="ruby-ivar">@list_index</span> = <span class="ruby-value">1</span>
+  <span class="ruby-ivar">@co_index</span> = <span class="ruby-value">1</span>
+  
+  <span class="ruby-keyword">nil</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- rewind-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- rewind-method -->
+
+      
+      </div><!-- public-instance-method-details -->
+    
+    </div><!-- 5Buntitled-5D -->
+  
+
+  </div><!-- documentation -->
+
+  <div id="validator-badges">
+    <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+    <p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+      Rdoc Generator</a> 2</small>.</p>
+  </div>
+
+</body>
+</html>
+

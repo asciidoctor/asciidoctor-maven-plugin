@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"buffer:EFI"Asciidoctor::Block#buffer;FI"RW;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"GPublic: Get/Set the original Array content for this section block.;T:
+@file0FI"lib/asciidoctor/block.rb;T

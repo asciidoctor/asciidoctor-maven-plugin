@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+
+  <title>Class: Asciidoctor::Table</title>
+
+  <link rel="stylesheet" href="../rdoc.css" type="text/css" media="screen" />
+
+  <script src="../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/thickbox-compressed.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/quicksearch.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/darkfish.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body id="top" class="class">
+
+  <div id="metadata">
+    <div id="home-metadata">
+      <div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+      </div>
+    </div>
+
+    <div id="file-metadata">
+      <div id="file-list-section" class="section">
+        <h3 class="section-header">In Files</h3>
+        <div class="section-body">
+          <ul>
+          
+            <li><a href="../lib/asciidoctor/table_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+              class="thickbox" title="lib/asciidoctor/table.rb">lib/asciidoctor/table.rb</a></li>
+          
+          </ul>
+        </div>
+      </div>
+
+      
+    </div>
+
+    <div id="class-metadata">
+      
+      <!-- Parent Class -->
+      <div id="parent-class-section" class="section">
+        <h3 class="section-header">Parent</h3>
+        
+        <p class="link">AbstractBlock</p>
+        
+      </div>
+      
+
+      
+
+      
+      <!-- Namespace Contents -->
+      <div id="namespace-list-section" class="section">
+        <h3 class="section-header">Namespace</h3>
+        <ul class="link-list">
+          
+          <li><span class="type">CLASS</span> <a href="Table/Cell.html">Asciidoctor::Table::Cell</a></li>
+          
+          <li><span class="type">CLASS</span> <a href="Table/Column.html">Asciidoctor::Table::Column</a></li>
+          
+          <li><span class="type">CLASS</span> <a href="Table/ParserContext.html">Asciidoctor::Table::ParserContext</a></li>
+          
+        </ul>
+      </div>
+      
+
+      
+      <!-- Method Quickref -->
+      <div id="method-list-section" class="section">
+        <h3 class="section-header">Methods</h3>
+        <ul class="link-list">
+          
+          <li><a href="#method-c-new">::new</a></li>
+          
+          <li><a href="#method-i-create_columns">#create_columns</a></li>
+          
+          <li><a href="#method-i-partition_header_footer">#partition_header_footer</a></li>
+          
+          <li><a href="#method-i-render">#render</a></li>
+          
+        </ul>
+      </div>
+      
+
+      
+    </div>
+
+    <div id="project-metadata">
+      
+      
+      <div id="fileindex-section" class="section project-section">
+        <h3 class="section-header">Files</h3>
+        <ul>
+        
+          <li class="file"><a href="../LICENSE.html">LICENSE</a></li>
+        
+        </ul>
+      </div>
+      
+
+      <div id="classindex-section" class="section project-section">
+        <h3 class="section-header">Class/Module Index
+          <span class="search-toggle"><img src="../images/find.png"
+            height="16" width="16" alt="[+]"
+            title="show/hide quicksearch" /></span></h3>
+        <form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+        <fieldset>
+          <legend>Quicksearch</legend>
+          <input type="text" name="quicksearch" value=""
+            class="quicksearch-field" />
+        </fieldset>
+        </form>
+
+        <ul class="link-list">
+        
+          <li><a href="../Asciidoctor.html">Asciidoctor</a></li>
+        
+          <li><a href="../Asciidoctor/AbstractBlock.html">Asciidoctor::AbstractBlock</a></li>
+        
+          <li><a href="../Asciidoctor/AbstractNode.html">Asciidoctor::AbstractNode</a></li>
+        
+          <li><a href="../Asciidoctor/AttributeList.html">Asciidoctor::AttributeList</a></li>
+        
+          <li><a href="../Asciidoctor/BaseTemplate.html">Asciidoctor::BaseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Block.html">Asciidoctor::Block</a></li>
+        
+          <li><a href="../Asciidoctor/Callouts.html">Asciidoctor::Callouts</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45.html">Asciidoctor::DocBook45</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockAdmonitionTemplate.html">Asciidoctor::DocBook45::BlockAdmonitionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockColistTemplate.html">Asciidoctor::DocBook45::BlockColistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockDlistTemplate.html">Asciidoctor::DocBook45::BlockDlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockExampleTemplate.html">Asciidoctor::DocBook45::BlockExampleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockImageTemplate.html">Asciidoctor::DocBook45::BlockImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockListingTemplate.html">Asciidoctor::DocBook45::BlockListingTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockLiteralTemplate.html">Asciidoctor::DocBook45::BlockLiteralTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockOlistTemplate.html">Asciidoctor::DocBook45::BlockOlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockOpenTemplate.html">Asciidoctor::DocBook45::BlockOpenTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockParagraphTemplate.html">Asciidoctor::DocBook45::BlockParagraphTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockPassTemplate.html">Asciidoctor::DocBook45::BlockPassTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockPreambleTemplate.html">Asciidoctor::DocBook45::BlockPreambleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockQuoteTemplate.html">Asciidoctor::DocBook45::BlockQuoteTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockRulerTemplate.html">Asciidoctor::DocBook45::BlockRulerTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockSidebarTemplate.html">Asciidoctor::DocBook45::BlockSidebarTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockTableTemplate.html">Asciidoctor::DocBook45::BlockTableTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockUlistTemplate.html">Asciidoctor::DocBook45::BlockUlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockVerseTemplate.html">Asciidoctor::DocBook45::BlockVerseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/DocumentTemplate.html">Asciidoctor::DocBook45::DocumentTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/EmbeddedTemplate.html">Asciidoctor::DocBook45::EmbeddedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineAnchorTemplate.html">Asciidoctor::DocBook45::InlineAnchorTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineBreakTemplate.html">Asciidoctor::DocBook45::InlineBreakTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineCalloutTemplate.html">Asciidoctor::DocBook45::InlineCalloutTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineImageTemplate.html">Asciidoctor::DocBook45::InlineImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineQuotedTemplate.html">Asciidoctor::DocBook45::InlineQuotedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/SectionTemplate.html">Asciidoctor::DocBook45::SectionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Document.html">Asciidoctor::Document</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5.html">Asciidoctor::HTML5</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockAdmonitionTemplate.html">Asciidoctor::HTML5::BlockAdmonitionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockColistTemplate.html">Asciidoctor::HTML5::BlockColistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockDlistTemplate.html">Asciidoctor::HTML5::BlockDlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockExampleTemplate.html">Asciidoctor::HTML5::BlockExampleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockImageTemplate.html">Asciidoctor::HTML5::BlockImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockListingTemplate.html">Asciidoctor::HTML5::BlockListingTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockLiteralTemplate.html">Asciidoctor::HTML5::BlockLiteralTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockOlistTemplate.html">Asciidoctor::HTML5::BlockOlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockOpenTemplate.html">Asciidoctor::HTML5::BlockOpenTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockParagraphTemplate.html">Asciidoctor::HTML5::BlockParagraphTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockPassTemplate.html">Asciidoctor::HTML5::BlockPassTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockPreambleTemplate.html">Asciidoctor::HTML5::BlockPreambleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockQuoteTemplate.html">Asciidoctor::HTML5::BlockQuoteTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockRulerTemplate.html">Asciidoctor::HTML5::BlockRulerTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockSidebarTemplate.html">Asciidoctor::HTML5::BlockSidebarTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockTableTemplate.html">Asciidoctor::HTML5::BlockTableTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockUlistTemplate.html">Asciidoctor::HTML5::BlockUlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockVerseTemplate.html">Asciidoctor::HTML5::BlockVerseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/DocumentTemplate.html">Asciidoctor::HTML5::DocumentTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/EmbeddedTemplate.html">Asciidoctor::HTML5::EmbeddedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineAnchorTemplate.html">Asciidoctor::HTML5::InlineAnchorTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineBreakTemplate.html">Asciidoctor::HTML5::InlineBreakTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineCalloutTemplate.html">Asciidoctor::HTML5::InlineCalloutTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineImageTemplate.html">Asciidoctor::HTML5::InlineImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineQuotedTemplate.html">Asciidoctor::HTML5::InlineQuotedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/SectionTemplate.html">Asciidoctor::HTML5::SectionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Inline.html">Asciidoctor::Inline</a></li>
+        
+          <li><a href="../Asciidoctor/Lexer.html">Asciidoctor::Lexer</a></li>
+        
+          <li><a href="../Asciidoctor/ListItem.html">Asciidoctor::ListItem</a></li>
+        
+          <li><a href="../Asciidoctor/ProjectError.html">Asciidoctor::ProjectError</a></li>
+        
+          <li><a href="../Asciidoctor/Reader.html">Asciidoctor::Reader</a></li>
+        
+          <li><a href="../Asciidoctor/Renderer.html">Asciidoctor::Renderer</a></li>
+        
+          <li><a href="../Asciidoctor/SafeMode.html">Asciidoctor::SafeMode</a></li>
+        
+          <li><a href="../Asciidoctor/Section.html">Asciidoctor::Section</a></li>
+        
+          <li><a href="../Asciidoctor/Substituters.html">Asciidoctor::Substituters</a></li>
+        
+          <li><a href="../Asciidoctor/Table.html">Asciidoctor::Table</a></li>
+        
+          <li><a href="../Asciidoctor/Table/Cell.html">Asciidoctor::Table::Cell</a></li>
+        
+          <li><a href="../Asciidoctor/Table/Column.html">Asciidoctor::Table::Column</a></li>
+        
+          <li><a href="../Asciidoctor/Table/ParserContext.html">Asciidoctor::Table::ParserContext</a></li>
+        
+        </ul>
+        <div id="no-class-search-results" style="display: none;">No matching classes.</div>
+      </div>
+
+      
+    </div>
+  </div>
+
+  <div id="documentation">
+    <h1 class="class">Asciidoctor::Table</h1>
+
+    <div id="description" class="description">
+      
+<p>Public: Methods and constants for managing AsciiDoc table content in a
+document. It supports all three of AsciiDoc’s table formats: psv, dsv and
+csv.</p>
+
+    </div><!-- description -->
+
+    
+    
+    
+    <div id="5Buntitled-5D" class="documentation-section">
+      
+
+      
+
+      
+      <!-- Constants -->
+      <div id="constants-list" class="section">
+        <h3 class="section-header">Constants</h3>
+        <dl>
+        
+          <dt><a name="ALIGNMENTS">ALIGNMENTS</a></dt>
+          
+          <dd class="description"><p>Public: A Hash mapping alignment abbreviations to alignments (horizontal
+and vertial) that can be applies to a table column or cell</p></dd>
+          
+        
+          <dt><a name="BLANK_LINE_PATTERN">BLANK_LINE_PATTERN</a></dt>
+          
+          <dd class="description"><p>Public: A compiled Regexp to match a blank line</p></dd>
+          
+        
+          <dt><a name="DATA_FORMATS">DATA_FORMATS</a></dt>
+          
+          <dd class="description"><p>Public: An Array of String keys that represent the table formats in
+AsciiDoc</p></dd>
+          
+        
+          <dt><a name="DEFAULT_DATA_FORMAT">DEFAULT_DATA_FORMAT</a></dt>
+          
+          <dd class="description"><p>Public: A String key that specifies the default table format in AsciiDoc
+(psv)</p></dd>
+          
+        
+          <dt><a name="DEFAULT_DELIMITERS">DEFAULT_DELIMITERS</a></dt>
+          
+          <dd class="description"><p>Public: A Hash mapping the AsciiDoc table formats to their default
+delimiters</p></dd>
+          
+        
+          <dt><a name="TEXT_STYLES">TEXT_STYLES</a></dt>
+          
+          <dd class="description"><p>Public: A Hash mapping styles abbreviations to styles that can be applied
+to a table column or cell</p></dd>
+          
+        
+        </dl>
+      </div>
+      
+
+      
+      <!-- Attributes -->
+      <div id="attribute-method-details" class="method-section section">
+        <h3 class="section-header">Attributes</h3>
+
+        
+        <div id="caption-attribute-method" class="method-detail">
+          <a name="caption"></a>
+          
+          <a name="caption="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">caption</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          <p>Public: Get/Set the String caption (unused, necessary for compatibility w/
+next_block)</p>
+          
+          </div>
+        </div>
+        
+        <div id="columns-attribute-method" class="method-detail">
+          <a name="columns"></a>
+          
+          <a name="columns="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">columns</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          <p>Public: Get/Set the columns for this table</p>
+          
+          </div>
+        </div>
+        
+        <div id="rows-attribute-method" class="method-detail">
+          <a name="rows"></a>
+          
+          <a name="rows="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">rows</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          <p>Public: Get/Set the Rows struct for this table (encapsulates head, foot and
+body rows)</p>
+          
+          </div>
+        </div>
+        
+      </div><!-- attribute-method-details -->
+      
+
+      <!-- Methods -->
+      
+      <div id="public-class-method-details" class="method-section section">
+        <h3 class="section-header">Public Class Methods</h3>
+
+      
+        <div id="new-method" class="method-detail ">
+          <a name="method-c-new"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">new</span><span
+              class="method-args">(parent, attributes)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="new-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/table.rb, line 59</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">parent</span>, <span class="ruby-identifier">attributes</span>)
+  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">parent</span>, <span class="ruby-value">:table</span>)
+  <span class="ruby-comment"># QUESTION since caption is on block, should it go to AbstractBlock?</span>
+  <span class="ruby-ivar">@caption</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-ivar">@rows</span> = <span class="ruby-constant">Rows</span>.<span class="ruby-identifier">new</span>([], [], [])
+  <span class="ruby-ivar">@columns</span> = []
+
+  <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@attributes</span>.<span class="ruby-identifier">has_key?</span> <span class="ruby-string">'tablepcwidth'</span>
+    <span class="ruby-comment"># smell like we need a utility method here</span>
+    <span class="ruby-comment"># to resolve an integer width from potential bogus input</span>
+    <span class="ruby-identifier">pcwidth</span> = <span class="ruby-identifier">attributes</span>[<span class="ruby-string">'width'</span>]
+    <span class="ruby-identifier">pcwidth_intval</span> = <span class="ruby-identifier">pcwidth</span>.<span class="ruby-identifier">to_i</span>.<span class="ruby-identifier">abs</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">pcwidth_intval</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">pcwidth</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;0&quot;</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">pcwidth_intval</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">100</span>
+      <span class="ruby-identifier">pcwidth_intval</span> = <span class="ruby-value">100</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-ivar">@attributes</span>[<span class="ruby-string">'tablepcwidth'</span>] = <span class="ruby-identifier">pcwidth_intval</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">attributes</span>.<span class="ruby-identifier">has_key?</span> <span class="ruby-string">'pagewidth'</span>
+    <span class="ruby-ivar">@attributes</span>[<span class="ruby-string">'tableabswidth'</span>] <span class="ruby-operator">||=</span>
+        ((<span class="ruby-ivar">@attributes</span>[<span class="ruby-string">'tablepcwidth'</span>].<span class="ruby-identifier">to_f</span> <span class="ruby-operator">/</span> <span class="ruby-value">100</span>) * <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">attributes</span>[<span class="ruby-string">'pagewidth'</span>]).<span class="ruby-identifier">round</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- new-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- new-method -->
+
+      
+      </div><!-- public-class-method-details -->
+    
+      <div id="public-instance-method-details" class="method-section section">
+        <h3 class="section-header">Public Instance Methods</h3>
+
+      
+        <div id="create_columns-method" class="method-detail ">
+          <a name="method-i-create_columns"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">create_columns</span><span
+              class="method-args">(col_specs)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Internal: Creates the <a href="Table/Column.html">Column</a> objects from
+the column spec</p>
+
+<p>returns nothing</p>
+            
+
+            
+            <div class="method-source-code" id="create_columns-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/table.rb, line 86</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create_columns</span>(<span class="ruby-identifier">col_specs</span>)
+  <span class="ruby-identifier">total_width</span> = <span class="ruby-value">0</span>
+  <span class="ruby-ivar">@columns</span> = <span class="ruby-identifier">col_specs</span>.<span class="ruby-identifier">inject</span>([]) {<span class="ruby-operator">|</span><span class="ruby-identifier">collector</span>, <span class="ruby-identifier">col_spec</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">total_width</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">col_spec</span>[<span class="ruby-string">'width'</span>]
+    <span class="ruby-identifier">collector</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Column</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">collector</span>.<span class="ruby-identifier">size</span>, <span class="ruby-identifier">col_spec</span>)
+    <span class="ruby-identifier">collector</span>
+  }
+  
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@columns</span>.<span class="ruby-identifier">empty?</span>
+    <span class="ruby-ivar">@attributes</span>[<span class="ruby-string">'colcount'</span>] = <span class="ruby-ivar">@columns</span>.<span class="ruby-identifier">size</span>
+    <span class="ruby-identifier">even_width</span> = (<span class="ruby-value">100.0</span> <span class="ruby-operator">/</span> <span class="ruby-ivar">@columns</span>.<span class="ruby-identifier">size</span>).<span class="ruby-identifier">floor</span>
+    <span class="ruby-ivar">@columns</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">assign_width</span>(<span class="ruby-identifier">total_width</span>, <span class="ruby-identifier">even_width</span>) }
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">nil</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- create_columns-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- create_columns-method -->
+
+      
+        <div id="partition_header_footer-method" class="method-detail ">
+          <a name="method-i-partition_header_footer"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">partition_header_footer</span><span
+              class="method-args">(attributes)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Internal: Partition the rows into header, footer and body as determined by
+the options on the table</p>
+
+<p>returns nothing</p>
+            
+
+            
+            <div class="method-source-code" id="partition_header_footer-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/table.rb, line 107</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">partition_header_footer</span>(<span class="ruby-identifier">attributes</span>)
+  <span class="ruby-comment"># set rowcount before splitting up body rows</span>
+  <span class="ruby-ivar">@attributes</span>[<span class="ruby-string">'rowcount'</span>] = <span class="ruby-ivar">@rows</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">size</span>
+  
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">rows</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">attributes</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-string">'header-option'</span>)
+    <span class="ruby-identifier">head</span> = <span class="ruby-identifier">rows</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">shift</span>
+    <span class="ruby-comment"># styles aren't applied to header row</span>
+    <span class="ruby-identifier">head</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">attributes</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">'style'</span>) }
+    <span class="ruby-comment"># QUESTION why does AsciiDoc use an array for head? is it</span>
+    <span class="ruby-comment"># possible to have more than one based on the syntax?</span>
+    <span class="ruby-identifier">rows</span>.<span class="ruby-identifier">head</span> = [<span class="ruby-identifier">head</span>]
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">rows</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">attributes</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-string">'footer-option'</span>)
+    <span class="ruby-identifier">rows</span>.<span class="ruby-identifier">foot</span> = [<span class="ruby-identifier">rows</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">pop</span>]
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-keyword">nil</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- partition_header_footer-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- partition_header_footer-method -->
+
+      
+        <div id="render-method" class="method-detail ">
+          <a name="method-i-render"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">render</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Get the rendered String content for this <a
+href="Block.html">Block</a>.  If the block has child blocks, the content
+method should cause them to be rendered and returned as content that can be
+included in the parent block’s template.</p>
+            
+
+            
+            <div class="method-source-code" id="render-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/table.rb, line 131</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">render</span>
+  <span class="ruby-constant">Asciidoctor</span>.<span class="ruby-identifier">debug</span> { <span class="ruby-node">&quot;Now attempting to render for table my own bad #{self}&quot;</span> }
+  <span class="ruby-constant">Asciidoctor</span>.<span class="ruby-identifier">debug</span> { <span class="ruby-node">&quot;Parent is #{@parent}&quot;</span> }
+  <span class="ruby-constant">Asciidoctor</span>.<span class="ruby-identifier">debug</span> { <span class="ruby-node">&quot;Renderer is #{renderer}&quot;</span> }
+  <span class="ruby-identifier">renderer</span>.<span class="ruby-identifier">render</span>(<span class="ruby-string">'block_table'</span>, <span class="ruby-keyword">self</span>) 
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- render-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- render-method -->
+
+      
+      </div><!-- public-instance-method-details -->
+    
+    </div><!-- 5Buntitled-5D -->
+  
+
+  </div><!-- documentation -->
+
+  <div id="validator-badges">
+    <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+    <p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+      Rdoc Generator</a> 2</small>.</p>
+  </div>
+
+</body>
+</html>
+

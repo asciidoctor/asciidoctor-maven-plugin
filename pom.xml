@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.asciidoc</groupId>
-    <artifactId>maven-asciidoctor-plugin</artifactId>
+    <artifactId>asciidoctor-maven-plugin</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
@@ -75,9 +75,9 @@
         </dependency>
         <dependency>
             <groupId>org.jruby</groupId>
-            <artifactId>jruby</artifactId>
+            <artifactId>jruby-complete</artifactId>
             <version>${jruby.version}</version>
-            <scope>compile</scope>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.spockframework</groupId>
@@ -85,11 +85,11 @@
             <version>${spock.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-site-plugin</artifactId>
-            <version>3.1</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-site-plugin</artifactId>-->
+            <!--<version>3.1</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>
@@ -99,7 +99,7 @@
                 <artifactId>maven-plugin-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <goalPrefix>maven-asciidoctor-plugin</goalPrefix>
+                    <goalPrefix>asciidoctor</goalPrefix>
                     <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
                 </configuration>
                 <executions>
@@ -109,25 +109,41 @@
                             <goal>descriptor</goal>
                         </goals>
                     </execution>
-                    <execution>
-                        <id>help-goal</id>
-                        <goals>
-                            <goal>helpmojo</goal>
-                        </goals>
-                    </execution>
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.spockframework</groupId>
-                <artifactId>spock-maven</artifactId>
-                <version>${spock.version}</version>
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <version>1.4</version>
+                <configuration>
+                    <providerSelection>2.0</providerSelection>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>find-specs</goal>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.gmaven.runtime</groupId>
+                        <artifactId>gmaven-runtime-2.0</artifactId>
+                        <version>1.4</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>org.codehaus.groovy</groupId>
+                                <artifactId>groovy-all</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                        <version>2.0.5</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

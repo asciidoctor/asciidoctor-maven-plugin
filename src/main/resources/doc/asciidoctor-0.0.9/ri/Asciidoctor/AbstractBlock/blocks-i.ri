@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"blocks:EFI"&Asciidoctor::AbstractBlock#blocks;FI"R;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"RPublic: Get the Array of Asciidoctor::AbstractBlock sub-blocks for this block;T:
+@file0FI"&lib/asciidoctor/abstract_block.rb;T

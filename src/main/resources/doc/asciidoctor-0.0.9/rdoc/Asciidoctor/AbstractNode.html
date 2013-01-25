@@ -1,0 +1,946 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+
+  <title>Class: Asciidoctor::AbstractNode</title>
+
+  <link rel="stylesheet" href="../rdoc.css" type="text/css" media="screen" />
+
+  <script src="../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/thickbox-compressed.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/quicksearch.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/darkfish.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body id="top" class="class">
+
+  <div id="metadata">
+    <div id="home-metadata">
+      <div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+      </div>
+    </div>
+
+    <div id="file-metadata">
+      <div id="file-list-section" class="section">
+        <h3 class="section-header">In Files</h3>
+        <div class="section-body">
+          <ul>
+          
+            <li><a href="../lib/asciidoctor/abstract_node_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+              class="thickbox" title="lib/asciidoctor/abstract_node.rb">lib/asciidoctor/abstract_node.rb</a></li>
+          
+          </ul>
+        </div>
+      </div>
+
+      
+    </div>
+
+    <div id="class-metadata">
+      
+      <!-- Parent Class -->
+      <div id="parent-class-section" class="section">
+        <h3 class="section-header">Parent</h3>
+        
+        <p class="link">Object</p>
+        
+      </div>
+      
+
+      
+
+      
+
+      
+      <!-- Method Quickref -->
+      <div id="method-list-section" class="section">
+        <h3 class="section-header">Methods</h3>
+        <ul class="link-list">
+          
+          <li><a href="#method-c-new">::new</a></li>
+          
+          <li><a href="#method-i-attr">#attr</a></li>
+          
+          <li><a href="#method-i-attr-3F">#attr?</a></li>
+          
+          <li><a href="#method-i-generate_data_uri">#generate_data_uri</a></li>
+          
+          <li><a href="#method-i-get_binding">#get_binding</a></li>
+          
+          <li><a href="#method-i-icon_uri">#icon_uri</a></li>
+          
+          <li><a href="#method-i-image_uri">#image_uri</a></li>
+          
+          <li><a href="#method-i-normalize_asset_path">#normalize_asset_path</a></li>
+          
+          <li><a href="#method-i-renderer">#renderer</a></li>
+          
+          <li><a href="#method-i-update_attributes">#update_attributes</a></li>
+          
+        </ul>
+      </div>
+      
+
+      
+      <!-- Included Modules -->
+      <div id="includes-section" class="section">
+        <h3 class="section-header">Included Modules</h3>
+        <ul class="link-list">
+        
+        
+          <li><a class="include" href="Substituters.html">Asciidoctor::Substituters</a></li>
+        
+        
+        </ul>
+      </div>
+      
+    </div>
+
+    <div id="project-metadata">
+      
+      
+      <div id="fileindex-section" class="section project-section">
+        <h3 class="section-header">Files</h3>
+        <ul>
+        
+          <li class="file"><a href="../LICENSE.html">LICENSE</a></li>
+        
+        </ul>
+      </div>
+      
+
+      <div id="classindex-section" class="section project-section">
+        <h3 class="section-header">Class/Module Index
+          <span class="search-toggle"><img src="../images/find.png"
+            height="16" width="16" alt="[+]"
+            title="show/hide quicksearch" /></span></h3>
+        <form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+        <fieldset>
+          <legend>Quicksearch</legend>
+          <input type="text" name="quicksearch" value=""
+            class="quicksearch-field" />
+        </fieldset>
+        </form>
+
+        <ul class="link-list">
+        
+          <li><a href="../Asciidoctor.html">Asciidoctor</a></li>
+        
+          <li><a href="../Asciidoctor/AbstractBlock.html">Asciidoctor::AbstractBlock</a></li>
+        
+          <li><a href="../Asciidoctor/AbstractNode.html">Asciidoctor::AbstractNode</a></li>
+        
+          <li><a href="../Asciidoctor/AttributeList.html">Asciidoctor::AttributeList</a></li>
+        
+          <li><a href="../Asciidoctor/BaseTemplate.html">Asciidoctor::BaseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Block.html">Asciidoctor::Block</a></li>
+        
+          <li><a href="../Asciidoctor/Callouts.html">Asciidoctor::Callouts</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45.html">Asciidoctor::DocBook45</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockAdmonitionTemplate.html">Asciidoctor::DocBook45::BlockAdmonitionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockColistTemplate.html">Asciidoctor::DocBook45::BlockColistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockDlistTemplate.html">Asciidoctor::DocBook45::BlockDlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockExampleTemplate.html">Asciidoctor::DocBook45::BlockExampleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockImageTemplate.html">Asciidoctor::DocBook45::BlockImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockListingTemplate.html">Asciidoctor::DocBook45::BlockListingTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockLiteralTemplate.html">Asciidoctor::DocBook45::BlockLiteralTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockOlistTemplate.html">Asciidoctor::DocBook45::BlockOlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockOpenTemplate.html">Asciidoctor::DocBook45::BlockOpenTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockParagraphTemplate.html">Asciidoctor::DocBook45::BlockParagraphTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockPassTemplate.html">Asciidoctor::DocBook45::BlockPassTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockPreambleTemplate.html">Asciidoctor::DocBook45::BlockPreambleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockQuoteTemplate.html">Asciidoctor::DocBook45::BlockQuoteTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockRulerTemplate.html">Asciidoctor::DocBook45::BlockRulerTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockSidebarTemplate.html">Asciidoctor::DocBook45::BlockSidebarTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockTableTemplate.html">Asciidoctor::DocBook45::BlockTableTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockUlistTemplate.html">Asciidoctor::DocBook45::BlockUlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockVerseTemplate.html">Asciidoctor::DocBook45::BlockVerseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/DocumentTemplate.html">Asciidoctor::DocBook45::DocumentTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/EmbeddedTemplate.html">Asciidoctor::DocBook45::EmbeddedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineAnchorTemplate.html">Asciidoctor::DocBook45::InlineAnchorTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineBreakTemplate.html">Asciidoctor::DocBook45::InlineBreakTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineCalloutTemplate.html">Asciidoctor::DocBook45::InlineCalloutTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineImageTemplate.html">Asciidoctor::DocBook45::InlineImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineQuotedTemplate.html">Asciidoctor::DocBook45::InlineQuotedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/SectionTemplate.html">Asciidoctor::DocBook45::SectionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Document.html">Asciidoctor::Document</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5.html">Asciidoctor::HTML5</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockAdmonitionTemplate.html">Asciidoctor::HTML5::BlockAdmonitionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockColistTemplate.html">Asciidoctor::HTML5::BlockColistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockDlistTemplate.html">Asciidoctor::HTML5::BlockDlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockExampleTemplate.html">Asciidoctor::HTML5::BlockExampleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockImageTemplate.html">Asciidoctor::HTML5::BlockImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockListingTemplate.html">Asciidoctor::HTML5::BlockListingTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockLiteralTemplate.html">Asciidoctor::HTML5::BlockLiteralTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockOlistTemplate.html">Asciidoctor::HTML5::BlockOlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockOpenTemplate.html">Asciidoctor::HTML5::BlockOpenTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockParagraphTemplate.html">Asciidoctor::HTML5::BlockParagraphTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockPassTemplate.html">Asciidoctor::HTML5::BlockPassTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockPreambleTemplate.html">Asciidoctor::HTML5::BlockPreambleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockQuoteTemplate.html">Asciidoctor::HTML5::BlockQuoteTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockRulerTemplate.html">Asciidoctor::HTML5::BlockRulerTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockSidebarTemplate.html">Asciidoctor::HTML5::BlockSidebarTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockTableTemplate.html">Asciidoctor::HTML5::BlockTableTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockUlistTemplate.html">Asciidoctor::HTML5::BlockUlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockVerseTemplate.html">Asciidoctor::HTML5::BlockVerseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/DocumentTemplate.html">Asciidoctor::HTML5::DocumentTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/EmbeddedTemplate.html">Asciidoctor::HTML5::EmbeddedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineAnchorTemplate.html">Asciidoctor::HTML5::InlineAnchorTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineBreakTemplate.html">Asciidoctor::HTML5::InlineBreakTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineCalloutTemplate.html">Asciidoctor::HTML5::InlineCalloutTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineImageTemplate.html">Asciidoctor::HTML5::InlineImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineQuotedTemplate.html">Asciidoctor::HTML5::InlineQuotedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/SectionTemplate.html">Asciidoctor::HTML5::SectionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Inline.html">Asciidoctor::Inline</a></li>
+        
+          <li><a href="../Asciidoctor/Lexer.html">Asciidoctor::Lexer</a></li>
+        
+          <li><a href="../Asciidoctor/ListItem.html">Asciidoctor::ListItem</a></li>
+        
+          <li><a href="../Asciidoctor/ProjectError.html">Asciidoctor::ProjectError</a></li>
+        
+          <li><a href="../Asciidoctor/Reader.html">Asciidoctor::Reader</a></li>
+        
+          <li><a href="../Asciidoctor/Renderer.html">Asciidoctor::Renderer</a></li>
+        
+          <li><a href="../Asciidoctor/SafeMode.html">Asciidoctor::SafeMode</a></li>
+        
+          <li><a href="../Asciidoctor/Section.html">Asciidoctor::Section</a></li>
+        
+          <li><a href="../Asciidoctor/Substituters.html">Asciidoctor::Substituters</a></li>
+        
+          <li><a href="../Asciidoctor/Table.html">Asciidoctor::Table</a></li>
+        
+          <li><a href="../Asciidoctor/Table/Cell.html">Asciidoctor::Table::Cell</a></li>
+        
+          <li><a href="../Asciidoctor/Table/Column.html">Asciidoctor::Table::Column</a></li>
+        
+          <li><a href="../Asciidoctor/Table/ParserContext.html">Asciidoctor::Table::ParserContext</a></li>
+        
+        </ul>
+        <div id="no-class-search-results" style="display: none;">No matching classes.</div>
+      </div>
+
+      
+    </div>
+  </div>
+
+  <div id="documentation">
+    <h1 class="class">Asciidoctor::AbstractNode</h1>
+
+    <div id="description" class="description">
+      
+<p>Public: An abstract base class that provides state and methods for managing
+a node of AsciiDoc content. The state and methods on this class are comment
+to all content segments in an AsciiDoc document.</p>
+
+    </div><!-- description -->
+
+    
+    
+    
+    <div id="5Buntitled-5D" class="documentation-section">
+      
+
+      
+
+      
+
+      
+      <!-- Attributes -->
+      <div id="attribute-method-details" class="method-section section">
+        <h3 class="section-header">Attributes</h3>
+
+        
+        <div id="attributes-attribute-method" class="method-detail">
+          <a name="attributes"></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">attributes</span><span
+              class="attribute-access-type">[R]</span>
+          </div>
+
+          <div class="method-description">
+          
+          <p>Public: Get the Hash of attributes for this node</p>
+          
+          </div>
+        </div>
+        
+        <div id="context-attribute-method" class="method-detail">
+          <a name="context"></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">context</span><span
+              class="attribute-access-type">[R]</span>
+          </div>
+
+          <div class="method-description">
+          
+          <p>Public: Get the Symbol context for this node</p>
+          
+          </div>
+        </div>
+        
+        <div id="document-attribute-method" class="method-detail">
+          <a name="document"></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">document</span><span
+              class="attribute-access-type">[R]</span>
+          </div>
+
+          <div class="method-description">
+          
+          <p>Public: Get the <a href="Document.html">Asciidoctor::Document</a> to which
+this node belongs</p>
+          
+          </div>
+        </div>
+        
+        <div id="id-attribute-method" class="method-detail">
+          <a name="id"></a>
+          
+          <a name="id="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">id</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          <p>Public: Get the id of this node</p>
+          
+          </div>
+        </div>
+        
+        <div id="parent-attribute-method" class="method-detail">
+          <a name="parent"></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">parent</span><span
+              class="attribute-access-type">[R]</span>
+          </div>
+
+          <div class="method-description">
+          
+          <p>Public: Get the element which is the parent of this node</p>
+          
+          </div>
+        </div>
+        
+      </div><!-- attribute-method-details -->
+      
+
+      <!-- Methods -->
+      
+      <div id="public-class-method-details" class="method-section section">
+        <h3 class="section-header">Public Class Methods</h3>
+
+      
+        <div id="new-method" class="method-detail ">
+          <a name="method-c-new"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">new</span><span
+              class="method-args">(parent, context)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="new-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_node.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">parent</span>, <span class="ruby-identifier">context</span>)
+  <span class="ruby-ivar">@parent</span> = (<span class="ruby-identifier">context</span> <span class="ruby-operator">!=</span> <span class="ruby-value">:document</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">parent</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">parent</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-ivar">@document</span> = <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Asciidoctor</span><span class="ruby-operator">::</span><span class="ruby-constant">Document</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">parent</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">document</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-ivar">@document</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-ivar">@context</span> = <span class="ruby-identifier">context</span>
+  <span class="ruby-ivar">@attributes</span> = {}
+  <span class="ruby-ivar">@passthroughs</span> = []
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- new-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- new-method -->
+
+      
+      </div><!-- public-class-method-details -->
+    
+      <div id="public-instance-method-details" class="method-section section">
+        <h3 class="section-header">Public Instance Methods</h3>
+
+      
+        <div id="attr-method" class="method-detail ">
+          <a name="method-i-attr"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">attr</span><span
+              class="method-args">(name, default = nil)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="attr-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_node.rb, line 37</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">attr</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">default</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span> <span class="ruby-operator">==</span> <span class="ruby-ivar">@document</span>
+    <span class="ruby-identifier">default</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@attributes</span>[<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>] <span class="ruby-operator">:</span> <span class="ruby-ivar">@attributes</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">default</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">default</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@attributes</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">attr</span>(<span class="ruby-identifier">name</span>)) <span class="ruby-operator">:</span>
+        <span class="ruby-ivar">@attributes</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">attr</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">default</span>))
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- attr-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- attr-method -->
+
+      
+        <div id="attr-3F-method" class="method-detail ">
+          <a name="method-i-attr-3F"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">attr?</span><span
+              class="method-args">(name)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="attr-3F-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_node.rb, line 46</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">attr?</span>(<span class="ruby-identifier">name</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span> <span class="ruby-operator">==</span> <span class="ruby-ivar">@document</span>
+    <span class="ruby-ivar">@attributes</span>.<span class="ruby-identifier">has_key?</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-ivar">@attributes</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>) <span class="ruby-operator">||</span> <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">attr?</span>(<span class="ruby-identifier">name</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- attr-3F-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- attr-3F-method -->
+
+      
+        <div id="generate_data_uri-method" class="method-detail ">
+          <a name="method-i-generate_data_uri"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">generate_data_uri</span><span
+              class="method-args">(target_image, asset_dir_key = nil)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Generate a data URI that can be used to embed an image in the
+output document</p>
+
+<p>First, and foremost, the target image path is cleaned if the document safe
+mode level is set to at least SafeMode::SAFE (a condition which is true by
+default) to prevent access to ancestor paths in the filesystem. The image
+data is then read and converted to Base64. Finally, a data URI is built
+which can be used in an image tag.</p>
+
+<p>target_image - A String path to the target image asset_dir_key - The String
+attribute key used to lookup the directory where</p>
+
+<pre>the image is located (default: nil)</pre>
+
+<p>Returns A String data URI containing the content of the target image</p>
+            
+
+            
+            <div class="method-source-code" id="generate_data_uri-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_node.rb, line 159</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">generate_data_uri</span>(<span class="ruby-identifier">target_image</span>, <span class="ruby-identifier">asset_dir_key</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-constant">Asciidoctor</span>.<span class="ruby-identifier">require_library</span> <span class="ruby-string">'base64'</span>
+
+  <span class="ruby-identifier">mimetype</span> = <span class="ruby-string">'image/'</span> <span class="ruby-operator">+</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">target_image</span>)[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">asset_dir_key</span>
+    <span class="ruby-identifier">image_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">normalize_asset_path</span>(<span class="ruby-ivar">@document</span>.<span class="ruby-identifier">attr</span>(<span class="ruby-identifier">asset_dir_key</span>, <span class="ruby-string">'.'</span>), <span class="ruby-identifier">asset_dir_key</span>), <span class="ruby-identifier">target_image</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">image_path</span> = <span class="ruby-identifier">normalize_asset_path</span>(<span class="ruby-identifier">target_image</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-string">'data:'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">mimetype</span> <span class="ruby-operator">+</span> <span class="ruby-string">';base64,'</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Base64</span>.<span class="ruby-identifier">encode64</span>(<span class="ruby-constant">IO</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">image_path</span>)).<span class="ruby-identifier">delete</span>(<span class="ruby-string">&quot;\n&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- generate_data_uri-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- generate_data_uri-method -->
+
+      
+        <div id="get_binding-method" class="method-detail ">
+          <a name="method-i-get_binding"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">get_binding</span><span
+              class="method-args">(template)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Get the execution context of this object (via Kernel#binding).</p>
+
+<p>This method is used to set the ‘self’ reference as well as local variables
+that map to this method’s arguments during the evaluation of a backend
+template.</p>
+
+<p>Each object in Ruby has a binding context that can be used to set the
+‘self’ reference in an evaluation context. Any arguments passed to this
+method are also available in the execution environment.</p>
+
+<p>template -  The <a href="BaseTemplate.html">BaseTemplate</a> instance in
+which this binding will be active.</p>
+
+<pre>Bound to the local variable of the same name, template.</pre>
+
+<p>returns the execution context for this object so it can be be transferred
+to the backend template and binds the method arguments as local variables
+in that same environment.</p>
+            
+
+            
+            <div class="method-source-code" id="get_binding-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_node.rb, line 70</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_binding</span> <span class="ruby-identifier">template</span>
+  <span class="ruby-identifier">binding</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- get_binding-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- get_binding-method -->
+
+      
+        <div id="icon_uri-method" class="method-detail ">
+          <a name="method-i-icon_uri"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">icon_uri</span><span
+              class="method-args">(name)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Construct a reference or data URI to an icon image for the
+specified icon name.</p>
+
+<p>If the ‘icon’ attribute is set on this block, the name is ignored and the
+value of this attribute is used as the  target image path. Otherwise,
+construct a target image path by concatenating the value of the ‘iconsdir’
+attribute, the icon name and the value of the ‘iconstype’ attribute
+(defaulting to ‘png’).</p>
+
+<p>The target image path is then passed through the <a
+href="AbstractNode.html#method-i-image_uri">image_uri()</a> method.  If the
+‘data-uri’ attribute is set on the document, the image will be safely
+converted to a data URI.</p>
+
+<p>The return value of this method can be safely used in an image tag.</p>
+
+<p>name - The String name of the icon</p>
+
+<p>Returns A String reference or data URI for an icon image</p>
+            
+
+            
+            <div class="method-source-code" id="icon_uri-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_node.rb, line 112</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">icon_uri</span>(<span class="ruby-identifier">name</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">attr?</span> <span class="ruby-string">'icon'</span>
+    <span class="ruby-identifier">image_uri</span>(<span class="ruby-identifier">attr</span>(<span class="ruby-string">'icon'</span>), <span class="ruby-keyword">nil</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">image_uri</span>(<span class="ruby-identifier">name</span> <span class="ruby-operator">+</span> <span class="ruby-string">'.'</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">attr</span>(<span class="ruby-string">'iconstype'</span>, <span class="ruby-string">'png'</span>), <span class="ruby-string">'iconsdir'</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- icon_uri-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- icon_uri-method -->
+
+      
+        <div id="image_uri-method" class="method-detail ">
+          <a name="method-i-image_uri"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">image_uri</span><span
+              class="method-args">(target_image, asset_dir_key = 'imagesdir')</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Construct a reference or data URI to the target image.</p>
+
+<p>The target image is resolved relative to the directory retrieved from the
+specified attribute key, if provided.</p>
+
+<p>If the ‘data-uri’ attribute is set on the document, and the safe mode level
+is less than SafeMode::SECURE, the image will be safely converted to a data
+URI by reading it from the same directory. If neither of these conditions
+are satisfied, a relative path (i.e., URL) will be returned.</p>
+
+<p>The return value of this method can be safely used in an image tag.</p>
+
+<p>target_image - A String path to the target image asset_dir_key - The String
+attribute key used to lookup the directory where</p>
+
+<pre>the image is located (default: 'imagesdir')</pre>
+
+<p>Returns A String reference or data URI for the target image</p>
+            
+
+            
+            <div class="method-source-code" id="image_uri-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_node.rb, line 137</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">image_uri</span>(<span class="ruby-identifier">target_image</span>, <span class="ruby-identifier">asset_dir_key</span> = <span class="ruby-string">'imagesdir'</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">safe</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Asciidoctor</span><span class="ruby-operator">::</span><span class="ruby-constant">SafeMode</span><span class="ruby-operator">::</span><span class="ruby-constant">SECURE</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">attr?</span>(<span class="ruby-string">'data-uri'</span>)
+    <span class="ruby-identifier">generate_data_uri</span>(<span class="ruby-identifier">target_image</span>, <span class="ruby-identifier">asset_dir_key</span>)
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">asset_dir_key</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">attr?</span>(<span class="ruby-identifier">asset_dir_key</span>)
+    <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-ivar">@document</span>.<span class="ruby-identifier">attr</span>(<span class="ruby-identifier">asset_dir_key</span>), <span class="ruby-identifier">target_image</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">target_image</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- image_uri-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- image_uri-method -->
+
+      
+        <div id="normalize_asset_path-method" class="method-detail ">
+          <a name="method-i-normalize_asset_path"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">normalize_asset_path</span><span
+              class="method-args">(asset_ref, asset_name = 'path')</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Normalize the asset file or directory to a concrete and rinsed path</p>
+
+<p>The most important functionality in this method is to prevent the asset
+reference from resolving to a directory outside of the chroot directory
+(which defaults to the directory of the source file, stored in the ‘docdir’
+attribute) if the document safe level is set to SafeMode::SAFE or greater
+(a condition which is true by default).</p>
+
+<p>asset_ref    - the String asset file or directory referenced in the
+document</p>
+
+<pre>or configuration attribute</pre>
+
+<p>asset_name   - the String name of the file or directory being resolved (for
+use in</p>
+
+<pre>the warning message) (default: 'path')</pre>
+
+<p>Examples</p>
+
+<pre># given these fixtures
+document.attr('docdir')
+# =&gt; &quot;/path/to/docdir&quot;
+document.safe &gt;= Asciidoctor::SafeMode::SAFE
+# =&gt; true
+
+# then
+normalize_asset_path('images')
+# =&gt; &quot;/path/to/docdir/images&quot;
+normalize_asset_path('/etc/images')
+# =&gt; &quot;/path/to/docdir/images&quot;
+normalize_asset_path('../images')
+# =&gt; &quot;/path/to/docdir/images&quot;
+
+# given these fixtures
+document.attr('docdir')
+# =&gt; &quot;/path/to/docdir&quot;
+document.safe &gt;= Asciidoctor::SafeMode::SAFE
+# =&gt; false
+
+# then
+normalize_asset_path('images')
+# =&gt; &quot;/path/to/docdir/images&quot;
+normalize_asset_path('/etc/images')
+# =&gt; &quot;/etc/images&quot;
+normalize_asset_path('../images')
+# =&gt; &quot;/path/to/images&quot;</pre>
+
+<p>Returns The normalized asset file or directory as a String path</p>
+            
+
+            
+            <div class="method-source-code" id="normalize_asset_path-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_node.rb, line 220</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">normalize_asset_path</span>(<span class="ruby-identifier">asset_ref</span>, <span class="ruby-identifier">asset_name</span> = <span class="ruby-string">'path'</span>)
+  <span class="ruby-comment"># TODO we may use pathname enough to make it a top-level require</span>
+  <span class="ruby-constant">Asciidoctor</span>.<span class="ruby-identifier">require_library</span> <span class="ruby-string">'pathname'</span>
+
+  <span class="ruby-identifier">input_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-ivar">@document</span>.<span class="ruby-identifier">attr</span>(<span class="ruby-string">'docdir'</span>))
+  <span class="ruby-identifier">asset_path</span> = <span class="ruby-constant">Pathname</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">asset_ref</span>)
+  
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">asset_path</span>.<span class="ruby-identifier">relative?</span>
+    <span class="ruby-identifier">asset_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">input_path</span>, <span class="ruby-identifier">asset_ref</span>))
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">asset_path</span> = <span class="ruby-identifier">asset_path</span>.<span class="ruby-identifier">cleanpath</span>.<span class="ruby-identifier">to_s</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">safe</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-constant">Asciidoctor</span><span class="ruby-operator">::</span><span class="ruby-constant">SafeMode</span><span class="ruby-operator">::</span><span class="ruby-constant">SAFE</span>
+    <span class="ruby-identifier">relative_asset_path</span> = <span class="ruby-constant">Pathname</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">asset_path</span>).<span class="ruby-identifier">relative_path_from</span>(<span class="ruby-constant">Pathname</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">input_path</span>)).<span class="ruby-identifier">to_s</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">relative_asset_path</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-string">'..'</span>)
+      <span class="ruby-identifier">puts</span> <span class="ruby-string">'asciidoctor: WARNING: '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">asset_name</span> <span class="ruby-operator">+</span> <span class="ruby-string">' has illegal reference to ancestor of base directory'</span>
+      <span class="ruby-identifier">relative_asset_path</span>.<span class="ruby-identifier">sub!</span>(<span class="ruby-regexp">/^(?:\.\.\/)*/</span>, <span class="ruby-string">''</span>)
+      <span class="ruby-comment"># just to be absolutely sure ;)</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">relative_asset_path</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-string">'.'</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-string">'Substitution of parent path references failed for '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">relative_asset_path</span>
+      <span class="ruby-keyword">end</span>
+      <span class="ruby-identifier">asset_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">input_path</span>, <span class="ruby-identifier">relative_asset_path</span>))
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">asset_path</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- normalize_asset_path-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- normalize_asset_path-method -->
+
+      
+        <div id="renderer-method" class="method-detail ">
+          <a name="method-i-renderer"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">renderer</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Get the <a href="Renderer.html">Asciidoctor::Renderer</a> instance
+being used for the <a href="Document.html">Asciidoctor::Document</a> to
+which this node belongs</p>
+            
+
+            
+            <div class="method-source-code" id="renderer-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_node.rb, line 90</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">renderer</span>
+  <span class="ruby-ivar">@document</span>.<span class="ruby-identifier">renderer</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- renderer-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- renderer-method -->
+
+      
+        <div id="update_attributes-method" class="method-detail ">
+          <a name="method-i-update_attributes"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">update_attributes</span><span
+              class="method-args">(attributes)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Update the attributes of this node with the new values in the
+attributes argument.</p>
+
+<p>If an attribute already exists with the same key, it’s value will be
+overridden.</p>
+
+<p>attributes - A Hash of attributes to assign to this node.</p>
+
+<p>returns nothing</p>
+            
+
+            
+            <div class="method-source-code" id="update_attributes-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_node.rb, line 83</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">attributes</span>)
+  <span class="ruby-ivar">@attributes</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">attributes</span>)
+  <span class="ruby-keyword">nil</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- update_attributes-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- update_attributes-method -->
+
+      
+      </div><!-- public-instance-method-details -->
+    
+    </div><!-- 5Buntitled-5D -->
+  
+
+  </div><!-- documentation -->
+
+  <div id="validator-badges">
+    <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+    <p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+      Rdoc Generator</a> 2</small>.</p>
+  </div>
+
+</body>
+</html>
+

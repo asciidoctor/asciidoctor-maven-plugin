@@ -1,0 +1,965 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+
+  <title>Class: Asciidoctor::AbstractBlock</title>
+
+  <link rel="stylesheet" href="../rdoc.css" type="text/css" media="screen" />
+
+  <script src="../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/thickbox-compressed.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/quicksearch.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/darkfish.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body id="top" class="class">
+
+  <div id="metadata">
+    <div id="home-metadata">
+      <div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+      </div>
+    </div>
+
+    <div id="file-metadata">
+      <div id="file-list-section" class="section">
+        <h3 class="section-header">In Files</h3>
+        <div class="section-body">
+          <ul>
+          
+            <li><a href="../lib/asciidoctor/abstract_block_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+              class="thickbox" title="lib/asciidoctor/abstract_block.rb">lib/asciidoctor/abstract_block.rb</a></li>
+          
+          </ul>
+        </div>
+      </div>
+
+      
+    </div>
+
+    <div id="class-metadata">
+      
+      <!-- Parent Class -->
+      <div id="parent-class-section" class="section">
+        <h3 class="section-header">Parent</h3>
+        
+        <p class="link"><a href="AbstractNode.html">Asciidoctor::AbstractNode</a></p>
+        
+      </div>
+      
+
+      
+
+      
+
+      
+      <!-- Method Quickref -->
+      <div id="method-list-section" class="section">
+        <h3 class="section-header">Methods</h3>
+        <ul class="link-list">
+          
+          <li><a href="#method-c-new">::new</a></li>
+          
+          <li><a href="#method-i-3C-3C">#<<</a></li>
+          
+          <li><a href="#method-i-5B-5D">#[]</a></li>
+          
+          <li><a href="#method-i-assign_index">#assign_index</a></li>
+          
+          <li><a href="#method-i-blocks-3F">#blocks?</a></li>
+          
+          <li><a href="#method-i-clear_blocks">#clear_blocks</a></li>
+          
+          <li><a href="#method-i-delete_at">#delete_at</a></li>
+          
+          <li><a href="#method-i-insert">#insert</a></li>
+          
+          <li><a href="#method-i-reindex_sections">#reindex_sections</a></li>
+          
+          <li><a href="#method-i-sections">#sections</a></li>
+          
+          <li><a href="#method-i-size">#size</a></li>
+          
+          <li><a href="#method-i-title">#title</a></li>
+          
+          <li><a href="#method-i-title-3F">#title?</a></li>
+          
+        </ul>
+      </div>
+      
+
+      
+    </div>
+
+    <div id="project-metadata">
+      
+      
+      <div id="fileindex-section" class="section project-section">
+        <h3 class="section-header">Files</h3>
+        <ul>
+        
+          <li class="file"><a href="../LICENSE.html">LICENSE</a></li>
+        
+        </ul>
+      </div>
+      
+
+      <div id="classindex-section" class="section project-section">
+        <h3 class="section-header">Class/Module Index
+          <span class="search-toggle"><img src="../images/find.png"
+            height="16" width="16" alt="[+]"
+            title="show/hide quicksearch" /></span></h3>
+        <form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+        <fieldset>
+          <legend>Quicksearch</legend>
+          <input type="text" name="quicksearch" value=""
+            class="quicksearch-field" />
+        </fieldset>
+        </form>
+
+        <ul class="link-list">
+        
+          <li><a href="../Asciidoctor.html">Asciidoctor</a></li>
+        
+          <li><a href="../Asciidoctor/AbstractBlock.html">Asciidoctor::AbstractBlock</a></li>
+        
+          <li><a href="../Asciidoctor/AbstractNode.html">Asciidoctor::AbstractNode</a></li>
+        
+          <li><a href="../Asciidoctor/AttributeList.html">Asciidoctor::AttributeList</a></li>
+        
+          <li><a href="../Asciidoctor/BaseTemplate.html">Asciidoctor::BaseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Block.html">Asciidoctor::Block</a></li>
+        
+          <li><a href="../Asciidoctor/Callouts.html">Asciidoctor::Callouts</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45.html">Asciidoctor::DocBook45</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockAdmonitionTemplate.html">Asciidoctor::DocBook45::BlockAdmonitionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockColistTemplate.html">Asciidoctor::DocBook45::BlockColistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockDlistTemplate.html">Asciidoctor::DocBook45::BlockDlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockExampleTemplate.html">Asciidoctor::DocBook45::BlockExampleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockImageTemplate.html">Asciidoctor::DocBook45::BlockImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockListingTemplate.html">Asciidoctor::DocBook45::BlockListingTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockLiteralTemplate.html">Asciidoctor::DocBook45::BlockLiteralTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockOlistTemplate.html">Asciidoctor::DocBook45::BlockOlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockOpenTemplate.html">Asciidoctor::DocBook45::BlockOpenTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockParagraphTemplate.html">Asciidoctor::DocBook45::BlockParagraphTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockPassTemplate.html">Asciidoctor::DocBook45::BlockPassTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockPreambleTemplate.html">Asciidoctor::DocBook45::BlockPreambleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockQuoteTemplate.html">Asciidoctor::DocBook45::BlockQuoteTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockRulerTemplate.html">Asciidoctor::DocBook45::BlockRulerTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockSidebarTemplate.html">Asciidoctor::DocBook45::BlockSidebarTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockTableTemplate.html">Asciidoctor::DocBook45::BlockTableTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockUlistTemplate.html">Asciidoctor::DocBook45::BlockUlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockVerseTemplate.html">Asciidoctor::DocBook45::BlockVerseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/DocumentTemplate.html">Asciidoctor::DocBook45::DocumentTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/EmbeddedTemplate.html">Asciidoctor::DocBook45::EmbeddedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineAnchorTemplate.html">Asciidoctor::DocBook45::InlineAnchorTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineBreakTemplate.html">Asciidoctor::DocBook45::InlineBreakTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineCalloutTemplate.html">Asciidoctor::DocBook45::InlineCalloutTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineImageTemplate.html">Asciidoctor::DocBook45::InlineImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineQuotedTemplate.html">Asciidoctor::DocBook45::InlineQuotedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/SectionTemplate.html">Asciidoctor::DocBook45::SectionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Document.html">Asciidoctor::Document</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5.html">Asciidoctor::HTML5</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockAdmonitionTemplate.html">Asciidoctor::HTML5::BlockAdmonitionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockColistTemplate.html">Asciidoctor::HTML5::BlockColistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockDlistTemplate.html">Asciidoctor::HTML5::BlockDlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockExampleTemplate.html">Asciidoctor::HTML5::BlockExampleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockImageTemplate.html">Asciidoctor::HTML5::BlockImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockListingTemplate.html">Asciidoctor::HTML5::BlockListingTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockLiteralTemplate.html">Asciidoctor::HTML5::BlockLiteralTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockOlistTemplate.html">Asciidoctor::HTML5::BlockOlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockOpenTemplate.html">Asciidoctor::HTML5::BlockOpenTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockParagraphTemplate.html">Asciidoctor::HTML5::BlockParagraphTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockPassTemplate.html">Asciidoctor::HTML5::BlockPassTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockPreambleTemplate.html">Asciidoctor::HTML5::BlockPreambleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockQuoteTemplate.html">Asciidoctor::HTML5::BlockQuoteTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockRulerTemplate.html">Asciidoctor::HTML5::BlockRulerTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockSidebarTemplate.html">Asciidoctor::HTML5::BlockSidebarTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockTableTemplate.html">Asciidoctor::HTML5::BlockTableTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockUlistTemplate.html">Asciidoctor::HTML5::BlockUlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockVerseTemplate.html">Asciidoctor::HTML5::BlockVerseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/DocumentTemplate.html">Asciidoctor::HTML5::DocumentTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/EmbeddedTemplate.html">Asciidoctor::HTML5::EmbeddedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineAnchorTemplate.html">Asciidoctor::HTML5::InlineAnchorTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineBreakTemplate.html">Asciidoctor::HTML5::InlineBreakTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineCalloutTemplate.html">Asciidoctor::HTML5::InlineCalloutTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineImageTemplate.html">Asciidoctor::HTML5::InlineImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineQuotedTemplate.html">Asciidoctor::HTML5::InlineQuotedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/SectionTemplate.html">Asciidoctor::HTML5::SectionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Inline.html">Asciidoctor::Inline</a></li>
+        
+          <li><a href="../Asciidoctor/Lexer.html">Asciidoctor::Lexer</a></li>
+        
+          <li><a href="../Asciidoctor/ListItem.html">Asciidoctor::ListItem</a></li>
+        
+          <li><a href="../Asciidoctor/ProjectError.html">Asciidoctor::ProjectError</a></li>
+        
+          <li><a href="../Asciidoctor/Reader.html">Asciidoctor::Reader</a></li>
+        
+          <li><a href="../Asciidoctor/Renderer.html">Asciidoctor::Renderer</a></li>
+        
+          <li><a href="../Asciidoctor/SafeMode.html">Asciidoctor::SafeMode</a></li>
+        
+          <li><a href="../Asciidoctor/Section.html">Asciidoctor::Section</a></li>
+        
+          <li><a href="../Asciidoctor/Substituters.html">Asciidoctor::Substituters</a></li>
+        
+          <li><a href="../Asciidoctor/Table.html">Asciidoctor::Table</a></li>
+        
+          <li><a href="../Asciidoctor/Table/Cell.html">Asciidoctor::Table::Cell</a></li>
+        
+          <li><a href="../Asciidoctor/Table/Column.html">Asciidoctor::Table::Column</a></li>
+        
+          <li><a href="../Asciidoctor/Table/ParserContext.html">Asciidoctor::Table::ParserContext</a></li>
+        
+        </ul>
+        <div id="no-class-search-results" style="display: none;">No matching classes.</div>
+      </div>
+
+      
+    </div>
+  </div>
+
+  <div id="documentation">
+    <h1 class="class">Asciidoctor::AbstractBlock</h1>
+
+    <div id="description" class="description">
+      
+    </div><!-- description -->
+
+    
+    
+    
+    <div id="5Buntitled-5D" class="documentation-section">
+      
+
+      
+
+      
+
+      
+      <!-- Attributes -->
+      <div id="attribute-method-details" class="method-section section">
+        <h3 class="section-header">Attributes</h3>
+
+        
+        <div id="blocks-attribute-method" class="method-detail">
+          <a name="blocks"></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">blocks</span><span
+              class="attribute-access-type">[R]</span>
+          </div>
+
+          <div class="method-description">
+          
+          <p>Public: Get the Array of <a
+href="AbstractBlock.html">Asciidoctor::AbstractBlock</a> sub-blocks for
+this block</p>
+          
+          </div>
+        </div>
+        
+        <div id="level-attribute-method" class="method-detail">
+          <a name="level"></a>
+          
+          <a name="level="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">level</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          <p>Public: Set the Integer level of this <a href="Section.html">Section</a> or
+the <a href="Section.html">Section</a> level in which this <a
+href="Block.html">Block</a> resides</p>
+          
+          </div>
+        </div>
+        
+        <div id="title-attribute-method" class="method-detail">
+          <a name="title"></a>
+          
+          <a name="title="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">title</span><span
+              class="attribute-access-type">[W]</span>
+          </div>
+
+          <div class="method-description">
+          
+          <p>Public: Set the String block title.</p>
+          
+          </div>
+        </div>
+        
+      </div><!-- attribute-method-details -->
+      
+
+      <!-- Methods -->
+      
+      <div id="public-class-method-details" class="method-section section">
+        <h3 class="section-header">Public Class Methods</h3>
+
+      
+        <div id="new-method" class="method-detail ">
+          <a name="method-c-new"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">new</span><span
+              class="method-args">(parent, context)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="new-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_block.rb, line 11</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">parent</span>, <span class="ruby-identifier">context</span>)
+  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">parent</span>, <span class="ruby-identifier">context</span>)
+  <span class="ruby-ivar">@blocks</span> = []
+  <span class="ruby-ivar">@id</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-ivar">@title</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">context</span> <span class="ruby-operator">==</span> <span class="ruby-value">:document</span>
+    <span class="ruby-ivar">@level</span> = <span class="ruby-value">0</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-operator">!</span><span class="ruby-identifier">parent</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Asciidoctor</span><span class="ruby-operator">::</span><span class="ruby-constant">Section</span>)
+    <span class="ruby-ivar">@level</span> = <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">level</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-ivar">@level</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@next_section_index</span> = <span class="ruby-value">0</span> 
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- new-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- new-method -->
+
+      
+      </div><!-- public-class-method-details -->
+    
+      <div id="public-instance-method-details" class="method-section section">
+        <h3 class="section-header">Public Instance Methods</h3>
+
+      
+        <div id="3C-3C-method" class="method-detail ">
+          <a name="method-i-3C-3C"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">&lt;&lt;</span><span
+              class="method-args">(block)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Append a content block to this block’s list of blocks.</p>
+
+<p>block - The new child block.</p>
+
+<p>Examples</p>
+
+<pre>block = Block.new(parent, :preamble)
+
+block &lt;&lt; Block.new(block, :paragraph, 'p1')
+block &lt;&lt; Block.new(block, :paragraph, 'p2')
+block.blocks
+# =&gt; [&quot;p1&quot;, &quot;p2&quot;]</pre>
+
+<p>Returns nothing.</p>
+            
+
+            
+            <div class="method-source-code" id="3C-3C-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_block.rb, line 96</span>
+<span class="ruby-keyword">def</span> <span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Asciidoctor</span><span class="ruby-operator">::</span><span class="ruby-constant">Section</span>)
+    <span class="ruby-identifier">assign_index</span>(<span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@blocks</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">block</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- 3C-3C-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- 3C-3C-method -->
+
+      
+        <div id="5B-5D-method" class="method-detail ">
+          <a name="method-i-5B-5D"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">[]</span><span
+              class="method-args">(i)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Get the element at i in the array of blocks.</p>
+
+<p>i - The Integer array index number.</p>
+
+<pre>section = Section.new
+
+section &lt;&lt; 'foo'
+section &lt;&lt; 'bar'
+section[1]
+=&gt; &quot;bar&quot;</pre>
+            
+
+            
+            <div class="method-source-code" id="5B-5D-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_block.rb, line 78</span>
+<span class="ruby-keyword">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">i</span>)
+  <span class="ruby-ivar">@blocks</span>[<span class="ruby-identifier">i</span>]
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- 5B-5D-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- 5B-5D-method -->
+
+      
+        <div id="assign_index-method" class="method-detail ">
+          <a name="method-i-assign_index"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">assign_index</span><span
+              class="method-args">(section)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Internal: Assign the next index (0-based) to this section</p>
+
+<p>Assign the next index of this section within the parent <a
+href="Block.html">Block</a> (in document order)</p>
+
+<p>returns nothing</p>
+            
+
+            
+            <div class="method-source-code" id="assign_index-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_block.rb, line 197</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">assign_index</span>(<span class="ruby-identifier">section</span>)
+  <span class="ruby-identifier">section</span>.<span class="ruby-identifier">index</span> = <span class="ruby-ivar">@next_section_index</span>
+  <span class="ruby-ivar">@next_section_index</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- assign_index-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- assign_index-method -->
+
+      
+        <div id="blocks-3F-method" class="method-detail ">
+          <a name="method-i-blocks-3F"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">blocks?</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Determine whether this <a href="Block.html">Block</a> contains
+block content</p>
+
+<p>returns Whether this <a href="Block.html">Block</a> has block content</p>
+            
+
+            
+            <div class="method-source-code" id="blocks-3F-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_block.rb, line 64</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">blocks?</span>
+  <span class="ruby-operator">!</span><span class="ruby-identifier">blocks</span>.<span class="ruby-identifier">empty?</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- blocks-3F-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- blocks-3F-method -->
+
+      
+        <div id="clear_blocks-method" class="method-detail ">
+          <a name="method-i-clear_blocks"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">clear_blocks</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Clear this Block’s list of blocks.</p>
+
+<pre>section = Section.new
+
+section &lt;&lt; 'foo'
+section &lt;&lt; 'bar'
+section.blocks
+=&gt; [&quot;foo&quot;, &quot;bar&quot;]
+section.clear_blocks
+section.blocks
+=&gt; []</pre>
+            
+
+            
+            <div class="method-source-code" id="clear_blocks-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_block.rb, line 149</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">clear_blocks</span>
+  <span class="ruby-ivar">@blocks</span> = []
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- clear_blocks-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- clear_blocks-method -->
+
+      
+        <div id="delete_at-method" class="method-detail ">
+          <a name="method-i-delete_at"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">delete_at</span><span
+              class="method-args">(i)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Delete the element at i in the array of section blocks, returning
+that element or nil if i is out of range.</p>
+
+<p>i - The Integer array index number.</p>
+
+<pre>section = Section.new
+
+section &lt;&lt; 'foo'
+section &lt;&lt; 'bar'
+section.delete_at(1)
+=&gt; &quot;bar&quot;
+
+section.blocks
+=&gt; [&quot;foo&quot;]</pre>
+            
+
+            
+            <div class="method-source-code" id="delete_at-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_block.rb, line 134</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_at</span>(<span class="ruby-identifier">i</span>)
+  <span class="ruby-ivar">@blocks</span>.<span class="ruby-identifier">delete_at</span>(<span class="ruby-identifier">i</span>)
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- delete_at-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- delete_at-method -->
+
+      
+        <div id="insert-method" class="method-detail ">
+          <a name="method-i-insert"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">insert</span><span
+              class="method-args">(i, block)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Insert a content block at the specified index in this block’s list
+of blocks.</p>
+
+<p>i - The Integer array index number. val = The content block to insert.</p>
+
+<pre>section = Section.new
+
+section &lt;&lt; 'foo'
+section &lt;&lt; 'baz'
+section.insert(1, 'bar')
+section.blocks
+[&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;]</pre>
+            
+
+            
+            <div class="method-source-code" id="insert-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_block.rb, line 116</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">insert</span>(<span class="ruby-identifier">i</span>, <span class="ruby-identifier">block</span>)
+  <span class="ruby-ivar">@blocks</span>.<span class="ruby-identifier">insert</span>(<span class="ruby-identifier">i</span>, <span class="ruby-identifier">block</span>)
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- insert-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- insert-method -->
+
+      
+        <div id="reindex_sections-method" class="method-detail ">
+          <a name="method-i-reindex_sections"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">reindex_sections</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Internal: Reassign the section indexes</p>
+
+<p>Walk the descendents of the current <a href="Document.html">Document</a> or
+<a href="Section.html">Section</a> and reassign the section 0-based index
+value to each <a href="Section.html">Section</a> as it appears in document
+order.</p>
+
+<p>returns nothing</p>
+            
+
+            
+            <div class="method-source-code" id="reindex_sections-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_block.rb, line 209</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">reindex_sections</span>
+  <span class="ruby-ivar">@next_section_index</span> = <span class="ruby-value">0</span>
+  <span class="ruby-ivar">@blocks</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">block</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Asciidoctor</span><span class="ruby-operator">::</span><span class="ruby-constant">Section</span>)
+      <span class="ruby-identifier">assign_index</span>(<span class="ruby-identifier">block</span>)
+      <span class="ruby-identifier">block</span>.<span class="ruby-identifier">reindex_sections</span>
+    <span class="ruby-keyword">end</span>
+  }
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- reindex_sections-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- reindex_sections-method -->
+
+      
+        <div id="sections-method" class="method-detail ">
+          <a name="method-i-sections"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">sections</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Get the Array of child <a href="Section.html">Section</a> objects</p>
+
+<p>Only applies to <a href="Document.html">Document</a> and <a
+href="Section.html">Section</a> instances</p>
+
+<p>Examples</p>
+
+<pre>section = Section.new(parent)
+section &lt;&lt; Block.new(section, :paragraph, 'paragraph 1')
+section &lt;&lt; Section.new(parent)
+section &lt;&lt; Block.new(section, :paragraph, 'paragraph 2')
+section.sections.size
+# =&gt; 1</pre>
+
+<p>returns an Array of <a href="Section.html">Section</a> objects</p>
+            
+
+            
+            <div class="method-source-code" id="sections-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_block.rb, line 184</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sections</span>
+  <span class="ruby-ivar">@blocks</span>.<span class="ruby-identifier">inject</span>([]) {<span class="ruby-operator">|</span><span class="ruby-identifier">collector</span>, <span class="ruby-identifier">block</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">collector</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">block</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Asciidoctor</span><span class="ruby-operator">::</span><span class="ruby-constant">Section</span>)
+    <span class="ruby-identifier">collector</span>
+  }
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- sections-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- sections-method -->
+
+      
+        <div id="size-method" class="method-detail ">
+          <a name="method-i-size"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">size</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Get the Integer number of blocks in this block</p>
+
+<p>Examples</p>
+
+<pre>section = Section.new
+
+section.size
+=&gt; 0
+
+section &lt;&lt; 'foo'
+section &lt;&lt; 'bar'
+section.size
+=&gt; 2</pre>
+            
+
+            
+            <div class="method-source-code" id="size-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_block.rb, line 166</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">size</span>
+  <span class="ruby-ivar">@blocks</span>.<span class="ruby-identifier">size</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- size-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- size-method -->
+
+      
+        <div id="title-method" class="method-detail ">
+          <a name="method-i-title"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">title</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Get the String title of this <a href="Block.html">Block</a> with
+title substitions applied</p>
+
+<p>The following substitutions are applied to block and section titles:</p>
+
+<p>:specialcharacters, :quotes, :replacements, :macros, :attributes and
+:post_replacements</p>
+
+<p>Examples</p>
+
+<pre>block.title = &quot;Foo 3^ # {two-colons} Bar(1)&quot;
+block.title
+=&gt; &quot;Foo 3^ # :: Bar(1)&quot;</pre>
+
+<p>Returns the String title of this <a href="Block.html">Block</a></p>
+            
+
+            
+            <div class="method-source-code" id="title-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_block.rb, line 45</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">title</span>
+  <span class="ruby-comment"># prevent substitutions from being applied multiple times</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@subbed_title</span>)
+    <span class="ruby-ivar">@subbed_title</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-ivar">@title</span>
+    <span class="ruby-ivar">@subbed_title</span> = <span class="ruby-identifier">apply_title_subs</span>(<span class="ruby-ivar">@title</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-ivar">@title</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- title-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- title-method -->
+
+      
+        <div id="title-3F-method" class="method-detail ">
+          <a name="method-i-title-3F"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">title?</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: A convenience method that indicates whether the title instance
+variable is blank (nil or empty)</p>
+            
+
+            
+            <div class="method-source-code" id="title-3F-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/abstract_block.rb, line 28</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">title?</span>
+  <span class="ruby-operator">!</span><span class="ruby-ivar">@title</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">empty?</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- title-3F-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- title-3F-method -->
+
+      
+      </div><!-- public-instance-method-details -->
+    
+    </div><!-- 5Buntitled-5D -->
+  
+
+  </div><!-- documentation -->
+
+  <div id="validator-badges">
+    <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+    <p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+      Rdoc Generator</a> 2</small>.</p>
+  </div>
+
+</body>
+</html>
+

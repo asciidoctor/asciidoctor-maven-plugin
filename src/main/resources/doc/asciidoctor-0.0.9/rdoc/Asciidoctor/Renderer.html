@@ -1,0 +1,691 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+
+  <title>Class: Asciidoctor::Renderer</title>
+
+  <link rel="stylesheet" href="../rdoc.css" type="text/css" media="screen" />
+
+  <script src="../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/thickbox-compressed.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/quicksearch.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/darkfish.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body id="top" class="class">
+
+  <div id="metadata">
+    <div id="home-metadata">
+      <div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+      </div>
+    </div>
+
+    <div id="file-metadata">
+      <div id="file-list-section" class="section">
+        <h3 class="section-header">In Files</h3>
+        <div class="section-body">
+          <ul>
+          
+            <li><a href="../lib/asciidoctor/renderer_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+              class="thickbox" title="lib/asciidoctor/renderer.rb">lib/asciidoctor/renderer.rb</a></li>
+          
+          </ul>
+        </div>
+      </div>
+
+      
+    </div>
+
+    <div id="class-metadata">
+      
+      <!-- Parent Class -->
+      <div id="parent-class-section" class="section">
+        <h3 class="section-header">Parent</h3>
+        
+        <p class="link">Object</p>
+        
+      </div>
+      
+
+      
+
+      
+
+      
+      <!-- Method Quickref -->
+      <div id="method-list-section" class="section">
+        <h3 class="section-header">Methods</h3>
+        <ul class="link-list">
+          
+          <li><a href="#method-c-camelcase_to_underscore">::camelcase_to_underscore</a></li>
+          
+          <li><a href="#method-c-extract_view_mapping">::extract_view_mapping</a></li>
+          
+          <li><a href="#method-c-new">::new</a></li>
+          
+          <li><a href="#method-i-load_eruby">#load_eruby</a></li>
+          
+          <li><a href="#method-i-render">#render</a></li>
+          
+          <li><a href="#method-i-views">#views</a></li>
+          
+        </ul>
+      </div>
+      
+
+      
+    </div>
+
+    <div id="project-metadata">
+      
+      
+      <div id="fileindex-section" class="section project-section">
+        <h3 class="section-header">Files</h3>
+        <ul>
+        
+          <li class="file"><a href="../LICENSE.html">LICENSE</a></li>
+        
+        </ul>
+      </div>
+      
+
+      <div id="classindex-section" class="section project-section">
+        <h3 class="section-header">Class/Module Index
+          <span class="search-toggle"><img src="../images/find.png"
+            height="16" width="16" alt="[+]"
+            title="show/hide quicksearch" /></span></h3>
+        <form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+        <fieldset>
+          <legend>Quicksearch</legend>
+          <input type="text" name="quicksearch" value=""
+            class="quicksearch-field" />
+        </fieldset>
+        </form>
+
+        <ul class="link-list">
+        
+          <li><a href="../Asciidoctor.html">Asciidoctor</a></li>
+        
+          <li><a href="../Asciidoctor/AbstractBlock.html">Asciidoctor::AbstractBlock</a></li>
+        
+          <li><a href="../Asciidoctor/AbstractNode.html">Asciidoctor::AbstractNode</a></li>
+        
+          <li><a href="../Asciidoctor/AttributeList.html">Asciidoctor::AttributeList</a></li>
+        
+          <li><a href="../Asciidoctor/BaseTemplate.html">Asciidoctor::BaseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Block.html">Asciidoctor::Block</a></li>
+        
+          <li><a href="../Asciidoctor/Callouts.html">Asciidoctor::Callouts</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45.html">Asciidoctor::DocBook45</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockAdmonitionTemplate.html">Asciidoctor::DocBook45::BlockAdmonitionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockColistTemplate.html">Asciidoctor::DocBook45::BlockColistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockDlistTemplate.html">Asciidoctor::DocBook45::BlockDlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockExampleTemplate.html">Asciidoctor::DocBook45::BlockExampleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockImageTemplate.html">Asciidoctor::DocBook45::BlockImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockListingTemplate.html">Asciidoctor::DocBook45::BlockListingTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockLiteralTemplate.html">Asciidoctor::DocBook45::BlockLiteralTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockOlistTemplate.html">Asciidoctor::DocBook45::BlockOlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockOpenTemplate.html">Asciidoctor::DocBook45::BlockOpenTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockParagraphTemplate.html">Asciidoctor::DocBook45::BlockParagraphTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockPassTemplate.html">Asciidoctor::DocBook45::BlockPassTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockPreambleTemplate.html">Asciidoctor::DocBook45::BlockPreambleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockQuoteTemplate.html">Asciidoctor::DocBook45::BlockQuoteTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockRulerTemplate.html">Asciidoctor::DocBook45::BlockRulerTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockSidebarTemplate.html">Asciidoctor::DocBook45::BlockSidebarTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockTableTemplate.html">Asciidoctor::DocBook45::BlockTableTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockUlistTemplate.html">Asciidoctor::DocBook45::BlockUlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/BlockVerseTemplate.html">Asciidoctor::DocBook45::BlockVerseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/DocumentTemplate.html">Asciidoctor::DocBook45::DocumentTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/EmbeddedTemplate.html">Asciidoctor::DocBook45::EmbeddedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineAnchorTemplate.html">Asciidoctor::DocBook45::InlineAnchorTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineBreakTemplate.html">Asciidoctor::DocBook45::InlineBreakTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineCalloutTemplate.html">Asciidoctor::DocBook45::InlineCalloutTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineImageTemplate.html">Asciidoctor::DocBook45::InlineImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/InlineQuotedTemplate.html">Asciidoctor::DocBook45::InlineQuotedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/DocBook45/SectionTemplate.html">Asciidoctor::DocBook45::SectionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Document.html">Asciidoctor::Document</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5.html">Asciidoctor::HTML5</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockAdmonitionTemplate.html">Asciidoctor::HTML5::BlockAdmonitionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockColistTemplate.html">Asciidoctor::HTML5::BlockColistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockDlistTemplate.html">Asciidoctor::HTML5::BlockDlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockExampleTemplate.html">Asciidoctor::HTML5::BlockExampleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockImageTemplate.html">Asciidoctor::HTML5::BlockImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockListingTemplate.html">Asciidoctor::HTML5::BlockListingTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockLiteralTemplate.html">Asciidoctor::HTML5::BlockLiteralTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockOlistTemplate.html">Asciidoctor::HTML5::BlockOlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockOpenTemplate.html">Asciidoctor::HTML5::BlockOpenTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockParagraphTemplate.html">Asciidoctor::HTML5::BlockParagraphTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockPassTemplate.html">Asciidoctor::HTML5::BlockPassTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockPreambleTemplate.html">Asciidoctor::HTML5::BlockPreambleTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockQuoteTemplate.html">Asciidoctor::HTML5::BlockQuoteTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockRulerTemplate.html">Asciidoctor::HTML5::BlockRulerTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockSidebarTemplate.html">Asciidoctor::HTML5::BlockSidebarTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockTableTemplate.html">Asciidoctor::HTML5::BlockTableTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockUlistTemplate.html">Asciidoctor::HTML5::BlockUlistTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/BlockVerseTemplate.html">Asciidoctor::HTML5::BlockVerseTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/DocumentTemplate.html">Asciidoctor::HTML5::DocumentTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/EmbeddedTemplate.html">Asciidoctor::HTML5::EmbeddedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineAnchorTemplate.html">Asciidoctor::HTML5::InlineAnchorTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineBreakTemplate.html">Asciidoctor::HTML5::InlineBreakTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineCalloutTemplate.html">Asciidoctor::HTML5::InlineCalloutTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineImageTemplate.html">Asciidoctor::HTML5::InlineImageTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/InlineQuotedTemplate.html">Asciidoctor::HTML5::InlineQuotedTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/HTML5/SectionTemplate.html">Asciidoctor::HTML5::SectionTemplate</a></li>
+        
+          <li><a href="../Asciidoctor/Inline.html">Asciidoctor::Inline</a></li>
+        
+          <li><a href="../Asciidoctor/Lexer.html">Asciidoctor::Lexer</a></li>
+        
+          <li><a href="../Asciidoctor/ListItem.html">Asciidoctor::ListItem</a></li>
+        
+          <li><a href="../Asciidoctor/ProjectError.html">Asciidoctor::ProjectError</a></li>
+        
+          <li><a href="../Asciidoctor/Reader.html">Asciidoctor::Reader</a></li>
+        
+          <li><a href="../Asciidoctor/Renderer.html">Asciidoctor::Renderer</a></li>
+        
+          <li><a href="../Asciidoctor/SafeMode.html">Asciidoctor::SafeMode</a></li>
+        
+          <li><a href="../Asciidoctor/Section.html">Asciidoctor::Section</a></li>
+        
+          <li><a href="../Asciidoctor/Substituters.html">Asciidoctor::Substituters</a></li>
+        
+          <li><a href="../Asciidoctor/Table.html">Asciidoctor::Table</a></li>
+        
+          <li><a href="../Asciidoctor/Table/Cell.html">Asciidoctor::Table::Cell</a></li>
+        
+          <li><a href="../Asciidoctor/Table/Column.html">Asciidoctor::Table::Column</a></li>
+        
+          <li><a href="../Asciidoctor/Table/ParserContext.html">Asciidoctor::Table::ParserContext</a></li>
+        
+        </ul>
+        <div id="no-class-search-results" style="display: none;">No matching classes.</div>
+      </div>
+
+      
+    </div>
+  </div>
+
+  <div id="documentation">
+    <h1 class="class">Asciidoctor::Renderer</h1>
+
+    <div id="description" class="description">
+      
+<p>Public: Methods for rendering Asciidoc Documents, Sections, and Blocks
+using eRuby templates.</p>
+
+    </div><!-- description -->
+
+    
+    
+    
+    <div id="5Buntitled-5D" class="documentation-section">
+      
+
+      
+
+      
+
+      
+      <!-- Attributes -->
+      <div id="attribute-method-details" class="method-section section">
+        <h3 class="section-header">Attributes</h3>
+
+        
+        <div id="compact-attribute-method" class="method-detail">
+          <a name="compact"></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">compact</span><span
+              class="attribute-access-type">[R]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+      </div><!-- attribute-method-details -->
+      
+
+      <!-- Methods -->
+      
+      <div id="public-class-method-details" class="method-section section">
+        <h3 class="section-header">Public Class Methods</h3>
+
+      
+        <div id="camelcase_to_underscore-method" class="method-detail ">
+          <a name="method-c-camelcase_to_underscore"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">camelcase_to_underscore</span><span
+              class="method-args">(str)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Internal: Convert a CamelCase word to an underscore-delimited word</p>
+
+<p>Examples</p>
+
+<pre>Renderer.camelcase_to_underscore('BlockSidebar')
+# =&gt; 'block_sidebar'
+
+Renderer.camelcase_to_underscore('BlockUlist')
+# =&gt; 'block_ulist'</pre>
+
+<p>Returns the String converted from CamelCase to underscore-delimited</p>
+            
+
+            
+            <div class="method-source-code" id="camelcase_to_underscore-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/renderer.rb, line 173</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">camelcase_to_underscore</span>(<span class="ruby-identifier">str</span>)
+  <span class="ruby-identifier">str</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/([[:upper:]]+)([[:upper:]][[:alpha:]])/</span>, <span class="ruby-string">'\1_\2'</span>).
+      <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/([[:lower:]])([[:upper:]])/</span>, <span class="ruby-string">'\1_\2'</span>).<span class="ruby-identifier">downcase</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- camelcase_to_underscore-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- camelcase_to_underscore-method -->
+
+      
+        <div id="extract_view_mapping-method" class="method-detail ">
+          <a name="method-c-extract_view_mapping"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">extract_view_mapping</span><span
+              class="method-args">(qualified_class)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Internal: Extracts the view name and backend from a qualified Ruby class</p>
+
+<p>The purpose of this method is to determine the view name and backend to
+which a built-in template class maps. We can make certain assumption since</p>
+<table class="rdoc-list"><tr><td class="rdoc-term"><p>we have control over these class names. The <a href="../Asciidoctor.html">Asciidoctor</a></p></td>
+<td>
+<p>prefix and</p>
+</td></tr></table>
+
+<p>Template suffix are stripped as the first step in the conversion.</p>
+
+<p>qualified_class - The Class or String qualified class name from which to
+extract the view name and backend</p>
+
+<p>Examples</p>
+
+<pre>Renderer.extract_view_mapping(Asciidoctor::HTML5::DocumentTemplate)
+# =&gt; ['document', 'html5']
+
+Renderer.extract_view_mapping(Asciidoctor::DocBook45::BlockSidebarTemplate)
+# =&gt; ['block_sidebar', 'docbook45']</pre>
+
+<p>Returns A two-element String Array mapped as [view_name, backend], where
+backend may be nil</p>
+            
+
+            
+            <div class="method-source-code" id="extract_view_mapping-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/renderer.rb, line 152</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">extract_view_mapping</span>(<span class="ruby-identifier">qualified_class</span>)
+  <span class="ruby-identifier">view_name</span>, <span class="ruby-identifier">backend</span> = <span class="ruby-identifier">qualified_class</span>.<span class="ruby-identifier">to_s</span>.
+      <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/^Asciidoctor::/</span>, <span class="ruby-string">''</span>).
+      <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/Template$/</span>, <span class="ruby-string">''</span>).
+      <span class="ruby-identifier">split</span>(<span class="ruby-string">'::'</span>).<span class="ruby-identifier">reverse</span>
+  <span class="ruby-identifier">view_name</span> = <span class="ruby-identifier">camelcase_to_underscore</span>(<span class="ruby-identifier">view_name</span>)
+  <span class="ruby-identifier">backend</span> = <span class="ruby-identifier">backend</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">backend</span>.<span class="ruby-identifier">nil?</span>
+  [<span class="ruby-identifier">view_name</span>, <span class="ruby-identifier">backend</span>]
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- extract_view_mapping-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- extract_view_mapping-method -->
+
+      
+        <div id="new-method" class="method-detail ">
+          <a name="method-c-new"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">new</span><span
+              class="method-args">(options={})</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Initialize an <a href="Renderer.html">Asciidoctor::Renderer</a>
+object.</p>
+            
+
+            
+            <div class="method-source-code" id="new-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/renderer.rb, line 8</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">options</span>={})
+  <span class="ruby-ivar">@debug</span> = <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-value">:debug</span>]
+
+  <span class="ruby-ivar">@views</span> = {}
+  <span class="ruby-ivar">@compact</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:compact</span>]
+
+  <span class="ruby-identifier">backend</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:backend</span>]
+  <span class="ruby-keyword">case</span> <span class="ruby-identifier">backend</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-string">'html5'</span>, <span class="ruby-string">'docbook45'</span>
+    <span class="ruby-identifier">eruby</span> = <span class="ruby-identifier">load_eruby</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:eruby</span>]
+    <span class="ruby-comment">#Asciidoctor.require_library 'asciidoctor/backends/' + backend</span>
+    <span class="ruby-identifier">require</span> <span class="ruby-string">'asciidoctor/backends/'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">backend</span>
+    <span class="ruby-comment"># Load up all the template classes that we know how to render for this backend</span>
+    <span class="ruby-constant">Asciidoctor</span><span class="ruby-operator">::</span><span class="ruby-constant">BaseTemplate</span>.<span class="ruby-identifier">template_classes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tc</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">tc</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">'::'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">backend</span> <span class="ruby-operator">+</span> <span class="ruby-string">'::'</span>) <span class="ruby-comment"># optimization</span>
+        <span class="ruby-identifier">view_name</span>, <span class="ruby-identifier">view_backend</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">extract_view_mapping</span>(<span class="ruby-identifier">tc</span>)
+        <span class="ruby-keyword">if</span> <span class="ruby-identifier">view_backend</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">backend</span>
+          <span class="ruby-ivar">@views</span>[<span class="ruby-identifier">view_name</span>] = <span class="ruby-identifier">tc</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">view_name</span>, <span class="ruby-identifier">eruby</span>)
+        <span class="ruby-keyword">end</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-constant">Asciidoctor</span>.<span class="ruby-identifier">debug</span> { <span class="ruby-node">&quot;No built-in templates for backend: #{backend}&quot;</span> }
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># If user passed in a template dir, let them override our base templates</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">template_dir</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:template_dir</span>)
+    <span class="ruby-constant">Asciidoctor</span>.<span class="ruby-identifier">require_library</span> <span class="ruby-string">'tilt'</span>
+
+    <span class="ruby-constant">Asciidoctor</span>.<span class="ruby-identifier">debug</span> {
+      <span class="ruby-identifier">msg</span> = []
+      <span class="ruby-identifier">msg</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;Views going in are like so:&quot;</span>
+      <span class="ruby-identifier">msg</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@views</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{k}: #{v}&quot;</span>}
+      <span class="ruby-identifier">msg</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">'='</span> * <span class="ruby-value">60</span>
+      <span class="ruby-identifier">msg</span> * <span class="ruby-string">&quot;\n&quot;</span>
+    }
+    
+    <span class="ruby-comment"># Grab the files in the top level of the directory (we're not traversing)</span>
+    <span class="ruby-identifier">files</span> = <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">template_dir</span>, <span class="ruby-string">'*'</span>)).<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">stat</span>(<span class="ruby-identifier">f</span>).<span class="ruby-identifier">file?</span>}
+    <span class="ruby-identifier">files</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-ivar">@views</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">view_hash</span>, <span class="ruby-identifier">view</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">name</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">view</span>).<span class="ruby-identifier">split</span>(<span class="ruby-string">'.'</span>).<span class="ruby-identifier">first</span>
+      <span class="ruby-identifier">view_hash</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Tilt</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">view</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-value">:trim</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'&lt;&gt;'</span>, <span class="ruby-value">:attr_wrapper</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'&quot;'</span>))
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-constant">Asciidoctor</span>.<span class="ruby-identifier">debug</span> {
+      <span class="ruby-identifier">msg</span> = []
+      <span class="ruby-identifier">msg</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;Views going in are like so:&quot;</span>
+      <span class="ruby-identifier">msg</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@views</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{k}: #{v}&quot;</span>}
+      <span class="ruby-identifier">msg</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">'='</span> * <span class="ruby-value">60</span>
+      <span class="ruby-identifier">msg</span> * <span class="ruby-string">&quot;\n&quot;</span>
+    }
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-ivar">@render_stack</span> = []
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- new-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- new-method -->
+
+      
+      </div><!-- public-class-method-details -->
+    
+      <div id="public-instance-method-details" class="method-section section">
+        <h3 class="section-header">Public Instance Methods</h3>
+
+      
+        <div id="load_eruby-method" class="method-detail ">
+          <a name="method-i-load_eruby"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">load_eruby</span><span
+              class="method-args">(name)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Internal: Load the eRuby implementation</p>
+
+<p>name - the String name of the eRuby implementation (default: ‘erb’)</p>
+
+<p>returns the eRuby implementation class</p>
+            
+
+            
+            <div class="method-source-code" id="load_eruby-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/renderer.rb, line 120</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">load_eruby</span>(<span class="ruby-identifier">name</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-operator">!</span>[<span class="ruby-string">'erb'</span>, <span class="ruby-string">'erubis'</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">name</span>)
+    <span class="ruby-identifier">name</span> = <span class="ruby-string">'erb'</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-constant">Asciidoctor</span>.<span class="ruby-identifier">require_library</span> <span class="ruby-identifier">name</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-string">'erb'</span>
+    <span class="ruby-operator">::</span><span class="ruby-constant">ERB</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-string">'erubis'</span>
+    <span class="ruby-operator">::</span><span class="ruby-constant">Erubis</span><span class="ruby-operator">::</span><span class="ruby-constant">FastEruby</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- load_eruby-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- load_eruby-method -->
+
+      
+        <div id="render-method" class="method-detail ">
+          <a name="method-i-render"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">render</span><span
+              class="method-args">(view, object, locals = {})</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Public: Render an Asciidoc object with a specified view template.</p>
+
+<p>view   - the String view template name. object - the Object to be used as
+an evaluation scope. locals - the optional Hash of locals to be passed to
+Tilt (default {}) (also ignored, really)</p>
+            
+
+            
+            <div class="method-source-code" id="render-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/renderer.rb, line 69</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">render</span>(<span class="ruby-identifier">view</span>, <span class="ruby-identifier">object</span>, <span class="ruby-identifier">locals</span> = {})
+  <span class="ruby-ivar">@render_stack</span>.<span class="ruby-identifier">push</span>([<span class="ruby-identifier">view</span>, <span class="ruby-identifier">object</span>])
+
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@views</span>.<span class="ruby-identifier">has_key?</span> <span class="ruby-identifier">view</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Couldn't find a view in @views for #{view}&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-constant">Asciidoctor</span>.<span class="ruby-identifier">debug</span> { <span class="ruby-node">&quot;View for #{view} is #{@views[view]}, object is #{object}&quot;</span> }
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-identifier">ret</span> = <span class="ruby-ivar">@views</span>[<span class="ruby-identifier">view</span>].<span class="ruby-identifier">render</span>(<span class="ruby-identifier">object</span>, <span class="ruby-identifier">locals</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@debug</span>
+    <span class="ruby-identifier">prefix</span> = <span class="ruby-string">''</span>
+    <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">puts</span> <span class="ruby-string">'='</span> * <span class="ruby-value">80</span>
+    <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;Rendering:&quot;</span>
+    <span class="ruby-ivar">@render_stack</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stack_view</span>, <span class="ruby-identifier">stack_obj</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">obj_info</span> = <span class="ruby-keyword">case</span> <span class="ruby-identifier">stack_obj</span>
+                 <span class="ruby-keyword">when</span> <span class="ruby-constant">Asciidoctor</span><span class="ruby-operator">::</span><span class="ruby-constant">Section</span>; <span class="ruby-node">&quot;SECTION #{stack_obj.title}&quot;</span>
+                 <span class="ruby-keyword">when</span> <span class="ruby-constant">Asciidoctor</span><span class="ruby-operator">::</span><span class="ruby-constant">Block</span>;
+                   <span class="ruby-keyword">if</span> <span class="ruby-identifier">stack_obj</span>.<span class="ruby-identifier">context</span> <span class="ruby-operator">==</span> <span class="ruby-value">:dlist</span>
+                     <span class="ruby-identifier">dt_list</span> = <span class="ruby-identifier">stack_obj</span>.<span class="ruby-identifier">buffer</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">dt</span>,<span class="ruby-identifier">dd</span><span class="ruby-operator">|</span> <span class="ruby-identifier">dt</span>.<span class="ruby-identifier">content</span>.<span class="ruby-identifier">strip</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-string">', '</span>)
+                     <span class="ruby-node">&quot;BLOCK :dlist (#{dt_list})&quot;</span>
+                   <span class="ruby-comment">#else</span>
+                   <span class="ruby-comment">#  &quot;BLOCK #{stack_obj.context.inspect}&quot;</span>
+                   <span class="ruby-keyword">end</span>
+                 <span class="ruby-keyword">else</span> <span class="ruby-identifier">stack_obj</span>.<span class="ruby-identifier">class</span>
+                 <span class="ruby-keyword">end</span>
+      <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{prefix}#{stack_view}: #{obj_info}&quot;</span>
+      <span class="ruby-identifier">prefix</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">'  '</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">puts</span> <span class="ruby-string">'-'</span> * <span class="ruby-value">80</span>
+    <span class="ruby-comment">#STDERR.puts ret.inspect</span>
+    <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">puts</span> <span class="ruby-string">'='</span> * <span class="ruby-value">80</span>
+    <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">puts</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-ivar">@render_stack</span>.<span class="ruby-identifier">pop</span>
+  <span class="ruby-identifier">ret</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- render-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- render-method -->
+
+      
+        <div id="views-method" class="method-detail ">
+          <a name="method-i-views"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">views</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="views-source">
+<pre>
+<span class="ruby-comment"># File lib/asciidoctor/renderer.rb, line 109</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">views</span>
+  <span class="ruby-identifier">readonly_views</span> = <span class="ruby-ivar">@views</span>.<span class="ruby-identifier">dup</span>
+  <span class="ruby-identifier">readonly_views</span>.<span class="ruby-identifier">freeze</span>
+  <span class="ruby-identifier">readonly_views</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- views-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- views-method -->
+
+      
+      </div><!-- public-instance-method-details -->
+    
+    </div><!-- 5Buntitled-5D -->
+  
+
+  </div><!-- documentation -->
+
+  <div id="validator-badges">
+    <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+    <p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+      Rdoc Generator</a> 2</small>.</p>
+  </div>
+
+</body>
+</html>
+
