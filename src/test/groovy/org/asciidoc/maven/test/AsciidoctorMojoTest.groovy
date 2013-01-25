@@ -42,6 +42,6 @@ class AsciidoctorMojoTest extends Specification {
             outputDir.list().toList().contains('sample.xml')
 
             File sampleOutput = new File('sample.xml', outputDir)
-            sampleOutput.totalSpace > 0
+            sampleOutput.length() > 0
     }
 }
