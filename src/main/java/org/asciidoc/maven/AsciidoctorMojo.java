@@ -29,7 +29,9 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 /**
+ * Basic maven plugin to render asciidoc files using asciidoctor, a ruby port.
  *
+ * Uses jRuby to invoke a small script to process the asciidoc files.
  */
 @Mojo(name = "process-asciidoc")
 public class AsciidoctorMojo extends AbstractMojo {
