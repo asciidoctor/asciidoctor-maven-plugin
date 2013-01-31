@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"sectname:EFI""Asciidoctor::Section#sectname;FI"RW;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"5Public: Get/Set the section name of this section;T:
+@file0FI"lib/asciidoctor/section.rb;T

@@ -1,0 +1,2 @@
+U:RDoc::Attr[iI"special:EFI"!Asciidoctor::Section#special;FI"RW;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"]Public: Get/Set the flag to indicate whether this is a special section or a child of one;T:
+@file0FI"lib/asciidoctor/section.rb;T
