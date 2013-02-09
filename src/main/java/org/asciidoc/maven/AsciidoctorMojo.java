@@ -55,7 +55,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         bindings.put("backend", backend);
 
         try {
-            final InputStream script = AbstractMojo.class.getClassLoader().getResourceAsStream("execute_asciidoctor.rb");
+            final InputStream script = getClass().getClassLoader().getResourceAsStream("execute_asciidoctor.rb");
             final InputStreamReader streamReader = new InputStreamReader(script);
             rubyEngine.eval(streamReader, bindings);
         } catch (ScriptException e) {
