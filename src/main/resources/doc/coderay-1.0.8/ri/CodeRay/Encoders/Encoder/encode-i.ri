@@ -1,3 +1,0 @@
-U:RDoc::AnyMethod[iI"encode:EFI"&CodeRay::Encoders::Encoder#encode;FF:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I":Encode the given +code+ using the Scanner for +lang+.;T:
-@file000[[I"highlight;Fo;;	[o;
-;	[I";You can use highlight instead of encode, if that seems;TI"more clear to you.;T;0I"(code, lang, options = {});FI"lib/coderay/encoder.rb;T

@@ -1,2 +1,0 @@
-U:RDoc::Attr[iI"scanner:EFI"CodeRay::Tokens#scanner;FI"RW;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"2The Scanner instance that created the tokens.;T:
-@file0FI"lib/coderay/tokens.rb;T

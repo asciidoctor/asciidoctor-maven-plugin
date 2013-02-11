@@ -1,3 +1,0 @@
-U:RDoc::Attr[iI"
-lines:EFI"Asciidoctor::Reader#lines;FI"R;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"APublic: Get the String Array of lines parsed from the source;T:
-@file0FI"lib/asciidoctor/reader.rb;T

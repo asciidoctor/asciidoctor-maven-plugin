@@ -1,2 +1,0 @@
-U:RDoc::Attr[iI"document:EFI"'Asciidoctor::AbstractNode#document;FI"R;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"EPublic: Get the Asciidoctor::Document to which this node belongs;T:
-@file0FI"%lib/asciidoctor/abstract_node.rb;T

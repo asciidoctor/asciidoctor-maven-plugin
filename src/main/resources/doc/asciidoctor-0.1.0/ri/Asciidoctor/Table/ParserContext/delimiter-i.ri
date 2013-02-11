@@ -1,2 +1,0 @@
-U:RDoc::Attr[iI"delimiter:EFI"0Asciidoctor::Table::ParserContext#delimiter;FI"R;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"/Public: The cell delimiter for this table.;T:
-@file0FI"lib/asciidoctor/table.rb;T

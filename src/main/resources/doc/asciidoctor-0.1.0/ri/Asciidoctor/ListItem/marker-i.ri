@@ -1,2 +1,0 @@
-U:RDoc::Attr[iI"marker:EFI"!Asciidoctor::ListItem#marker;FI"RW;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I";Public: Get/Set the String used to mark this list item;T:
-@file0FI"!lib/asciidoctor/list_item.rb;T

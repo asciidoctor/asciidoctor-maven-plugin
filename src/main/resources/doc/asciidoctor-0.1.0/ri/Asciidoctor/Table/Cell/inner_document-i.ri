@@ -1,2 +1,0 @@
-U:RDoc::Attr[iI"inner_document:EFI",Asciidoctor::Table::Cell#inner_document;FI"R;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"VPublic: The internal Asciidoctor::Document for a cell that has the asciidoc style;T:
-@file0FI"lib/asciidoctor/table.rb;T

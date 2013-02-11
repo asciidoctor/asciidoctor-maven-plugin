@@ -1,3 +1,0 @@
-U:RDoc::Attr[iI"
-level:EFI"%Asciidoctor::AbstractBlock#level;FI"RW;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"cPublic: Set the Integer level of this Section or the Section level in which this Block resides;T:
-@file0FI"&lib/asciidoctor/abstract_block.rb;T

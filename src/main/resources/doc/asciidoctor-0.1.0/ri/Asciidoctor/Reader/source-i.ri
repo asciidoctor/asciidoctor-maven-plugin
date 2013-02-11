@@ -1,2 +1,0 @@
-U:RDoc::Attr[iI"source:EFI"Asciidoctor::Reader#source;FI"R;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I",Public: Get the String document source.;T:
-@file0FI"lib/asciidoctor/reader.rb;T

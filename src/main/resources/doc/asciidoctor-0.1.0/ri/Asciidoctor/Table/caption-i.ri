@@ -1,2 +1,0 @@
-U:RDoc::Attr[iI"caption:EFI"Asciidoctor::Table#caption;FI"RW;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"[Public: Get/Set the String caption (unused, necessary for compatibility w/ next_block);T:
-@file0FI"lib/asciidoctor/table.rb;T

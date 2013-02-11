@@ -1,2 +1,0 @@
-U:RDoc::Attr[iI"	rows:EFI"Asciidoctor::Table#rows;FI"RW;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"LPublic: Get/Set the Rows struct for this table (encapsulates head, foot;TI"and body rows);T:
-@file0FI"lib/asciidoctor/table.rb;T

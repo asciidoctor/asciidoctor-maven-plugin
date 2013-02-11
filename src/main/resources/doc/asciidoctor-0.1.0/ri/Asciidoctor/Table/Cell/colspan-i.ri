@@ -1,2 +1,0 @@
-U:RDoc::Attr[iI"colspan:EFI"%Asciidoctor::Table::Cell#colspan;FI"RW;F:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"SPublic: An Integer of the number of columns this cell will span (default: nil);T:
-@file0FI"lib/asciidoctor/table.rb;T
