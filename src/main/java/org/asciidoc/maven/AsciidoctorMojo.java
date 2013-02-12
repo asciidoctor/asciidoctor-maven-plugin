@@ -65,7 +65,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             final InputStreamReader streamReader = new InputStreamReader(script);
             rubyEngine.eval(streamReader, bindings);
         } catch (ScriptException e) {
-            getLog().error("Error running ruby script", e);
+            throw new MojoExecutionException("Error running ruby script", e);
         }
 
         if ("html".equals(backend)) {
