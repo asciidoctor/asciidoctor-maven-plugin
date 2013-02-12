@@ -1,0 +1,34 @@
+#header, #content, #footnotes, #footer {
+    *zoom: 1;
+}
+
+#header:before, #content:before, #footnotes:before, #footer:before, #header:after, #content:after, #footnotes:after, #footer:after {
+    content: " ";
+    display: table;
+}
+
+#header:after, #content:after, #footnotes:after, #footer:after {
+    clear: both;
+}
+
+*, *:before, *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    background: white;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 1;
+    color: #222222;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+}
