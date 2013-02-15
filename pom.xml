@@ -9,7 +9,7 @@
 
     <name>Asciidoctor Maven Plugin</name>
     <description>Asciidoctor Maven Plugin</description>
-    <url>http://maven.apache.org</url>
+    <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
 
     <developers>
         <developer>
