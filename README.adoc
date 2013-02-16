@@ -1,0 +1,79 @@
+asciidoctor-maven-plugin
+========================
+:asciidoc-url: http://asciidoc.org
+:asciidoctor-url: http://asciidoctor.org
+:issues: https://github.com/asciidoctor/asciidoctor-maven-plugin/issues
+:maven-url: http://maven.apache.org/
+
+The asciidoctor-maven-plugin is the official means of using {asciidoctor-url}[Asciidoctor] to render all your {asciidoc-url}[AsciiDoc] documentation using {maven-url}[Apache Maven].
+
+== Installation
+
+As this is a typical Maven plugin, there isn't much to do to use it, simply add it to your plugins section in your pom:
+
+[source,xml]
+.Plugin declaration
+----
+...
+<plugins>
+  <plugin>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctor-maven-plugin</artifactId>
+    <version>${asciidoctor.version}</version>                   <1>
+    ...
+  </plugin>
+</plugins>
+...
+----
+
+<1> As this plugin tracks the version of asciidoctor, you can use which every version of asciidoctor you prefer
+
+== Usage
+
+[source,xml]
+.Execution setup
+----
+...
+  <plugin>
+    ...
+    <executions>
+      <execution>
+        <id>output-html</id>                                    <2>
+        <phase>generate-resources</phase>                       <3>
+      </execution>
+    </executions>
+    ...
+  </plugin>
+...
+----
+
+<2> This is simply an unique id for the execution
+<3> The asciidoctor-maven-plugin does not run in a specific phase, so one must be specified
+
+=== Configuration options
+
+Currently there are only three configuration options that the asciidoctor-maven-plugin uses:
+
+* sourceDir -- defaults to `${basedir}/src/main/asciidoc`
+* outputDir -- defaults to `${project.build.directory}/generated-docs`
+* backend -- defaults to `docbook`
+
+More will be added in the future to take advantage of other options and attributes of Asciidoctor.
+These settings can all be changed in the `<configuration>` section of the plugin section:
+
+[source,xml]
+.Plugin configuration options
+----
+<plugin>
+  ...
+    </executions>
+    <configuration>
+      <sourceDir>src/main/doc</sourceDir>      
+      <outputDir>target/docs</outputDir>
+      <backend>html</backend>
+    </configuration>
+    ...
+</plugin>
+...
+----
+
