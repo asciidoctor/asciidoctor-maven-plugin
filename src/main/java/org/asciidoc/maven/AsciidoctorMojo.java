@@ -35,10 +35,10 @@ import org.apache.maven.plugins.annotations.Parameter;
  */
 @Mojo(name = "process-asciidoc")
 public class AsciidoctorMojo extends AbstractMojo {
-    @Parameter(property = "sourceDir", defaultValue = "${basedir}/src/asciidoc", required = true)
+    @Parameter(property = "sourceDir", defaultValue = "${basedir}/src/main/asciidoc", required = true)
     protected File sourceDirectory;
 
-    @Parameter(property = "outputDir", defaultValue = "${project.build.directory}", required = true)
+    @Parameter(property = "outputDir", defaultValue = "${project.build.directory}/generated-docs", required = true)
     protected File outputDirectory;
 
     @Parameter(property = "backend", defaultValue = "docbook", required = true)
