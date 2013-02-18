@@ -43,9 +43,9 @@
     </prerequisites>
 
     <scm>
-        <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
-        <connection>https://github.com/asciidoctor/asciidoctor-maven-plugin.git</connection>
-        <developerConnection>git@github.com:asciidoctor/asciidoctor-maven-plugin.git</developerConnection>
+        <url>scm:git:git@github.com:asciidoctor/asciidoctor-maven-plugin.git</url>
+        <connection>scm:git:git@github.com:asciidoctor/asciidoctor-maven-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:asciidoctor/asciidoctor-maven-plugin.git</developerConnection>
     </scm>
 
     <issueManagement>
