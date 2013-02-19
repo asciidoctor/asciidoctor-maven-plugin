@@ -52,7 +52,7 @@ As this is a typical Maven plugin, there isn't much to do to use it, simply add 
 
 <1> This is simply an unique id for the execution
 <2> The asciidoctor-maven-plugin does not run in a specific phase, so one must be specified
-<3> The (only for the moment) ascii doc maven plugin goal
+<3> The (only for the moment) asciidoctor maven plugin goal
 
 === Configuration options
 
