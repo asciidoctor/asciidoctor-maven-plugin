@@ -46,6 +46,8 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+        ensureOutputExists();
+
         final ScriptEngineManager engineManager = new ScriptEngineManager();
         final ScriptEngine rubyEngine = engineManager.getEngineByName("jruby");
         final Bindings bindings = new SimpleBindings();
@@ -60,6 +62,14 @@ public class AsciidoctorMojo extends AbstractMojo {
             rubyEngine.eval(streamReader, bindings);
         } catch (ScriptException e) {
             getLog().error("Error running ruby script", e);
+        }
+    }
+
+    private void ensureOutputExists() {
+        if (!outputDirectory.exists()) {
+            if (!outputDirectory.mkdirs()) {
+                getLog().error("Can't create " + outputDirectory.getPath());
+            }
         }
     }
 
