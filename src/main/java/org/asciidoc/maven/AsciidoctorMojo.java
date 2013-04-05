@@ -44,6 +44,9 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = "backend", defaultValue = "docbook", required = true)
     protected String backend;
 
+    @Parameter(property = "doctype", defaultValue = "article", required = true)
+    protected String doctype;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         ensureOutputExists();
@@ -55,6 +58,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         bindings.put("srcDir", sourceDirectory.getAbsolutePath());
         bindings.put("outputDir", outputDirectory.getAbsolutePath());
         bindings.put("backend", backend);
+        bindings.put("doctype", doctype);
 
         try {
             final InputStream script = getClass().getClassLoader().getResourceAsStream("execute_asciidoctor.rb");
