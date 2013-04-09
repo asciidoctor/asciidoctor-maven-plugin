@@ -60,8 +60,8 @@ As this is a typical Maven plugin, there isn't much to do to use it, simply add 
 
 Currently there are only three configuration options that the asciidoctor-maven-plugin uses:
 
-* sourceDir -- defaults to `${basedir}/src/main/asciidoc`
-* outputDir -- defaults to `${project.build.directory}/generated-docs`
+* sourceDirectory -- defaults to `${basedir}/src/main/asciidoc`
+* outputDirectory -- defaults to `${project.build.directory}/generated-docs`
 * backend -- defaults to `docbook`
 * doctype -- defaults to `article`
 
@@ -75,8 +75,8 @@ These settings can all be changed in the `<configuration>` section of the plugin
   ...
     </executions>
     <configuration>
-      <sourceDir>src/main/doc</sourceDir>      
-      <outputDir>target/docs</outputDir>
+      <sourceDirectory>src/main/doc</sourceDirectory>      
+      <outputDirectory>target/docs</outputDirectory>
       <backend>html</backend>
       <doctype>book</doctype>
     </configuration>
