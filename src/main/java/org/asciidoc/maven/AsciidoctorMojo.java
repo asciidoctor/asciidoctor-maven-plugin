@@ -12,6 +12,8 @@
 
 package org.asciidoc.maven;
 
+import java.util.Map;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -47,6 +49,9 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = "doctype", defaultValue = "article", required = true)
     protected String doctype;
 
+    @Parameter(property = "attributes", required = false)
+    protected Map<String,String> attributes = null;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         ensureOutputExists();
@@ -59,6 +64,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         bindings.put("outputDir", outputDirectory.getAbsolutePath());
         bindings.put("backend", backend);
         bindings.put("doctype", doctype);
+        bindings.put("attributes", attributes);
 
         try {
             final InputStream script = getClass().getClassLoader().getResourceAsStream("execute_asciidoctor.rb");
@@ -99,5 +105,13 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setBackend(String backend) {
         this.backend = backend;
+    }
+
+    public Map<String,String> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String,String> attributes) {
+        this.attributes = attributes;
     }
 }
