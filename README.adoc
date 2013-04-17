@@ -64,6 +64,7 @@ Currently there are only three configuration options that the asciidoctor-maven-
 * outputDirectory -- defaults to `${project.build.directory}/generated-docs`
 * backend -- defaults to `docbook`
 * doctype -- defaults to `article`
+* attributes -- a Map<String,String> of attributes to pass to Asciidoctor, defaults to `null`
 
 More will be added in the future to take advantage of other options and attributes of Asciidoctor.
 These settings can all be changed in the `<configuration>` section of the plugin section:
@@ -79,6 +80,9 @@ These settings can all be changed in the `<configuration>` section of the plugin
       <outputDirectory>target/docs</outputDirectory>
       <backend>html</backend>
       <doctype>book</doctype>
+      <attributes>
+        <stylesheet>my-theme.css</stylesheet>
+      </attributes>
     </configuration>
     ...
 </plugin>
