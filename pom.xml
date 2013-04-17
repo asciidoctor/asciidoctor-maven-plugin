@@ -58,6 +58,7 @@
         <project.execution.environment>JavaSE-1.6</project.execution.environment>
         <spock.version>0.7-groovy-2.0</spock.version>
         <jruby.version>1.7.2</jruby.version>
+        <asciidoctor.java.integration.version>0.1.1</asciidoctor.java.integration.version>
     </properties>
 
     <dependencies>
@@ -80,10 +81,10 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.jruby</groupId>
-            <artifactId>jruby-complete</artifactId>
-            <version>${jruby.version}</version>
-            <scope>runtime</scope>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctor-java-integration</artifactId>
+            <version>${asciidoctor.java.integration.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.spockframework</groupId>
