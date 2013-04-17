@@ -12,6 +12,7 @@
 
 package org.asciidoc.maven;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import java.io.File;
@@ -26,6 +27,7 @@ import org.asciidoctor.AsciidocDirectoryWalker;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.SafeMode;
 
 /**
  * Basic maven plugin to render asciidoc files using asciidoctor, a ruby port.
@@ -47,7 +49,28 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected String doctype;
 
     @Parameter(property = "attributes", required = false)
-    protected Map<String,String> attributes = null;
+    protected Map<String,String> attributes = new HashMap<String, String>();
+
+    @Parameter(property = "compact", required = false)
+    protected boolean compact = false;
+
+    @Parameter(property = "headerFooter", required = false)
+    protected boolean headerFooter = false;
+
+    @Parameter(property = "templateDir", required = false)
+    protected String templateDir;
+
+    @Parameter(property = "templateEngine", required = false)
+    protected String templateEngine;
+
+    @Parameter(property = "imagesDir", required = false)
+    protected File imagesDir = new File(sourceDirectory, "images");
+
+    @Parameter(property = "sourceHighlighter", required = false)
+    protected String sourceHighlighter;
+
+    @Parameter(property = "title", required = false)
+    protected String title;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -56,12 +79,18 @@ public class AsciidoctorMojo extends AbstractMojo {
         final Asciidoctor instance = Asciidoctor.Factory.create();
         final List<File> asciidocFiles = new AsciidocDirectoryWalker(sourceDirectory.getAbsolutePath()).scan();
 
-        final OptionsBuilder optionsBuilder = OptionsBuilder.options().toDir(outputDirectory);
-        final AttributesBuilder attributesBuilder = AttributesBuilder.attributes().backend(backend);
-        optionsBuilder.attributes(attributesBuilder.asMap());
+        final OptionsBuilder optionsBuilder = OptionsBuilder.options().toDir(outputDirectory).compact(compact)
+                .headerFooter(headerFooter).safe(SafeMode.UNSAFE).templateDir(templateDir).templateEngine(templateEngine);
+        final AttributesBuilder attributesBuilder = AttributesBuilder.attributes().backend(backend).docType(doctype)
+                .imagesDir(imagesDir).sourceHighlighter(sourceHighlighter).title(title);
+
+        // FIXME: There needs to be a better way to do this -- talk to Alex
+        final Map<String, Object> attributesMap = attributesBuilder.asMap();
+        attributesMap.putAll(attributes);
+
+        optionsBuilder.attributes(attributesMap);
 
 
-// TODO: add backend, doctype and attributes
         for (final File f : asciidocFiles) {
             instance.renderFile(f.getAbsolutePath(), optionsBuilder.asMap());
         }
@@ -99,7 +128,13 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.backend = backend;
     }
 
-// TODO: getter / setter doctype
+    public String getDoctype() {
+        return doctype;
+    }
+
+    public void setDoctype(String doctype) {
+        this.doctype = doctype;
+    }
 
     public Map<String,String> getAttributes() {
         return attributes;
@@ -107,5 +142,61 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setAttributes(Map<String,String> attributes) {
         this.attributes = attributes;
+    }
+
+    public boolean isCompact() {
+        return compact;
+    }
+
+    public void setCompact(boolean compact) {
+        this.compact = compact;
+    }
+
+    public boolean isHeaderFooter() {
+        return headerFooter;
+    }
+
+    public void setHeaderFooter(boolean headerFooter) {
+        this.headerFooter = headerFooter;
+    }
+
+    public String getTemplateDir() {
+        return templateDir;
+    }
+
+    public void setTemplateDir(String templateDir) {
+        this.templateDir = templateDir;
+    }
+
+    public String getTemplateEngine() {
+        return templateEngine;
+    }
+
+    public void setTemplateEngine(String templateEngine) {
+        this.templateEngine = templateEngine;
+    }
+
+    public File getImagesDir() {
+        return imagesDir;
+    }
+
+    public void setImagesDir(File imagesDir) {
+        this.imagesDir = imagesDir;
+    }
+
+    public String getSourceHighlighter() {
+        return sourceHighlighter;
+    }
+
+    public void setSourceHighlighter(String sourceHighlighter) {
+        this.sourceHighlighter = sourceHighlighter;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
