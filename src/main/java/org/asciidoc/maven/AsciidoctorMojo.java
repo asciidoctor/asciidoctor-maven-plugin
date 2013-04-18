@@ -12,23 +12,22 @@
 
 package org.asciidoc.maven;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import javax.script.Bindings;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
+import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.asciidoctor.AsciidocDirectoryWalker;
+import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.SafeMode;
 
 /**
  * Basic maven plugin to render asciidoc files using asciidoctor, a ruby port.
@@ -50,28 +49,50 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected String doctype;
 
     @Parameter(property = "attributes", required = false)
-    protected Map<String,String> attributes = null;
+    protected Map<String,String> attributes = new HashMap<String, String>();
+
+    @Parameter(property = "compact", required = false)
+    protected boolean compact = false;
+
+    @Parameter(property = "headerFooter", required = false)
+    protected boolean headerFooter = false;
+
+    @Parameter(property = "templateDir", required = false)
+    protected String templateDir;
+
+    @Parameter(property = "templateEngine", required = false)
+    protected String templateEngine;
+
+    @Parameter(property = "imagesDir", required = false)
+    protected File imagesDir = new File(sourceDirectory, "images");
+
+    @Parameter(property = "sourceHighlighter", required = false)
+    protected String sourceHighlighter;
+
+    @Parameter(property = "title", required = false)
+    protected String title;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         ensureOutputExists();
 
-        final ScriptEngineManager engineManager = new ScriptEngineManager();
-        final ScriptEngine rubyEngine = engineManager.getEngineByName("jruby");
-        final Bindings bindings = new SimpleBindings();
+        final Asciidoctor instance = Asciidoctor.Factory.create();
+        final List<File> asciidocFiles = new AsciidocDirectoryWalker(sourceDirectory.getAbsolutePath()).scan();
 
-        bindings.put("srcDir", sourceDirectory.getAbsolutePath());
-        bindings.put("outputDir", outputDirectory.getAbsolutePath());
-        bindings.put("backend", backend);
-        bindings.put("doctype", doctype);
-        bindings.put("attributes", attributes);
+        final OptionsBuilder optionsBuilder = OptionsBuilder.options().toDir(outputDirectory).compact(compact)
+                .headerFooter(headerFooter).safe(SafeMode.UNSAFE).templateDir(templateDir).templateEngine(templateEngine);
+        final AttributesBuilder attributesBuilder = AttributesBuilder.attributes().backend(backend).docType(doctype)
+                .imagesDir(imagesDir).sourceHighlighter(sourceHighlighter).title(title);
 
-        try {
-            final InputStream script = getClass().getClassLoader().getResourceAsStream("execute_asciidoctor.rb");
-            final InputStreamReader streamReader = new InputStreamReader(script);
-            rubyEngine.eval(streamReader, bindings);
-        } catch (ScriptException e) {
-            getLog().error("Error running ruby script", e);
+        // FIXME: There needs to be a better way to do this -- talk to Alex
+        final Map<String, Object> attributesMap = attributesBuilder.asMap();
+        attributesMap.putAll(attributes);
+
+        optionsBuilder.attributes(attributesMap);
+
+
+        for (final File f : asciidocFiles) {
+            instance.renderFile(f.getAbsolutePath(), optionsBuilder.asMap());
         }
     }
 
@@ -107,11 +128,75 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.backend = backend;
     }
 
+    public String getDoctype() {
+        return doctype;
+    }
+
+    public void setDoctype(String doctype) {
+        this.doctype = doctype;
+    }
+
     public Map<String,String> getAttributes() {
         return attributes;
     }
 
     public void setAttributes(Map<String,String> attributes) {
         this.attributes = attributes;
+    }
+
+    public boolean isCompact() {
+        return compact;
+    }
+
+    public void setCompact(boolean compact) {
+        this.compact = compact;
+    }
+
+    public boolean isHeaderFooter() {
+        return headerFooter;
+    }
+
+    public void setHeaderFooter(boolean headerFooter) {
+        this.headerFooter = headerFooter;
+    }
+
+    public String getTemplateDir() {
+        return templateDir;
+    }
+
+    public void setTemplateDir(String templateDir) {
+        this.templateDir = templateDir;
+    }
+
+    public String getTemplateEngine() {
+        return templateEngine;
+    }
+
+    public void setTemplateEngine(String templateEngine) {
+        this.templateEngine = templateEngine;
+    }
+
+    public File getImagesDir() {
+        return imagesDir;
+    }
+
+    public void setImagesDir(File imagesDir) {
+        this.imagesDir = imagesDir;
+    }
+
+    public String getSourceHighlighter() {
+        return sourceHighlighter;
+    }
+
+    public void setSourceHighlighter(String sourceHighlighter) {
+        this.sourceHighlighter = sourceHighlighter;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
