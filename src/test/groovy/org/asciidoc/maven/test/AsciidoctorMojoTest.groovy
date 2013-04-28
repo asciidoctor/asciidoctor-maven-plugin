@@ -19,6 +19,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.backend = 'docbook'
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
+            mojo.sourceDocumentName = new File(srcDir, 'sample.asciidoc')
             mojo.execute()
         then:
             outputDir.list().toList().isEmpty() == false

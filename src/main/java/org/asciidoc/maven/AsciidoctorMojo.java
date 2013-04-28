@@ -69,6 +69,9 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = "title", required = false)
     protected String title;
 
+    @Parameter(property = "sourceDocumentName", required = false)
+    protected File sourceDocumentName;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         ensureOutputExists();
@@ -86,7 +89,12 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         optionsBuilder.attributes(attributesMap);
 
-        asciidoctorInstance.renderDirectory(sourceDirectory, optionsBuilder.asMap());
+        if (sourceDocumentName == null) {
+            asciidoctorInstance.renderDirectory(sourceDirectory, optionsBuilder.asMap());
+        } else {
+            asciidoctorInstance.renderFile(sourceDocumentName, optionsBuilder.asMap());
+        }
+
     }
 
     private void ensureOutputExists() {
