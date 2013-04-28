@@ -12,18 +12,15 @@
 
 package org.asciidoc.maven;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
-import java.io.File;
-import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.asciidoctor.AsciidocDirectoryWalker;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.OptionsBuilder;
@@ -76,8 +73,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         ensureOutputExists();
 
-        final Asciidoctor instance = Asciidoctor.Factory.create();
-        final List<File> asciidocFiles = new AsciidocDirectoryWalker(sourceDirectory.getAbsolutePath()).scan();
+        final Asciidoctor asciidoctorInstance = Asciidoctor.Factory.create();
 
         final OptionsBuilder optionsBuilder = OptionsBuilder.options().toDir(outputDirectory).compact(compact)
                 .headerFooter(headerFooter).safe(SafeMode.UNSAFE).templateDir(templateDir).templateEngine(templateEngine);
@@ -90,10 +86,7 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         optionsBuilder.attributes(attributesMap);
 
-
-        for (final File f : asciidocFiles) {
-            instance.renderFile(f.getAbsolutePath(), optionsBuilder.asMap());
-        }
+        asciidoctorInstance.renderDirectory(sourceDirectory, optionsBuilder.asMap());
     }
 
     private void ensureOutputExists() {

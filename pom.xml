@@ -57,8 +57,7 @@
         <project.java.version>1.6</project.java.version>
         <project.execution.environment>JavaSE-1.6</project.execution.environment>
         <spock.version>0.7-groovy-2.0</spock.version>
-        <jruby.version>1.7.3</jruby.version>
-        <asciidoctor.java.integration.version>0.1.1</asciidoctor.java.integration.version>
+        <asciidoctor.java.integration.version>0.1.2</asciidoctor.java.integration.version>
     </properties>
 
     <dependencyManagement>
@@ -196,15 +195,5 @@
           </plugins>
         </pluginManagement>
     </build>
-    <repositories>
-        <repository>
-            <id>rubygems-release</id>
-            <url>http://rubygems-proxy.torquebox.org/releases</url>
-        </repository>
-        <repository>
-            <id>rubygems-prerelease</id>
-            <url>http://rubygems-proxy.torquebox.org/prereleases</url>
-        </repository>
-    </repositories>
 </project>
 
