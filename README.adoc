@@ -95,22 +95,19 @@ Developer setup for hacking on this project isn't very difficult. The requiremen
 
 * Java
 * Maven 3
-* Ruby (1.9.x)
-* Bundler
 
-Everything else will be brought in by either Maven or Bundler.
+Everything else will be brought in by Maven. This is a typical Maven Java project, nothing special. You should be able to use IntelliJ, Eclipse, or Netbeans 
+without any issue for hacking on the project.
 
-=== Updating the gems in the project
+== Building
 
-All of the gems for the project must be self contained so they're included in the final jar. To update the gems in the project, simply issue:
+Standard Maven build:
 
- bundle install --path src/main/resources --standalone --clean
-
-from the project root. This will retrieve any new versions since the last install, or Gemfile change, install them into the correct location and clean any unused versions.
+ mvn clean install
 
 == Testing
 
-http://spockframework.org/(Spock) is used for testing the calling of the jRuby code from the Mojo. This will be downloaded by Maven. Tests are run simply by:
+http://spockframework.org/(Spock) is used for testing the calling of the Mojo. This will be downloaded by Maven. Tests are run simply by:
 
  mvn clean test
 
