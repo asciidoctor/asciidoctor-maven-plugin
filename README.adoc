@@ -91,7 +91,7 @@ These settings can all be changed in the `<configuration>` section of the plugin
 
 == Maven Site Integration
 
-To author your Maven-generated site in Asciidoc, you must first add a dependency on the Asciidoctor plugin to your maven-site-plugin config:
+To author your Maven-generated site in AsciiDoc, you must first add a dependency on the Asciidoctor plugin to your maven-site-plugin config:
 
 [source,xml]
 .Maven site integration
@@ -114,7 +114,7 @@ To author your Maven-generated site in Asciidoc, you must first add a dependency
 </build>       
 -----
 
-All of your Asciidoc-based files should be placed in `src/site/asciidoc` with an extension of `.ad`.
+All of your AsciiDoc-based files should be placed in `src/site/asciidoc` with an extension of `.ad`.
 
 For example, the file `src/site/asciidoc/usage.ad` will be rendered into `target/site/usage.html`.
 

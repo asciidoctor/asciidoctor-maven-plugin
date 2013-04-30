@@ -24,16 +24,16 @@ import org.codehaus.plexus.component.annotations.Component;
 public class AsciidoctorSiteModule extends AbstractSiteModule {
 
     /**
-     * The source directory for asciidoc files.
+     * The source directory for AsciiDoc files.
      */
     public static final String SOURCE_DIRECTORY = "asciidoc";
     /**
-     * The extension for asciidoc files.
+     * The extension for AsciiDoc files.
      */
     public static final String FILE_EXTENSION = "ad";
 
     /**
-     * Build a new instance of {@link AsciidocSiteModule}.
+     * Build a new instance of {@link AsciidoctorSiteModule}.
      */
     public AsciidoctorSiteModule() {
         super(SOURCE_DIRECTORY, FILE_EXTENSION, AsciidoctorParser.ROLE_HINT);

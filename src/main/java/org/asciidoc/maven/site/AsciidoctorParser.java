@@ -26,7 +26,7 @@ import org.codehaus.plexus.util.IOUtil;
 
 /**
  * This class is used by the Doxia framework to handle the actual parsing of the
- * asciidoc input files into HTML to be consumed/wrapped by the site generation
+ * AsciiDoc input files into HTML to be consumed/wrapped by the site generation
  * process.
  *
  * @author jdlee
