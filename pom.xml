@@ -63,6 +63,7 @@
         <maven.plugin.api.version>2.0</maven.plugin.api.version>
         <maven.project.version>2.2.1</maven.project.version>
         <plexus.utils.version>3.0.10</plexus.utils.version>
+		<plexus.component.metadata.version>1.5.5</plexus.component.metadata.version>
         <netty.version>4.0.0.CR1</netty.version>
         <commons.io.version>2.4</commons.io.version>
     </properties>
@@ -100,7 +101,7 @@
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>
             <version>${plexus.utils.version}</version>
-            <scope>runtime</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.asciidoctor</groupId>
@@ -130,6 +131,18 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-component-metadata</artifactId>
+                <version>${plexus.component.metadata.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate-metadata</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
