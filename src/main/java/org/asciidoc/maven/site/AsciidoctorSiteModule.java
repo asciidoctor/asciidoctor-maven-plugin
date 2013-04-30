@@ -12,7 +12,7 @@ import org.codehaus.plexus.component.annotations.Component;
  *
  * @author jdlee
  */
-@Component( role = SiteModule.class, hint = "asciidoc" )
+@Component( role = SiteModule.class, hint = AsciidoctorParser.ROLE_HINT )
 public class AsciidoctorSiteModule extends AbstractSiteModule {
 
     /**
@@ -28,6 +28,6 @@ public class AsciidoctorSiteModule extends AbstractSiteModule {
      * Build a new instance of {@link MarkdownSiteModule}.
      */
     public AsciidoctorSiteModule() {
-        super(SOURCE_DIRECTORY, FILE_EXTENSION, "asciidoc");
+        super(SOURCE_DIRECTORY, FILE_EXTENSION, AsciidoctorParser.ROLE_HINT);
     }
 }
