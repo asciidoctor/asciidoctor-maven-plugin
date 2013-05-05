@@ -10,7 +10,7 @@
  * limitations under the License.
  */
 
-package org.asciidoc.maven;
+package org.asciidoc.maven.io;
 
 import org.apache.commons.io.IOUtils;
 

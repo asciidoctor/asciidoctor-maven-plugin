@@ -19,6 +19,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
+import org.asciidoc.maven.io.Zips;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,16 +32,16 @@ public class AsciidoctorZipMojo extends AsciidoctorMojo {
     @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
 
-    @Parameter(property = "attach", defaultValue = "true")
+    @Parameter(property = AsciidoctorMaven.PREFIX + "attach", defaultValue = "true")
     protected boolean attach;
 
-    @Parameter(property = "zip", defaultValue = "true")
+    @Parameter(property = AsciidoctorMaven.PREFIX + "zip", defaultValue = "true")
     protected boolean zip;
 
-    @Parameter(property = "zipDestination", defaultValue = "${project.build.directory}/${project.build.finalName}.zip")
+    @Parameter(property = AsciidoctorMaven.PREFIX + "zipDestination", defaultValue = "${project.build.directory}/${project.build.finalName}.zip")
     protected File zipDestination;
 
-    @Parameter(property = "zipClassifier", defaultValue = "asciidoctor")
+    @Parameter(property = AsciidoctorMaven.PREFIX + "zipClassifier", defaultValue = "asciidoctor")
     protected String zipClassifier;
 
     @Override
