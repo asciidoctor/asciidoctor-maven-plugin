@@ -41,10 +41,10 @@ public class AsciidoctorHttpMojo extends AsciidoctorMojo {
     // should probably be configured in AsciidoctorMojo through @Parameter 'extension'
     private static final String ASCIIDOC_REG_EXP_EXTENSION = ".*\\.a((sc(iidoc)?)|d(oc)?)$";
 
-    @Parameter(property = "port", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "port", required = false)
     protected int port = 2000;
 
-    @Parameter(property = "interval", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "interval", required = false)
     protected int interval = 2000; // 2s
 
     private Future<Asciidoctor> asciidoctor = null;
