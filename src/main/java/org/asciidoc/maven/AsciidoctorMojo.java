@@ -13,9 +13,12 @@
 package org.asciidoc.maven;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -33,6 +36,10 @@ import org.asciidoctor.SafeMode;
  */
 @Mojo(name = "process-asciidoc")
 public class AsciidoctorMojo extends AbstractMojo {
+    // copied from org.asciidoctor.AsciiDocDirectoryWalker.ASCIIDOC_REG_EXP_EXTENSION
+    // should probably be configured in AsciidoctorMojo through @Parameter 'extension'
+    protected static final String ASCIIDOC_REG_EXP_EXTENSION = ".*\\.a((sc(iidoc)?)|d(oc)?)$";
+
     @Parameter(property = "sourceDir", defaultValue = "${basedir}/src/main/asciidoc", required = true)
     protected File sourceDirectory;
 
@@ -61,7 +68,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected String templateEngine;
 
     @Parameter(property = "imagesDir", required = false)
-    protected File imagesDir = new File(sourceDirectory, "images");
+    protected String imagesDir = "images"; // use a string because otherwise html doc uses absolute path
 
     @Parameter(property = "sourceHighlighter", required = false)
     protected String sourceHighlighter;
@@ -72,16 +79,19 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = "sourceDocumentName", required = false)
     protected File sourceDocumentName;
 
+    @Parameter
+    protected List<Synchronization> synchronizations;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         ensureOutputExists();
 
-        final Asciidoctor asciidoctorInstance = Asciidoctor.Factory.create();
+        final Asciidoctor asciidoctorInstance = getAsciidoctorInstance();
 
         final OptionsBuilder optionsBuilder = OptionsBuilder.options().toDir(outputDirectory).compact(compact)
                 .headerFooter(headerFooter).safe(SafeMode.UNSAFE).templateDir(templateDir).templateEngine(templateEngine);
         final AttributesBuilder attributesBuilder = AttributesBuilder.attributes().backend(backend).docType(doctype)
-                .imagesDir(imagesDir).sourceHighlighter(sourceHighlighter).title(title);
+                .sourceHighlighter(sourceHighlighter).title(title);
 
         // FIXME: There needs to be a better way to do this -- talk to Alex
         final Map<String, Object> attributesMap = attributesBuilder.asMap();
@@ -89,12 +99,32 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         optionsBuilder.attributes(attributesMap);
 
+        // temp hack, see https://github.com/asciidoctor/asciidoctor-java-integration/issues/26
+        optionsBuilder.asMap().put("imagesdir", imagesDir);
+
         if (sourceDocumentName == null) {
             asciidoctorInstance.renderDirectory(sourceDirectory, optionsBuilder.asMap());
         } else {
             asciidoctorInstance.renderFile(sourceDocumentName, optionsBuilder.asMap());
         }
 
+        if (synchronizations != null) {
+            synchronize();
+        }
+    }
+
+    protected Asciidoctor getAsciidoctorInstance() throws MojoExecutionException {
+        return Asciidoctor.Factory.create();
+    }
+
+    private void synchronize() {
+        for (final Synchronization synchronization : synchronizations) {
+            try {
+                FileUtils.copyDirectory(synchronization.getSource(), synchronization.getTarget());
+            } catch (IOException e) {
+                getLog().error(String.format("Can't synchronize %s -> %s", synchronization.getSource(), synchronization.getTarget()));
+            }
+        }
     }
 
     private void ensureOutputExists() {
@@ -177,11 +207,11 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.templateEngine = templateEngine;
     }
 
-    public File getImagesDir() {
+    public String getImagesDir() {
         return imagesDir;
     }
 
-    public void setImagesDir(File imagesDir) {
+    public void setImagesDir(String imagesDir) {
         this.imagesDir = imagesDir;
     }
 
