@@ -15,6 +15,7 @@ package org.asciidoc.maven;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.monitor.FileAlterationListener;
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
@@ -35,7 +36,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -101,10 +101,9 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     }
 
     protected synchronized void doExecute() {
-        try {
-            FileUtils.deleteDirectory(outputDirectory);
-        } catch (final IOException e) {
-            // no-op: swallow it, shouldn't be a big deal, just not as clean as it should in some cases
+        // delete only content files, resources are synchronized so normally up to date
+        for (final File f : FileUtils.listFiles(outputDirectory, new RegexFileFilter(ASCIIDOC_REG_EXP_EXTENSION), TrueFileFilter.INSTANCE)) {
+            FileUtils.deleteQuietly(f);
         }
 
         try {
