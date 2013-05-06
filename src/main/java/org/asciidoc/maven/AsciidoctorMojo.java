@@ -46,7 +46,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected String doctype;
 
     @Parameter(property = "attributes", required = false)
-    protected Map<String,String> attributes = new HashMap<String, String>();
+    protected Map<String,Object> attributes = new HashMap<String, Object>();
 
     @Parameter(property = "compact", required = false)
     protected boolean compact = false;
@@ -82,6 +82,16 @@ public class AsciidoctorMojo extends AbstractMojo {
                 .headerFooter(headerFooter).safe(SafeMode.UNSAFE).templateDir(templateDir).templateEngine(templateEngine);
         final AttributesBuilder attributesBuilder = AttributesBuilder.attributes().backend(backend).docType(doctype)
                 .imagesDir(imagesDir).sourceHighlighter(sourceHighlighter).title(title);
+
+        for (String key : attributes.keySet()) {
+            Object val = attributes.get(key);
+            if (val == null) {
+                attributes.put(key, ""); 
+            }
+            else if (val.equals(false)) {
+                attributes.put(key, null);
+            }
+        }
 
         // FIXME: There needs to be a better way to do this -- talk to Alex
         final Map<String, Object> attributesMap = attributesBuilder.asMap();
@@ -137,11 +147,11 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.doctype = doctype;
     }
 
-    public Map<String,String> getAttributes() {
+    public Map<String,Object> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(Map<String,String> attributes) {
+    public void setAttributes(Map<String,Object> attributes) {
         this.attributes = attributes;
     }
 
