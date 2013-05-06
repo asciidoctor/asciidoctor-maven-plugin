@@ -33,8 +33,6 @@ class AsciidoctorHttpMojoTest extends Specification {
 
                 This is test, only a test.'''.stripIndent() }
 
-            def target = new File(outputDir, "content.html")
-
             def mojo = new AsciidoctorHttpMojo()
             mojo.backend = 'html5'
             mojo.sourceDirectory = srcDir
