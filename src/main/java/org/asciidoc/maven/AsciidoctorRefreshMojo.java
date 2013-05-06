@@ -100,6 +100,8 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     }
 
     protected synchronized void doExecute() {
+        ensureOutputExists();
+
         // delete only content files, resources are synchronized so normally up to date
         for (final File f : FileUtils.listFiles(outputDirectory, new RegexFileFilter(ASCIIDOC_REG_EXP_EXTENSION), TrueFileFilter.INSTANCE)) {
             FileUtils.deleteQuietly(f);

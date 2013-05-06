@@ -24,8 +24,7 @@ public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
         final AsciidoctorHttpServer server = new AsciidoctorHttpServer(getLog(), port, outputDirectory);
         server.start();
 
-        doExecute();
-        doWait();
+        super.doWork();
 
         server.stop();
     }

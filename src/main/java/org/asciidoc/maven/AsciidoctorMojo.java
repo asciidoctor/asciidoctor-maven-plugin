@@ -139,7 +139,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
     }
 
-    private void ensureOutputExists() {
+    protected void ensureOutputExists() {
         if (!outputDirectory.exists()) {
             if (!outputDirectory.mkdirs()) {
                 getLog().error("Can't create " + outputDirectory.getPath());
