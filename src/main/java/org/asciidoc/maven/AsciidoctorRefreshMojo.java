@@ -27,12 +27,17 @@ import org.asciidoctor.Asciidoctor;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mojo(name = "auto-refresh")
 public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
@@ -43,7 +48,10 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     protected int interval = 2000; // 2s
 
     private Future<Asciidoctor> asciidoctor = null;
-    private FileAlterationMonitor monitor = null;
+    private Collection<FileAlterationMonitor> monitors = null;
+
+    private final AtomicBoolean needsUpdate = new AtomicBoolean(false);
+    private ScheduledExecutorService updaterScheduler = null;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -51,10 +59,23 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
         createAsciidoctor();
 
         startPolling();
+        startUpdater();
 
         doWork();
 
+        stopUpdater();
         stopMonitor();
+    }
+
+    private void stopUpdater() {
+        if (updaterScheduler != null) {
+            updaterScheduler.shutdown();
+        }
+    }
+
+    private void startUpdater() {
+        updaterScheduler = Executors.newScheduledThreadPool(1);
+        updaterScheduler.scheduleAtFixedRate(new Updater(needsUpdate, this), interval, interval, TimeUnit.MILLISECONDS);
     }
 
     protected void doWork() throws MojoFailureException, MojoExecutionException {
@@ -68,11 +89,13 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     }
 
     private void stopMonitor() throws MojoExecutionException {
-        if (monitor != null) {
-            try {
-                monitor.stop();
-            } catch (Exception e) {
-                throw new MojoExecutionException(e.getMessage(), e);
+        if (monitors != null) {
+            for (final FileAlterationMonitor monitor : monitors) {
+                try {
+                    monitor.stop();
+                } catch (Exception e) {
+                    throw new MojoExecutionException(e.getMessage(), e);
+                }
             }
         }
     }
@@ -97,42 +120,96 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     }
 
     private void startPolling() throws MojoExecutionException {
-        final FileAlterationObserver observer;
-        if (sourceDirectory != null) {
-            observer = new FileAlterationObserver(sourceDirectory, new RegexFileFilter(ASCIIDOC_REG_EXP_EXTENSION));
-        } else if (sourceDocumentName != null) {
-            observer = new FileAlterationObserver(sourceDocumentName.getParentFile(), new NameFileFilter(sourceDocumentName.getName()));
-        } else {
-            return;
+        monitors = new ArrayList<FileAlterationMonitor>();
+
+        { // content monitor
+            final FileAlterationObserver observer;
+            if (sourceDirectory != null) {
+                observer = new FileAlterationObserver(sourceDirectory, new RegexFileFilter(ASCIIDOC_REG_EXP_EXTENSION));
+            } else if (sourceDocumentName != null) {
+                observer = new FileAlterationObserver(sourceDocumentName.getParentFile(), new NameFileFilter(sourceDocumentName.getName()));
+            } else {
+                monitors = null; // no need to start anything because there is no content
+                return;
+            }
+
+            final FileAlterationMonitor monitor = new FileAlterationMonitor(interval);
+            final FileAlterationListener listener = new FileAlterationListenerAdaptor() {
+                @Override
+                public void onFileCreate(final File file) {
+                    getLog().info("File " + file.getAbsolutePath() + " created.");
+                    needsUpdate.set(true);
+                }
+
+                @Override
+                public void onFileChange(final File file) {
+                    getLog().info("File " + file.getAbsolutePath() + " updated.");
+                    needsUpdate.set(true);
+                }
+
+                @Override
+                public void onFileDelete(final File file) {
+                    getLog().info("File " + file.getAbsolutePath() + " deleted.");
+                    needsUpdate.set(true);
+                }
+            };
+
+            observer.addListener(listener);
+            monitor.addObserver(observer);
+
+            monitors.add(monitor);
         }
 
-        monitor = new FileAlterationMonitor(interval);
-        final FileAlterationListener listener = new FileAlterationListenerAdaptor() {
-            @Override
-            public void onFileCreate(final File file) {
-                getLog().info("File " + file.getAbsolutePath() + " created.");
-                doExecute();
-            }
+        { // resources monitors
+            if (synchronizations != null) {
+                for (final Synchronization s : synchronizations) {
+                    final FileAlterationMonitor monitor = new FileAlterationMonitor(interval);
+                    final FileAlterationListener listener = new FileAlterationListenerAdaptor() {
+                        @Override
+                        public void onFileCreate(final File file) {
+                            getLog().info("File " + file.getAbsolutePath() + " created.");
+                            synchronize(s);
+                            needsUpdate.set(true);
+                        }
 
-            @Override
-            public void onFileChange(final File file) {
-                getLog().info("File " + file.getAbsolutePath() + " updated.");
-                doExecute();
-            }
+                        @Override
+                        public void onFileChange(final File file) {
+                            getLog().info("File " + file.getAbsolutePath() + " updated.");
+                            synchronize(s);
+                            needsUpdate.set(true);
+                        }
 
-            @Override
-            public void onFileDelete(final File file) {
-                getLog().info("File " + file.getAbsolutePath() + " deleted.");
-                doExecute();
-            }
-        };
+                        @Override
+                        public void onFileDelete(final File file) {
+                            getLog().info("File " + file.getAbsolutePath() + " deleted.");
+                            FileUtils.deleteQuietly(file);
+                            needsUpdate.set(true);
+                        }
+                    };
 
-        observer.addListener(listener);
-        monitor.addObserver(observer);
-        try {
-            monitor.start();
-        } catch (final Exception e) {
-            throw new MojoExecutionException(e.getMessage(), e);
+                    final File source = s.getSource();
+
+                    final FileAlterationObserver observer;
+                    if (source.isDirectory()) {
+                        observer = new FileAlterationObserver(sourceDirectory, new RegexFileFilter(ASCIIDOC_REG_EXP_EXTENSION));
+                    } else {
+                        observer = new FileAlterationObserver(source.getParentFile(), new NameFileFilter(source.getName()));
+                    }
+
+                    observer.addListener(listener);
+                    monitor.addObserver(observer);
+
+                    monitors.add(monitor);
+                }
+            }
+        }
+
+        for (final FileAlterationMonitor monitor : monitors) {
+            try {
+                monitor.start();
+            } catch (final Exception e) {
+                throw new MojoExecutionException(e.getMessage(), e);
+            }
         }
     }
 
@@ -153,6 +230,24 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
             return asciidoctor.get();
         } catch (final Exception e) {
             throw new MojoExecutionException(e.getMessage(), e);
+        }
+    }
+
+    private static class Updater implements Runnable {
+        private final AtomicBoolean run;
+        private final AsciidoctorRefreshMojo mojo;
+
+        private Updater(final AtomicBoolean run, final AsciidoctorRefreshMojo mojo) {
+            this.run = run;
+            this.mojo = mojo;
+        }
+
+        @Override
+        public void run() {
+            if (run.get()) {
+                run.set(false);
+                mojo.doExecute();
+            }
         }
     }
 }

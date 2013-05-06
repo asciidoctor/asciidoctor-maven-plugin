@@ -119,18 +119,22 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     private void synchronize() {
         for (final Synchronization synchronization : synchronizations) {
-            if (synchronization.getSource().isDirectory()) {
-                try {
-                    FileUtils.copyDirectory(synchronization.getSource(), synchronization.getTarget());
-                } catch (IOException e) {
-                    getLog().error(String.format("Can't synchronize %s -> %s", synchronization.getSource(), synchronization.getTarget()));
-                }
-            } else {
-                try {
-                    FileUtils.copyFile(synchronization.getSource(), synchronization.getTarget());
-                } catch (IOException e) {
-                    getLog().error(String.format("Can't synchronize %s -> %s", synchronization.getSource(), synchronization.getTarget()));
-                }
+            synchronize(synchronization);
+        }
+    }
+
+    protected void synchronize(final Synchronization synchronization) {
+        if (synchronization.getSource().isDirectory()) {
+            try {
+                FileUtils.copyDirectory(synchronization.getSource(), synchronization.getTarget());
+            } catch (IOException e) {
+                getLog().error(String.format("Can't synchronize %s -> %s", synchronization.getSource(), synchronization.getTarget()));
+            }
+        } else {
+            try {
+                FileUtils.copyFile(synchronization.getSource(), synchronization.getTarget());
+            } catch (IOException e) {
+                getLog().error(String.format("Can't synchronize %s -> %s", synchronization.getSource(), synchronization.getTarget()));
             }
         }
     }
