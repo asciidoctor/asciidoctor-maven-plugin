@@ -14,6 +14,7 @@ package org.asciidoc.maven;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -21,8 +22,10 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.asciidoctor.AsciiDocDirectoryWalker;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
 
@@ -33,6 +36,8 @@ import org.asciidoctor.SafeMode;
  */
 @Mojo(name = "process-asciidoc")
 public class AsciidoctorMojo extends AbstractMojo {
+    protected static final String ASCIIDOC_REG_EXP_EXTENSION = ".*\\.a((sc(iidoc)?)|d(oc)?)$";
+
     @Parameter(property = "sourceDir", defaultValue = "${basedir}/src/main/asciidoc", required = true)
     protected File sourceDirectory;
 
@@ -72,6 +77,10 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = "sourceDocumentName", required = false)
     protected File sourceDocumentName;
 
+    @Parameter(property = "extension", required = false)
+    protected String extension;
+
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         ensureOutputExists();
@@ -89,10 +98,25 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         optionsBuilder.attributes(attributesMap);
 
+        final Map<String, Object> options = optionsBuilder.asMap();
+
         if (sourceDocumentName == null) {
-            asciidoctorInstance.renderDirectory(sourceDirectory, optionsBuilder.asMap());
+            final List<File> asciidoctorFiles;
+            if (extension == null) {
+                final DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker(sourceDirectory.getAbsolutePath());
+                asciidoctorFiles = directoryWalker.scan();
+            } else {
+                final DirectoryWalker directoryWalker = new CustomExtensionDirectoryWalker(sourceDirectory.getAbsolutePath(), extension);
+                asciidoctorFiles = directoryWalker.scan();
+            }
+
+            for (final File f : asciidoctorFiles) {
+                asciidoctorInstance.renderFile(f, options);
+                getLog().info("Rendered " + f.getAbsolutePath());
+            }
         } else {
-            asciidoctorInstance.renderFile(sourceDocumentName, optionsBuilder.asMap());
+            asciidoctorInstance.renderFile(sourceDocumentName, options);
+            getLog().info("Rendered " + sourceDocumentName.getAbsolutePath());
         }
 
     }
@@ -199,5 +223,19 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    private static class CustomExtensionDirectoryWalker extends DirectoryWalker {
+        private final String extension;
+
+        public CustomExtensionDirectoryWalker(final String absolutePath, final String extension) {
+            super(absolutePath);
+            this.extension = extension;
+        }
+
+        @Override
+        protected boolean isAcceptedFile(File filename) {
+            return filename.getName().endsWith(extension);
+        }
     }
 }
