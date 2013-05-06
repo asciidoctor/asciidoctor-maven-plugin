@@ -101,24 +101,34 @@ public class AsciidoctorMojo extends AbstractMojo {
         final Map<String, Object> options = optionsBuilder.asMap();
 
         if (sourceDocumentName == null) {
-            final List<File> asciidoctorFiles;
-            if (extension == null) {
-                final DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker(sourceDirectory.getAbsolutePath());
-                asciidoctorFiles = directoryWalker.scan();
-            } else {
-                final DirectoryWalker directoryWalker = new CustomExtensionDirectoryWalker(sourceDirectory.getAbsolutePath(), extension);
-                asciidoctorFiles = directoryWalker.scan();
-            }
-
-            for (final File f : asciidoctorFiles) {
-                asciidoctorInstance.renderFile(f, options);
-                getLog().info("Rendered " + f.getAbsolutePath());
+            for (final File f : scanSourceFiles()) {
+                renderFile(asciidoctorInstance, options, f);
             }
         } else {
-            asciidoctorInstance.renderFile(sourceDocumentName, options);
-            getLog().info("Rendered " + sourceDocumentName.getAbsolutePath());
+            renderFile(asciidoctorInstance, options, sourceDocumentName);
         }
 
+    }
+
+    private List<File> scanSourceFiles() {
+        final List<File> asciidoctorFiles;
+        if (extension == null) {
+            final DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker(sourceDirectory.getAbsolutePath());
+            asciidoctorFiles = directoryWalker.scan();
+        } else {
+            final DirectoryWalker directoryWalker = new CustomExtensionDirectoryWalker(sourceDirectory.getAbsolutePath(), extension);
+            asciidoctorFiles = directoryWalker.scan();
+        }
+        return asciidoctorFiles;
+    }
+
+    private void renderFile(Asciidoctor asciidoctorInstance, Map<String, Object> options, File f) {
+        asciidoctorInstance.renderFile(f, options);
+        logRenderedFile(f);
+    }
+
+    private void logRenderedFile(File f) {
+        getLog().info("Rendered " + f.getAbsolutePath());
     }
 
     private void ensureOutputExists() {
@@ -234,7 +244,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
 
         @Override
-        protected boolean isAcceptedFile(File filename) {
+        protected boolean isAcceptedFile(final File filename) {
             return filename.getName().endsWith(extension);
         }
     }
