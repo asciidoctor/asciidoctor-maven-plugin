@@ -83,8 +83,22 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     }
 
     protected void doWait() {
-        getLog().info("Type [Enter] to exit");
-        new Scanner(System.in).nextLine();
+        getLog().info("Type [exit|quit] to exit and [refresh] to force a manual re-rendering.");
+
+        String line;
+        final Scanner scanner = new Scanner(System.in);
+        while ((line = scanner.nextLine()) != null) {
+            line = line.trim();
+            if ("exit".equalsIgnoreCase(line) || "quit".equalsIgnoreCase(line)) {
+                break;
+            }
+
+            if ("refresh".equalsIgnoreCase(line)) {
+                doExecute();
+            } else {
+                getLog().warn("'" + line + "' not understood, available commands are [quit, exit, refresh].");
+            }
+        }
     }
 
     private void stopMonitor() throws MojoExecutionException {
