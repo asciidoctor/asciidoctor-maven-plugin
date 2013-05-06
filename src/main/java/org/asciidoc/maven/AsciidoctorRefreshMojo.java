@@ -27,7 +27,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.asciidoctor.Asciidoctor;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
@@ -79,7 +78,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     }
 
     protected void doWork() throws MojoFailureException, MojoExecutionException {
-        super.execute();
+        getLog().info("Rendered doc in " + executeAndReturnDuration() + "ms");
         doWait();
     }
 
@@ -107,15 +106,19 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
         }
 
         try {
-            final long start = System.nanoTime();
-            super.execute();
-            final long end = System.nanoTime();
-            getLog().info("Re-rendered doc in " + TimeUnit.NANOSECONDS.toMillis(end - start) + "ms");
+            getLog().info("Re-rendered doc in " + executeAndReturnDuration() + "ms");
         } catch (final MojoExecutionException e) {
             getLog().error(e);
         } catch (final MojoFailureException e) {
             getLog().error(e);
         }
+    }
+
+    protected long executeAndReturnDuration() throws MojoExecutionException, MojoFailureException {
+        final long start = System.nanoTime();
+        super.execute();
+        final long end = System.nanoTime();
+        return TimeUnit.NANOSECONDS.toMillis(end - start);
     }
 
     private void startPolling() throws MojoExecutionException {
