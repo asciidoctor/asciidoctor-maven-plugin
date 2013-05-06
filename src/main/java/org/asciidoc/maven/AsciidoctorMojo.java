@@ -12,11 +12,6 @@
 
 package org.asciidoc.maven;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -29,6 +24,11 @@ import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Basic maven plugin to render asciidoc files using asciidoctor, a ruby port.
  *
@@ -36,8 +36,6 @@ import org.asciidoctor.SafeMode;
  */
 @Mojo(name = "process-asciidoc")
 public class AsciidoctorMojo extends AbstractMojo {
-    protected static final String ASCIIDOC_REG_EXP_EXTENSION = ".*\\.a((sc(iidoc)?)|d(oc)?)$";
-
     @Parameter(property = "sourceDir", defaultValue = "${basedir}/src/main/asciidoc", required = true)
     protected File sourceDirectory;
 
