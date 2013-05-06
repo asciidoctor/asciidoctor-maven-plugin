@@ -41,6 +41,8 @@ class AsciidoctorMojoTest extends Specification {
             mojo.backend = 'html'
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
+            mojo.headerFooter = true
+            mojo.attributes = [toc: '', stylesheet: false]
             mojo.execute()
         then:
             outputDir.list().toList().isEmpty() == false
@@ -48,5 +50,8 @@ class AsciidoctorMojoTest extends Specification {
 
             File sampleOutput = new File('sample.html', outputDir)
             sampleOutput.length() > 0
+            String text = sampleOutput.getText()
+            text.contains('id="toc"')
+            !text.contains('link rel="stylesheet"')
     }
 }
