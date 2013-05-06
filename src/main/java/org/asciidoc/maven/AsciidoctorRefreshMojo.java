@@ -191,7 +191,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
 
                     final FileAlterationObserver observer;
                     if (source.isDirectory()) {
-                        observer = new FileAlterationObserver(sourceDirectory, new RegexFileFilter(ASCIIDOC_REG_EXP_EXTENSION));
+                        observer = new FileAlterationObserver(source);
                     } else {
                         observer = new FileAlterationObserver(source.getParentFile(), new NameFileFilter(source.getName()));
                     }
