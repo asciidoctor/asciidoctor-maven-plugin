@@ -75,9 +75,8 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = "sourceDocumentName", required = false)
     protected File sourceDocumentName;
 
-    @Parameter(property = "extension", required = false)
-    protected String extension;
-
+    @Parameter(property = "extensions", required = false)
+    protected List<String> extensions;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -110,11 +109,11 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     private List<File> scanSourceFiles() {
         final List<File> asciidoctorFiles;
-        if (extension == null) {
+        if (extensions == null || extensions.isEmpty()) {
             final DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker(sourceDirectory.getAbsolutePath());
             asciidoctorFiles = directoryWalker.scan();
         } else {
-            final DirectoryWalker directoryWalker = new CustomExtensionDirectoryWalker(sourceDirectory.getAbsolutePath(), extension);
+            final DirectoryWalker directoryWalker = new CustomExtensionDirectoryWalker(sourceDirectory.getAbsolutePath(), extensions);
             asciidoctorFiles = directoryWalker.scan();
         }
         return asciidoctorFiles;
@@ -233,17 +232,31 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.title = title;
     }
 
-    private static class CustomExtensionDirectoryWalker extends DirectoryWalker {
-        private final String extension;
+    public List<String> getExtensions() {
+        return extensions;
+    }
 
-        public CustomExtensionDirectoryWalker(final String absolutePath, final String extension) {
+    public void setExtensions(final List<String> extensions) {
+        this.extensions = extensions;
+    }
+
+    private static class CustomExtensionDirectoryWalker extends DirectoryWalker {
+        private final List<String> extensions;
+
+        public CustomExtensionDirectoryWalker(final String absolutePath, final List<String> extensions) {
             super(absolutePath);
-            this.extension = extension;
+            this.extensions = extensions;
         }
 
         @Override
         protected boolean isAcceptedFile(final File filename) {
-            return filename.getName().endsWith(extension);
+            final String name = filename.getName();
+            for (final String extension : extensions) {
+                if (name.endsWith(extension)) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
