@@ -75,7 +75,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = "sourceDocumentName", required = false)
     protected File sourceDocumentName;
 
-    @Parameter(property = "extensions", required = false)
+    @Parameter
     protected List<String> extensions;
 
     @Override
