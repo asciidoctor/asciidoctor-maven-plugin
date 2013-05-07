@@ -62,4 +62,36 @@ public class AsciidoctorZipMojo extends AsciidoctorMojo {
             }
         }
     }
+
+    public String getZipClassifier() {
+        return zipClassifier;
+    }
+
+    public void setZipClassifier(final String zipClassifier) {
+        this.zipClassifier = zipClassifier;
+    }
+
+    public File getZipDestination() {
+        return zipDestination;
+    }
+
+    public void setZipDestination(final File zipDestination) {
+        this.zipDestination = zipDestination;
+    }
+
+    public boolean isZip() {
+        return zip;
+    }
+
+    public void setZip(final boolean zip) {
+        this.zip = zip;
+    }
+
+    public boolean isAttach() {
+        return attach;
+    }
+
+    public void setAttach(final boolean attach) {
+        this.attach = attach;
+    }
 }
