@@ -12,19 +12,22 @@
 
 package org.asciidoc.maven;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.asciidoctor.AsciiDocDirectoryWalker;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Basic maven plugin to render asciidoc files using asciidoctor, a ruby port.
@@ -72,6 +75,9 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = "sourceDocumentName", required = false)
     protected File sourceDocumentName;
 
+    @Parameter
+    protected List<String> extensions;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         ensureOutputExists();
@@ -99,12 +105,37 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         optionsBuilder.attributes(attributesMap);
 
+        final Map<String, Object> options = optionsBuilder.asMap();
+
         if (sourceDocumentName == null) {
-            asciidoctorInstance.renderDirectory(sourceDirectory, optionsBuilder.asMap());
+            for (final File f : scanSourceFiles()) {
+                renderFile(asciidoctorInstance, options, f);
+            }
         } else {
-            asciidoctorInstance.renderFile(sourceDocumentName, optionsBuilder.asMap());
+            renderFile(asciidoctorInstance, options, sourceDocumentName);
         }
 
+    }
+
+    private List<File> scanSourceFiles() {
+        final List<File> asciidoctorFiles;
+        if (extensions == null || extensions.isEmpty()) {
+            final DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker(sourceDirectory.getAbsolutePath());
+            asciidoctorFiles = directoryWalker.scan();
+        } else {
+            final DirectoryWalker directoryWalker = new CustomExtensionDirectoryWalker(sourceDirectory.getAbsolutePath(), extensions);
+            asciidoctorFiles = directoryWalker.scan();
+        }
+        return asciidoctorFiles;
+    }
+
+    private void renderFile(Asciidoctor asciidoctorInstance, Map<String, Object> options, File f) {
+        asciidoctorInstance.renderFile(f, options);
+        logRenderedFile(f);
+    }
+
+    private void logRenderedFile(File f) {
+        getLog().info("Rendered " + f.getAbsolutePath());
     }
 
     private void ensureOutputExists() {
@@ -209,5 +240,33 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public List<String> getExtensions() {
+        return extensions;
+    }
+
+    public void setExtensions(final List<String> extensions) {
+        this.extensions = extensions;
+    }
+
+    private static class CustomExtensionDirectoryWalker extends DirectoryWalker {
+        private final List<String> extensions;
+
+        public CustomExtensionDirectoryWalker(final String absolutePath, final List<String> extensions) {
+            super(absolutePath);
+            this.extensions = extensions;
+        }
+
+        @Override
+        protected boolean isAcceptedFile(final File filename) {
+            final String name = filename.getName();
+            for (final String extension : extensions) {
+                if (name.endsWith(extension)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
