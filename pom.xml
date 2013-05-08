@@ -66,6 +66,7 @@
 		<plexus.component.metadata.version>1.5.5</plexus.component.metadata.version>
         <netty.version>4.0.0.CR1</netty.version>
         <commons.io.version>2.4</commons.io.version>
+		<doxia.version>1.4</doxia.version>
     </properties>
 
     <dependencyManagement>
@@ -122,9 +123,21 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache.maven.doxia</groupId>
+            <artifactId>doxia-core</artifactId>
+            <version>${doxia.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${commons.io.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.doxia</groupId>
+            <artifactId>doxia-module-xhtml</artifactId>
+            <version>${doxia.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

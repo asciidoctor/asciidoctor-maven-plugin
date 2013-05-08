@@ -26,7 +26,7 @@ public class AsciidoctorSiteModule extends AbstractSiteModule {
     /**
      * The source directory for AsciiDoc files.
      */
-    public static final String SOURCE_DIRECTORY = "asciidoc";
+    public static final String SOURCE_DIRECTORY = AsciidoctorParser.ROLE_HINT;
     /**
      * The extension for AsciiDoc files.
      */
