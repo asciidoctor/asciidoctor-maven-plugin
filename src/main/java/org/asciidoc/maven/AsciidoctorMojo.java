@@ -24,14 +24,17 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.asciidoctor.AsciiDocDirectoryWalker;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
 
+
 /**
  * Basic maven plugin to render asciidoc files using asciidoctor, a ruby port.
- *
+ * <p/>
  * Uses jRuby to invoke a small script to process the asciidoc files.
  */
 @Mojo(name = "process-asciidoc")
@@ -53,7 +56,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected String doctype;
 
     @Parameter(property = "attributes", required = false)
-    protected Map<String,Object> attributes = new HashMap<String, Object>();
+    protected Map<String, Object> attributes = new HashMap<String, Object>();
 
     @Parameter(property = "compact", required = false)
     protected boolean compact = false;
@@ -82,6 +85,9 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter
     protected List<Synchronization> synchronizations;
 
+    @Parameter
+    protected List<String> extensions;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         ensureOutputExists();
@@ -96,9 +102,8 @@ public class AsciidoctorMojo extends AbstractMojo {
         for (String key : attributes.keySet()) {
             Object val = attributes.get(key);
             if (val == null) {
-                attributes.put(key, ""); 
-            }
-            else if (val.equals(false)) {
+                attributes.put(key, "");
+            } else if (val.equals(false)) {
                 attributes.put(key, null);
             }
         }
@@ -110,12 +115,16 @@ public class AsciidoctorMojo extends AbstractMojo {
         optionsBuilder.attributes(attributesMap);
 
         // temp hack, see https://github.com/asciidoctor/asciidoctor-java-integration/issues/26
-        optionsBuilder.asMap().put("imagesdir", imagesDir);
+        final Map<String, Object> options = optionsBuilder.asMap();
+
+        options.put("imagesdir", imagesDir);
 
         if (sourceDocumentName == null) {
-            asciidoctorInstance.renderDirectory(sourceDirectory, optionsBuilder.asMap());
+            for (final File f : scanSourceFiles()) {
+                renderFile(asciidoctorInstance, options, f);
+            }
         } else {
-            asciidoctorInstance.renderFile(sourceDocumentName, optionsBuilder.asMap());
+            renderFile(asciidoctorInstance, options, sourceDocumentName);
         }
 
         if (synchronizations != null) {
@@ -127,10 +136,31 @@ public class AsciidoctorMojo extends AbstractMojo {
         return Asciidoctor.Factory.create();
     }
 
+    private List<File> scanSourceFiles() {
+        final List<File> asciidoctorFiles;
+        if (extensions == null || extensions.isEmpty()) {
+            final DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker(sourceDirectory.getAbsolutePath());
+            asciidoctorFiles = directoryWalker.scan();
+        } else {
+            final DirectoryWalker directoryWalker = new CustomExtensionDirectoryWalker(sourceDirectory.getAbsolutePath(), extensions);
+            asciidoctorFiles = directoryWalker.scan();
+        }
+        return asciidoctorFiles;
+    }
+
     private void synchronize() {
         for (final Synchronization synchronization : synchronizations) {
             synchronize(synchronization);
         }
+    }
+
+    private void renderFile(Asciidoctor asciidoctorInstance, Map<String, Object> options, File f) {
+        asciidoctorInstance.renderFile(f, options);
+        logRenderedFile(f);
+    }
+
+    private void logRenderedFile(File f) {
+        getLog().info("Rendered " + f.getAbsolutePath());
     }
 
     protected void synchronize(final Synchronization synchronization) {
@@ -189,11 +219,11 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.doctype = doctype;
     }
 
-    public Map<String,Object> getAttributes() {
+    public Map<String, Object> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(Map<String,Object> attributes) {
+    public void setAttributes(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 
@@ -251,5 +281,33 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public List<String> getExtensions() {
+        return extensions;
+    }
+
+    public void setExtensions(final List<String> extensions) {
+        this.extensions = extensions;
+    }
+
+    private static class CustomExtensionDirectoryWalker extends DirectoryWalker {
+        private final List<String> extensions;
+
+        public CustomExtensionDirectoryWalker(final String absolutePath, final List<String> extensions) {
+            super(absolutePath);
+            this.extensions = extensions;
+        }
+
+        @Override
+        protected boolean isAcceptedFile(final File filename) {
+            final String name = filename.getName();
+            for (final String extension : extensions) {
+                if (name.endsWith(extension)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
