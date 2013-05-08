@@ -36,6 +36,10 @@ import org.asciidoctor.SafeMode;
  */
 @Mojo(name = "process-asciidoc")
 public class AsciidoctorMojo extends AbstractMojo {
+    // copied from org.asciidoctor.AsciiDocDirectoryWalker.ASCIIDOC_REG_EXP_EXTENSION
+    // should probably be configured in AsciidoctorMojo through @Parameter 'extension'
+    protected static final String ASCIIDOC_REG_EXP_EXTENSION = ".*\\.a((sc(iidoc)?)|d(oc)?)$";
+
     @Parameter(property = "sourceDir", defaultValue = "${basedir}/src/main/asciidoc", required = true)
     protected File sourceDirectory;
 
@@ -125,15 +129,27 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     private void synchronize() {
         for (final Synchronization synchronization : synchronizations) {
+            synchronize(synchronization);
+        }
+    }
+
+    protected void synchronize(final Synchronization synchronization) {
+        if (synchronization.getSource().isDirectory()) {
             try {
                 FileUtils.copyDirectory(synchronization.getSource(), synchronization.getTarget());
+            } catch (IOException e) {
+                getLog().error(String.format("Can't synchronize %s -> %s", synchronization.getSource(), synchronization.getTarget()));
+            }
+        } else {
+            try {
+                FileUtils.copyFile(synchronization.getSource(), synchronization.getTarget());
             } catch (IOException e) {
                 getLog().error(String.format("Can't synchronize %s -> %s", synchronization.getSource(), synchronization.getTarget()));
             }
         }
     }
 
-    private void ensureOutputExists() {
+    protected void ensureOutputExists() {
         if (!outputDirectory.exists()) {
             if (!outputDirectory.mkdirs()) {
                 getLog().error("Can't create " + outputDirectory.getPath());
