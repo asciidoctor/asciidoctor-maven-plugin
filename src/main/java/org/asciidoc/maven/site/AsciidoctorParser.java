@@ -14,14 +14,15 @@ package org.asciidoc.maven.site;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.maven.doxia.module.xhtml.XhtmlParser;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.OptionsBuilder;
 import org.codehaus.plexus.component.annotations.Component;
-
 import org.codehaus.plexus.util.IOUtil;
 
 /**
@@ -46,11 +47,12 @@ public class AsciidoctorParser extends XhtmlParser {
     @Override
     public void parse(Reader source, Sink sink) throws ParseException {
         try {
-            super.parse(new StringReader("<html><body>"
-                    + asciidoctorInstance.render(IOUtil.toString(source), new HashMap())
-                    + "</body></html>"), sink);
-        } catch (IOException e) {
-            throw new ParseException("Failed reading Asciidoc source document", e);
+            super.parse(new StringReader(
+                    asciidoctorInstance.render(IOUtil.toString(source),
+                        OptionsBuilder.options().headerFooter(true).asMap())),
+                    sink);
+        } catch (IOException ex) {
+            getLog().error(ex.getLocalizedMessage());
         }
     }
 }
