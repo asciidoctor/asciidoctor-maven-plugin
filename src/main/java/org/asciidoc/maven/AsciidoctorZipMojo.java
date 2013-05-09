@@ -32,6 +32,7 @@ public class AsciidoctorZipMojo extends AsciidoctorMojo {
     @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
 
+<<<<<<< HEAD
     @Parameter(property = AsciidoctorMaven.PREFIX + "attach", defaultValue = "true")
     protected boolean attach;
 
@@ -42,6 +43,18 @@ public class AsciidoctorZipMojo extends AsciidoctorMojo {
     protected File zipDestination;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "zipClassifier", defaultValue = "asciidoctor")
+=======
+    @Parameter(property = "attach", defaultValue = "true")
+    protected boolean attach;
+
+    @Parameter(property = "zip", defaultValue = "true")
+    protected boolean zip;
+
+    @Parameter(property = "zipDestination", defaultValue = "${project.build.directory}/${project.build.finalName}.zip")
+    protected File zipDestination;
+
+    @Parameter(property = "zipClassifier", defaultValue = "asciidoctor")
+>>>>>>> upstream/master
     protected String zipClassifier;
 
     @Override
@@ -62,4 +75,39 @@ public class AsciidoctorZipMojo extends AsciidoctorMojo {
             }
         }
     }
+<<<<<<< HEAD
+=======
+
+    public String getZipClassifier() {
+        return zipClassifier;
+    }
+
+    public void setZipClassifier(final String zipClassifier) {
+        this.zipClassifier = zipClassifier;
+    }
+
+    public File getZipDestination() {
+        return zipDestination;
+    }
+
+    public void setZipDestination(final File zipDestination) {
+        this.zipDestination = zipDestination;
+    }
+
+    public boolean isZip() {
+        return zip;
+    }
+
+    public void setZip(final boolean zip) {
+        this.zip = zip;
+    }
+
+    public boolean isAttach() {
+        return attach;
+    }
+
+    public void setAttach(final boolean attach) {
+        this.attach = attach;
+    }
+>>>>>>> upstream/master
 }

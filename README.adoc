@@ -89,6 +89,48 @@ These settings can all be changed in the `<configuration>` section of the plugin
 ...
 ----
 
+== Maven Site Integration
+
+To author your Maven-generated site in AsciiDoc, you must first add a dependency on the Asciidoctor plugin to your maven-site-plugin config:
+
+[source,xml]
+.Maven site integration
+-----
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>3.2</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.asciidoctor</groupId>
+                    <artifactId>asciidoctor-maven-plugin</artifactId>
+                    <version>${asciidoctor.version}</version>
+                </dependency>
+            </dependencies>
+        </plugin>
+    </plugins>
+</build>
+-----
+
+All of your AsciiDoc-based files should be placed in `src/site/asciidoc` with an extension of `.ad`.
+
+For example, the file `src/site/asciidoc/usage.ad` will be rendered into `target/site/usage.html`.
+
+As always, make sure you add a `menu` item for each page:
+
+[source,xml]
+-----
+<body>
+...
+    <menu name="User guide">
+        <item href="usage.html" name="Usage" />
+    </menu>
+...
+</body>
+-----
+
 == Hacking
 
 Developer setup for hacking on this project isn't very difficult. The requirements are very small:

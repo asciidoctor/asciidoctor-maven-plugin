@@ -12,6 +12,7 @@
 
 package org.asciidoc.maven;
 
+<<<<<<< HEAD
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
@@ -161,5 +162,22 @@ public class AsciidoctorHttpMojo extends AsciidoctorMojo {
         } catch (final Exception e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
+=======
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.asciidoc.maven.http.AsciidoctorHttpServer;
+
+@Mojo(name = "http")
+public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
+    @Override
+    protected void doWork() throws MojoFailureException, MojoExecutionException {
+        final AsciidoctorHttpServer server = new AsciidoctorHttpServer(getLog(), port, outputDirectory);
+        server.start();
+
+        super.doWork();
+
+        server.stop();
+>>>>>>> upstream/master
     }
 }
