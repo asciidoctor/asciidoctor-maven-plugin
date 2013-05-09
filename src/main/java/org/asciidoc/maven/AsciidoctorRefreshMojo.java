@@ -74,7 +74,11 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
 
     private void startUpdater() {
         updaterScheduler = Executors.newScheduledThreadPool(1);
-        updaterScheduler.scheduleAtFixedRate(new Updater(needsUpdate, this), interval, interval, TimeUnit.MILLISECONDS);
+
+        // we prevent refreshing more often than all 200ms and we refresh at least once/s
+        // NOTE1: it is intended to avoid too much time space between file polling and re-rendering
+        // NOTE2: if nothing to refresh it does nothing so all is fine
+        updaterScheduler.scheduleAtFixedRate(new Updater(needsUpdate, this), 0, Math.min(1000, Math.max(200, interval / 2)), TimeUnit.MILLISECONDS);
     }
 
     protected void doWork() throws MojoFailureException, MojoExecutionException {
