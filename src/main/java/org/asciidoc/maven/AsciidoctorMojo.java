@@ -39,71 +39,55 @@ import org.asciidoctor.SafeMode;
  */
 @Mojo(name = "process-asciidoc")
 public class AsciidoctorMojo extends AbstractMojo {
-<<<<<<< HEAD
-    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDir", defaultValue = "${basedir}/src/main/asciidoc", required = true)
-=======
     // copied from org.asciidoctor.AsciiDocDirectoryWalker.ASCIIDOC_REG_EXP_EXTENSION
     // should probably be configured in AsciidoctorMojo through @Parameter 'extension'
     protected static final String ASCIIDOC_REG_EXP_EXTENSION = ".*\\.a((sc(iidoc)?)|d(oc)?)$";
 
     @Parameter(property = "sourceDir", defaultValue = "${basedir}/src/main/asciidoc", required = true)
->>>>>>> upstream/master
     protected File sourceDirectory;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "outputDir", defaultValue = "${project.build.directory}/generated-docs", required = true)
+    @Parameter(property = "outputDir", defaultValue = "${project.build.directory}/generated-docs", required = true)
     protected File outputDirectory;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "backend", defaultValue = "docbook", required = true)
+    @Parameter(property = "backend", defaultValue = "docbook", required = true)
     protected String backend;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "doctype", defaultValue = "article", required = true)
+    @Parameter(property = "doctype", defaultValue = "article", required = true)
     protected String doctype;
 
-<<<<<<< HEAD
-    @Parameter(property = AsciidoctorMaven.PREFIX + "attributes", required = false)
-    protected Map<String,String> attributes = new HashMap<String, String>();
-=======
     @Parameter(property = "attributes", required = false)
     protected Map<String, Object> attributes = new HashMap<String, Object>();
->>>>>>> upstream/master
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "compact", required = false)
+    @Parameter(property = "compact", required = false)
     protected boolean compact = false;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "headerFooter", required = false)
+    @Parameter(property = "headerFooter", required = false)
     protected boolean headerFooter = false;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "templateDir", required = false)
+    @Parameter(property = "templateDir", required = false)
     protected String templateDir;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "templateEngine", required = false)
+    @Parameter(property = "templateEngine", required = false)
     protected String templateEngine;
 
-<<<<<<< HEAD
-    @Parameter(property = AsciidoctorMaven.PREFIX + "imagesDir", required = false)
-=======
     @Parameter(property = "imagesDir", required = false)
->>>>>>> upstream/master
     protected String imagesDir = "images"; // use a string because otherwise html doc uses absolute path
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceHighlighter", required = false)
+    @Parameter(property = "sourceHighlighter", required = false)
     protected String sourceHighlighter;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "title", required = false)
+    @Parameter(property = "title", required = false)
     protected String title;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDocumentName", required = false)
+    @Parameter(property = "sourceDocumentName", required = false)
     protected File sourceDocumentName;
 
     @Parameter
     protected List<Synchronization> synchronizations;
 
-<<<<<<< HEAD
-=======
     @Parameter
     protected List<String> extensions;
 
->>>>>>> upstream/master
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         ensureOutputExists();
@@ -114,8 +98,6 @@ public class AsciidoctorMojo extends AbstractMojo {
                 .headerFooter(headerFooter).safe(SafeMode.UNSAFE).templateDir(templateDir).templateEngine(templateEngine);
         final AttributesBuilder attributesBuilder = AttributesBuilder.attributes().backend(backend).docType(doctype)
                 .sourceHighlighter(sourceHighlighter).title(title);
-<<<<<<< HEAD
-=======
 
         for (String key : attributes.keySet()) {
             Object val = attributes.get(key);
@@ -125,7 +107,6 @@ public class AsciidoctorMojo extends AbstractMojo {
                 attributes.put(key, null);
             }
         }
->>>>>>> upstream/master
 
         // FIXME: There needs to be a better way to do this -- talk to Alex
         final Map<String, Object> attributesMap = attributesBuilder.asMap();
@@ -134,13 +115,9 @@ public class AsciidoctorMojo extends AbstractMojo {
         optionsBuilder.attributes(attributesMap);
 
         // temp hack, see https://github.com/asciidoctor/asciidoctor-java-integration/issues/26
-<<<<<<< HEAD
-        optionsBuilder.asMap().put("imagesdir", imagesDir);
-=======
         final Map<String, Object> options = optionsBuilder.asMap();
 
         options.put("imagesdir", imagesDir);
->>>>>>> upstream/master
 
         if (sourceDocumentName == null) {
             for (final File f : scanSourceFiles()) {
@@ -186,36 +163,19 @@ public class AsciidoctorMojo extends AbstractMojo {
         getLog().info("Rendered " + f.getAbsolutePath());
     }
 
-<<<<<<< HEAD
-        if (synchronizations != null) {
-            synchronize();
-        }
-    }
-
-    protected Asciidoctor getAsciidoctorInstance() throws MojoExecutionException {
-        return Asciidoctor.Factory.create();
-    }
-
-    private void synchronize() {
-        for (final Synchronization synchronization : synchronizations) {
-=======
     protected void synchronize(final Synchronization synchronization) {
         if (synchronization.getSource().isDirectory()) {
->>>>>>> upstream/master
             try {
                 FileUtils.copyDirectory(synchronization.getSource(), synchronization.getTarget());
             } catch (IOException e) {
                 getLog().error(String.format("Can't synchronize %s -> %s", synchronization.getSource(), synchronization.getTarget()));
             }
-<<<<<<< HEAD
-=======
         } else {
             try {
                 FileUtils.copyFile(synchronization.getSource(), synchronization.getTarget());
             } catch (IOException e) {
                 getLog().error(String.format("Can't synchronize %s -> %s", synchronization.getSource(), synchronization.getTarget()));
             }
->>>>>>> upstream/master
         }
     }
 
