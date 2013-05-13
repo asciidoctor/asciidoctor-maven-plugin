@@ -15,17 +15,29 @@ package org.asciidoc.maven;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.asciidoc.maven.http.AsciidoctorHttpServer;
 
 @Mojo(name = "http")
 public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
+    @Parameter(property = AsciidoctorMaven.PREFIX + "home", required = false, defaultValue = "index")
+    protected String home;
+
     @Override
     protected void doWork() throws MojoFailureException, MojoExecutionException {
-        final AsciidoctorHttpServer server = new AsciidoctorHttpServer(getLog(), port, outputDirectory);
+        final AsciidoctorHttpServer server = new AsciidoctorHttpServer(getLog(), port, outputDirectory, home);
         server.start();
 
         super.doWork();
 
         server.stop();
+    }
+
+    public String getHome() {
+        return home;
+    }
+
+    public void setHome(final String home) {
+        this.home = home;
     }
 }
