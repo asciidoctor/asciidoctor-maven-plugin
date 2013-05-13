@@ -12,5 +12,5 @@
 package org.asciidoc.maven;
 
 public interface AsciidoctorMaven {
-    static final String PREFIX = "asciidoctor";
+    static final String PREFIX = "asciidoctor.";
 }
