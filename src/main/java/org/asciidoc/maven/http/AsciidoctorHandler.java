@@ -31,11 +31,19 @@ import java.io.FileInputStream;
 
 public class AsciidoctorHandler extends ChannelInboundMessageHandlerAdapter<FullHttpRequest> {
     private static final String HTML_MEDIA_TYPE = "text/html";
+    public static final String HTML_EXTENSION = ".html";
 
     private final File directory;
+    private final String defaultPage;
 
-    public AsciidoctorHandler(final File workDir) {
+    public AsciidoctorHandler(final File workDir, final String defaultPage) {
         this.directory = workDir;
+
+        if (defaultPage.contains(".")) {
+            this.defaultPage = defaultPage;
+        } else {
+            this.defaultPage = addDefaultExtension(defaultPage);
+        }
     }
 
     @Override
@@ -79,10 +87,19 @@ public class AsciidoctorHandler extends ChannelInboundMessageHandlerAdapter<Full
     }
 
     private File deduceFile(final String path) {
-        if (!path.contains(".")) {
-            return new File(directory, path + ".html");
+        if (path.isEmpty() || "/".equals(path)) {
+            return new File(directory, defaultPage);
         }
+
+        if (!path.contains(".")) {
+            return new File(directory, addDefaultExtension(path));
+        }
+
         return new File(directory, path);
+    }
+
+    private static String addDefaultExtension(String path) {
+        return path + HTML_EXTENSION;
     }
 
     private static String mediaType(final String name) {
