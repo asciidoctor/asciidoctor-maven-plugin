@@ -37,13 +37,15 @@ public class AsciidoctorHttpServer {
     private final Log logger;
     private final int port;
     private final File workDir;
+    private final String defaultPage;
 
     private ServerBootstrap bootstrap;
 
-    public AsciidoctorHttpServer(final Log logger, final int port, final File outputDirectory) {
+    public AsciidoctorHttpServer(final Log logger, final int port, final File outputDirectory, final String defaultPage) {
         this.logger = logger;
         this.port = port;
         this.workDir = outputDirectory;
+        this.defaultPage = defaultPage;
     }
 
     public void start() {
@@ -78,7 +80,7 @@ public class AsciidoctorHttpServer {
                             .addLast("aggregator", new HttpObjectAggregator(Integer.MAX_VALUE))
                             .addLast("encoder", new HttpResponseEncoder())
                             .addLast("chunked-writer", new ChunkedWriteHandler())
-                            .addLast("asciidoctor", new AsciidoctorHandler(workDir));
+                            .addLast("asciidoctor", new AsciidoctorHandler(workDir, defaultPage));
                     }
                 })
                 .bind(HOST, port).addListener(new ChannelFutureListener() {
