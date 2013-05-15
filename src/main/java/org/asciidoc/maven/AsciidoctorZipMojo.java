@@ -50,14 +50,17 @@ public class AsciidoctorZipMojo extends AsciidoctorMojo {
         if (zip) {
             try {
                 Zips.zip(outputDirectory, zipDestination);
+                getLog().info("Created " + zipDestination.getAbsolutePath() + ".");
             } catch (final IOException e) {
                 getLog().error("Can't zip " + outputDirectory.getAbsolutePath(), e);
             }
             if (attach) {
                 if (zipClassifier != null) {
                     projectHelper.attachArtifact(project, "zip", zipClassifier, zipDestination);
+                    getLog().info("Attached " + zipDestination.getAbsolutePath() + " with classifier " + zipClassifier + ".");
                 } else {
                     projectHelper.attachArtifact(project, "zip", zipDestination);
+                    getLog().info("Attached " + zipDestination.getAbsolutePath() + ".");
                 }
             }
         }
