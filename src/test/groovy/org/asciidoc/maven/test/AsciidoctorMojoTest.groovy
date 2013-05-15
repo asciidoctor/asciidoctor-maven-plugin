@@ -98,4 +98,11 @@ class AsciidoctorMojoTest extends Specification {
             new File(outputDir, 'sample1.html').text.contains('foo')
             new File(outputDir, 'sample2.html').text.contains('bar')
     }
+
+    def "header footer is enabled by default"() {
+        when:
+          AsciidoctorMojo mojo = new AsciidoctorMojo()
+        then:
+          mojo.headerFooter == true
+    }
 }

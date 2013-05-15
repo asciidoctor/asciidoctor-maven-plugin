@@ -58,13 +58,21 @@ As this is a typical Maven plugin, there isn't much to do to use it, simply add 
 
 === Configuration options
 
-Currently there are only three configuration options that the asciidoctor-maven-plugin uses:
+There are several configuration options that the asciidoctor-maven-plugin uses, which parallel the options in Asciidoctor:
 
-* sourceDirectory -- defaults to `${basedir}/src/main/asciidoc`
-* outputDirectory -- defaults to `${project.build.directory}/generated-docs`
-* backend -- defaults to `docbook`
-* doctype -- defaults to `article`
-* attributes -- a Map<String,String> of attributes to pass to Asciidoctor, defaults to `null`
+sourceDirectory:: defaults to `${basedir}/src/main/asciidoc`
+sourceDocumentName:: an override to process a single source file; defaults to all files in `${sourceDirectory}`
+outputDirectory:: defaults to `${project.build.directory}/generated-docs`
+imagesDir:: defaults to `${sourceDirectory}/images`
+backend:: defaults to `docbook`
+doctype:: defaults to `article`
+headerFooter:: defaults to `true`
+compact:: defaults to `false`
+templateDir:: disabled by default
+templateEngine:: disabled by default
+sourceHighlighter:: enables and sets the source highlighter (currently `coderay` or `highlightjs` are supported)
+title:: An override for the title of the document
+attributes:: a Map<String,String> of attributes to pass to Asciidoctor, defaults to `null`
 
 More will be added in the future to take advantage of other options and attributes of Asciidoctor.
 These settings can all be changed in the `<configuration>` section of the plugin section:

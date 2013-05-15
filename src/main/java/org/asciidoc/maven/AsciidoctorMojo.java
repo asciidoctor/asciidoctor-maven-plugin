@@ -62,7 +62,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected boolean compact = false;
 
     @Parameter(property = "headerFooter", required = false)
-    protected boolean headerFooter = false;
+    protected boolean headerFooter = true;
 
     @Parameter(property = "templateDir", required = false)
     protected String templateDir;
