@@ -43,43 +43,43 @@ public class AsciidoctorMojo extends AbstractMojo {
     // should probably be configured in AsciidoctorMojo through @Parameter 'extension'
     protected static final String ASCIIDOC_REG_EXP_EXTENSION = ".*\\.a((sc(iidoc)?)|d(oc)?)$";
 
-    @Parameter(property = "sourceDir", defaultValue = "${basedir}/src/main/asciidoc", required = true)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDir", defaultValue = "${basedir}/src/main/asciidoc", required = true)
     protected File sourceDirectory;
 
-    @Parameter(property = "outputDir", defaultValue = "${project.build.directory}/generated-docs", required = true)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "outputDir", defaultValue = "${project.build.directory}/generated-docs", required = true)
     protected File outputDirectory;
 
-    @Parameter(property = "backend", defaultValue = "docbook", required = true)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "backend", defaultValue = "docbook", required = true)
     protected String backend;
 
-    @Parameter(property = "doctype", defaultValue = "article", required = true)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "doctype", defaultValue = "article", required = true)
     protected String doctype;
 
-    @Parameter(property = "attributes", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "attributes", required = false)
     protected Map<String, Object> attributes = new HashMap<String, Object>();
 
-    @Parameter(property = "compact", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "compact", required = false)
     protected boolean compact = false;
 
-    @Parameter(property = "headerFooter", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "headerFooter", required = false)
     protected boolean headerFooter = false;
 
-    @Parameter(property = "templateDir", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "templateDir", required = false)
     protected String templateDir;
 
-    @Parameter(property = "templateEngine", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "templateEngine", required = false)
     protected String templateEngine;
 
-    @Parameter(property = "imagesDir", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "imagesDir", required = false)
     protected String imagesDir = "images"; // use a string because otherwise html doc uses absolute path
 
-    @Parameter(property = "sourceHighlighter", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceHighlighter", required = false)
     protected String sourceHighlighter;
 
-    @Parameter(property = "title", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "title", required = false)
     protected String title;
 
-    @Parameter(property = "sourceDocumentName", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDocumentName", required = false)
     protected File sourceDocumentName;
 
     @Parameter
