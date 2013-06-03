@@ -12,16 +12,27 @@
 
 package org.asciidoc.maven;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.asciidoc.maven.http.AsciidoctorHttpServer;
+import org.asciidoc.maven.io.IO;
+import org.asciidoctor.Asciidoctor;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Map;
 
 @Mojo(name = "http")
 public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "home", required = false, defaultValue = "index")
     protected String home;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + "reload-interval", required = false, defaultValue = "0")
+    protected int autoReloadInterval;
 
     @Override
     protected void doWork() throws MojoFailureException, MojoExecutionException {
@@ -31,6 +42,52 @@ public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
         super.doWork();
 
         server.stop();
+    }
+
+    @Override
+    protected void renderFile(final Asciidoctor asciidoctorInstance, final Map<String, Object> options, final File f) {
+        asciidoctorInstance.renderFile(f, options);
+
+        if (autoReloadInterval > 0 && backend.toLowerCase().startsWith("html")) {
+            final String filename = f.getName();
+            final File out = new File(outputDirectory, filename.substring(0, filename.lastIndexOf(".")) + ".html");
+            if (out.exists()) {
+
+                String content = null;
+
+                { // read
+                    FileInputStream fis = null;
+                    try {
+                        fis = new FileInputStream(out); // java asciidoctor render() doesn't work ATM so read the rendered file instead of doing it in memory
+                        content = IO.slurp(fis);
+                    } catch (final Exception e) {
+                        getLog().error(e);
+                    } finally {
+                        IOUtils.closeQuietly(fis);
+                    }
+                }
+
+                if (content != null) { // render + write
+                    FileOutputStream fos = null;
+                    try {
+                        fos = new FileOutputStream(out);
+                        fos.write(addRefreshing(content).getBytes());
+                    } catch (final Exception e) {
+                        getLog().error(e);
+                    } finally {
+                        IOUtils.closeQuietly(fos);
+                    }
+                }
+            }
+        } else {
+            asciidoctorInstance.renderFile(f, options);
+        }
+
+        logRenderedFile(f);
+    }
+
+    private String addRefreshing(final String html) {
+        return html.replace("</body>", "<script>setTimeout(\"location.reload(true);\"," + autoReloadInterval + ");</script>\n</body>");
     }
 
     public String getHome() {
