@@ -154,12 +154,12 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
     }
 
-    private void renderFile(Asciidoctor asciidoctorInstance, Map<String, Object> options, File f) {
+    protected void renderFile(Asciidoctor asciidoctorInstance, Map<String, Object> options, File f) {
         asciidoctorInstance.renderFile(f, options);
         logRenderedFile(f);
     }
 
-    private void logRenderedFile(File f) {
+    protected void logRenderedFile(File f) {
         getLog().info("Rendered " + f.getAbsolutePath());
     }
 
