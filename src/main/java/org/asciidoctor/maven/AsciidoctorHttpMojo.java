@@ -10,21 +10,21 @@
  * limitations under the License.
  */
 
-package org.asciidoc.maven;
+package org.asciidoctor.maven;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.asciidoc.maven.http.AsciidoctorHttpServer;
-import org.asciidoc.maven.io.IO;
 import org.asciidoctor.Asciidoctor;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.Map;
+import org.asciidoctor.maven.http.AsciidoctorHttpServer;
+import org.asciidoctor.maven.io.IO;
 
 @Mojo(name = "http")
 public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {

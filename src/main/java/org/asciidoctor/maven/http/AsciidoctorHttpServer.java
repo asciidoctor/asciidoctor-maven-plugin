@@ -9,7 +9,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.asciidoc.maven.http;
+package org.asciidoctor.maven.http;
+
+import java.io.File;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -24,10 +28,6 @@ import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import org.apache.maven.plugin.logging.Log;
-
-import java.io.File;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class AsciidoctorHttpServer {
     private static final String HOST = "localhost";

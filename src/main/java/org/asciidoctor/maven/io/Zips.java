@@ -10,9 +10,7 @@
  * limitations under the License.
  */
 
-package org.asciidoc.maven.io;
-
-import org.apache.commons.io.IOUtils;
+package org.asciidoctor.maven.io;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,6 +18,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import org.apache.commons.io.IOUtils;
 
 public final class Zips {
     public static void zip(final File dir, final File zipName) throws IOException, IllegalArgumentException {

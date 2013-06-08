@@ -9,7 +9,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.asciidoc.maven.http;
+package org.asciidoctor.maven.http;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -24,10 +28,6 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.util.CharsetUtil;
 import org.apache.commons.io.IOUtils;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 
 public class AsciidoctorHandler extends ChannelInboundMessageHandlerAdapter<FullHttpRequest> {
     private static final String HTML_MEDIA_TYPE = "text/html";

@@ -1,4 +1,4 @@
-package org.asciidoc.maven.io;
+package org.asciidoctor.maven.io;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

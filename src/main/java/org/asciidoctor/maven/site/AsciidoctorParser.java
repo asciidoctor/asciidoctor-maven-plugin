@@ -9,13 +9,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.asciidoc.maven.site;
+package org.asciidoctor.maven.site;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import org.apache.maven.doxia.module.xhtml.XhtmlParser;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;

@@ -10,7 +10,7 @@
  * limitations under the License.
  */
 
-package org.asciidoc.maven;
+package org.asciidoctor.maven;
 
 import java.io.File;
 import java.io.IOException;

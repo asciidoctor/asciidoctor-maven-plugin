@@ -10,7 +10,10 @@
  * limitations under the License.
  */
 
-package org.asciidoc.maven;
+package org.asciidoctor.maven;
+
+import java.io.File;
+import java.io.IOException;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;

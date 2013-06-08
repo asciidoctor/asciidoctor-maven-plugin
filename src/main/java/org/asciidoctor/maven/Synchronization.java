@@ -9,11 +9,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.asciidoc.maven;
-
-import org.apache.maven.plugins.annotations.Parameter;
+package org.asciidoctor.maven;
 
 import java.io.File;
+
+import org.apache.maven.plugins.annotations.Parameter;
 
 public class Synchronization {
     @Parameter(property = "source")
