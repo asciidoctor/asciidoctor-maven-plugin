@@ -26,16 +26,17 @@ class AsciidoctorRefreshMojoTest extends Specification {
             System.setOut(new PrintStream(newOut))
             System.setIn(newIn)
 
-            def content = new File(srcDir, 'content' + new Random(System.currentTimeMillis()).nextInt(1000) + '.asciidoctor')
-            content.delete()
+            def content = new File(srcDir, 'content' + new Random(System.currentTimeMillis()).nextInt(1000) + '.asciidoc')
+
+            if (content.exists())
+                content.delete()
 
             content.withWriter{ it <<
-                '''Document Title
-                ==============
+                '''= Document Title
 
                 This is test, only a test.'''.stripIndent() }
 
-            def target = new File(outputDir, content.name.replace('.asciidoctor', '.html'))
+            def target = new File(outputDir, content.name.replace('.asciidoc', '.html'))
 
             def mojo = new AsciidoctorRefreshMojo()
             mojo.backend = 'html'
@@ -58,8 +59,7 @@ class AsciidoctorRefreshMojoTest extends Specification {
 
         when:
             content.withWriter{ it <<
-                '''Document Title
-                ==============
+                '''= Document Title
 
                 Wow, this will be auto refreshed!'''.stripIndent() }
 

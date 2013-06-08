@@ -8,18 +8,18 @@ import spock.lang.Specification
  */
 class AsciidoctorMojoTest extends Specification {
     def "renders docbook"() {
-        when:
+        setup:
             File srcDir = new File('target/test-classes/src/asciidoctor')
             File outputDir = new File('target/asciidoctor-output')
 
             if (!outputDir.exists())
                 outputDir.mkdir()
-
+        when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'docbook'
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.sourceDocumentName = new File(srcDir, 'sample.asciidoctor')
+            mojo.sourceDocumentName = new File(srcDir, 'sample.asciidoc')
             mojo.execute()
         then:
             outputDir.list().toList().isEmpty() == false
@@ -30,19 +30,21 @@ class AsciidoctorMojoTest extends Specification {
     }
 
     def "renders html"() {
-        when:
+        setup:
             File srcDir = new File('target/test-classes/src/asciidoctor')
             File outputDir = new File('target/asciidoctor-output')
 
             if (!outputDir.exists())
                 outputDir.mkdir()
-
+        when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
-            mojo.attributes = [toc: '', stylesheet: false]
+            mojo.toc = true
+            mojo.linkCss = false
+            mojo.fontawesome = false
             mojo.execute()
         then:
             outputDir.list().toList().isEmpty() == false
@@ -58,7 +60,7 @@ class AsciidoctorMojoTest extends Specification {
     def "asciidoc file extension can be changed"() {
         given: 'an empty output directory'
             def outputDir = new File('target/asciidoctor-output')
-            outputDir.deleteDir()
+            outputDir.delete()
 
         when: 'asciidoctor mojo is called with extension foo and bar and it exists a sample1.foo and a sample2.bar'
             def srcDir = new File('target/test-classes/src/asciidoctor')

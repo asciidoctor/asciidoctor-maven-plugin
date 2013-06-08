@@ -1,11 +1,9 @@
 package org.asciidoctor.maven.test
 
-import org.asciidoctor.maven.AsciidoctorMojo
 import org.asciidoctor.maven.AsciidoctorZipMojo
 import spock.lang.Specification
 
 import java.util.zip.ZipFile
-
 /**
  *
  */
@@ -23,7 +21,7 @@ class AsciidoctorZipMojoTest extends Specification {
             def srcDir = new File('target/test-classes/src/asciidoctor-zip')
             srcDir.mkdirs()
 
-            new File(srcDir, "sample.asciidoctor").withWriter {
+            new File(srcDir, "sample.asciidoc").withWriter {
                 it << '''
                 Title
                 =====

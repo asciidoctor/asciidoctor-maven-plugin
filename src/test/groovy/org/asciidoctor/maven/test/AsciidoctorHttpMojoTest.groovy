@@ -26,7 +26,7 @@ class AsciidoctorHttpMojoTest extends Specification {
             System.setOut(new PrintStream(newOut))
             System.setIn(newIn)
 
-            def content = new File(srcDir, "content.asciidoctor")
+            def content = new File(srcDir, "content.asciidoc")
             content.withWriter{ it <<
                 '''Document Title
                 ==============
@@ -82,7 +82,7 @@ class AsciidoctorHttpMojoTest extends Specification {
             System.setOut(new PrintStream(newOut))
             System.setIn(newIn)
 
-            def content = new File(srcDir, "content.asciidoctor")
+            def content = new File(srcDir, "content.asciidoc")
             content.withWriter{ it <<
                     '''Document Title
                     ==============

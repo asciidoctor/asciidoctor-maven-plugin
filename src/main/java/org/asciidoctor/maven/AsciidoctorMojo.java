@@ -14,6 +14,8 @@ package org.asciidoctor.maven;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,20 +53,20 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "outputDir", defaultValue = "${project.build.directory}/generated-docs", required = true)
     protected File outputDirectory;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Options.BACKEND, defaultValue = "docbook", required = true)
-    protected String backend;
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + Options.DOCTYPE, defaultValue = "article", required = true)
-    protected String doctype;
-
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.ATTRIBUTES, required = false)
     protected Map<String, Object> attributes = new HashMap<String, Object>();
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + Options.BACKEND, defaultValue = "docbook", required = true)
+    protected String backend = "";
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.COMPACT, required = false)
     protected boolean compact = false;
 
+    @Parameter(property = AsciidoctorMaven.PREFIX + Options.DOCTYPE, defaultValue = "article", required = true)
+    protected String doctype = "article";
+
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.ERUBY, required = false)
-    protected String eruby;
+    protected String eruby = "";
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.HEADER_FOOTER, required = false)
     protected boolean headerFooter = true;
@@ -73,27 +75,73 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected File templateDir;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.TEMPLATE_ENGINE, required = false)
-    protected String templateEngine;
+    protected String templateEngine = "";
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.IMAGESDIR, required = false)
     protected String imagesDir = "images"; // use a string because otherwise html doc uses absolute path
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.SOURCE_HIGHLIGHTER, required = false)
-    protected String sourceHighlighter;
+    protected String sourceHighlighter = "";
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.TITLE, required = false)
-    protected String title;
+    protected String title = "";
 
-    // TODO: Add more attribute properties
+    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.COPY_CSS)
+    protected boolean copyCss = false;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.DATA_URI)
+    protected boolean dataUri = false;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.DOCTIME)
+    protected Date docTime;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.EXPERIMENTAL)
+    protected boolean experimental;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + "admonitionWithFontAwesome")
+    protected boolean fontawesome = true;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.ICONS)
+    protected String icons = "";
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.ICONS_DIR)
+    protected String iconsDir = "";
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.LINK_ATTRS)
+    protected boolean linkAttrs;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.LINK_CSS)
+    protected boolean linkCss;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.LOCALDATE)
+    protected Date localDate;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.LOCALTIME)
+    protected Date localTime;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + "noStylesheetName")
+    protected boolean notStylesheetName = false;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + "originalAdmonitionIcons")
+    protected boolean originalAdmonitionIconsWithImage = false;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.STYLES_DIR)
+    protected String stylesDir = "";
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.STYLESHEET_NAME)
+    protected String stylesheetName = "";
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.TOC)
+    protected boolean toc;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDocumentName", required = false)
     protected File sourceDocumentName;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "synchronizations")
-    protected List<Synchronization> synchronizations;
+    protected List<Synchronization> synchronizations = new ArrayList<Synchronization>();
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "extensions")
-    protected List<String> extensions;
+    protected List<String> extensions = new ArrayList<String>();
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -102,20 +150,50 @@ public class AsciidoctorMojo extends AbstractMojo {
         final Asciidoctor asciidoctorInstance = getAsciidoctorInstance();
 
         final OptionsBuilder optionsBuilder = OptionsBuilder.options().toDir(outputDirectory).compact(compact)
-                .headerFooter(headerFooter).safe(SafeMode.UNSAFE).templateDir(templateDir).templateEngine(templateEngine)
-                .eruby(eruby);
+                .headerFooter(headerFooter).safe(SafeMode.UNSAFE).templateEngine(templateEngine)
+                .eruby(eruby).backend(backend).docType(doctype).headerFooter(headerFooter);
 
-        final AttributesBuilder attributesBuilder = AttributesBuilder.attributes().attributes(attributes).backend(backend)
-                .docType(doctype).sourceHighlighter(sourceHighlighter).title(title).imagesDir(imagesDir);
+        if (templateDir != null) {
+            optionsBuilder.templateDir(templateDir);
+        }
+
+        final AttributesBuilder attributesBuilder = AttributesBuilder.attributes().attributes(attributes)
+                .sourceHighlighter(sourceHighlighter).title(title).imagesDir(imagesDir).copyCss(copyCss)
+                .dataUri(dataUri).experimental(experimental).icons(icons).iconsDir(iconsDir)
+                .linkAttrs(linkAttrs).linkCss(linkCss).stylesDir(stylesDir).styleSheetName(stylesheetName)
+                .tableOfContents(toc);
+
+        if (docTime != null) {
+            attributesBuilder.docTime(docTime);
+        }
+
+        if (localDate != null) {
+            attributesBuilder.localDate(localDate);
+        }
+
+        if (localTime != null) {
+            attributesBuilder.localTime(localTime);
+        }
+
+        if (fontawesome) {
+            attributesBuilder.icons(Attributes.FONTAWESOME_ADMONITION_ICONS);
+        }
+        if (notStylesheetName) {
+            attributesBuilder.unsetStyleSheet();
+        }
+
+        if (originalAdmonitionIconsWithImage) {
+            attributesBuilder.icons(Attributes.ICONS);
+        }
 
         optionsBuilder.attributes(attributesBuilder.get());
 
         if (sourceDocumentName == null) {
             for (final File f : scanSourceFiles()) {
-                renderFile(asciidoctorInstance, optionsBuilder.options().asMap(), f);
+                renderFile(asciidoctorInstance, optionsBuilder.asMap(), f);
             }
         } else {
-            renderFile(asciidoctorInstance, optionsBuilder.options().asMap(), sourceDocumentName);
+            renderFile(asciidoctorInstance, optionsBuilder.asMap(), sourceDocumentName);
         }
 
         if (synchronizations != null) {
@@ -280,6 +358,158 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setExtensions(final List<String> extensions) {
         this.extensions = extensions;
+    }
+
+    public String getEruby() {
+        return eruby;
+    }
+
+    public void setEruby(String eruby) {
+        this.eruby = eruby;
+    }
+
+    public boolean isCopyCss() {
+        return copyCss;
+    }
+
+    public void setCopyCss(boolean copyCss) {
+        this.copyCss = copyCss;
+    }
+
+    public boolean isDataUri() {
+        return dataUri;
+    }
+
+    public void setDataUri(boolean dataUri) {
+        this.dataUri = dataUri;
+    }
+
+    public Date getDocTime() {
+        return docTime;
+    }
+
+    public void setDocTime(Date docTime) {
+        this.docTime = docTime;
+    }
+
+    public boolean isExperimental() {
+        return experimental;
+    }
+
+    public void setExperimental(boolean experimental) {
+        this.experimental = experimental;
+    }
+
+    public boolean isFontawesome() {
+        return fontawesome;
+    }
+
+    public void setFontawesome(boolean fontawesome) {
+        this.fontawesome = fontawesome;
+    }
+
+    public String getIcons() {
+        return icons;
+    }
+
+    public void setIcons(String icons) {
+        this.icons = icons;
+    }
+
+    public String getIconsDir() {
+        return iconsDir;
+    }
+
+    public void setIconsDir(String iconsDir) {
+        this.iconsDir = iconsDir;
+    }
+
+    public boolean isLinkAttrs() {
+        return linkAttrs;
+    }
+
+    public void setLinkAttrs(boolean linkAttrs) {
+        this.linkAttrs = linkAttrs;
+    }
+
+    public boolean isLinkCss() {
+        return linkCss;
+    }
+
+    public void setLinkCss(boolean linkCss) {
+        this.linkCss = linkCss;
+    }
+
+    public Date getLocalDate() {
+        return localDate;
+    }
+
+    public void setLocalDate(Date localDate) {
+        this.localDate = localDate;
+    }
+
+    public Date getLocalTime() {
+        return localTime;
+    }
+
+    public void setLocalTime(Date localTime) {
+        this.localTime = localTime;
+    }
+
+    public boolean isNotStylesheetName() {
+        return notStylesheetName;
+    }
+
+    public void setNotStylesheetName(boolean notStylesheetName) {
+        this.notStylesheetName = notStylesheetName;
+    }
+
+    public boolean isOriginalAdmonitionIconsWithImage() {
+        return originalAdmonitionIconsWithImage;
+    }
+
+    public void setOriginalAdmonitionIconsWithImage(boolean originalAdmonitionIconsWithImage) {
+        this.originalAdmonitionIconsWithImage = originalAdmonitionIconsWithImage;
+    }
+
+    public String getStylesDir() {
+        return stylesDir;
+    }
+
+    public void setStylesDir(String stylesDir) {
+        this.stylesDir = stylesDir;
+    }
+
+    public String getStylesheetName() {
+        return stylesheetName;
+    }
+
+    public void setStylesheetName(String stylesheetName) {
+        this.stylesheetName = stylesheetName;
+    }
+
+    public boolean isToc() {
+        return toc;
+    }
+
+    public void setToc(boolean toc) {
+        this.toc = toc;
+    }
+
+    public File getSourceDocumentName() {
+        return sourceDocumentName;
+    }
+
+    public void setSourceDocumentName(File sourceDocumentName) {
+        this.sourceDocumentName = sourceDocumentName;
+    }
+
+    public List<Synchronization> getSynchronizations() {
+        return synchronizations;
+    }
+
+    public void setSynchronizations(List<Synchronization> synchronizations) {
+        this.synchronizations = synchronizations;
     }
 
     private static class CustomExtensionDirectoryWalker extends DirectoryWalker {
