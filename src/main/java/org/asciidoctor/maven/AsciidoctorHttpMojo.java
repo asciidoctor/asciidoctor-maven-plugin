@@ -28,10 +28,12 @@ import org.asciidoctor.maven.io.IO;
 
 @Mojo(name = "http")
 public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
-    @Parameter(property = AsciidoctorMaven.PREFIX + "home", required = false, defaultValue = "index")
+    public static final String PREFIX = AsciidoctorMaven.PREFIX + "http.";
+
+    @Parameter(property = PREFIX + "home", required = false, defaultValue = "index")
     protected String home;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "reload-interval", required = false, defaultValue = "0")
+    @Parameter(property = PREFIX + "reload-interval", required = false, defaultValue = "0")
     protected int autoReloadInterval;
 
     @Override

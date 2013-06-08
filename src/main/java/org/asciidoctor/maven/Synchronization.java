@@ -16,10 +16,11 @@ import java.io.File;
 import org.apache.maven.plugins.annotations.Parameter;
 
 public class Synchronization {
-    @Parameter(property = "source")
+    public static final String PREFIX = AsciidoctorMaven.PREFIX + "synchronization.";
+    @Parameter(property = PREFIX + "source")
     protected File source;
 
-    @Parameter(property = "target")
+    @Parameter(property = PREFIX + "target")
     protected File target;
 
     public File getSource() {
