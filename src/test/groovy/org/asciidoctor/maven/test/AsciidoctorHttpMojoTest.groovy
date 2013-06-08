@@ -1,8 +1,8 @@
-package org.asciidoc.maven.test
+package org.asciidoctor.maven.test
 
-import org.asciidoc.maven.AsciidoctorHttpMojo
-import org.asciidoc.maven.test.io.DoubleOuputStream
-import org.asciidoc.maven.test.io.PrefilledInputStream
+import org.asciidoctor.maven.AsciidoctorHttpMojo
+import org.asciidoctor.maven.test.io.DoubleOuputStream
+import org.asciidoctor.maven.test.io.PrefilledInputStream
 import spock.lang.Specification
 
 import java.util.concurrent.CountDownLatch
@@ -10,8 +10,8 @@ import java.util.concurrent.CountDownLatch
 class AsciidoctorHttpMojoTest extends Specification {
     def "http front should let access rendered files"() {
         setup:
-            def srcDir = new File('target/test-classes/src/asciidoc-http')
-            def outputDir = new File('target/asciidoc-http-output')
+            def srcDir = new File('target/test-classes/src/asciidoctor-http')
+            def outputDir = new File('target/asciidoctor-http-output')
 
             srcDir.mkdirs()
 
@@ -26,7 +26,7 @@ class AsciidoctorHttpMojoTest extends Specification {
             System.setOut(new PrintStream(newOut))
             System.setIn(newIn)
 
-            def content = new File(srcDir, "content.asciidoc")
+            def content = new File(srcDir, "content.asciidoctor")
             content.withWriter{ it <<
                 '''Document Title
                 ==============
@@ -66,8 +66,8 @@ class AsciidoctorHttpMojoTest extends Specification {
 
     def "default page"() {
         setup:
-            def srcDir = new File('target/test-classes/src/asciidoc-http-default')
-            def outputDir = new File('target/asciidoc-http-default-output')
+            def srcDir = new File('target/test-classes/src/asciidoctor-http-default')
+            def outputDir = new File('target/asciidoctor-http-default-output')
 
             srcDir.mkdirs()
 
@@ -82,7 +82,7 @@ class AsciidoctorHttpMojoTest extends Specification {
             System.setOut(new PrintStream(newOut))
             System.setIn(newIn)
 
-            def content = new File(srcDir, "content.asciidoc")
+            def content = new File(srcDir, "content.asciidoctor")
             content.withWriter{ it <<
                     '''Document Title
                     ==============

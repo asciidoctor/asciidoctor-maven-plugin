@@ -1,4 +1,4 @@
-package org.asciidoc.maven.test.io
+package org.asciidoctor.maven.test.io
 
 import java.util.concurrent.CountDownLatch
 

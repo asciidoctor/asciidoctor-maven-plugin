@@ -1,7 +1,7 @@
-package org.asciidoc.maven.test
+package org.asciidoctor.maven.test
 
-import org.asciidoc.maven.AsciidoctorMojo
-import org.asciidoc.maven.AsciidoctorZipMojo
+import org.asciidoctor.maven.AsciidoctorMojo
+import org.asciidoctor.maven.AsciidoctorZipMojo
 import spock.lang.Specification
 
 import java.util.zip.ZipFile
@@ -12,18 +12,18 @@ import java.util.zip.ZipFile
 class AsciidoctorZipMojoTest extends Specification {
     def "zip it"() {
         given: 'an empty output directory'
-            def outputDir = new File('target/asciidoc-zip-output')
+            def outputDir = new File('target/asciidoctor-zip-output')
             outputDir.deleteDir()
             outputDir.mkdirs()
 
-            def zip = new File('target/asciidoc-zip.zip')
+            def zip = new File('target/asciidoctor-zip.zip')
             zip.delete()
 
         when: 'zip mojo is called'
-            def srcDir = new File('target/test-classes/src/asciidoc-zip')
+            def srcDir = new File('target/test-classes/src/asciidoctor-zip')
             srcDir.mkdirs()
 
-            new File(srcDir, "sample.asciidoc").withWriter {
+            new File(srcDir, "sample.asciidoctor").withWriter {
                 it << '''
                 Title
                 =====
@@ -44,6 +44,6 @@ class AsciidoctorZipMojoTest extends Specification {
 
             def entries = new ZipFile(mojo.zipDestination).entries()
             entries.hasMoreElements()
-            entries.nextElement().name == 'asciidoc-zip/target/asciidoc-zip-output/sample.html'
+            entries.nextElement().name == 'asciidoctor-zip/target/asciidoctor-zip-output/sample.html'
     }
 }

@@ -1,8 +1,8 @@
-package org.asciidoc.maven.test
+package org.asciidoctor.maven.test
 
-import org.asciidoc.maven.AsciidoctorRefreshMojo
-import org.asciidoc.maven.test.io.DoubleOuputStream
-import org.asciidoc.maven.test.io.PrefilledInputStream
+import org.asciidoctor.maven.AsciidoctorRefreshMojo
+import org.asciidoctor.maven.test.io.DoubleOuputStream
+import org.asciidoctor.maven.test.io.PrefilledInputStream
 import spock.lang.Specification
 
 import java.util.concurrent.CountDownLatch
@@ -10,8 +10,8 @@ import java.util.concurrent.CountDownLatch
 class AsciidoctorRefreshMojoTest extends Specification {
     def "auto render when source updated"() {
         setup:
-            def srcDir = new File('target/test-classes/src/asciidoc-refresh')
-            def outputDir = new File('target/asciidoc-refresh-output')
+            def srcDir = new File('target/test-classes/src/asciidoctor-refresh')
+            def outputDir = new File('target/asciidoctor-refresh-output')
 
             srcDir.mkdirs()
 
@@ -26,7 +26,7 @@ class AsciidoctorRefreshMojoTest extends Specification {
             System.setOut(new PrintStream(newOut))
             System.setIn(newIn)
 
-            def content = new File(srcDir, 'content' + new Random(System.currentTimeMillis()).nextInt(1000) + '.asciidoc')
+            def content = new File(srcDir, 'content' + new Random(System.currentTimeMillis()).nextInt(1000) + '.asciidoctor')
             content.delete()
 
             content.withWriter{ it <<
@@ -35,7 +35,7 @@ class AsciidoctorRefreshMojoTest extends Specification {
 
                 This is test, only a test.'''.stripIndent() }
 
-            def target = new File(outputDir, content.name.replace('.asciidoc', '.html'))
+            def target = new File(outputDir, content.name.replace('.asciidoctor', '.html'))
 
             def mojo = new AsciidoctorRefreshMojo()
             mojo.backend = 'html'

@@ -1,4 +1,4 @@
-package org.asciidoc.maven.test.io
+package org.asciidoctor.maven.test.io
 
 class DoubleOuputStream extends ByteArrayOutputStream {
     final OutputStream other

@@ -1,6 +1,6 @@
-package org.asciidoc.maven.test
+package org.asciidoctor.maven.test
 
-import org.asciidoc.maven.AsciidoctorMojo
+import org.asciidoctor.maven.AsciidoctorMojo
 import spock.lang.Specification
 
 /**
@@ -9,8 +9,8 @@ import spock.lang.Specification
 class AsciidoctorMojoTest extends Specification {
     def "renders docbook"() {
         when:
-            File srcDir = new File('target/test-classes/src/asciidoc')
-            File outputDir = new File('target/asciidoc-output')
+            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output')
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -19,7 +19,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.backend = 'docbook'
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.sourceDocumentName = new File(srcDir, 'sample.asciidoc')
+            mojo.sourceDocumentName = new File(srcDir, 'sample.asciidoctor')
             mojo.execute()
         then:
             outputDir.list().toList().isEmpty() == false
@@ -31,8 +31,8 @@ class AsciidoctorMojoTest extends Specification {
 
     def "renders html"() {
         when:
-            File srcDir = new File('target/test-classes/src/asciidoc')
-            File outputDir = new File('target/asciidoc-output')
+            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output')
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -57,11 +57,11 @@ class AsciidoctorMojoTest extends Specification {
 
     def "asciidoc file extension can be changed"() {
         given: 'an empty output directory'
-            def outputDir = new File('target/asciidoc-output')
+            def outputDir = new File('target/asciidoctor-output')
             outputDir.deleteDir()
 
         when: 'asciidoctor mojo is called with extension foo and bar and it exists a sample1.foo and a sample2.bar'
-            def srcDir = new File('target/test-classes/src/asciidoc')
+            def srcDir = new File('target/test-classes/src/asciidoctor')
 
             outputDir.mkdirs()
 
