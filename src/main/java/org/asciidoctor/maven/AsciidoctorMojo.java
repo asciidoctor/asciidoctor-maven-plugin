@@ -26,8 +26,10 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.asciidoctor.AsciiDocDirectoryWalker;
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Attributes;
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.DirectoryWalker;
+import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
 
@@ -49,35 +51,40 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "outputDir", defaultValue = "${project.build.directory}/generated-docs", required = true)
     protected File outputDirectory;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "backend", defaultValue = "docbook", required = true)
+    @Parameter(property = AsciidoctorMaven.PREFIX + Options.BACKEND, defaultValue = "docbook", required = true)
     protected String backend;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "doctype", defaultValue = "article", required = true)
+    @Parameter(property = AsciidoctorMaven.PREFIX + Options.DOCTYPE, defaultValue = "article", required = true)
     protected String doctype;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "attributes", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + Options.ATTRIBUTES, required = false)
     protected Map<String, Object> attributes = new HashMap<String, Object>();
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "compact", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + Options.COMPACT, required = false)
     protected boolean compact = false;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "headerFooter", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + Options.ERUBY, required = false)
+    protected String eruby;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + Options.HEADER_FOOTER, required = false)
     protected boolean headerFooter = true;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "templateDir", required = false)
-    protected String templateDir;
+    @Parameter(property = AsciidoctorMaven.PREFIX + Options.TEMPLATE_DIR, required = false)
+    protected File templateDir;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "templateEngine", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + Options.TEMPLATE_ENGINE, required = false)
     protected String templateEngine;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "imagesDir", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.IMAGESDIR, required = false)
     protected String imagesDir = "images"; // use a string because otherwise html doc uses absolute path
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceHighlighter", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.SOURCE_HIGHLIGHTER, required = false)
     protected String sourceHighlighter;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "title", required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.TITLE, required = false)
     protected String title;
+
+    // TODO: Add more attribute properties
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDocumentName", required = false)
     protected File sourceDocumentName;
@@ -95,36 +102,20 @@ public class AsciidoctorMojo extends AbstractMojo {
         final Asciidoctor asciidoctorInstance = getAsciidoctorInstance();
 
         final OptionsBuilder optionsBuilder = OptionsBuilder.options().toDir(outputDirectory).compact(compact)
-                .headerFooter(headerFooter).safe(SafeMode.UNSAFE).templateDir(templateDir).templateEngine(templateEngine);
-        final AttributesBuilder attributesBuilder = AttributesBuilder.attributes().backend(backend).docType(doctype)
-                .sourceHighlighter(sourceHighlighter).title(title);
+                .headerFooter(headerFooter).safe(SafeMode.UNSAFE).templateDir(templateDir).templateEngine(templateEngine)
+                .eruby(eruby);
 
-        for (String key : attributes.keySet()) {
-            Object val = attributes.get(key);
-            if (val == null) {
-                attributes.put(key, "");
-            } else if (val.equals(false)) {
-                attributes.put(key, null);
-            }
-        }
+        final AttributesBuilder attributesBuilder = AttributesBuilder.attributes().attributes(attributes).backend(backend)
+                .docType(doctype).sourceHighlighter(sourceHighlighter).title(title).imagesDir(imagesDir);
 
-        // FIXME: There needs to be a better way to do this -- talk to Alex
-        final Map<String, Object> attributesMap = attributesBuilder.asMap();
-        attributesMap.putAll(attributes);
-
-        optionsBuilder.attributes(attributesMap);
-
-        // temp hack, see https://github.com/asciidoctor/asciidoctor-java-integration/issues/26
-        final Map<String, Object> options = optionsBuilder.asMap();
-
-        options.put("imagesdir", imagesDir);
+        optionsBuilder.attributes(attributesBuilder.get());
 
         if (sourceDocumentName == null) {
             for (final File f : scanSourceFiles()) {
-                renderFile(asciidoctorInstance, options, f);
+                renderFile(asciidoctorInstance, optionsBuilder.options().asMap(), f);
             }
         } else {
-            renderFile(asciidoctorInstance, options, sourceDocumentName);
+            renderFile(asciidoctorInstance, optionsBuilder.options().asMap(), sourceDocumentName);
         }
 
         if (synchronizations != null) {
@@ -243,11 +234,11 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.headerFooter = headerFooter;
     }
 
-    public String getTemplateDir() {
+    public File getTemplateDir() {
         return templateDir;
     }
 
-    public void setTemplateDir(String templateDir) {
+    public void setTemplateDir(File templateDir) {
         this.templateDir = templateDir;
     }
 
