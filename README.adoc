@@ -74,6 +74,8 @@ sourceHighlighter:: enables and sets the source highlighter (currently `coderay`
 title:: An override for the title of the document
 attributes:: a Map<String,String> of attributes to pass to Asciidoctor, defaults to `null`
 
+// TODO: Add the rest of the attributes here
+
 More will be added in the future to take advantage of other options and attributes of Asciidoctor.
 These settings can all be changed in the `<configuration>` section of the plugin section:
 
@@ -96,6 +98,54 @@ These settings can all be changed in the `<configuration>` section of the plugin
 </plugin>
 ...
 ----
+
+=== Multiple outputs for the same file
+
+Maven has the ability to execute a Mojo multiple times. Instead of reinventing the wheel inside the Mojo, we'll push this off to Maven to handle the multiple executions.
+An example of this setup is below:
+
+```xml
+<plugin>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctor-maven-plugin</artifactId>
+    <version>0.1.2</version>
+    <executions>
+        <execution>
+            <id>output-html</id>
+            <phase>generate-resources</phase>
+            <goals>
+                <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+                <sourceHighlighter>coderay</sourceHighlighter>
+                <backend>html</backend>
+                <attributes>
+                    <toc/>
+                    <linkcss>false</linkcss>
+                </attributes>
+            </configuration>
+        </execution>
+        <execution>
+            <id>output-docbook</id>
+            <phase>generate-resources</phase>
+            <goals>
+                <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+                <backend>docbook</backend>
+                <doctype>book</doctype>
+            </configuration>
+        </execution>
+    </executions>
+    <configuration>
+        <sourceDirectory>src/main/asciidoc</sourceDirectory>
+        <headerFooter>true</headerFooter>
+    </configuration>
+</plugin>
+```
+
+Any configuration specified outside the executions section is inherited by each execution.
+This allows an easier way of defining common configuration options.
 
 == Maven Site Integration
 
@@ -138,6 +188,18 @@ As always, make sure you add a `menu` item for each page:
 ...
 </body>
 -----
+
+== Watching for changes
+
+// TODO
+
+== Zipping output into a bundle
+
+// TODO
+
+== Previewing generated content in the browser
+
+// TODO
 
 == Hacking
 
