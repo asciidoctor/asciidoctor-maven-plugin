@@ -63,7 +63,7 @@ There are several configuration options that the asciidoctor-maven-plugin uses, 
 sourceDirectory:: defaults to `${basedir}/src/main/asciidoc`
 sourceDocumentName:: an override to process a single source file; defaults to all files in `${sourceDirectory}`
 outputDirectory:: defaults to `${project.build.directory}/generated-docs`
-imagesDir:: defaults to `${sourceDirectory}/images`
+imagesDir:: defaults to `images`, which will be relative to the directory containing the source files
 backend:: defaults to `docbook`
 doctype:: defaults to `article`
 eruby:: defaults to erb, the version used in jruby
@@ -72,29 +72,19 @@ compact:: defaults to `false`
 templateDir:: disabled by default
 templateEngine:: disabled by default
 sourceHighlighter:: enables and sets the source highlighter (currently `coderay` or `highlightjs` are supported)
-title:: An override for the title of the document, empty by default
 templateDir:: defaults to `null`
-attributes:: a `Map<String,String>` of attributes to pass to Asciidoctor, defaults to `null`
+attributes:: a `Map<String,Object>` of attributes to pass to Asciidoctor, defaults to `null`
+extensions:: a `List<String>` of non-standard extensions to render. Currently ad, adoc, and asciidoc will be rendered by default.
 
-In addition to the attributes map, many of the attributes now have their own configuration line:
+==== Builtin attributes
 
-copyCss:: defaults to `false`
-dataUri:: defaults to `false`
-docTime:: defaults to `null`
-experimental:: defaults to `false`
-admonitionWithFontAwesome:: defaults to `true`
-icons:: defaults to an empty string
-iconsDir:: defaults to an empty string
-linkAttrs:: defaults to `false`
-linkCss:: defaults to `false`
-localDate:: defaults to `null`
-localTime:: defaults to `null`
-noStylesheetName:: defaults to `false`
-originalAdmonitionIcons:: defaults to `false`
-stylesDir:: defaults to an empty string
-stylesheetName:: defaults to an empty string
-toc:: defaults to `false`;
-extensions:: defaults to an empty `List<String>`
+There are various attributes Asciidoctor recognizes. Below is a list of them and what they do::
+
+title:: An override for the title of the document.
+
+NOTE: This one, for backwards compatibility, can still be used in the top level configuration options.
+
+Many other attributes are possible. Until a canonical list is created for asciidoctor, you may find http://asciidoc.org/userguide.html#X88[this list] to be helpful.
 
 More will be added in the future to take advantage of other options and attributes of Asciidoctor.
 Any setting in the attributes section that conflicts with an explicitly named attribute configuration will be overidden by the explicitly named attribute configuration.
@@ -163,9 +153,12 @@ An example of this setup is below:
     <configuration>
         <sourceDirectory>src/main/asciidoc</sourceDirectory>
         <headerFooter>true</headerFooter>
+        <imagesDir>../resources/images</imagesDir>                  <1>
     </configuration>
 </plugin>
 ----
+
+<1> `imagesDir` should be relative to the source directory. It defaults to `images` but in this example the images used in the docs are also used elsewhere in the project.
 
 Any configuration specified outside the executions section is inherited by each execution.
 This allows an easier way of defining common configuration options.
@@ -212,15 +205,15 @@ As always, make sure you add a `menu` item for each page:
 </body>
 -----
 
-== Watching for changes
+// == Watching for changes
 
 // TODO
 
-== Zipping output into a bundle
+// == Zipping output into a bundle
 
 // TODO
 
-== Previewing generated content in the browser
+// == Previewing generated content in the browser
 
 // TODO
 

@@ -42,9 +42,8 @@ class AsciidoctorMojoTest extends Specification {
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
-            mojo.toc = true
-            mojo.linkCss = false
-            mojo.fontawesome = false
+            mojo.attributes['toc'] = true
+            mojo.attributes['linkcss!'] = ''
             mojo.execute()
         then:
             outputDir.list().toList().isEmpty() == false

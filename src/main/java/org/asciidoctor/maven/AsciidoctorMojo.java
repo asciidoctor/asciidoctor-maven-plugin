@@ -15,7 +15,6 @@ package org.asciidoctor.maven;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +28,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.asciidoctor.AsciiDocDirectoryWalker;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
-import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
@@ -38,8 +36,6 @@ import org.asciidoctor.SafeMode;
 
 /**
  * Basic maven plugin to render asciidoc files using asciidoctor, a ruby port.
- * <p/>
- * Uses jRuby to invoke a small script to process the asciidoc files.
  */
 @Mojo(name = "process-asciidoc")
 public class AsciidoctorMojo extends AbstractMojo {
@@ -86,54 +82,6 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.TITLE, required = false)
     protected String title = "";
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "copyCss")
-    protected boolean copyCss = false;
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + "dataUri")
-    protected boolean dataUri = false;
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + "docTime")
-    protected Date docTime;
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.EXPERIMENTAL)
-    protected boolean experimental;
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + "admonitionWithFontAwesome")
-    protected boolean fontawesome = true;
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.ICONS)
-    protected String icons = "";
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + "iconsDir")
-    protected String iconsDir = "";
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + "linkAttrs")
-    protected boolean linkAttrs;
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + "linkCss")
-    protected boolean linkCss;
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + "localDate")
-    protected Date localDate;
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + "localTime")
-    protected Date localTime;
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + "noStylesheetName")
-    protected boolean notStylesheetName = false;
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + "originalAdmonitionIcons")
-    protected boolean originalAdmonitionIconsWithImage = false;
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + "stylesDir")
-    protected String stylesDir = "";
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + "stylesheetName")
-    protected String stylesheetName = "";
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.TOC)
-    protected boolean toc;
-
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDocumentName", required = false)
     protected File sourceDocumentName;
 
@@ -156,36 +104,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             optionsBuilder.templateDir(templateDir);
         }
 
-        final AttributesBuilder attributesBuilder = AttributesBuilder.attributes().attributes(attributes)
-                .sourceHighlighter(sourceHighlighter).title(title).imagesDir(imagesDir).copyCss(copyCss)
-                .dataUri(dataUri).experimental(experimental).icons(icons).iconsDir(iconsDir)
-                .linkAttrs(linkAttrs).linkCss(linkCss).stylesDir(stylesDir).styleSheetName(stylesheetName)
-                .tableOfContents(toc);
-
-        if (docTime != null) {
-            attributesBuilder.docTime(docTime);
-        }
-
-        if (localDate != null) {
-            attributesBuilder.localDate(localDate);
-        }
-
-        if (localTime != null) {
-            attributesBuilder.localTime(localTime);
-        }
-
-        if (fontawesome) {
-            attributesBuilder.icons(Attributes.FONTAWESOME_ADMONITION_ICONS);
-        }
-        if (notStylesheetName) {
-            attributesBuilder.unsetStyleSheet();
-        }
-
-        if (originalAdmonitionIconsWithImage) {
-            attributesBuilder.icons(Attributes.ICONS);
-        }
-
-        optionsBuilder.attributes(attributesBuilder.get());
+        optionsBuilder.attributes(attributes);
 
         if (sourceDocumentName == null) {
             for (final File f : scanSourceFiles()) {
@@ -365,134 +284,6 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setEruby(String eruby) {
         this.eruby = eruby;
-    }
-
-    public boolean isCopyCss() {
-        return copyCss;
-    }
-
-    public void setCopyCss(boolean copyCss) {
-        this.copyCss = copyCss;
-    }
-
-    public boolean isDataUri() {
-        return dataUri;
-    }
-
-    public void setDataUri(boolean dataUri) {
-        this.dataUri = dataUri;
-    }
-
-    public Date getDocTime() {
-        return docTime;
-    }
-
-    public void setDocTime(Date docTime) {
-        this.docTime = docTime;
-    }
-
-    public boolean isExperimental() {
-        return experimental;
-    }
-
-    public void setExperimental(boolean experimental) {
-        this.experimental = experimental;
-    }
-
-    public boolean isFontawesome() {
-        return fontawesome;
-    }
-
-    public void setFontawesome(boolean fontawesome) {
-        this.fontawesome = fontawesome;
-    }
-
-    public String getIcons() {
-        return icons;
-    }
-
-    public void setIcons(String icons) {
-        this.icons = icons;
-    }
-
-    public String getIconsDir() {
-        return iconsDir;
-    }
-
-    public void setIconsDir(String iconsDir) {
-        this.iconsDir = iconsDir;
-    }
-
-    public boolean isLinkAttrs() {
-        return linkAttrs;
-    }
-
-    public void setLinkAttrs(boolean linkAttrs) {
-        this.linkAttrs = linkAttrs;
-    }
-
-    public boolean isLinkCss() {
-        return linkCss;
-    }
-
-    public void setLinkCss(boolean linkCss) {
-        this.linkCss = linkCss;
-    }
-
-    public Date getLocalDate() {
-        return localDate;
-    }
-
-    public void setLocalDate(Date localDate) {
-        this.localDate = localDate;
-    }
-
-    public Date getLocalTime() {
-        return localTime;
-    }
-
-    public void setLocalTime(Date localTime) {
-        this.localTime = localTime;
-    }
-
-    public boolean isNotStylesheetName() {
-        return notStylesheetName;
-    }
-
-    public void setNotStylesheetName(boolean notStylesheetName) {
-        this.notStylesheetName = notStylesheetName;
-    }
-
-    public boolean isOriginalAdmonitionIconsWithImage() {
-        return originalAdmonitionIconsWithImage;
-    }
-
-    public void setOriginalAdmonitionIconsWithImage(boolean originalAdmonitionIconsWithImage) {
-        this.originalAdmonitionIconsWithImage = originalAdmonitionIconsWithImage;
-    }
-
-    public String getStylesDir() {
-        return stylesDir;
-    }
-
-    public void setStylesDir(String stylesDir) {
-        this.stylesDir = stylesDir;
-    }
-
-    public String getStylesheetName() {
-        return stylesheetName;
-    }
-
-    public void setStylesheetName(String stylesheetName) {
-        this.stylesheetName = stylesheetName;
-    }
-
-    public boolean isToc() {
-        return toc;
-    }
-
-    public void setToc(boolean toc) {
-        this.toc = toc;
     }
 
     public File getSourceDocumentName() {
