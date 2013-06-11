@@ -68,31 +68,31 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.ERUBY, required = false)
     protected String eruby = "";
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Options.HEADER_FOOTER, required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "headerFooter", required = false)
     protected boolean headerFooter = true;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Options.TEMPLATE_DIR, required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "templateDir", required = false)
     protected File templateDir;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Options.TEMPLATE_ENGINE, required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "templateEngine", required = false)
     protected String templateEngine = "";
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.IMAGESDIR, required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "imagesDir", required = false)
     protected String imagesDir = "images"; // use a string because otherwise html doc uses absolute path
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.SOURCE_HIGHLIGHTER, required = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceHighlighter", required = false)
     protected String sourceHighlighter = "";
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.TITLE, required = false)
     protected String title = "";
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.COPY_CSS)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "copyCss")
     protected boolean copyCss = false;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.DATA_URI)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "dataUri")
     protected boolean dataUri = false;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.DOCTIME)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "docTime")
     protected Date docTime;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.EXPERIMENTAL)
@@ -104,19 +104,19 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.ICONS)
     protected String icons = "";
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.ICONS_DIR)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "iconsDir")
     protected String iconsDir = "";
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.LINK_ATTRS)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "linkAttrs")
     protected boolean linkAttrs;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.LINK_CSS)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "linkCss")
     protected boolean linkCss;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.LOCALDATE)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "localDate")
     protected Date localDate;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.LOCALTIME)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "localTime")
     protected Date localTime;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "noStylesheetName")
@@ -125,10 +125,10 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "originalAdmonitionIcons")
     protected boolean originalAdmonitionIconsWithImage = false;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.STYLES_DIR)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "stylesDir")
     protected String stylesDir = "";
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.STYLESHEET_NAME)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "stylesheetName")
     protected String stylesheetName = "";
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.TOC)
@@ -137,7 +137,6 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDocumentName", required = false)
     protected File sourceDocumentName;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "synchronizations")
     protected List<Synchronization> synchronizations = new ArrayList<Synchronization>();
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "extensions")
