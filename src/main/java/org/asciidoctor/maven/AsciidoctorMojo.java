@@ -71,7 +71,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected File templateDir;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "templateEngine", required = false)
-    protected String templateEngine = "";
+    protected String templateEngine;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "imagesDir", required = false)
     protected String imagesDir = "images"; // use a string because otherwise html doc uses absolute path
@@ -97,11 +97,14 @@ public class AsciidoctorMojo extends AbstractMojo {
         final Asciidoctor asciidoctorInstance = getAsciidoctorInstance();
 
         final OptionsBuilder optionsBuilder = OptionsBuilder.options().toDir(outputDirectory).compact(compact)
-                .headerFooter(headerFooter).safe(SafeMode.UNSAFE).templateEngine(templateEngine)
+                .headerFooter(headerFooter).safe(SafeMode.UNSAFE)
                 .eruby(eruby).backend(backend).docType(doctype).headerFooter(headerFooter);
 
         if (templateDir != null) {
             optionsBuilder.templateDir(templateDir);
+        }
+        if (templateEngine != null) {
+            optionsBuilder.templateEngine(templateEngine);
         }
 
         optionsBuilder.attributes(attributes);
