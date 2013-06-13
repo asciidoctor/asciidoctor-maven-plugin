@@ -97,11 +97,14 @@ public class AsciidoctorMojo extends AbstractMojo {
         final Asciidoctor asciidoctorInstance = getAsciidoctorInstance();
 
         final OptionsBuilder optionsBuilder = OptionsBuilder.options().toDir(outputDirectory).compact(compact)
-                .headerFooter(headerFooter).safe(SafeMode.UNSAFE).templateEngine(templateEngine)
+                .headerFooter(headerFooter).safe(SafeMode.UNSAFE)
                 .eruby(eruby).backend(backend).docType(doctype).headerFooter(headerFooter);
 
         if (templateDir != null) {
             optionsBuilder.templateDir(templateDir);
+        }
+        if (templateEngine != null) {
+            optionsBuilder.templateEngine(templateEngine);
         }
 
         optionsBuilder.attributes(attributes);
