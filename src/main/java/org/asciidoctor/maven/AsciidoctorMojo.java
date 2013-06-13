@@ -85,6 +85,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDocumentName", required = false)
     protected File sourceDocumentName;
 
+    @Parameter
     protected List<Synchronization> synchronizations = new ArrayList<Synchronization>();
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "extensions")
