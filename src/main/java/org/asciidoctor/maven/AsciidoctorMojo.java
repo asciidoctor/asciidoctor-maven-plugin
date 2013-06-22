@@ -91,6 +91,9 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "extensions")
     protected List<String> extensions = new ArrayList<String>();
 
+    @Parameter(property = AsciidoctorMaven.PREFIX + "embedAssets")
+    protected boolean embedAssets = false;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         ensureOutputExists();
@@ -106,6 +109,11 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         if (templateDir != null) {
             optionsBuilder.templateDir(templateDir);
+        }
+
+        if (embedAssets) {
+            attributes.put("linkcss!", true);
+            attributes.put("data-uri", true);
         }
 
         optionsBuilder.attributes(attributes);
@@ -304,6 +312,14 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setSynchronizations(List<Synchronization> synchronizations) {
         this.synchronizations = synchronizations;
+    }
+
+    public boolean isEmbedAssets() {
+        return embedAssets;
+    }
+
+    public void setEmbedAssets(boolean embedAssets) {
+        this.embedAssets = embedAssets;
     }
 
     private static class CustomExtensionDirectoryWalker extends DirectoryWalker {

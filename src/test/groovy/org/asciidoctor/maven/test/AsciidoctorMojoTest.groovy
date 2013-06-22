@@ -106,4 +106,30 @@ class AsciidoctorMojoTest extends Specification {
         then:
           mojo.headerFooter == true
     }
+
+    def "embedding resources"() {
+        setup:
+            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output')
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.attributes["icons"] = "font"
+            mojo.embedAssets = true
+            mojo.outputDirectory = outputDir
+            mojo.sourceDocumentName = new File(srcDir, 'sample-embedded.adoc')
+            mojo.backend = 'html'
+            mojo.execute()
+        then:
+            outputDir.list().toList().isEmpty() == false
+            outputDir.list().toList().contains('sample.html')
+
+            File sampleOutput = new File(outputDir, 'sample-embedded.html')
+            sampleOutput.length() > 0
+            String text = sampleOutput.getText()
+            text.contains('font-awesome.min.css')
+            text.contains('i class="icon-tip')
+    }
 }
