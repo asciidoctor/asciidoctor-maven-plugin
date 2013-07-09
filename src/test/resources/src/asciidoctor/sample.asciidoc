@@ -24,3 +24,5 @@ NOTE: This is test, only a test.
 * Item 2
 * Item 3
 
+[source,ruby]
+require 'asciidoctor'

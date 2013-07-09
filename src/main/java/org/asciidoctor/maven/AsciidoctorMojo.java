@@ -111,6 +111,10 @@ public class AsciidoctorMojo extends AbstractMojo {
             optionsBuilder.templateDir(templateDir);
         }
 
+        if (sourceHighlighter != null) {
+            attributes.put("source-highlighter", sourceHighlighter);
+        }
+
         if (embedAssets) {
             attributes.put("linkcss!", true);
             attributes.put("data-uri", true);
