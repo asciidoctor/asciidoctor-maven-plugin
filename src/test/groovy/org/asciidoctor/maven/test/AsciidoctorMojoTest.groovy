@@ -42,6 +42,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
+            mojo.sourceHighlighter = 'coderay'
             mojo.attributes['toc'] = true
             mojo.attributes['linkcss!'] = ''
             mojo.execute()
@@ -54,6 +55,7 @@ class AsciidoctorMojoTest extends Specification {
             String text = sampleOutput.getText()
             text.contains('id="toc"')
             !text.contains('link rel="stylesheet"')
+            text.contains('<pre class="CodeRay">')
     }
 
     def "asciidoc file extension can be changed"() {
