@@ -41,7 +41,8 @@ class AsciidoctorZipMojoTest extends Specification {
             mojo.zipDestination.exists()
 
             def entries = new ZipFile(mojo.zipDestination).entries()
-            entries.hasMoreElements()
-            entries.nextElement().name == 'asciidoctor-zip/target/asciidoctor-zip-output/sample.html'
+           entries.hasMoreElements()
+		   def entryName = entries.nextElement().name
+		   entryName == 'asciidoctor-zip/target/asciidoctor-zip-output/sample.html' || entryName == 'asciidoctor-zip/target\\asciidoctor-zip-output\\sample.html'
     }
 }
