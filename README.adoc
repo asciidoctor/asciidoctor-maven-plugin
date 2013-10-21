@@ -5,7 +5,7 @@ asciidoctor-maven-plugin
 :issues: https://github.com/asciidoctor/asciidoctor-maven-plugin/issues
 :maven-url: http://maven.apache.org/
 
-image:https://travis-ci.org/asciidoctor/asciidoctor-maven-plugin.png?branch=master["Build Status", link="https://travis-ci.org/asciidoctor/asciidoctor-maven-plugin"]
+image:https://travis-ci.org/asciidoctor/asciidoctor-maven-plugin.png?branch=master["Build Status", link="https://travis-ci.org/wwerner/asciidoctor-maven-plugin"]
 
 The asciidoctor-maven-plugin is the official means of using {asciidoctor-url}[Asciidoctor] to render all your {asciidoc-url}[AsciiDoc] documentation using {maven-url}[Apache Maven].
 
