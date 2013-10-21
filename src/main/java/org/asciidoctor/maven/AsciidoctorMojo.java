@@ -121,6 +121,10 @@ public class AsciidoctorMojo extends AbstractMojo {
             attributes.put("data-uri", true);
         }
 
+        if (imagesDir != null) {
+            attributes.put("imagesdir", imagesDir);
+        }
+
         optionsBuilder.attributes(attributes);
 
         if (sourceDocumentName == null) {
