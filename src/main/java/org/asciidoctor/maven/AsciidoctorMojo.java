@@ -25,6 +25,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.asciidoctor.AbstractDirectoryWalker;
 import org.asciidoctor.AsciiDocDirectoryWalker;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
@@ -118,6 +119,10 @@ public class AsciidoctorMojo extends AbstractMojo {
         if (embedAssets) {
             attributes.put("linkcss!", true);
             attributes.put("data-uri", true);
+        }
+
+        if (imagesDir != null) {
+            attributes.put("imagesdir", imagesDir);
         }
 
         optionsBuilder.attributes(attributes);
@@ -326,7 +331,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.embedAssets = embedAssets;
     }
 
-    private static class CustomExtensionDirectoryWalker extends DirectoryWalker {
+    private static class CustomExtensionDirectoryWalker extends AbstractDirectoryWalker {
         private final List<String> extensions;
 
         public CustomExtensionDirectoryWalker(final String absolutePath, final List<String> extensions) {
