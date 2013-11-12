@@ -36,7 +36,7 @@ import org.asciidoctor.SafeMode;
 
 
 /**
- * Basic maven plugin to render asciidoc files using asciidoctor, a ruby port.
+ * Basic maven plugin to render Asciidoc files using Asciidoctor, a ruby port.
  */
 @Mojo(name = "process-asciidoc")
 public class AsciidoctorMojo extends AbstractMojo {
@@ -95,6 +95,12 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "embedAssets")
     protected boolean embedAssets = false;
 
+    @Parameter(property = AsciidoctorMaven.PREFIX + "attributeMissing")
+    protected String attributeMissing = "skip";
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + "attributeUndefined")
+    protected String attributeUndefined = "drop-line";
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         ensureOutputExists();
@@ -123,6 +129,18 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         if (imagesDir != null) {
             attributes.put("imagesdir", imagesDir);
+        }
+
+        if ("skip" == attributeMissing || "drop" == attributeMissing || "drop-line" == attributeMissing) {
+            attributes.put("attribute-missing", attributeMissing);
+        } else {
+            throw new MojoExecutionException(attributeMissing + " is not valid. Must be one of 'skip', 'drop' or 'drop-line'");
+        }
+
+        if ("drop" == attributeUndefined || "drop-line" == attributeUndefined) {
+            attributes.put("attribute-undefined", attributeUndefined);
+        } else {
+            throw new MojoExecutionException(attributeUndefined + " is not valid. Must be one of 'drop' or 'drop-line'");
         }
 
         optionsBuilder.attributes(attributes);
@@ -329,6 +347,22 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setEmbedAssets(boolean embedAssets) {
         this.embedAssets = embedAssets;
+    }
+
+    public String getAttributeMissing() {
+        return attributeMissing;
+    }
+
+    public void setAttributeMissing(String attributeMissing) {
+        this.attributeMissing = attributeMissing;
+    }
+
+    public String getAttributeUndefined() {
+        return attributeUndefined;
+    }
+
+    public void setAttributeUndefined(String attributeUndefined) {
+        this.attributeUndefined = attributeUndefined;
     }
 
     private static class CustomExtensionDirectoryWalker extends AbstractDirectoryWalker {
