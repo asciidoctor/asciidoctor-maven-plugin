@@ -134,4 +134,108 @@ class AsciidoctorMojoTest extends Specification {
             text.contains('font-awesome.min.css')
             text.contains('i class="icon-tip')
     }
+
+    def "missing-attribute skip"() {
+        given:
+            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output')
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.outputDirectory = outputDir
+            mojo.sourceDocumentName = new File(srcDir, 'attribute-missing.adoc')
+            mojo.backend = 'html'
+            mojo.attributeMissing = 'skip'
+            mojo.execute()
+        then:
+            File sampleOutput = new File(outputDir, 'attribute-missing.html')
+            String text = sampleOutput.getText()
+            text.contains('Here is a line that has an attribute that is {missing}!')
+    }
+
+    def "missing-attribute drop"() {
+        given:
+            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output')
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.outputDirectory = outputDir
+            mojo.sourceDocumentName = new File(srcDir, 'attribute-missing.adoc')
+            mojo.backend = 'html'
+            mojo.attributeMissing = 'drop'
+            mojo.execute()
+        then:
+            File sampleOutput = new File(outputDir, 'attribute-missing.html')
+            String text = sampleOutput.getText()
+            text.contains('Here is a line that has an attribute that is !')
+            !text.contains('{name}')
+    }
+
+    def "missing-attribute drop-line"() {
+        given:
+            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output')
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.outputDirectory = outputDir
+            mojo.sourceDocumentName = new File(srcDir, 'attribute-missing.adoc')
+            mojo.backend = 'html'
+            mojo.attributeMissing = 'drop-line'
+            mojo.execute()
+        then:
+            File sampleOutput = new File(outputDir, 'attribute-missing.html')
+            String text = sampleOutput.getText()
+            !text.contains('Here is a line that has an attribute that is')
+            !text.contains('{set: name!}')
+    }
+
+    def "undefined-attribute drop"() {
+        given:
+            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output')
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.outputDirectory = outputDir
+            mojo.sourceDocumentName = new File(srcDir, 'attribute-undefined.adoc')
+            mojo.backend = 'html'
+            mojo.attributeUndefined = 'drop'
+            mojo.execute()
+        then:
+            File sampleOutput = new File(outputDir, 'attribute-undefined.html')
+            String text = sampleOutput.getText()
+            text.contains('Here is a line that has an attribute that is !')
+            !text.contains('{set: name!}')
+    }
+
+    def "undefined-attribute drop-line"() {
+        given:
+            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output')
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.outputDirectory = outputDir
+            mojo.sourceDocumentName = new File(srcDir, 'attribute-undefined.adoc')
+            mojo.backend = 'html'
+            mojo.attributeMissing = 'drop-line'
+            mojo.execute()
+        then:
+            File sampleOutput = new File(outputDir, 'attribute-undefined.html')
+            String text = sampleOutput.getText()
+            !text.contains('Here is a line that has an attribute that is')
+            !text.contains('{set: name!}')
+    }
 }
