@@ -75,7 +75,7 @@ sourceHighlighter:: enables and sets the source highlighter (currently `coderay`
 templateDir:: defaults to `null`
 attributes:: a `Map<String,Object>` of attributes to pass to Asciidoctor, defaults to `null`
 extensions:: a `List<String>` of non-standard extensions to render. Currently ad, adoc, and asciidoc will be rendered by default.
-embedAssets:: defaults to `false`
+embedAssets:: Embedd the CSS file, etc into the output, defaults to `false`
 
 ==== Builtin attributes
 
