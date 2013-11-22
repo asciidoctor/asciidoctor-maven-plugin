@@ -110,6 +110,22 @@ These settings can all be changed in the `<configuration>` section of the plugin
 ...
 ----
 
+==== Passing POM properties ====
+
+It is possible to pass properties defined in the POM to the Asciidoctor processor. This is handy for example to include in the generated document the POM artifact version number.
+
+This is done by creating a custom Asciidoc property in the `attributes` section of the `configuration`. The Asciidoc property value is defined in the usual Maven way: `${myMavenProperty}`.
+
+[source,xml]
+----
+<attributes>
+    <docVersion>${project.version}</docVersion>
+</attributes>
+----
+
+The custom Asciidoc property then be used in the document like this `Version: {docVersion}`.
+
+
 === Multiple outputs for the same file
 
 Maven has the ability to execute a Mojo multiple times. Instead of reinventing the wheel inside the Mojo, we'll push this off to Maven to handle the multiple executions.
