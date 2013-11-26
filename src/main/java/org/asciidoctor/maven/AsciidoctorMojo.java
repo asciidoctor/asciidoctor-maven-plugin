@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -170,6 +171,21 @@ public class AsciidoctorMojo extends AbstractMojo {
         } else {
             final DirectoryWalker directoryWalker = new CustomExtensionDirectoryWalker(sourceDirectory.getAbsolutePath(), extensions);
             asciidoctorFiles = directoryWalker.scan();
+        }
+        String absoluteSourceDirectory = sourceDirectory.getAbsolutePath();
+        for (Iterator<File> iter = asciidoctorFiles.iterator(); iter.hasNext();) {
+            File f = iter.next();
+            do {
+                // stop when we hit the source directory root
+                if (absoluteSourceDirectory.equals(f.getAbsolutePath())) {
+                    break;
+                }
+                // skip if the filename or directory begins with _
+                if (f.getName().startsWith("_")) {
+                    iter.remove();
+                    break;
+                }
+            } while ((f = f.getParentFile()) != null);
         }
         return asciidoctorFiles;
     }
