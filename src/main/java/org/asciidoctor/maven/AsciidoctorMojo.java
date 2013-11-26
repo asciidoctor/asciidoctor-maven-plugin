@@ -131,13 +131,13 @@ public class AsciidoctorMojo extends AbstractMojo {
             attributes.put("imagesdir", imagesDir);
         }
 
-        if ("skip" == attributeMissing || "drop" == attributeMissing || "drop-line" == attributeMissing) {
+        if ("skip".equals(attributeMissing) || "drop".equals(attributeMissing) || "drop-line".equals(attributeMissing)) {
             attributes.put("attribute-missing", attributeMissing);
         } else {
             throw new MojoExecutionException(attributeMissing + " is not valid. Must be one of 'skip', 'drop' or 'drop-line'");
         }
 
-        if ("drop" == attributeUndefined || "drop-line" == attributeUndefined) {
+        if ("drop".equals(attributeUndefined) || "drop-line".equals(attributeUndefined)) {
             attributes.put("attribute-undefined", attributeUndefined);
         } else {
             throw new MojoExecutionException(attributeUndefined + " is not valid. Must be one of 'drop' or 'drop-line'");
