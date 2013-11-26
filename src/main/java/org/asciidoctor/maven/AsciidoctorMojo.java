@@ -49,7 +49,13 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "outputDir", defaultValue = "${project.build.directory}/generated-docs", required = true)
     protected File outputDirectory;
+    
+    @Parameter(defaultValue = "${basedir}", required = false, readonly = true)
+    protected File projectDirectory;
 
+    @Parameter(property = AsciidoctorMaven.PREFIX + "baseDir", required = false)
+    protected String baseDirectory;
+    
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.ATTRIBUTES, required = false)
     protected Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -110,6 +116,22 @@ public class AsciidoctorMojo extends AbstractMojo {
         final OptionsBuilder optionsBuilder = OptionsBuilder.options().toDir(outputDirectory).compact(compact)
                 .safe(SafeMode.UNSAFE).eruby(eruby).backend(backend).docType(doctype).headerFooter(headerFooter);
 
+        File baseDir = null;
+        
+        if (baseDirectory == null) {
+            baseDir = projectDirectory;
+        }
+        else if (!baseDirectory.equals("null")) {
+            baseDir = new File(baseDirectory);
+            if (!baseDir.isAbsolute()) {
+                baseDir = new File(projectDirectory, baseDir.getPath());
+            }
+        }
+        
+        if (baseDir != null) {
+            optionsBuilder.baseDir(baseDir);
+        }
+        
         if (templateEngine != null) {
             optionsBuilder.templateEngine(templateEngine);
         }
