@@ -281,6 +281,25 @@ class AsciidoctorMojoTest extends Specification {
         File sampleOutput = new File(outputDir, 'sample.html')
         String text = sampleOutput.getText()
         !text.contains('class="toc2"')
+    }
 
+    def 'test_imageDir_properly_passed'() {
+        given:
+            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output-imageDir')
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.outputDirectory = outputDir
+            mojo.sourceDocumentName = new File(srcDir, 'imageDir.adoc')
+            mojo.backend = 'html'
+            mojo.imagesDir = 'images-dir'
+            mojo.execute()
+        then:
+            File sampleOutput = new File(outputDir, 'imageDir.html')
+            String text = sampleOutput.getText()
+            text.contains('<img src="images-dir/my-cool-image.jpg" alt="my cool image">')
     }
 }
