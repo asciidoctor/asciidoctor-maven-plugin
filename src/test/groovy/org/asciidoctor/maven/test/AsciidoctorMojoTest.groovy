@@ -19,7 +19,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.backend = 'docbook'
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.sourceDocumentName = new File(srcDir, 'sample.asciidoc')
+            mojo.sourceDocumentName = 'sample.asciidoc'
             mojo.execute()
         then:
             outputDir.list().toList().isEmpty() == false
@@ -121,7 +121,8 @@ class AsciidoctorMojoTest extends Specification {
             mojo.attributes["icons"] = "font"
             mojo.embedAssets = true
             mojo.outputDirectory = outputDir
-            mojo.sourceDocumentName = new File(srcDir, 'sample-embedded.adoc')
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'sample-embedded.adoc'
             mojo.backend = 'html'
             mojo.execute()
         then:
@@ -145,7 +146,8 @@ class AsciidoctorMojoTest extends Specification {
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.outputDirectory = outputDir
-            mojo.sourceDocumentName = new File(srcDir, 'attribute-missing.adoc')
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'attribute-missing.adoc'
             mojo.backend = 'html'
             mojo.attributeMissing = 'skip'
             mojo.execute()
@@ -165,7 +167,8 @@ class AsciidoctorMojoTest extends Specification {
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.outputDirectory = outputDir
-            mojo.sourceDocumentName = new File(srcDir, 'attribute-missing.adoc')
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'attribute-missing.adoc'
             mojo.backend = 'html'
             mojo.attributeMissing = 'drop'
             mojo.execute()
@@ -186,7 +189,8 @@ class AsciidoctorMojoTest extends Specification {
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.outputDirectory = outputDir
-            mojo.sourceDocumentName = new File(srcDir, 'attribute-missing.adoc')
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'attribute-missing.adoc'
             mojo.backend = 'html'
             mojo.attributeMissing = 'drop-line'
             mojo.execute()
@@ -207,7 +211,8 @@ class AsciidoctorMojoTest extends Specification {
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.outputDirectory = outputDir
-            mojo.sourceDocumentName = new File(srcDir, 'attribute-undefined.adoc')
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'attribute-undefined.adoc'
             mojo.backend = 'html'
             mojo.attributeUndefined = 'drop'
             mojo.execute()
@@ -228,7 +233,8 @@ class AsciidoctorMojoTest extends Specification {
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.outputDirectory = outputDir
-            mojo.sourceDocumentName = new File(srcDir, 'attribute-undefined.adoc')
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'attribute-undefined.adoc'
             mojo.backend = 'html'
             mojo.attributeMissing = 'drop-line'
             mojo.execute()
@@ -250,7 +256,8 @@ class AsciidoctorMojoTest extends Specification {
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.outputDirectory = outputDir
-            mojo.sourceDocumentName = new File(srcDir, 'sample.asciidoc')
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'sample.asciidoc'
             mojo.backend = 'html'
             mojo.attributes.put('toc2', true)
             mojo.execute()
@@ -272,7 +279,8 @@ class AsciidoctorMojoTest extends Specification {
         when:
         AsciidoctorMojo mojo = new AsciidoctorMojo()
         mojo.outputDirectory = outputDir
-        mojo.sourceDocumentName = new File(srcDir, 'sample.asciidoc')
+        mojo.sourceDirectory = srcDir
+        mojo.sourceDocumentName = 'sample.asciidoc'
         mojo.backend = 'html'
 //        mojo.attributes.put('toc2', true)
         mojo.attributes.put('toc2', false)
@@ -293,7 +301,8 @@ class AsciidoctorMojoTest extends Specification {
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.outputDirectory = outputDir
-            mojo.sourceDocumentName = new File(srcDir, 'imageDir.adoc')
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'imageDir.adoc'
             mojo.backend = 'html'
             mojo.imagesDir = 'images-dir'
             mojo.execute()
@@ -301,5 +310,26 @@ class AsciidoctorMojoTest extends Specification {
             File sampleOutput = new File(outputDir, 'imageDir.html')
             String text = sampleOutput.getText()
             text.contains('<img src="images-dir/my-cool-image.jpg" alt="my cool image">')
+    }
+
+    def 'includes_test'() {
+        given:
+            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output-include-test')
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = srcDir
+            mojo.outputDirectory = outputDir
+            mojo.sourceDocumentName = new File('main-document.adoc')
+            mojo.backend = 'html'
+            mojo.execute()
+        then:
+            File mainDocumentOutput = new File(outputDir, 'main-document.html')
+            String text = mainDocumentOutput.getText()
+            text.contains('This is the parent document')
+            text.contains('This is an included file.')
     }
 }
