@@ -238,4 +238,49 @@ class AsciidoctorMojoTest extends Specification {
             !text.contains('Here is a line that has an attribute that is')
             !text.contains('{set: name!}')
     }
+
+    // Test for Issue 62
+    def 'setting_boolean_values'() {
+        given:
+            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output-issue-62')
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.outputDirectory = outputDir
+            mojo.sourceDocumentName = new File(srcDir, 'sample.asciidoc')
+            mojo.backend = 'html'
+            mojo.attributes.put('toc2', true)
+            mojo.execute()
+        then:
+            File sampleOutput = new File(outputDir, 'sample.html')
+            String text = sampleOutput.getText()
+            text.contains('class="toc2"')
+
+    }
+
+    // Test for Issue 62 (unset)
+    def 'unsetting_boolean_values'() {
+        given:
+        File srcDir = new File('target/test-classes/src/asciidoctor')
+        File outputDir = new File('target/asciidoctor-output-issue-62-unset')
+
+        if (!outputDir.exists())
+            outputDir.mkdir()
+        when:
+        AsciidoctorMojo mojo = new AsciidoctorMojo()
+        mojo.outputDirectory = outputDir
+        mojo.sourceDocumentName = new File(srcDir, 'sample.asciidoc')
+        mojo.backend = 'html'
+//        mojo.attributes.put('toc2', true)
+        mojo.attributes.put('toc2', false)
+        mojo.execute()
+        then:
+        File sampleOutput = new File(outputDir, 'sample.html')
+        String text = sampleOutput.getText()
+        !text.contains('class="toc2"')
+
+    }
 }

@@ -110,7 +110,7 @@ These settings can all be changed in the `<configuration>` section of the plugin
 ...
 ----
 
-==== Passing POM properties ====
+==== Passing POM properties
 
 It is possible to pass properties defined in the POM to the Asciidoctor processor. This is handy for example to include in the generated document the POM artifact version number.
 
@@ -125,6 +125,9 @@ This is done by creating a custom Asciidoc property in the `attributes` section 
 
 The custom Asciidoc property then be used in the document like this `Version: {docVersion}`.
 
+==== Setting boolean values
+
+Boolean attributes in asciidoctor, such as `numbered`, `toc`, `copycss` or `linkcss!` can be set with a value of `true` or unset (in the case of `linkcss` vs `linkcss!`) with a value of false.
 
 === Multiple outputs for the same file
 

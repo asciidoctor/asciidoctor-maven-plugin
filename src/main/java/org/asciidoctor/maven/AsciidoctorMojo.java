@@ -30,6 +30,7 @@ import org.asciidoctor.AbstractDirectoryWalker;
 import org.asciidoctor.AsciiDocDirectoryWalker;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
+import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
@@ -50,13 +51,13 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "outputDir", defaultValue = "${project.build.directory}/generated-docs", required = true)
     protected File outputDirectory;
-    
+
     @Parameter(defaultValue = "${basedir}", required = false, readonly = true)
     protected File projectDirectory;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "baseDir", required = false)
     protected String baseDirectory;
-    
+
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.ATTRIBUTES, required = false)
     protected Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -117,8 +118,10 @@ public class AsciidoctorMojo extends AbstractMojo {
         final OptionsBuilder optionsBuilder = OptionsBuilder.options().toDir(outputDirectory).compact(compact)
                 .safe(SafeMode.UNSAFE).eruby(eruby).backend(backend).docType(doctype).headerFooter(headerFooter);
 
+        final AttributesBuilder attributesBuilder = AttributesBuilder.attributes();
+
         File baseDir = null;
-        
+
         if (baseDirectory == null) {
             baseDir = projectDirectory;
         }
@@ -128,45 +131,16 @@ public class AsciidoctorMojo extends AbstractMojo {
                 baseDir = new File(projectDirectory, baseDir.getPath());
             }
         }
-        
+
         if (baseDir != null) {
             optionsBuilder.baseDir(baseDir);
         }
-        
-        if (templateEngine != null) {
-            optionsBuilder.templateEngine(templateEngine);
-        }
 
-        if (templateDir != null) {
-            optionsBuilder.templateDir(templateDir);
-        }
+        setOptions(optionsBuilder);
 
-        if (sourceHighlighter != null) {
-            attributes.put("source-highlighter", sourceHighlighter);
-        }
+        setAttributesOnBuilder(attributesBuilder);
 
-        if (embedAssets) {
-            attributes.put("linkcss!", true);
-            attributes.put("data-uri", true);
-        }
-
-        if (imagesDir != null) {
-            attributes.put("imagesdir", imagesDir);
-        }
-
-        if ("skip".equals(attributeMissing) || "drop".equals(attributeMissing) || "drop-line".equals(attributeMissing)) {
-            attributes.put("attribute-missing", attributeMissing);
-        } else {
-            throw new MojoExecutionException(attributeMissing + " is not valid. Must be one of 'skip', 'drop' or 'drop-line'");
-        }
-
-        if ("drop".equals(attributeUndefined) || "drop-line".equals(attributeUndefined)) {
-            attributes.put("attribute-undefined", attributeUndefined);
-        } else {
-            throw new MojoExecutionException(attributeUndefined + " is not valid. Must be one of 'drop' or 'drop-line'");
-        }
-
-        optionsBuilder.attributes(attributes);
+        optionsBuilder.attributes(attributesBuilder.get());
 
         if (sourceDocumentName == null) {
             for (final File f : scanSourceFiles()) {
@@ -248,6 +222,53 @@ public class AsciidoctorMojo extends AbstractMojo {
             if (!outputDirectory.mkdirs()) {
                 getLog().error("Can't create " + outputDirectory.getPath());
             }
+        }
+    }
+
+    protected void setOptions(OptionsBuilder optionsBuilder) {
+        if (templateEngine != null) {
+            optionsBuilder.templateEngine(templateEngine);
+        }
+
+        if (templateDir != null) {
+            optionsBuilder.templateDir(templateDir);
+        }
+    }
+
+    protected void setAttributesOnBuilder(AttributesBuilder attributesBuilder) throws MojoExecutionException {
+        if (sourceHighlighter != null) {
+            attributesBuilder.sourceHighlighter(sourceHighlighter);
+        }
+
+        if (embedAssets) {
+            attributesBuilder.linkCss(true);
+            attributesBuilder.dataUri(true);
+        }
+
+        if (imagesDir != null) {
+            attributesBuilder.imagesDir(imagesDir);
+        }
+
+        if ("skip".equals(attributeMissing) || "drop".equals(attributeMissing) || "drop-line".equals(attributeMissing)) {
+            attributesBuilder.attributeMissing(attributeMissing);
+        } else {
+            throw new MojoExecutionException(attributeMissing + " is not valid. Must be one of 'skip', 'drop' or 'drop-line'");
+        }
+
+        if ("drop".equals(attributeUndefined) || "drop-line".equals(attributeUndefined)) {
+            attributesBuilder.attributeUndefined(attributeUndefined);
+        } else {
+            throw new MojoExecutionException(attributeUndefined + " is not valid. Must be one of 'drop' or 'drop-line'");
+        }
+
+        // TODO Figure out how to reliably set other values (like boolean values, dates, times, etc)
+        for (Map.Entry<String, Object> attributeEntry : attributes.entrySet()) {
+            if (attributeEntry.getValue() instanceof Boolean) {
+                attributesBuilder.attribute(attributeEntry.getKey(), Attributes.toAsciidoctorFlag((Boolean) attributeEntry.getValue()));
+                continue;
+            }
+            // Can't do anything about dates and times because all that logic is private in Attributes
+            attributesBuilder.attribute(attributeEntry.getKey(), attributeEntry.getValue());
         }
     }
 
