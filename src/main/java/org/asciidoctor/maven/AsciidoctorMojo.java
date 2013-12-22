@@ -235,7 +235,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
 
         if (embedAssets) {
-            attributesBuilder.linkCss(true);
+            attributesBuilder.linkCss(false);
             attributesBuilder.dataUri(true);
         }
 

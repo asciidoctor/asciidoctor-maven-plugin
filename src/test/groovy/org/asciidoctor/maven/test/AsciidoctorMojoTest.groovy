@@ -120,6 +120,7 @@ class AsciidoctorMojoTest extends Specification {
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.attributes["icons"] = "font"
             mojo.embedAssets = true
+            mojo.imagesDir = 'src/test/resources/src/asciidoctor'
             mojo.outputDirectory = outputDir
             mojo.sourceDirectory = srcDir
             mojo.sourceDocumentName = 'sample-embedded.adoc'
@@ -132,6 +133,8 @@ class AsciidoctorMojoTest extends Specification {
             File sampleOutput = new File(outputDir, 'sample-embedded.html')
             sampleOutput.length() > 0
             String text = sampleOutput.getText()
+            text.contains('Asciidoctor default stylesheet')
+            text.contains('data:image/png;base64,iVBORw0KGgo')
             text.contains('font-awesome.min.css')
             text.contains('i class="icon-tip')
     }
