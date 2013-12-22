@@ -55,6 +55,9 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(defaultValue = "${basedir}", required = false, readonly = true)
     protected File projectDirectory;
 
+    @Parameter(property = AsciidoctorMaven.PREFIX + "baseDir", required = false)
+    protected File baseDir;
+
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.ATTRIBUTES, required = false)
     protected Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -122,6 +125,10 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
 
         optionsBuilder.baseDir(sourceDirectory).toDir(outputDirectory).destinationDir(outputDirectory).mkDirs(true);
+
+        if (baseDir != null) {
+            optionsBuilder.baseDir(baseDir);
+        }
 
         setOptions(optionsBuilder);
 
@@ -409,6 +416,14 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setAttributeUndefined(String attributeUndefined) {
         this.attributeUndefined = attributeUndefined;
+    }
+
+    public File getBaseDir() {
+        return baseDir;
+    }
+
+    public void setBaseDir(File baseDir) {
+        this.baseDir = baseDir;
     }
 
     private static class CustomExtensionDirectoryWalker extends AbstractDirectoryWalker {
