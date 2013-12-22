@@ -56,7 +56,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected File projectDirectory;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "baseDir", required = false)
-    protected String baseDirectory;
+    protected File baseDir;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.ATTRIBUTES, required = false)
     protected Map<String, Object> attributes = new HashMap<String, Object>();
@@ -92,7 +92,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected String title = "";
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDocumentName", required = false)
-    protected File sourceDocumentName;
+    protected String sourceDocumentName;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "synchronizations", required = false)
     protected List<Synchronization> synchronizations = new ArrayList<Synchronization>();
@@ -120,17 +120,11 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         final AttributesBuilder attributesBuilder = AttributesBuilder.attributes();
 
-        File baseDir = null;
+        if (sourceDirectory == null) {
+            throw new MojoExecutionException("Required parameter 'asciidoctor.sourceDir' not set.");
+        }
 
-        if (baseDirectory == null) {
-            baseDir = projectDirectory;
-        }
-        else if (!baseDirectory.equals("null")) {
-            baseDir = new File(baseDirectory);
-            if (!baseDir.isAbsolute()) {
-                baseDir = new File(projectDirectory, baseDir.getPath());
-            }
-        }
+        optionsBuilder.baseDir(sourceDirectory).toDir(outputDirectory).destinationDir(outputDirectory).mkDirs(true);
 
         if (baseDir != null) {
             optionsBuilder.baseDir(baseDir);
@@ -147,7 +141,7 @@ public class AsciidoctorMojo extends AbstractMojo {
                 renderFile(asciidoctorInstance, optionsBuilder.asMap(), f);
             }
         } else {
-            renderFile(asciidoctorInstance, optionsBuilder.asMap(), sourceDocumentName);
+            renderFile(asciidoctorInstance, optionsBuilder.asMap(), new File(sourceDirectory, sourceDocumentName));
         }
 
         if (synchronizations != null) {
@@ -384,11 +378,11 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.eruby = eruby;
     }
 
-    public File getSourceDocumentName() {
+    public String getSourceDocumentName() {
         return sourceDocumentName;
     }
 
-    public void setSourceDocumentName(File sourceDocumentName) {
+    public void setSourceDocumentName(String sourceDocumentName) {
         this.sourceDocumentName = sourceDocumentName;
     }
 
@@ -422,6 +416,14 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setAttributeUndefined(String attributeUndefined) {
         this.attributeUndefined = attributeUndefined;
+    }
+
+    public File getBaseDir() {
+        return baseDir;
+    }
+
+    public void setBaseDir(File baseDir) {
+        this.baseDir = baseDir;
     }
 
     private static class CustomExtensionDirectoryWalker extends AbstractDirectoryWalker {

@@ -1,0 +1,5 @@
+= Include test
+
+This is the parent document
+
+include::includes/new-include.adoc[]
