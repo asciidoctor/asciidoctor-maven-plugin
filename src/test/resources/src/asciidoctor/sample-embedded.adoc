@@ -25,3 +25,4 @@ NOTE: This is test, only a test.
 
 TIP: Here is a tip!
 
+image::ruby.png[]
