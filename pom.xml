@@ -9,7 +9,7 @@
 
     <groupId>org.asciidoctor</groupId>
     <artifactId>asciidoctor-maven-plugin</artifactId>
-    <version>1.5.0-SNAPSHOT</version>
+    <version>0.1.4</version>
     <packaging>maven-plugin</packaging>
 
     <name>Asciidoctor Maven Plugin</name>
