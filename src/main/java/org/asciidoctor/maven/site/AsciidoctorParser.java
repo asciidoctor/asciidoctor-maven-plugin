@@ -50,7 +50,7 @@ public class AsciidoctorParser extends XhtmlParser {
             String result = asciidoctorInstance.render(IOUtil.toString(source),
                         OptionsBuilder.options().headerFooter(true).safe(SafeMode.UNSAFE).backend("xhtml").asMap());
             // prevent site plugin from breaking font-based icon syntax
-            result = result.replaceAll("<i class=\"icon-([^\"]+)\"([^>]*)></i>", "<span class=\"icon-$1\"$2></span>");
+            result = result.replaceAll("<i class=\"fa icon-([^\"]+)\"([^>]*)></i>", "<span class=\"fa icon-$1\"$2></span>");
             super.parse(new StringReader(result), sink);
         } catch (IOException ex) {
             getLog().error(ex.getLocalizedMessage());

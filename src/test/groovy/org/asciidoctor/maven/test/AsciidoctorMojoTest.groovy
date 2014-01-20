@@ -54,8 +54,9 @@ class AsciidoctorMojoTest extends Specification {
             sampleOutput.length() > 0
             String text = sampleOutput.getText()
             text.contains('id="toc"')
-            !text.contains('link rel="stylesheet"')
-            text.contains('<pre class="CodeRay">')
+            text.contains('Asciidoctor default stylesheet')
+            !text.contains('<link rel="stylesheet" href="./asciidoctor.css">')
+            text.contains('<pre class="CodeRay highlight">')
     }
 
     def "asciidoc file extension can be changed"() {
@@ -120,7 +121,7 @@ class AsciidoctorMojoTest extends Specification {
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.attributes["icons"] = "font"
             mojo.embedAssets = true
-            mojo.imagesDir = 'src/test/resources/src/asciidoctor'
+            mojo.imagesDir = ''
             mojo.outputDirectory = outputDir
             mojo.sourceDirectory = srcDir
             mojo.sourceDocumentName = 'sample-embedded.adoc'
@@ -136,7 +137,7 @@ class AsciidoctorMojoTest extends Specification {
             text.contains('Asciidoctor default stylesheet')
             text.contains('data:image/png;base64,iVBORw0KGgo')
             text.contains('font-awesome.min.css')
-            text.contains('i class="icon-tip')
+            text.contains('i class="fa icon-tip"')
     }
 
     def "missing-attribute skip"() {
