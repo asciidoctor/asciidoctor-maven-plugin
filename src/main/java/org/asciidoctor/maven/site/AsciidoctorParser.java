@@ -48,7 +48,7 @@ public class AsciidoctorParser extends XhtmlParser {
         try {
             super.parse(new StringReader(
                     asciidoctorInstance.render(IOUtil.toString(source),
-                        OptionsBuilder.options().headerFooter(true).backend("xhtml").asMap())),
+                        OptionsBuilder.options().headerFooter(true).backend("xhtml5").asMap())),
                     sink);
         } catch (IOException ex) {
             getLog().error(ex.getLocalizedMessage());
