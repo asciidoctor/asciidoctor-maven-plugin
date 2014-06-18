@@ -21,6 +21,7 @@ import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.SafeMode;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 
@@ -46,10 +47,11 @@ public class AsciidoctorParser extends XhtmlParser {
     @Override
     public void parse(Reader source, Sink sink) throws ParseException {
         try {
-            super.parse(new StringReader(
-                    asciidoctorInstance.render(IOUtil.toString(source),
-                        OptionsBuilder.options().headerFooter(true).asMap())),
-                    sink);
+            String result = asciidoctorInstance.render(IOUtil.toString(source),
+                        OptionsBuilder.options().headerFooter(true).safe(SafeMode.UNSAFE).backend("xhtml").asMap());
+            // prevent site plugin from breaking font-based icon syntax
+            result = result.replaceAll("<i class=\"icon-([^\"]+)\"([^>]*)></i>", "<span class=\"icon-$1\"$2></span>");
+            super.parse(new StringReader(result), sink);
         } catch (IOException ex) {
             getLog().error(ex.getLocalizedMessage());
         }
