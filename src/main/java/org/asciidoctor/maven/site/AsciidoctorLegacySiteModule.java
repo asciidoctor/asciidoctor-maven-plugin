@@ -21,7 +21,7 @@ import org.codehaus.plexus.component.annotations.Component;
  * @author jdlee
  */
 @Component(role = SiteModule.class, hint = AsciidoctorParser.ROLE_HINT)
-public class AsciidoctorSiteModule extends AbstractSiteModule {
+public class AsciidoctorLegacySiteModule extends AbstractSiteModule {
 
     /**
      * The source directory for AsciiDoc files.
@@ -31,12 +31,12 @@ public class AsciidoctorSiteModule extends AbstractSiteModule {
     /**
      * The extension for AsciiDoc files.
      */
-    public static final String FILE_EXTENSION = "adoc";
+    public static final String FILE_EXTENSION = "ad";
 
     /**
      * Build a new instance of {@link AsciidoctorSiteModule}.
      */
-    public AsciidoctorSiteModule() {
+    public AsciidoctorLegacySiteModule() {
         super(SOURCE_DIRECTORY, FILE_EXTENSION, AsciidoctorParser.ROLE_HINT);
     }
 }
