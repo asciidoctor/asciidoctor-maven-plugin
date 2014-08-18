@@ -27,6 +27,15 @@
             </roles>
             <timezone>UTC-7</timezone>
         </developer>
+        <developer>
+            <id>mojavelinux</id>
+            <name>Dan Allen</name>
+            <email>dan.j.allen@gmail.com</email>
+            <roles>
+                <role>Contributor</role>
+            </roles>
+            <timezone>-7</timezone>
+        </developer>
     </developers>
 
     <licenses>
