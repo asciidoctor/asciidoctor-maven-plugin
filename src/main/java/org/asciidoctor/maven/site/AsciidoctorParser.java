@@ -21,6 +21,7 @@ import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.SafeMode;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
@@ -47,8 +48,10 @@ public class AsciidoctorParser extends XhtmlParser {
     @Override
     public void parse(Reader source, Sink sink) throws ParseException {
         try {
+            // NOTE we have to generate a full document, but we unset stylesheet to keep framing minimal
             String result = asciidoctorInstance.render(IOUtil.toString(source),
-                        OptionsBuilder.options().headerFooter(true).safe(SafeMode.UNSAFE).backend("xhtml").asMap());
+                        OptionsBuilder.options().headerFooter(true).safe(SafeMode.UNSAFE).backend("xhtml")
+                        .attributes(AttributesBuilder.attributes().unsetStyleSheet().asMap()).asMap());
             // prevent site plugin from breaking font-based icon syntax
             result = result.replaceAll("<i class=\"fa icon-([^\"]+)\"([^>]*)></i>", "<span class=\"fa icon-$1\"$2></span>");
             super.parse(new StringReader(result), sink);
