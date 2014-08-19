@@ -248,7 +248,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     }
 
     @Override
-    protected Asciidoctor getAsciidoctorInstance() throws MojoExecutionException {
+    protected Asciidoctor getAsciidoctorInstance(File gemPath) throws MojoExecutionException {
         try {
             return asciidoctor.get();
         } catch (final Exception e) {
