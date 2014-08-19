@@ -35,6 +35,8 @@ import org.asciidoctor.DirectoryWalker;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
+import org.asciidoctor.internal.JRubyRuntimeContext;
+import org.asciidoctor.internal.RubyUtils;
 
 
 /**
@@ -57,6 +59,12 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "baseDir", required = false)
     protected File baseDir;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + "gemPath", required = false)
+    protected String gemPath;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + "requires")
+    protected List<String> requires = new ArrayList<String>();
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.ATTRIBUTES, required = false)
     protected Map<String, Object> attributes = new HashMap<String, Object>();
@@ -113,7 +121,14 @@ public class AsciidoctorMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         ensureOutputExists();
 
-        final Asciidoctor asciidoctorInstance = getAsciidoctorInstance();
+        final Asciidoctor asciidoctorInstance = getAsciidoctorInstance(gemPath);
+
+        if (requires.size() > 0) {
+            for (String require : requires) {
+                // FIXME AsciidoctorJ should provide a public API for requiring paths in the Ruby runtime
+                RubyUtils.requireLibrary(JRubyRuntimeContext.get(), require);
+            }
+        }
 
         final OptionsBuilder optionsBuilder = OptionsBuilder.options().toDir(outputDirectory).compact(compact)
                 .safe(SafeMode.UNSAFE).eruby(eruby).backend(backend).docType(doctype).headerFooter(headerFooter);
@@ -149,8 +164,13 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
     }
 
-    protected Asciidoctor getAsciidoctorInstance() throws MojoExecutionException {
-        return Asciidoctor.Factory.create();
+    protected Asciidoctor getAsciidoctorInstance(String gemPath) throws MojoExecutionException {
+        if (gemPath == null) {
+            return Asciidoctor.Factory.create();
+        }
+        else {
+            return Asciidoctor.Factory.create(gemPath);
+        }
     }
 
     private List<File> scanSourceFiles() {
