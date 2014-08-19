@@ -61,7 +61,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected File baseDir;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "gemPath", required = false)
-    protected File gemPath;
+    protected String gemPath;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "requires")
     protected List<String> requires = new ArrayList<String>();
@@ -164,12 +164,12 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
     }
 
-    protected Asciidoctor getAsciidoctorInstance(File gemPath) throws MojoExecutionException {
+    protected Asciidoctor getAsciidoctorInstance(String gemPath) throws MojoExecutionException {
         if (gemPath == null) {
             return Asciidoctor.Factory.create();
         }
         else {
-            return Asciidoctor.Factory.create(gemPath.getAbsolutePath());
+            return Asciidoctor.Factory.create(gemPath);
         }
     }
 
