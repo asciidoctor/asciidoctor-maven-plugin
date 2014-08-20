@@ -54,8 +54,11 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "outputDir", defaultValue = "${project.build.directory}/generated-docs", required = true)
     protected File outputDirectory;
 
-    @Parameter(defaultValue = "${basedir}", required = false, readonly = true)
+    @Parameter(defaultValue = "${basedir}", required = false, readonly = false)
     protected File projectDirectory;
+
+    @Parameter(defaultValue = "${basedir}", required = false, readonly = false)
+    protected File rootDir;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "baseDir", required = false)
     protected File baseDir;
@@ -436,6 +439,30 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setAttributeUndefined(String attributeUndefined) {
         this.attributeUndefined = attributeUndefined;
+    }
+
+    public File getProjectDirectory() {
+        return projectDirectory;
+    }
+
+    public void setProjectDirectory(File projectDirectory) {
+        this.projectDirectory = projectDirectory;
+    }
+
+    public File getRootDir() {
+        return rootDir;
+    }
+
+    public void setRootDir(File rootDir) {
+        this.rootDir = rootDir;
+    }
+
+    public String getGemPath() {
+        return gemPath;
+    }
+
+    public void setGemPath(String gemPath) {
+        this.gemPath = gemPath;
     }
 
     public File getBaseDir() {
