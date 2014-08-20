@@ -247,15 +247,6 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
         es.shutdown();
     }
 
-    @Override
-    protected Asciidoctor getAsciidoctorInstance(File gemPath) throws MojoExecutionException {
-        try {
-            return asciidoctor.get();
-        } catch (final Exception e) {
-            throw new MojoExecutionException(e.getMessage(), e);
-        }
-    }
-
     private static class Updater implements Runnable {
         private final AtomicBoolean run;
         private final AsciidoctorRefreshMojo mojo;
