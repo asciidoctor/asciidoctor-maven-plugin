@@ -43,7 +43,9 @@ class AsciidoctorMojoTest extends Specification {
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.sourceHighlighter = 'coderay'
-            mojo.attributes['toc'] = true
+            // IMPORTANT Maven can only assign string values or null, so we have to emulate the value precisely in the test!
+            // Believe it or not, null is the equivalent of writing <toc/> in the XML configuration
+            mojo.attributes['toc'] = null
             mojo.attributes['linkcss!'] = ''
             mojo.execute()
         then:
@@ -263,7 +265,9 @@ class AsciidoctorMojoTest extends Specification {
             mojo.sourceDirectory = srcDir
             mojo.sourceDocumentName = 'sample.asciidoc'
             mojo.backend = 'html'
-            mojo.attributes.put('toc2', true)
+            // IMPORTANT Maven can only assign string values or null, so we have to emulate the value precisely in the test!
+            // Believe it or not, null is the equivalent of writing <toc/> in the XML configuration
+            mojo.attributes.put('toc2', 'true')
             mojo.execute()
         then:
             File sampleOutput = new File(outputDir, 'sample.html')
@@ -286,8 +290,9 @@ class AsciidoctorMojoTest extends Specification {
         mojo.sourceDirectory = srcDir
         mojo.sourceDocumentName = 'sample.asciidoc'
         mojo.backend = 'html'
-//        mojo.attributes.put('toc2', true)
-        mojo.attributes.put('toc2', false)
+        // IMPORTANT Maven can only assign string values or null, so we have to emulate the value precisely in the test!
+        // Believe it or not, null is the equivalent of writing <toc/> in the XML configuration
+        mojo.attributes.put('toc2', 'false')
         mojo.execute()
         then:
         File sampleOutput = new File(outputDir, 'sample.html')
@@ -351,7 +356,9 @@ class AsciidoctorMojoTest extends Specification {
         mojo.sourceDocumentName = new File('main.adoc')
         mojo.doctype = 'book'
         mojo.embedAssets = true
-        mojo.attributes['toc'] = true
+        // IMPORTANT Maven can only assign string values or null, so we have to emulate the value precisely in the test!
+        // Believe it or not, null is the equivalent of writing <toc/> in the XML configuration
+        mojo.attributes['toc'] = 'true'
         mojo.backend = 'html'
         mojo.execute()
         then:
