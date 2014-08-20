@@ -54,10 +54,10 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "outputDir", defaultValue = "${project.build.directory}/generated-docs", required = true)
     protected File outputDirectory;
 
-    @Parameter(defaultValue = "${basedir}", required = false, readonly = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "projectDirectory", defaultValue = "${basedir}", required = false, readonly = false)
     protected File projectDirectory;
 
-    @Parameter(defaultValue = "${basedir}", required = false, readonly = false)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "rootDir", defaultValue = "${basedir}", required = false, readonly = false)
     protected File rootDir;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "baseDir", required = false)
