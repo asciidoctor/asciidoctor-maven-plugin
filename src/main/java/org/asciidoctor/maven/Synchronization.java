@@ -23,6 +23,14 @@ public class Synchronization {
     @Parameter(property = PREFIX + "target")
     protected File target;
 
+    public Synchronization() {
+    }
+
+    public Synchronization(File source, File target) {
+        this.source = source;
+        this.target = target;
+    }
+
     public File getSource() {
         return source;
     }

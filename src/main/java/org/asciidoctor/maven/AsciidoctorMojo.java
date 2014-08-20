@@ -162,7 +162,13 @@ public class AsciidoctorMojo extends AbstractMojo {
             renderFile(asciidoctorInstance, optionsBuilder.asMap(), new File(sourceDirectory, sourceDocumentName));
         }
 
-        if (synchronizations != null) {
+        // #67 -- get all files that aren't adoc/ad/asciidoc and create synchronizations for them
+        List<File> resources = new NonAsciiDocExtensionDirectoryWalker(sourceDirectory.getAbsolutePath()).scan();
+        for (File resource : resources) {
+            synchronizations.add(new Synchronization(resource, new File(outputDirectory, resource.getName())));
+        }
+
+        if (synchronizations != null && !synchronizations.isEmpty()) {
             synchronize();
         }
     }
@@ -490,6 +496,26 @@ public class AsciidoctorMojo extends AbstractMojo {
                 }
             }
             return false;
+        }
+    }
+
+    private static class NonAsciiDocExtensionDirectoryWalker extends AbstractDirectoryWalker {
+        private final List<String> extensions;
+
+        public NonAsciiDocExtensionDirectoryWalker(final String absolutePath) {
+            super(absolutePath);
+            this.extensions = java.util.Arrays.asList("ad", "adoc", "asciidoc");
+        }
+
+        @Override
+        protected boolean isAcceptedFile(final File filename) {
+            final String name = filename.getName();
+            for (final String extension : extensions) {
+                if (name.endsWith(extension)) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
