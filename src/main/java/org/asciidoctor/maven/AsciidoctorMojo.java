@@ -13,6 +13,7 @@
 package org.asciidoctor.maven;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -163,9 +164,10 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
 
         // #67 -- get all files that aren't adoc/ad/asciidoc and create synchronizations for them
-        List<File> resources = new NonAsciiDocExtensionDirectoryWalker(sourceDirectory.getAbsolutePath()).scan();
-        for (File resource : resources) {
-            synchronizations.add(new Synchronization(resource, new File(outputDirectory, resource.getName())));
+        try {
+            FileUtils.copyDirectory(sourceDirectory, outputDirectory, new NonAsciiDocExtensionFileFilter(), false);
+        } catch (IOException e) {
+            throw new MojoExecutionException("Error copying resources", e);
         }
 
         if (synchronizations != null && !synchronizations.isEmpty()) {
@@ -499,17 +501,16 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
     }
 
-    private static class NonAsciiDocExtensionDirectoryWalker extends AbstractDirectoryWalker {
+    private static class NonAsciiDocExtensionFileFilter implements FileFilter {
         private final List<String> extensions;
 
-        public NonAsciiDocExtensionDirectoryWalker(final String absolutePath) {
-            super(absolutePath);
+        public NonAsciiDocExtensionFileFilter() {
             this.extensions = java.util.Arrays.asList("ad", "adoc", "asciidoc");
         }
 
         @Override
-        protected boolean isAcceptedFile(final File filename) {
-            final String name = filename.getName();
+        public boolean accept(File pathname) {
+            final String name = pathname.getName();
             for (final String extension : extensions) {
                 if (name.endsWith(extension)) {
                     return false;

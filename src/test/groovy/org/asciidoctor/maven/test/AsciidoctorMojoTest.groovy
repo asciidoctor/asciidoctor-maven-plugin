@@ -336,4 +336,30 @@ class AsciidoctorMojoTest extends Specification {
             text.contains('This is the parent document')
             text.contains('This is an included file.')
     }
+
+    def 'issue-78'() {
+        given:
+        File srcDir = new File('target/test-classes/src/asciidoctor/issue-78')
+        File outputDir = new File('target/asciidoctor-output-issue-78')
+
+        if (!outputDir.exists())
+            outputDir.mkdir()
+        when:
+        AsciidoctorMojo mojo = new AsciidoctorMojo()
+        mojo.sourceDirectory = srcDir
+        mojo.outputDirectory = outputDir
+        mojo.sourceDocumentName = new File('main.adoc')
+        mojo.doctype = 'book'
+        mojo.embedAssets = true
+        mojo.attributes['toc'] = true
+        mojo.backend = 'html'
+        mojo.execute()
+        then:
+        File mainDocumentOutput = new File(outputDir, 'main.html')
+        File imageFile = new File(outputDir, 'images/halliburton_lab.jpg')
+        imageFile.exists();
+        String text = mainDocumentOutput.getText()
+        text.contains("<p>Here&#8217;s an image:</p>")
+        text.contains('<img src="data:image/jpg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/4gzESUNDX1BST0ZJTEUAAQEAAA')
+    }
 }
