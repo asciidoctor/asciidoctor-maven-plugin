@@ -258,15 +258,24 @@
           </plugins>
         </pluginManagement>
     </build>
-    <repositories>
-      <repository>
-        <snapshots>
-          <enabled>true</enabled>
-        </snapshots>
-        <id>central-bintray</id>
-        <name>bintray</name>
-        <url>http://dl.bintray.com/lordofthejars/maven</url>
-      </repository>
-    </repositories>
+
+    <profiles>
+        <profile>
+            <id>asciidoctorj-snapshot</id>
+            <properties>
+                <asciidoctorj.version>1.5.1-SNAPSHOT</asciidoctorj.version>
+            </properties>
+            <repositories>
+                <repository>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                    <id>central-bintray</id>
+                    <name>bintray</name>
+                    <url>http://dl.bintray.com/lordofthejars/maven</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
 </project>
 
