@@ -63,8 +63,8 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "baseDir", required = false)
     protected File baseDir;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "gemPath", required = false)
-    protected String gemPath;
+    @Parameter(property = AsciidoctorMaven.PREFIX + "gemPath", defaultValue = "", required = false)
+    protected String gemPath = "";
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "requires")
     protected List<String> requires = new ArrayList<String>();
