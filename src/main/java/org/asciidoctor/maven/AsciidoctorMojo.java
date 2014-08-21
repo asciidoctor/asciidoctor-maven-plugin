@@ -176,12 +176,22 @@ public class AsciidoctorMojo extends AbstractMojo {
     }
 
     protected Asciidoctor getAsciidoctorInstance(String gemPath) throws MojoExecutionException {
+        Asciidoctor asciidoctor = null;
         if (gemPath == null) {
-            return Asciidoctor.Factory.create();
+             asciidoctor = Asciidoctor.Factory.create();
         }
         else {
-            return Asciidoctor.Factory.create(gemPath);
+            asciidoctor = Asciidoctor.Factory.create(gemPath);
         }
+
+        String gemHome = JRubyRuntimeContext.get().evalScriptlet("ENV['GEM_HOME']").toString();
+        String gemHomeExpected = (gemPath == null || "".equals(gemPath)) ? "" : gemPath.split(java.io.File.pathSeparator)[0];
+
+        if (!"".equals(gemHome) && !gemHomeExpected.equals(gemHome)) {
+            getLog().warn("Using inherited external environment to resolve gems (" + gemHome + "), i.e. build is platform dependent!");
+        }
+
+        return asciidoctor;
     }
 
     private List<File> scanSourceFiles() {
