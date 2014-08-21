@@ -261,6 +261,11 @@
 
     <profiles>
         <profile>
+            <!--
+              To release to bintray, add your credentials to ~/.m2/settings.xml and run:
+
+               $ mvn deploy -Prelease
+            -->
             <id>release</id>
             <build>
                 <plugins>
