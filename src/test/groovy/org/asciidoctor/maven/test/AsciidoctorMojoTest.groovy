@@ -369,4 +369,123 @@ class AsciidoctorMojoTest extends Specification {
         text.contains("<p>Here&#8217;s an image:</p>")
         text.contains('<img src="data:image/jpg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/4gzESUNDX1BST0ZJTEUAAQEAAA')
     }
+
+	/**
+	 * Tests CodeRay source code highlighting options.
+	 */
+	def 'code highlighting - coderay'() {
+		setup:
+		    File srcDir = new File('src/test/resources/src/asciidoctor')
+		    File outputDir = new File('target/asciidoctor-output-sourceHighlighting/coderay')
+
+		when:
+		    AsciidoctorMojo mojo = new AsciidoctorMojo()
+		    mojo.sourceDirectory = srcDir
+		    mojo.outputDirectory = outputDir
+		    mojo.sourceHighlighter = 'coderay'
+		    mojo.sourceDocumentName = new File('main-document.adoc')
+		    mojo.backend = 'html'
+		    mojo.execute()
+
+		then:
+		    File mainDocumentOutput = new File(outputDir, 'main-document.html')
+		    String text = mainDocumentOutput.getText()
+		    text.contains('CodeRay')
+	}   
+
+	/**
+	 * Tests Highlight.js source code highlighting options.
+	 */
+	def 'code highlighting - highlightjs'() {
+		setup:
+		    File srcDir = new File('src/test/resources/src/asciidoctor')
+		    File outputDir = new File('target/asciidoctor-output-sourceHighlighting/highlightjs')
+
+		when:
+		    AsciidoctorMojo mojo = new AsciidoctorMojo()
+		    mojo.sourceDirectory = srcDir
+		    mojo.outputDirectory = outputDir
+		    mojo.sourceHighlighter = 'highlightjs'
+		    mojo.sourceDocumentName = new File('main-document.adoc')
+		    mojo.backend = 'html'
+		    mojo.execute()
+
+		then:
+		    File mainDocumentOutput = new File(outputDir, 'main-document.html')
+		    String text = mainDocumentOutput.getText()
+		    text.contains('highlight')
+	}
+
+	/**
+	 * Tests Prettify source code highlighting options.
+	 */
+	def 'code highlighting - prettify'() {
+		setup:
+		    File srcDir = new File('src/test/resources/src/asciidoctor')
+		    File outputDir = new File('target/asciidoctor-output-sourceHighlighting/prettify')
+
+		when:
+		    AsciidoctorMojo mojo = new AsciidoctorMojo()
+		    mojo.sourceDirectory = srcDir
+		    mojo.outputDirectory = outputDir
+		    mojo.sourceHighlighter = 'prettify'
+		    mojo.sourceDocumentName = new File('main-document.adoc')   
+		    mojo.backend = 'html'
+		    mojo.execute()
+
+		then:
+		    File mainDocumentOutput = new File(outputDir, 'main-document.html')
+		    String text = mainDocumentOutput.getText()
+		    text.contains('prettify')
+	}
+
+	/**
+	 * Tests (currenty not working) Pygments source code highlighting options.
+	 *
+	 * Test checks that an exception is thrown.
+	 */
+	def 'code highlighting - pygments'() {
+		setup:
+		    File srcDir = new File('src/test/resources/src/asciidoctor')
+		    File outputDir = new File('target/asciidoctor-output-sourceHighlighting/pygments')
+
+		when:
+		    AsciidoctorMojo mojo = new AsciidoctorMojo()
+		    mojo.sourceDirectory = srcDir
+		    mojo.outputDirectory = outputDir
+		    mojo.sourceHighlighter = 'pygments'
+		    mojo.sourceDocumentName = new File('main-document.adoc')
+		    mojo.backend = 'html'
+		    mojo.execute()
+
+		then:
+		    thrown(org.jruby.exceptions.RaiseException)
+	}
+
+	/**
+	 * Tests behaviour when an invalid source code highlighting option is set.
+	 *
+	 * Test checks that no additional CSS are added.
+	 */
+	def 'code highlighting - nonExistent'() {
+		setup:
+		    File srcDir = new File('src/test/resources/src/asciidoctor')
+		    File outputDir = new File('target/asciidoctor-output-sourceHighlighting/nonExistent')
+
+		when:
+		    AsciidoctorMojo mojo = new AsciidoctorMojo()
+		    mojo.sourceDirectory = srcDir
+		    mojo.outputDirectory = outputDir
+		    mojo.sourceHighlighter = 'nonExistent'
+		    mojo.sourceDocumentName = new File('main-document.adoc')
+		    mojo.backend = 'html'
+		    mojo.execute()
+
+		then:
+		    File mainDocumentOutput = new File(outputDir, 'main-document.html')
+		    String text = mainDocumentOutput.getText()
+		    // No extra CSS is added other than AsciiDoctor's default
+		    text.count('<style>') == 1
+	}
+	
 }
