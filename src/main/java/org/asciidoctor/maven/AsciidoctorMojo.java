@@ -55,6 +55,12 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "outputDir", defaultValue = "${project.build.directory}/generated-docs", required = true)
     protected File outputDirectory;
 
+    @Parameter(property = AsciidoctorMaven.PREFIX + "preserveDirectories", defaultValue = "false", required = false)
+    protected boolean preserveDirectories = false;
+    
+    @Parameter(property = AsciidoctorMaven.PREFIX + "relativeBaseDir", defaultValue = "false", required = false)
+    protected boolean relativeBaseDir = false;
+    
     @Parameter(property = AsciidoctorMaven.PREFIX + "projectDirectory", defaultValue = "${basedir}", required = false, readonly = false)
     protected File projectDirectory;
 
@@ -134,19 +140,13 @@ public class AsciidoctorMojo extends AbstractMojo {
             }
         }
 
-        final OptionsBuilder optionsBuilder = OptionsBuilder.options().toDir(outputDirectory).compact(compact)
-                .safe(SafeMode.UNSAFE).eruby(eruby).backend(backend).docType(doctype).headerFooter(headerFooter);
+        final OptionsBuilder optionsBuilder = OptionsBuilder.options().compact(compact).safe(SafeMode.UNSAFE)
+                .eruby(eruby).backend(backend).docType(doctype).headerFooter(headerFooter).mkDirs(true);
 
         final AttributesBuilder attributesBuilder = AttributesBuilder.attributes();
 
         if (sourceDirectory == null) {
             throw new MojoExecutionException("Required parameter 'asciidoctor.sourceDir' not set.");
-        }
-
-        optionsBuilder.baseDir(sourceDirectory).toDir(outputDirectory).destinationDir(outputDirectory).mkDirs(true);
-
-        if (baseDir != null) {
-            optionsBuilder.baseDir(baseDir);
         }
 
         setOptions(optionsBuilder);
@@ -157,10 +157,13 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         if (sourceDocumentName == null) {
             for (final File f : scanSourceFiles()) {
+                setDestinationPaths(optionsBuilder, f);
                 renderFile(asciidoctorInstance, optionsBuilder.asMap(), f);
             }
         } else {
-            renderFile(asciidoctorInstance, optionsBuilder.asMap(), new File(sourceDirectory, sourceDocumentName));
+            File sourceFile = new File(sourceDirectory, sourceDocumentName);
+            setDestinationPaths(optionsBuilder, sourceFile);
+            renderFile(asciidoctorInstance, optionsBuilder.asMap(), sourceFile);
         }
 
         // #67 -- get all files that aren't adoc/ad/asciidoc and create synchronizations for them
@@ -172,6 +175,38 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         if (synchronizations != null && !synchronizations.isEmpty()) {
             synchronize();
+        }
+    }
+
+    /**
+     * Updates optionsBuilder object's baseDir and destination(s) accordingly to the options.
+     * 
+     * @param optionsBuilder
+     *            AsciidoctorJ options to be updated.
+     * @param sourceFile
+     *           AsciiDoc source file to process.
+     */
+    private void setDestinationPaths(OptionsBuilder optionsBuilder, final File sourceFile) throws MojoExecutionException {
+        try {
+            if (baseDir != null) {
+                optionsBuilder.baseDir(baseDir);
+            } else {
+                // when preserveDirectories == false, parent and sourceDirectory are the same
+                if (relativeBaseDir) {
+                    optionsBuilder.baseDir(sourceFile.getParentFile());
+                } else {
+                    optionsBuilder.baseDir(sourceDirectory);
+                }
+            }
+            if (preserveDirectories) {
+                String propostalPath = sourceFile.getParentFile().getCanonicalPath().substring(sourceDirectory.getCanonicalPath().length());
+                File relativePath = new File(outputDirectory.getCanonicalPath() + propostalPath);
+                optionsBuilder.toDir(relativePath).destinationDir(relativePath);
+            } else {
+                optionsBuilder.toDir(outputDirectory).destinationDir(outputDirectory);
+            }
+        } catch (IOException e) {
+            throw new MojoExecutionException("Unable to locate output directory", e);
         }
     }
 
@@ -501,6 +536,14 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setBaseDir(File baseDir) {
         this.baseDir = baseDir;
+    }
+
+    public void setPreserveDirertories(boolean preserveDirertories) {
+        this.preserveDirectories = preserveDirertories;
+    }
+
+    public void setRelativeBaseDir(boolean relativeBaseDir) {
+        this.relativeBaseDir = relativeBaseDir;
     }
 
     private static class CustomExtensionDirectoryWalker extends AbstractDirectoryWalker {
