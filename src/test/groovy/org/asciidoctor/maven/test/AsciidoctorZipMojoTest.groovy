@@ -78,7 +78,7 @@ class AsciidoctorZipMojoTest extends Specification {
             }
             zipfile.close()
             // Paths are adapted for the test are do not match the real paths inside the zip
-            entries == [
+            def expected = [
                 'asciidoctor-zip/HelloWorld.groovy',
                 'asciidoctor-zip/HelloWorld.html',
                 'asciidoctor-zip/level-1-1/asciidoctor-icon.jpg',
@@ -92,6 +92,8 @@ class AsciidoctorZipMojoTest extends Specification {
                 'asciidoctor-zip/level-1-1/level-2-2/level-3-1/HelloWorld4.groovy',
                 'asciidoctor-zip/level-1-1/level-2-2/level-3-1/HelloWorld4.html'
             ]
+            expected.containsAll(entries)
+            entries.containsAll(expected)
 
         cleanup:
             FileUtils.deleteDirectory(outputDir)
@@ -123,7 +125,7 @@ class AsciidoctorZipMojoTest extends Specification {
             }
             zipfile.close()
             // Paths are adapted for the test are do not match the real paths inside the zip
-            entries == [
+            def expected = [
                 'asciidoctor-zip/HelloWorld.groovy',
                 'asciidoctor-zip/HelloWorld.html',
                 'asciidoctor-zip/HelloWorld2.html',
@@ -136,6 +138,8 @@ class AsciidoctorZipMojoTest extends Specification {
                 'asciidoctor-zip/level-1-1/level-2-2/HelloWorld3.groovy',
                 'asciidoctor-zip/level-1-1/level-2-2/level-3-1/HelloWorld4.groovy'
             ]
+            expected.containsAll(entries)
+            entries.containsAll(expected)
 
         cleanup:
             FileUtils.deleteDirectory(outputDir)
