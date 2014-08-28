@@ -63,6 +63,19 @@ There are several configuration options that the asciidoctor-maven-plugin uses, 
 sourceDirectory:: defaults to `${basedir}/src/main/asciidoc`
 sourceDocumentName:: an override to process a single source file; defaults to all files in `${sourceDirectory}`
 outputDirectory:: defaults to `${project.build.directory}/generated-docs`
+baseDir:: (not maven's basedir) enables to set the root path for resouces (e.g. included files), defaults to `${sourceDirectory}`
+preserveDirectories:: enables to specify whether the documents should be rendered in the same folder structure as in the source directory or not, defaults to `false`.
+When `true`, instead of generating all output in a single folder, output files are generated in the same structure. See the following example
+[source]
+----
+    ├── docs                          ├── docs
+    │   ├── examples.adoc             │   ├── examples.html
+    │   └── examples            =>    │   └── examples
+    │       ├── html.adoc             │       ├── html.html
+    │       └── docbook.adoc          │       └── docbook.html
+    └── index.adoc                    └── index.html
+----
+relativeBaseDir:: only used when baseDir is not set, enables to specify that each AsciiDoc file must search for its resources in the same folder (for example, included files). Internally, for each AsciiDoc source, sets `baseDir` to the same path as the source file. Defaults to `false`
 imagesDir:: defaults to `images`, which will be relative to the directory containing the source files
 backend:: defaults to `docbook`
 doctype:: defaults to `article`
