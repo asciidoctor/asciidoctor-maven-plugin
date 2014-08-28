@@ -1,6 +1,10 @@
 package org.asciidoctor.maven.test
 
+import groovy.io.FileType
+
+import org.apache.commons.io.FileUtils
 import org.asciidoctor.maven.AsciidoctorMojo
+
 import spock.lang.Specification
 
 /**
@@ -369,4 +373,374 @@ class AsciidoctorMojoTest extends Specification {
         text.contains("<p>Here&#8217;s an image:</p>")
         text.contains('<img src="data:image/jpg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/4gzESUNDX1BST0ZJTEUAAQEAAA')
     }
+
+    /**
+     * Tests CodeRay source code highlighting options.
+     */
+    def 'code highlighting - coderay'() {
+        setup:
+            File srcDir = new File('src/test/resources/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output-sourceHighlighting/coderay')
+
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = srcDir
+            mojo.outputDirectory = outputDir
+            mojo.sourceHighlighter = 'coderay'
+            mojo.sourceDocumentName = new File('main-document.adoc')
+            mojo.backend = 'html'
+            mojo.execute()
+
+        then:
+            File mainDocumentOutput = new File(outputDir, 'main-document.html')
+            String text = mainDocumentOutput.getText()
+            text.contains('CodeRay')
+    }   
+
+    /**
+     * Tests Highlight.js source code highlighting options.
+     */
+    def 'code highlighting - highlightjs'() {
+        setup:
+            File srcDir = new File('src/test/resources/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output-sourceHighlighting/highlightjs')
+
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = srcDir
+            mojo.outputDirectory = outputDir
+            mojo.sourceHighlighter = 'highlightjs'
+            mojo.sourceDocumentName = new File('main-document.adoc')
+            mojo.backend = 'html'
+            mojo.execute()
+
+        then:
+            File mainDocumentOutput = new File(outputDir, 'main-document.html')
+            String text = mainDocumentOutput.getText()
+            text.contains('highlight')
+    }
+
+    /**
+     * Tests Prettify source code highlighting options.
+     */
+    def 'code highlighting - prettify'() {
+        setup:
+            File srcDir = new File('src/test/resources/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output-sourceHighlighting/prettify')
+
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = srcDir
+            mojo.outputDirectory = outputDir
+            mojo.sourceHighlighter = 'prettify'
+            mojo.sourceDocumentName = new File('main-document.adoc')   
+            mojo.backend = 'html'
+            mojo.execute()
+
+        then:
+            File mainDocumentOutput = new File(outputDir, 'main-document.html')
+            String text = mainDocumentOutput.getText()
+            text.contains('prettify')
+    }
+
+    /**
+     * Tests (currenty not working) Pygments source code highlighting options.
+     *
+     * Test checks that an exception is thrown.
+     */
+    def 'code highlighting - pygments'() {
+        setup:
+            File srcDir = new File('src/test/resources/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output-sourceHighlighting/pygments')
+
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = srcDir
+            mojo.outputDirectory = outputDir
+            mojo.sourceHighlighter = 'pygments'
+            mojo.sourceDocumentName = new File('main-document.adoc')
+            mojo.backend = 'html'
+            mojo.execute()
+
+        then:
+            thrown(org.jruby.exceptions.RaiseException)
+    }
+
+    /**
+     * Tests behaviour when an invalid source code highlighting option is set.
+     *
+     * Test checks that no additional CSS are added.
+     */
+    def 'code highlighting - nonExistent'() {
+        setup:
+            File srcDir = new File('src/test/resources/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output-sourceHighlighting/nonExistent')
+
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = srcDir
+            mojo.outputDirectory = outputDir
+            mojo.sourceHighlighter = 'nonExistent'
+            mojo.sourceDocumentName = new File('main-document.adoc')
+            mojo.backend = 'html'
+            mojo.execute()
+
+        then:
+            File mainDocumentOutput = new File(outputDir, 'main-document.html')
+            String text = mainDocumentOutput.getText()
+            // No extra CSS is added other than AsciiDoctor's default
+            text.count('<style>') == 1
+    }
+    
+    /**
+     * Tests for relative folder structures treatment
+     */
+    static final FileFilter DIRECTORY_FILTER = {File f -> f.isDirectory()} as FileFilter
+    static final String ASCIIDOC_REG_EXP_EXTENSION = '.*\\.a((sc(iidoc)?)|d(oc)?)$'
+    
+    /**
+     * Validates that the folder structures under certain files are the same
+     *
+     * @param expected
+     *         list of expected folders
+     * @param actual
+     *         list of actual folders (the ones to validate)
+     */
+    private void assertEqualsStructure (File[] expected, File[] actual) {
+        assert expected.length == actual.length
+        assert expected*.name == actual*.name    
+        for (File actualFile in actual) {
+            File expectedFile = expected.find {it.getName() == actualFile.getName()}
+            assert expectedFile != null
+            
+            // check that at least the number of html files and asciidoc are the same in each folder
+            File[] expectedChildren =  expectedFile.listFiles(DIRECTORY_FILTER)
+            File[] htmls =  actualFile.listFiles({File f -> f.getName() ==~ /.+html/} as FileFilter)
+            if (htmls) {
+                File[] asciidocs =  expectedFile.listFiles({File f -> f.getName() ==~ ASCIIDOC_REG_EXP_EXTENSION} as FileFilter)
+                assert htmls.length == asciidocs.length
+            }
+            File[] actualChildren =  actualFile.listFiles(DIRECTORY_FILTER)
+            assertEqualsStructure(expectedChildren, actualChildren)
+        }
+    }
+
+    
+    /**
+     * Tests the behaviour when: 
+     *  - simple paths are used
+     *  - preserveDirectories = true
+     *  - relativeBaseDir = true
+     *  
+     *  Expected:
+     *   - all documents are rendered in the same folder structure found in the sourceDirectory
+     *   - all documents are correctly rendered with the import
+     */
+    def 'should replicate source structure-standard paths'() {
+        setup:
+            File srcDir = new File('src/test/resources/src/asciidoctor/relative-path-treatment')
+            File outputDir = new File('target/asciidoctor-output-relative')
+
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.backend = 'html5'
+            mojo.sourceDirectory = srcDir
+            mojo.outputDirectory = outputDir
+            mojo.imagesDir = '.'
+            mojo.preserveDirectories = true
+            mojo.relativeBaseDir = true
+            mojo.sourceHighlighter = 'prettify'
+            mojo.attributes = ['icons':'font']
+            mojo.execute()
+
+        then:
+            outputDir.list().toList().isEmpty() == false
+            assertEqualsStructure(srcDir.listFiles(DIRECTORY_FILTER), outputDir.listFiles(DIRECTORY_FILTER))
+            def asciidocs = []
+            outputDir.eachFileRecurse(FileType.FILES) {
+                if (it.getName() ==~ /.+html/) asciidocs << it
+            }
+            asciidocs.size() == 6
+            // Checks that all imports are found in the respective baseDir
+            for (File renderedFile in asciidocs) {
+                assert renderedFile.text.contains('Unresolved directive') == false
+            }
+        cleanup:
+            // Avoids false positives in other tests
+            FileUtils.deleteDirectory(outputDir)
+    }
+
+    /**
+     * Tests the behaviour when: 
+     *  - complex paths are used
+     *  - preserveDirectories = true
+     *  - relativeBaseDir = true
+     *  
+     *  Expected:
+     *   - all documents are rendered in the same folder structure found in the sourceDirectory
+     *   - all documents are correctly rendered with the import
+     */
+    def 'should replicate source structure-complex paths'() {
+        setup:
+            File srcDir = new File('src/test/resources/src/asciidoctor/relative-path-treatment/../relative-path-treatment')
+            File outputDir = new File('target/../target/asciidoctor-output-relative')
+
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.backend = 'html5'
+            mojo.sourceDirectory = srcDir
+            mojo.outputDirectory = outputDir
+            mojo.preserveDirectories = true
+            mojo.relativeBaseDir = true
+            mojo.sourceHighlighter = 'coderay'
+            mojo.attributes = ['icons':'font']
+            mojo.execute()
+        
+        then:
+            outputDir.list().toList().isEmpty() == false
+            outputDir.listFiles({File f -> f.getName().endsWith('html')} as FileFilter).length == 1
+            assertEqualsStructure(srcDir.listFiles(DIRECTORY_FILTER), outputDir.listFiles(DIRECTORY_FILTER))
+            def asciidocs = []
+            outputDir.eachFileRecurse(FileType.FILES) {
+                if (it.getName() ==~ /.+html/) asciidocs << it
+            }
+            asciidocs.size() == 6
+            // Checks that all imports are found in the respective baseDir
+            for (File renderedFile in asciidocs) {
+                assert renderedFile.text.contains('Unresolved directive') == false
+            }
+        cleanup:
+            // Avoid possible false positives in other tests
+            FileUtils.deleteDirectory(outputDir)
+    }
+
+    /**
+     * Tests the behaviour when: 
+     *  - complex paths are used
+     *  - preserveDirectories = false
+     *  - relativeBaseDir = false
+     *  
+     *  Expected:
+     *   - all documents are rendered in the same outputDirectory. 1 document is overwritten
+     *   - all documents but 1 (in the root) are incorrectly rendered because they cannot find the imported file
+     */
+    def 'should not replicate source structure-complex paths'() {
+        setup:
+            File srcDir = new File('src/test/resources/src/asciidoctor/relative-path-treatment/../relative-path-treatment')
+            File outputDir = new File('target/../target/asciidoctor-output-relative')
+
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.backend = 'html5'
+            mojo.sourceDirectory = srcDir
+            mojo.outputDirectory = outputDir
+            mojo.sourceHighlighter = 'coderay'
+            mojo.execute()
+
+        then:
+            outputDir.list().toList().isEmpty() == false
+            // 1 file is missing because 2 share the same name and 1 is overwritten in outputDirectory
+            def asciidocs  = outputDir.listFiles({File f -> f.getName().endsWith('html')} as FileFilter)
+			asciidocs.length == 5
+            // folders are copied anyway
+            assertEqualsStructure(srcDir.listFiles(DIRECTORY_FILTER), outputDir.listFiles(DIRECTORY_FILTER))
+			for (File renderedFile in asciidocs) {
+				if (renderedFile.getName() != 'HelloWorld.html') {
+					assert renderedFile.text.contains('Unresolved directive')
+				}
+			}
+        cleanup:
+            // Avoid possible false positives in other tests
+            FileUtils.deleteDirectory(outputDir)
+    }
+
+    /**
+     * Tests the behaviour when: 
+     *  - simple paths are used
+     *  - preserveDirectories = true
+     *  - relativeBaseDir = false
+     *  
+     *  Expected:
+     *   - all documents are rendered in the same folder structure found in the sourceDirectory
+     *   - all documents but 1 (in the root) are incorrectly rendered because they cannot find the imported file
+     */
+    def 'should replicate source structure-no baseDir rewrite'() {
+        setup:
+            File srcDir = new File('src/test/resources/src/asciidoctor/relative-path-treatment')
+            File outputDir = new File('target/asciidoctor-output-relative')
+
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.backend = 'html5'
+            mojo.sourceDirectory = srcDir
+            mojo.outputDirectory = outputDir
+            mojo.imagesDir = '.'
+            mojo.preserveDirectories = true
+			mojo.baseDir = srcDir
+            //mojo.relativeBaseDir = true
+            mojo.sourceHighlighter = 'prettify'
+            mojo.attributes = ['icons':'font']
+            mojo.execute()
+
+        then:
+            outputDir.list().toList().isEmpty() == false
+            assertEqualsStructure(srcDir.listFiles(DIRECTORY_FILTER), outputDir.listFiles(DIRECTORY_FILTER))
+            def asciidocs = []
+            outputDir.eachFileRecurse(FileType.FILES) {
+                if (it.getName() ==~ /.+html/) asciidocs << it
+            }
+            asciidocs.size() == 6
+            // Looks for import errors in all files but the one in the root folder
+            for (File renderedFile in asciidocs) {
+                if (renderedFile.getName() != 'HelloWorld.html') {
+                    assert renderedFile.text.contains('Unresolved directive')
+                }
+            }
+        
+        cleanup:
+            // Avoids false positives in other tests
+            FileUtils.deleteDirectory(outputDir)
+    }
+
+    /**
+     * Tests the behaviour when: 
+     *  - simple paths are used 
+     *  - preserveDirectories = false
+     *  - relativeBaseDir = true
+     *  
+     *  Expected: all documents are correctly rendered in the same folder 
+     */
+    def 'should not replicate source structure-baseDir rewrite'() {
+        setup:
+            File srcDir = new File('src/test/resources/src/asciidoctor/relative-path-treatment')
+            File outputDir = new File('target/asciidoctor-output-relative')
+
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.backend = 'html'
+            mojo.sourceDirectory = srcDir
+            mojo.outputDirectory = outputDir
+            mojo.imagesDir = '.'
+            mojo.preserveDirectories = false
+            mojo.relativeBaseDir = true
+            mojo.sourceHighlighter = 'prettify'
+            mojo.attributes = ['icons':'font']
+            mojo.execute()
+
+        then:
+            assertEqualsStructure(srcDir.listFiles(DIRECTORY_FILTER), outputDir.listFiles(DIRECTORY_FILTER))
+			// all files are rendered in the outputDirectory
+            def asciidocs = outputDir.listFiles({File f -> f.getName().endsWith('html')} as FileFilter)
+			// 1 file is missing because 2 share the same name and 1 is overwritten in outputDirectory
+            asciidocs.length == 5
+            // Checks that all imports are found correctly because baseDir is adapted for each file
+            for (File renderedFile in asciidocs) {
+                assert renderedFile.text.contains('Unresolved directive') == false
+            }
+        
+        cleanup:
+            // Avoids false positives in other tests
+            FileUtils.deleteDirectory(outputDir)
+    }
+
 }
