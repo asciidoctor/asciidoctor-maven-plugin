@@ -216,7 +216,10 @@ public class AsciidoctorMojo extends AbstractMojo {
              asciidoctor = Asciidoctor.Factory.create();
         }
         else {
-            asciidoctor = Asciidoctor.Factory.create(gemPath);
+            // Replace Windows path separator to avoid paths with mixed \ and /.
+            // This happens for instance when setting: <gemPath>${project.build.directory}/gems-provided</gemPath>
+            // because the project's path is converted to string.
+            asciidoctor = Asciidoctor.Factory.create(gemPath.replaceAll("\\\\", "/"));
         }
 
         String gemHome = JRubyRuntimeContext.get().evalScriptlet("ENV['GEM_HOME']").toString();
