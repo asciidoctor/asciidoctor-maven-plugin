@@ -508,7 +508,8 @@ class AsciidoctorMojoTest extends Specification {
      */
     private void assertEqualsStructure (File[] expected, File[] actual) {
         assert expected.length == actual.length
-        assert expected*.name == actual*.name    
+        expected*.name.containsAll(actual*.name)
+        actual*.name.containsAll(expected*.name) 
         for (File actualFile in actual) {
             File expectedFile = expected.find {it.getName() == actualFile.getName()}
             assert expectedFile != null
