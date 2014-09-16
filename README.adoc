@@ -4,6 +4,7 @@ asciidoctor-maven-plugin
 :asciidoctor-url: http://asciidoctor.org
 :issues: https://github.com/asciidoctor/asciidoctor-maven-plugin/issues
 :maven-url: http://maven.apache.org/
+:asciidoctor-maven-examples: https://github.com/asciidoctor/asciidoctor-maven-examples
 
 image:http://img.shields.io/travis/asciidoctor/asciidoctor-maven-plugin/master.svg["Build Status", link="https://travis-ci.org/asciidoctor/asciidoctor-maven-plugin"]
 
@@ -86,8 +87,10 @@ templateDir:: disabled by default, defaults to `null`
 templateEngine:: disabled by default
 sourceHighlighter:: enables and sets the source highlighter (currently `coderay` or `highlightjs` are supported)
 attributes:: a `Map<String,Object>` of attributes to pass to Asciidoctor, defaults to `null`
-extensions:: a `List<String>` of non-standard extensions to render. Currently ad, adoc, and asciidoc will be rendered by default.
+extensions:: a `List<String>` of non-standard extensions to render. Currently ad, adoc, and asciidoc will be rendered by default
 embedAssets:: Embedd the CSS file, etc into the output, defaults to `false`
+gemPaths:: enables to specify the location to one or more gem installation directories (same as GEM_PATH environment var), `empty` by default
+requires:: a `List<String>` to specify additional Ruby libraries not packaged in AsciidoctorJ, `empty` by default
 
 ==== Builtin attributes
 
@@ -141,6 +144,10 @@ The custom Asciidoc property then be used in the document like this `Version: {d
 ==== Setting boolean values
 
 Boolean attributes in asciidoctor, such as `numbered`, `toc`, `copycss` or `linkcss!` can be set with a value of `true` or unset (in the case of `linkcss` vs `linkcss!`) with a value of false.
+
+==== Examples
+
+You can find more information and many examples ready to copy-paste in the {asciidoctor-maven-examples}[asciidoctor-maven-examples] project.
 
 === Multiple outputs for the same file
 
