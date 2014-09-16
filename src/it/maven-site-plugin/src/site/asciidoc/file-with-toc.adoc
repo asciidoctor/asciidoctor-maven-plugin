@@ -1,0 +1,17 @@
+= Maven Site Plugin Test
+:toc:
+:idprefix: a_
+
+This is an example file to test asciidoctor-maven-plugin with maven-site-plugin.
+
+= First section
+This is the first section of the page.
+
+== Sub section
+This is a subsection of the first section
+
+= Second section
+This is the first section of the page.
+
+== Sub section
+This is a subsection of the second section.
