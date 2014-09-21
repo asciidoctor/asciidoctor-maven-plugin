@@ -51,7 +51,7 @@ public class AsciidoctorParser extends XhtmlParser {
             // NOTE we have to generate a full document, but we unset stylesheet to keep framing minimal
             String result = asciidoctorInstance.render(IOUtil.toString(source),
                         OptionsBuilder.options().headerFooter(true).safe(SafeMode.UNSAFE).backend("xhtml")
-                        .attributes(AttributesBuilder.attributes().unsetStyleSheet().asMap()).asMap());
+                        .attributes(AttributesBuilder.attributes().unsetStyleSheet().attribute("idprefix", "a_").asMap()).asMap());
             // prevent site plugin from breaking font-based icon syntax
             result = result.replaceAll("<i class=\"fa icon-([^\"]+)\"([^>]*)></i>", "<span class=\"fa icon-$1\"$2></span>");
             super.parse(new StringReader(result), sink);
