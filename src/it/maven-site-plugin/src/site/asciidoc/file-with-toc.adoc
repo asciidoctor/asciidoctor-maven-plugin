@@ -1,6 +1,5 @@
 = Maven Site Plugin Test
 :toc:
-:idprefix: a_
 
 This is an example file to test asciidoctor-maven-plugin with maven-site-plugin.
 

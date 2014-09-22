@@ -1,10 +1,21 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 File outputDir = new File( basedir, "target/site" );
 
 String[] expectedFiles = {
 	"file-with-toc.html"
 };
+
+Pattern tocEntry = Pattern.compile("<li><a href=\"#(.*?)\">.*");
+Pattern elementIdPattern = Pattern.compile(".* id=\"(.*?)\".*");
+Matcher matcher = null;
 
 for ( String expectedFile : expectedFiles )
 {
@@ -13,6 +24,31 @@ for ( String expectedFile : expectedFiles )
     if ( !file.isFile() )
     {
         throw new Exception( "Missing file " + file );
+    }
+
+    System.out.println("Ensuring that id's match TOC links");
+    List lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
+
+    List tocEntries = new ArrayList();
+
+    for (String line : lines) {
+
+        matcher = tocEntry.matcher(line);
+        if (matcher.matches()) {
+            tocEntries.add(matcher.group(1));
+        }
+
+        matcher = elementIdPattern.matcher(line);
+        if (matcher.matches()) {
+            String elementId = matcher.group(1);
+            if (tocEntries.contains(elementId)) {
+                tocEntries.remove(tocEntries.indexOf(elementId));
+            }
+        }
+    }
+
+    if (tocEntries.size() != 0) {
+        throw new Exception("Couldn't find matching ids for the following TOC entries: " + tocEntries);
     }
 }
 
