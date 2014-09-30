@@ -77,7 +77,7 @@
         <plexus.component.metadata.version>1.5.5</plexus.component.metadata.version>
         <netty.version>4.0.0.CR1</netty.version>
         <commons.io.version>2.4</commons.io.version>
-        <doxia.version>1.4</doxia.version>
+        <doxia.version>1.6</doxia.version>
         <gmaven.version>1.5</gmaven.version>
     </properties>
 
