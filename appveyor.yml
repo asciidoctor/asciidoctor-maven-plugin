@@ -8,6 +8,7 @@ environment:
 install:
   - ps: >-
       $MVNDIR = 'C:\bin\apache-maven-3.2.3\'
+
       if(!(Test-Path -Path $MVNDIR )){
         Write-Host (Test-Path -Path $MVNDIR)
         Write-Host 'Installing Maven'
