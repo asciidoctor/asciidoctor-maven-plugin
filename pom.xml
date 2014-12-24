@@ -241,7 +241,7 @@
             <plugin>
               <groupId>org.eclipse.m2e</groupId>
               <artifactId>lifecycle-mapping</artifactId>
-              <version>${lifecycle.mapping.version}</version>
+              <version>1.0.0</version>
               <configuration>
                 <lifecycleMappingMetadata>
                   <pluginExecutions>
@@ -252,6 +252,32 @@
                         <versionRange>[${gmaven.version},)</versionRange>
                         <goals>
                           <goal>testCompile</goal>
+                        </goals>
+                      </pluginExecutionFilter>
+                      <action>
+                        <execute />
+                      </action>
+                    </pluginExecution>
+                    <pluginExecution>
+                      <pluginExecutionFilter>
+                        <groupId>org.codehaus.plexus</groupId>
+                        <artifactId>plexus-component-metadata</artifactId>
+                        <versionRange>[${plexus.component.metadata.version},)</versionRange>
+                        <goals>
+                          <goal>generate-metadata</goal>
+                        </goals>
+                      </pluginExecutionFilter>
+                      <action>
+                        <execute />
+                      </action>
+                    </pluginExecution>
+                    <pluginExecution>
+                      <pluginExecutionFilter>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-plugin-plugin</artifactId>
+                        <versionRange>[${maven.plugin.plugin.version},)</versionRange>
+                        <goals>
+                          <goal>descriptor</goal>
                         </goals>
                       </pluginExecutionFilter>
                       <action>
