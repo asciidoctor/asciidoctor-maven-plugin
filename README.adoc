@@ -144,6 +144,15 @@ This is done by creating a custom Asciidoc property in the `attributes` section 
 
 The custom Asciidoc property then be used in the document like this `Version: {docVersion}`.
 
+[NOTE]
+====
+If you want to have the project version as the revision number of the document, use this construct:
+
+ :revnumber: {project-version}
+
+This will make the version number appear in the header and footer of the output.
+====
+
 ==== Setting boolean values
 
 Boolean attributes in asciidoctor, such as `numbered`, `toc`, `copycss` or `linkcss!` can be set with a value of `true` or unset (in the case of `linkcss` vs `linkcss!`) with a value of false.
