@@ -142,7 +142,7 @@ This is done by creating a custom Asciidoc property in the `attributes` section 
 </attributes>
 ----
 
-The custom Asciidoc property then be used in the document like this `Version: {docVersion}`.
+The custom Asciidoc property can then be used in the document like this `Version: {docVersion}`.
 
 [NOTE]
 ====
