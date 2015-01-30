@@ -744,4 +744,27 @@ class AsciidoctorMojoTest extends Specification {
             FileUtils.deleteDirectory(outputDir)
     }
 
+    def 'project-version test'()
+    {
+        given:
+            File srcDir = new File( 'target/test-classes/src/asciidoctor' )
+            File outputDir = new File( 'target/asciidoctor-output-project-version-test' )
+
+            if (!outputDir.exists()) {
+                outputDir.mkdir()
+            }
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = srcDir
+            mojo.outputDirectory = outputDir
+            mojo.sourceDocumentName = new File( 'project-version.adoc' )
+            mojo.backend = 'html'
+            mojo.attributes['project-version'] = "1.0-SNAPSHOT"
+            mojo.execute()
+        then:
+            File mainDocumentOutput = new File( outputDir, 'project-version.html' )
+            String text = mainDocumentOutput.getText()
+            assert text =~ /[vV]ersion 1\.0-SNAPSHOT/
+            text.contains( "This is the project version: 1.0-SNAPSHOT" )
+    }
 }

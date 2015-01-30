@@ -142,7 +142,16 @@ This is done by creating a custom Asciidoc property in the `attributes` section 
 </attributes>
 ----
 
-The custom Asciidoc property then be used in the document like this `Version: {docVersion}`.
+The custom Asciidoc property can then be used in the document like this `Version: {docVersion}`.
+
+[NOTE]
+====
+If you want to have the project version as the revision number of the document, use this construct:
+
+ :revnumber: {project-version}
+
+This will make the version number appear in the header and footer of the output.
+====
 
 ==== Setting boolean values
 
