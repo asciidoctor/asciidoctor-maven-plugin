@@ -89,10 +89,44 @@ templateDir:: disabled by default, defaults to `null`
 templateEngine:: disabled by default
 sourceHighlighter:: enables and sets the source highlighter (currently `coderay` or `highlightjs` are supported)
 attributes:: a `Map<String,Object>` of attributes to pass to Asciidoctor, defaults to `null`
-extensions:: a `List<String>` of non-standard extensions to render. Currently ad, adoc, and asciidoc will be rendered by default
+fileExtensions:: (named `extensions` in v1.5.3 and before) a `List<String>` of non-standard file extensions to render. Currently ad, adoc, and asciidoc will be rendered by default
 embedAssets:: Embedd the CSS file, etc into the output, defaults to `false`
 gemPaths:: enables to specify the location to one or more gem installation directories (same as GEM_PATH environment var), `empty` by default
 requires:: a `List<String>` to specify additional Ruby libraries not packaged in AsciidoctorJ, `empty` by default
+extensions:: `List of extensions` to include during the conversion process (see link:https://github.com/asciidoctor/asciidoctorj/blob/master/README.adoc#extension-api[AsciidoctorJ's Extension API] for information about the available options). For each extension, the implementation class must be specified in the `className` parameter, the `blockName` is only required when configuring a _BlockProcessor_, _BlockMacroProcessor_ or _InlineMacroProcessor_. Here follows a configuration example:
+
+[source,xml]
+----
+  <plugin>
+    . . . 
+      <executions>
+          <execution>
+              <configuration>
+                . . .
+                  <extensions>
+                      <extension>
+                          <className>org.asciidoctor.maven.SomePreprocessor</className>
+                      </extension>
+                      <extension>
+                          <className>org.asciidoctor.maven.SomeBlockProcessor</className>
+                          <blockName>yell</blockName>
+                      </extension>
+                  </extensions>
+              </configuration>
+          </execution>
+      </executions>
+      <dependencies>
+          <dependency> <1>
+              <groupId>org.asciidoctor.maven</groupId>
+              <artifactId>my-asciidoctor-extensions</artifactId>
+              <version>0.1.0</version>
+          </dependency>
+      </dependencies>
+  </plugin>
+----
+<1> Note that processors must be included in the plugin's execution classpath, not in the project's.
+
+NOTE: Extensions can also be integrated through the SPI interface implementation. This method does not require any configuration in the `pom.xml`, see link:https://github.com/asciidoctor/asciidoctorj#extension-spi[Extension SPI] for details.
 
 ==== Builtin attributes
 

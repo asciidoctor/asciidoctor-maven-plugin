@@ -38,10 +38,13 @@ import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.internal.RubyUtils;
+import org.asciidoctor.maven.extensions.AsciidoctorJExtensionRegistry;
+import org.asciidoctor.maven.extensions.ExtensionConfiguration;
+import org.asciidoctor.maven.extensions.ExtensionRegistry;
 
 
 /**
- * Basic maven plugin to render Asciidoc files using Asciidoctor, a ruby port.
+ * Basic maven plugin to render AsciiDoc files using Asciidoctor, a ruby port.
  */
 @Mojo(name = "process-asciidoc")
 public class AsciidoctorMojo extends AbstractMojo {
@@ -115,9 +118,12 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "synchronizations", required = false)
     protected List<Synchronization> synchronizations = new ArrayList<Synchronization>();
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "extensions")
-    protected List<String> extensions = new ArrayList<String>();
+    @Parameter(property = AsciidoctorMaven.PREFIX + "fileExtensions")
+    protected List<String> fileExtensions = new ArrayList<String>();
 
+    @Parameter(property = AsciidoctorMaven.PREFIX + "extensions")
+    protected List<ExtensionConfiguration> extensions = new ArrayList<ExtensionConfiguration>();
+    
     @Parameter(property = AsciidoctorMaven.PREFIX + "embedAssets")
     protected boolean embedAssets = false;
 
@@ -155,6 +161,15 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         optionsBuilder.attributes(attributesBuilder.get());
 
+        ExtensionRegistry extensionRegistry = new AsciidoctorJExtensionRegistry(asciidoctorInstance);
+        for (ExtensionConfiguration extension: extensions) {
+            try {
+                extensionRegistry.register(extension.getClassName(), extension.getBlockName());
+            } catch (Exception e) {
+                throw new MojoExecutionException(e.getMessage(), e);
+            }
+        }
+        
         if (sourceDocumentName == null) {
             for (final File f : scanSourceFiles()) {
                 setDestinationPaths(optionsBuilder, f);
@@ -235,11 +250,11 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     private List<File> scanSourceFiles() {
         final List<File> asciidoctorFiles;
-        if (extensions == null || extensions.isEmpty()) {
+        if (fileExtensions == null || fileExtensions.isEmpty()) {
             final DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker(sourceDirectory.getAbsolutePath());
             asciidoctorFiles = directoryWalker.scan();
         } else {
-            final DirectoryWalker directoryWalker = new CustomExtensionDirectoryWalker(sourceDirectory.getAbsolutePath(), extensions);
+            final DirectoryWalker directoryWalker = new CustomExtensionDirectoryWalker(sourceDirectory.getAbsolutePath(), fileExtensions);
             asciidoctorFiles = directoryWalker.scan();
         }
         String absoluteSourceDirectory = sourceDirectory.getAbsolutePath();
@@ -454,12 +469,12 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.title = title;
     }
 
-    public List<String> getExtensions() {
-        return extensions;
+    public List<String> getFileExtensions() {
+        return fileExtensions;
     }
 
-    public void setExtensions(final List<String> extensions) {
-        this.extensions = extensions;
+    public void setFileExtensions(final List<String> fileExtensions) {
+        this.fileExtensions = fileExtensions;
     }
 
     public String getEruby() {
@@ -548,20 +563,28 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setRelativeBaseDir(boolean relativeBaseDir) {
         this.relativeBaseDir = relativeBaseDir;
+    }    
+    
+    public List<ExtensionConfiguration> getExtensions() {
+        return extensions;
+    }
+
+    public void setExtensions(List<ExtensionConfiguration> extensions) {
+        this.extensions = extensions;
     }
 
     private static class CustomExtensionDirectoryWalker extends AbstractDirectoryWalker {
-        private final List<String> extensions;
+        private final List<String> fileExtensions;
 
         public CustomExtensionDirectoryWalker(final String absolutePath, final List<String> extensions) {
             super(absolutePath);
-            this.extensions = extensions;
+            this.fileExtensions = extensions;
         }
 
         @Override
         protected boolean isAcceptedFile(final File filename) {
             final String name = filename.getName();
-            for (final String extension : extensions) {
+            for (final String extension : fileExtensions) {
                 if (name.endsWith(extension)) {
                     return true;
                 }
@@ -571,16 +594,16 @@ public class AsciidoctorMojo extends AbstractMojo {
     }
 
     private static class NonAsciiDocExtensionFileFilter implements FileFilter {
-        private final List<String> extensions;
+        private final List<String> fileExtensions;
 
         public NonAsciiDocExtensionFileFilter() {
-            this.extensions = java.util.Arrays.asList("ad", "adoc", "asciidoc");
+            this.fileExtensions = java.util.Arrays.asList("ad", "adoc", "asciidoc");
         }
 
         @Override
         public boolean accept(File pathname) {
             final String name = pathname.getName();
-            for (final String extension : extensions) {
+            for (final String extension : fileExtensions) {
                 if (name.endsWith(extension)) {
                     return false;
                 }
