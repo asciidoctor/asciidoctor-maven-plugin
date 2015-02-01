@@ -38,6 +38,9 @@ import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.internal.JRubyRuntimeContext;
 import org.asciidoctor.internal.RubyUtils;
+import org.asciidoctor.maven.processors.AsciidoctorJProcessorRegistry;
+import org.asciidoctor.maven.processors.ProcessorConfiguration;
+import org.asciidoctor.maven.processors.ProcessorRegistry;
 
 
 /**
@@ -118,6 +121,9 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "extensions")
     protected List<String> extensions = new ArrayList<String>();
 
+    @Parameter(property = AsciidoctorMaven.PREFIX + "processors")
+    protected List<ProcessorConfiguration> processors = new ArrayList<ProcessorConfiguration>();
+    
     @Parameter(property = AsciidoctorMaven.PREFIX + "embedAssets")
     protected boolean embedAssets = false;
 
@@ -155,6 +161,16 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         optionsBuilder.attributes(attributesBuilder.get());
 
+        ProcessorRegistry processorRegistry = new AsciidoctorJProcessorRegistry(asciidoctorInstance);
+        for (ProcessorConfiguration processor: processors) {
+            try {
+                processorRegistry.register(processor.getClassName(), processor.getBlockName());
+            } catch (Exception e) {
+                throw new MojoExecutionException(e.getMessage(), e);
+            }
+        }
+        
+        
         if (sourceDocumentName == null) {
             for (final File f : scanSourceFiles()) {
                 setDestinationPaths(optionsBuilder, f);
@@ -548,6 +564,14 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setRelativeBaseDir(boolean relativeBaseDir) {
         this.relativeBaseDir = relativeBaseDir;
+    }    
+    
+    public List<ProcessorConfiguration> getProcessors() {
+        return processors;
+    }
+
+    public void setProcessors(List<ProcessorConfiguration> processors) {
+        this.processors = processors;
     }
 
     private static class CustomExtensionDirectoryWalker extends AbstractDirectoryWalker {
