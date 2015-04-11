@@ -32,7 +32,7 @@ As this is a typical Maven plugin, there isn't much to do to use it, simply add 
 ...
 ----
 
-<1> As this plugin tracks the version of asciidoctor, you can use which every version of asciidoctor you prefer
+<1> As this plugin tracks the version of asciidoctor, you can use whichever version of asciidoctor you prefer
 
 == Usage
 
