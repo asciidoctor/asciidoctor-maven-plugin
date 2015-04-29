@@ -159,6 +159,10 @@ Boolean attributes in asciidoctor, such as `numbered`, `toc`, `copycss` or `link
 
 ==== Examples
 
+In the `attributes` part of your ascidoctor-maven-plugin : 
+
+<numbered>true</numbered>
+
 You can find more information and many examples ready to copy-paste in the {asciidoctor-maven-examples}[asciidoctor-maven-examples] project.
 
 === Multiple outputs for the same file
