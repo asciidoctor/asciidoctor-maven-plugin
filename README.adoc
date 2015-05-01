@@ -159,6 +159,10 @@ Boolean attributes in asciidoctor, such as `numbered`, `toc`, `copycss` or `link
 
 ==== Examples
 
+In the `attributes` part of your ascidoctor-maven-plugin : 
+
+<numbered>true</numbered>
+
 You can find more information and many examples ready to copy-paste in the {asciidoctor-maven-examples}[asciidoctor-maven-examples] project.
 
 === Multiple outputs for the same file
@@ -291,4 +295,32 @@ http://spockframework.org/(Spock) is used for testing the calling of the Mojo. T
  mvn clean test
 
 Or any of the other goals which run tests. If I can figure out a good way to setup a ruby testing environment I'll do that as well, but none exists at this time.
+
+== Tips & Tricks
+
+=== Generate your documentation in separate folders for your different versions
+
+[source, xml]
+-----
+<configuration>
+...
+  <outputDirectory>target/generated-docs/${project.version}</outputDirectory>
+...
+</configuration>
+-----
+
+=== Add numbers to your titles
+
+[source, xml]
+-----
+<configuration>
+...
+  <attributes>
+  ...
+    <numbered>true</numbered>
+  ...
+  </attributes>
+...
+</configuration>
+-----
 
