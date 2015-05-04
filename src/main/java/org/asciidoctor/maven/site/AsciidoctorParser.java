@@ -11,20 +11,19 @@
  */
 package org.asciidoctor.maven.site;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-
 import org.apache.maven.doxia.module.xhtml.XhtmlParser;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
+
+import java.io.IOException;
+import java.io.Reader;
 
 /**
  * This class is used by the Doxia framework to handle the actual parsing of the
@@ -40,6 +39,7 @@ public class AsciidoctorParser extends XhtmlParser {
      * The role hint for the {@link AsciiDoctorParser} Plexus component.
      */
     public static final String ROLE_HINT = "asciidoc";
+
     protected final Asciidoctor asciidoctorInstance = Asciidoctor.Factory.create();
 
     /**
@@ -50,11 +50,10 @@ public class AsciidoctorParser extends XhtmlParser {
         try {
             // NOTE we have to generate a full document, but we unset stylesheet to keep framing minimal
             String result = asciidoctorInstance.render(IOUtil.toString(source),
-                        OptionsBuilder.options().headerFooter(true).safe(SafeMode.UNSAFE).backend("xhtml")
-                        .attributes(AttributesBuilder.attributes().unsetStyleSheet().attribute("idprefix", "a_").asMap()).asMap());
-            // prevent site plugin from breaking font-based icon syntax
-            result = result.replaceAll("<i class=\"fa icon-([^\"]+)\"([^>]*)></i>", "<span class=\"fa icon-$1\"$2></span>");
-            super.parse(new StringReader(result), sink);
+                                                       OptionsBuilder.options().headerFooter(false).safe(SafeMode.UNSAFE).backend("xhtml").attributes(
+                                                                       AttributesBuilder.attributes().unsetStyleSheet().attribute("idprefix",
+                                                                                                                                  "a_").asMap()).asMap());
+            sink.rawText(result);
         } catch (IOException ex) {
             getLog().error(ex.getLocalizedMessage());
         }
