@@ -1,9 +1,8 @@
-asciidoctor-maven-plugin
-========================
+= Asciidoctor Maven Plugin
 :asciidoc-url: http://asciidoc.org
 :asciidoctor-url: http://asciidoctor.org
 :issues: https://github.com/asciidoctor/asciidoctor-maven-plugin/issues
-:maven-url: http://maven.apache.org/
+:maven-url: http://maven.apache.org
 :asciidoctor-maven-examples: https://github.com/asciidoctor/asciidoctor-maven-examples
 :project-full-path: asciidoctor/asciidoctor-maven-plugin
 
@@ -176,7 +175,7 @@ An example of this setup is below:
 <plugin>
     <groupId>org.asciidoctor</groupId>
     <artifactId>asciidoctor-maven-plugin</artifactId>
-    <version>0.1.4</version>
+    <version>${asciidoctor.version}</version>
     <executions>
         <execution>
             <id>output-html</id>
