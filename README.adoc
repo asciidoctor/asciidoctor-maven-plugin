@@ -65,6 +65,7 @@ There are several configuration options that the asciidoctor-maven-plugin uses, 
 
 sourceDirectory:: defaults to `${basedir}/src/main/asciidoc`
 sourceDocumentName:: an override to process a single source file; defaults to all files in `${sourceDirectory}`
+sourceDocumentExtensions:: (named `extensions` in v1.5.3 and below) a `List<String>` of non-standard file extensions to render. Currently ad, adoc, and asciidoc will be rendered by default
 outputDirectory:: defaults to `${project.build.directory}/generated-docs`
 baseDir:: (not maven's basedir) enables to set the root path for resouces (e.g. included files), defaults to `${sourceDirectory}`
 preserveDirectories:: enables to specify whether the documents should be rendered in the same folder structure as in the source directory or not, defaults to `false`.
@@ -89,11 +90,9 @@ templateDir:: disabled by default, defaults to `null`
 templateEngine:: disabled by default
 sourceHighlighter:: enables and sets the source highlighter (currently `coderay` or `highlightjs` are supported)
 attributes:: a `Map<String,Object>` of attributes to pass to Asciidoctor, defaults to `null`
-fileExtensions:: (named `extensions` in v1.5.3 and before) a `List<String>` of non-standard file extensions to render. Currently ad, adoc, and asciidoc will be rendered by default
 embedAssets:: Embedd the CSS file, etc into the output, defaults to `false`
 gemPaths:: enables to specify the location to one or more gem installation directories (same as GEM_PATH environment var), `empty` by default
 requires:: a `List<String>` to specify additional Ruby libraries not packaged in AsciidoctorJ, `empty` by default
-<<<<<<< HEAD
 extensions:: `List of extensions` to include during the conversion process (see link:https://github.com/asciidoctor/asciidoctorj/blob/master/README.adoc#extension-api[AsciidoctorJ's Extension API] for information about the available options). For each extension, the implementation class must be specified in the `className` parameter, the `blockName` is only required when configuring a _BlockProcessor_, _BlockMacroProcessor_ or _InlineMacroProcessor_. Here follows a configuration example:
 
 [source,xml]
@@ -128,42 +127,6 @@ extensions:: `List of extensions` to include during the conversion process (see 
 <1> Note that processors must be included in the plugin's execution classpath, not in the project's.
 
 NOTE: Extensions can also be integrated through the SPI interface implementation. This method does not require any configuration in the `pom.xml`, see link:https://github.com/asciidoctor/asciidoctorj#extension-spi[Extension SPI] for details.
-=======
-processors:: `List of processors` to include during the conversion process (see link:https://github.com/asciidoctor/asciidoctorj/blob/master/README.adoc#extension-api[AsciidoctorJ's Extension API] for information about the available options). For each processor, the implementation class must be specified in the `className` parameter, the `blockName` is only required when configuring a _BlockProcessor_, _BlockMacroProcessor_ or _InlineMacroProcessor_. Here follows a configuration example:
-
-[source,xml]
-----
-  <plugin>
-    . . . 
-      <executions>
-          <execution>
-              <configuration>
-                . . .
-                  <processors>
-                      <processor>
-                          <className>org.asciidoctor.maven.SomePreprocessor</className>
-                      </processor>
-                      <processor>
-                          <className>org.asciidoctor.maven.SomeBlockProcessor</className>
-                          <blockName>yell</blockName>
-                      </processor>
-                  </processors>
-              </configuration>
-          </execution>
-      </executions>
-      <dependencies>
-          <dependency> <1>
-              <groupId>org.asciidoctor.maven</groupId>
-              <artifactId>my-asciidoctor-processors</artifactId>
-              <version>0.1.0</version>
-          </dependency>
-      </dependencies>
-  </plugin>
-----
-<1> Note that processors must be included in the plugin's execution classpath, not in the project's. 
-
-NOTE: Processors can also be integrated through the SPI interface implementation. This method does not require any configuration in the `pom.xml`, see link:https://github.com/asciidoctor/asciidoctorj#extension-spi[Extension SPI] for details.
->>>>>>> refs/remotes/origin/master
 
 ==== Builtin attributes
 

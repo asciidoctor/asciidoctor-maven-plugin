@@ -96,7 +96,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.backend = 'html'
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.fileExtensions = [ 'foo', 'bar' ]
+            mojo.sourceDocumentExtensions = [ 'foo', 'bar' ]
             mojo.execute()
 
         then: 'sample1.html and sample2.html exist and contain the extension of the original file'

@@ -115,11 +115,11 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDocumentName", required = false)
     protected String sourceDocumentName;
 
+    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDocumentExtensions")
+    protected List<String> sourceDocumentExtensions = new ArrayList<String>();
+
     @Parameter(property = AsciidoctorMaven.PREFIX + "synchronizations", required = false)
     protected List<Synchronization> synchronizations = new ArrayList<Synchronization>();
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + "fileExtensions")
-    protected List<String> fileExtensions = new ArrayList<String>();
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "extensions")
     protected List<ExtensionConfiguration> extensions = new ArrayList<ExtensionConfiguration>();
@@ -250,11 +250,11 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     private List<File> scanSourceFiles() {
         final List<File> asciidoctorFiles;
-        if (fileExtensions == null || fileExtensions.isEmpty()) {
+        if (sourceDocumentExtensions == null || sourceDocumentExtensions.isEmpty()) {
             final DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker(sourceDirectory.getAbsolutePath());
             asciidoctorFiles = directoryWalker.scan();
         } else {
-            final DirectoryWalker directoryWalker = new CustomExtensionDirectoryWalker(sourceDirectory.getAbsolutePath(), fileExtensions);
+            final DirectoryWalker directoryWalker = new CustomExtensionDirectoryWalker(sourceDirectory.getAbsolutePath(), sourceDocumentExtensions);
             asciidoctorFiles = directoryWalker.scan();
         }
         String absoluteSourceDirectory = sourceDirectory.getAbsolutePath();
@@ -469,12 +469,12 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.title = title;
     }
 
-    public List<String> getFileExtensions() {
-        return fileExtensions;
+    public List<String> getSourceDocumentExtensions() {
+        return sourceDocumentExtensions;
     }
 
-    public void setFileExtensions(final List<String> fileExtensions) {
-        this.fileExtensions = fileExtensions;
+    public void setSourceDocumentExtensions(final List<String> sourceDocumentExtensions) {
+        this.sourceDocumentExtensions = sourceDocumentExtensions;
     }
 
     public String getEruby() {
@@ -576,9 +576,9 @@ public class AsciidoctorMojo extends AbstractMojo {
     private static class CustomExtensionDirectoryWalker extends AbstractDirectoryWalker {
         private final List<String> fileExtensions;
 
-        public CustomExtensionDirectoryWalker(final String absolutePath, final List<String> extensions) {
+        public CustomExtensionDirectoryWalker(final String absolutePath, final List<String> fileExtensions) {
             super(absolutePath);
-            this.fileExtensions = extensions;
+            this.fileExtensions = fileExtensions;
         }
 
         @Override
