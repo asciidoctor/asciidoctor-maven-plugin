@@ -123,7 +123,7 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "extensions")
     protected List<ExtensionConfiguration> extensions = new ArrayList<ExtensionConfiguration>();
-    
+
     @Parameter(property = AsciidoctorMaven.PREFIX + "embedAssets")
     protected boolean embedAssets = false;
 
