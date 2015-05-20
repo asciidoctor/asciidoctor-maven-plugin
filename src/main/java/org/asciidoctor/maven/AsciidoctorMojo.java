@@ -139,7 +139,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
-            getLog().info( "Asciidoctor generation is skipped." );
+            getLog().info("AsciiDoc processing is skipped.");
             return;
         }
         ensureOutputExists();
