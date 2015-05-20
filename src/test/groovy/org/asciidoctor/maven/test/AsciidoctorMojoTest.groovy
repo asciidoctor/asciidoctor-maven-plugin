@@ -346,6 +346,24 @@ class AsciidoctorMojoTest extends Specification {
             text.contains('This is an included file.')
     }
 
+    def 'skip'() {
+        given:
+            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output-skip-test')
+            if (outputDir.exists())
+                outputDir.delete()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = srcDir
+            mojo.outputDirectory = outputDir
+            mojo.sourceDocumentName = new File('main-document.adoc')
+            mojo.backend = 'html'
+            mojo.skip = true
+            mojo.execute()
+        then:
+            !outputDir.exists()
+    }
+
     def 'issue-78'() {
         given:
         File srcDir = new File('target/test-classes/src/asciidoctor/issue-78')

@@ -73,6 +73,9 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "baseDir", required = false)
     protected File baseDir;
 
+    @Parameter(property = AsciidoctorMaven.PREFIX + "skip", required = false)
+    protected boolean skip = false;
+
     @Parameter(property = AsciidoctorMaven.PREFIX + "gemPath", defaultValue = "", required = false)
     protected String gemPath = "";
 
@@ -135,6 +138,10 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+        if (skip) {
+            getLog().info("AsciiDoc processing is skipped.");
+            return;
+        }
         ensureOutputExists();
 
         final Asciidoctor asciidoctorInstance = getAsciidoctorInstance(gemPath);
@@ -395,6 +402,14 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setBackend(String backend) {
         this.backend = backend;
+    }
+
+    public boolean isSkip() {
+        return skip;
+    }
+
+    public void setSkip(boolean skip) {
+        this.skip = skip;
     }
 
     public String getDoctype() {

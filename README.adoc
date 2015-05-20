@@ -68,6 +68,7 @@ sourceDocumentName:: an override to process a single source file; defaults to al
 sourceDocumentExtensions:: (named `extensions` in v1.5.3 and below) a `List<String>` of non-standard file extensions to render. Currently ad, adoc, and asciidoc will be rendered by default
 outputDirectory:: defaults to `${project.build.directory}/generated-docs`
 baseDir:: (not maven's basedir) enables to set the root path for resouces (e.g. included files), defaults to `${sourceDirectory}`
+skip:: set this to `true` to bypass generation, defaults to `false`
 preserveDirectories:: enables to specify whether the documents should be rendered in the same folder structure as in the source directory or not, defaults to `false`.
 When `true`, instead of generating all output in a single folder, output files are generated in the same structure. See the following example
 [source]
