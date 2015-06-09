@@ -36,7 +36,7 @@ import java.io.Reader;
 public class AsciidoctorParser extends XhtmlParser {
 
     /**
-     * The role hint for the {@link AsciiDoctorParser} Plexus component.
+     * The role hint for the {@link AsciidoctorParser} Plexus component.
      */
     public static final String ROLE_HINT = "asciidoc";
 
