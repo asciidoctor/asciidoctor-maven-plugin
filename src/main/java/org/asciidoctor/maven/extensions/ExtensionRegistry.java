@@ -9,6 +9,7 @@ public interface ExtensionRegistry {
      * class and if it can be found in the classpath
      * 
      * @param extensionClassName
+     *             fully qualified name of the class implementing the extension
      * @param blockName
      *            required when declaring
      * 
