@@ -324,7 +324,7 @@ Standard Maven build:
 
 == Testing
 
-http://spockframework.org/(Spock) is used for testing the calling of the Mojo. This will be downloaded by Maven. Tests are run simply by:
+http://spockframework.org/[Spock] is used for testing the calling of the Mojo. This will be downloaded by Maven. Tests are run simply by:
 
  mvn clean test
 
