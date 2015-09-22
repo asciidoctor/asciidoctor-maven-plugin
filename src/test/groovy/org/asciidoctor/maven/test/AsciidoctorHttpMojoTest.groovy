@@ -26,6 +26,8 @@ class AsciidoctorHttpMojoTest extends Specification {
             System.setOut(new PrintStream(newOut))
             System.setIn(newIn)
 
+            def httpPort = new AsciidoctorMojoTestHelper().availablePort
+
             def content = new File(srcDir, "content.asciidoc")
             content.withWriter{ it <<
                 '''Document Title
@@ -35,6 +37,7 @@ class AsciidoctorHttpMojoTest extends Specification {
 
             def mojo = new AsciidoctorHttpMojo()
             mojo.backend = 'html5'
+            mojo.port = httpPort
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
@@ -52,7 +55,7 @@ class AsciidoctorHttpMojoTest extends Specification {
             }
 
         when:
-            def html = 'http://localhost:2000/content'.toURL().text
+            def html = "http://localhost:${httpPort}/content".toURL().text
 
         then:
             assert html.contains('This is test, only a test')
@@ -79,6 +82,8 @@ class AsciidoctorHttpMojoTest extends Specification {
             def newOut = new DoubleOuputStream(originalOut)
             def newIn = new PrefilledInputStream('exit\r\n'.bytes, inputLatch)
 
+            def httpPort = new AsciidoctorMojoTestHelper().availablePort
+
             System.setOut(new PrintStream(newOut))
             System.setIn(newIn)
 
@@ -91,6 +96,7 @@ class AsciidoctorHttpMojoTest extends Specification {
 
             def mojo = new AsciidoctorHttpMojo()
             mojo.backend = 'html5'
+            mojo.port = httpPort
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
@@ -108,7 +114,7 @@ class AsciidoctorHttpMojoTest extends Specification {
             }
 
         when:
-            def html = 'http://localhost:2000/'.toURL().text
+            def html = "http://localhost:${httpPort}/".toURL().text
 
         then:
             assert html.contains('DEFAULT')
