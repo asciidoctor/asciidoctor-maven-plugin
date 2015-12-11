@@ -88,9 +88,6 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.BACKEND, defaultValue = "docbook", required = true)
     protected String backend = "";
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Options.COMPACT, required = false)
-    protected boolean compact = false;
-
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.DOCTYPE, defaultValue = "article", required = true)
     protected String doctype = "article";
 
@@ -153,7 +150,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             }
         }
 
-        final OptionsBuilder optionsBuilder = OptionsBuilder.options().compact(compact).safe(SafeMode.UNSAFE)
+        final OptionsBuilder optionsBuilder = OptionsBuilder.options().safe(SafeMode.UNSAFE)
                 .eruby(eruby).backend(backend).docType(doctype).headerFooter(headerFooter).mkDirs(true);
 
         final AttributesBuilder attributesBuilder = AttributesBuilder.attributes();
@@ -426,14 +423,6 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setAttributes(Map<String, Object> attributes) {
         this.attributes = attributes;
-    }
-
-    public boolean isCompact() {
-        return compact;
-    }
-
-    public void setCompact(boolean compact) {
-        this.compact = compact;
     }
 
     public boolean isHeaderFooter() {
