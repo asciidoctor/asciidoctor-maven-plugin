@@ -44,6 +44,7 @@ class AsciidoctorMojoTest extends Specification {
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'
             mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'sample.asciidoc'
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.sourceHighlighter = 'coderay'
@@ -59,10 +60,36 @@ class AsciidoctorMojoTest extends Specification {
             File sampleOutput = new File('sample.html', outputDir)
             sampleOutput.length() > 0
             String text = sampleOutput.getText()
+            text.contains('<body class="article">')
             text.contains('id="toc"')
             text.contains('Asciidoctor default stylesheet')
             !text.contains('<link rel="stylesheet" href="./asciidoctor.css">')
             text.contains('<pre class="CodeRay highlight">')
+    }
+
+    def "should honor doctype set in document"() {
+        setup:
+            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output')
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.backend = 'html'
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'book.adoc'
+            mojo.outputDirectory = outputDir
+            mojo.headerFooter = true
+            mojo.attributes['linkcss'] = ''
+            mojo.attributes['copycss!'] = ''
+            mojo.execute()
+        then:
+            outputDir.list().toList().isEmpty() == false
+            outputDir.list().toList().contains('book.html')
+            File sampleOutput = new File('book.html', outputDir)
+            sampleOutput.length() > 0
+            String text = sampleOutput.getText()
+            text.contains('<body class="book">')
     }
 
     def "asciidoc file extension can be changed"() {
