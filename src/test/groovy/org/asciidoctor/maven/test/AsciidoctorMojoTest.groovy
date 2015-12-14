@@ -143,6 +143,27 @@ class AsciidoctorMojoTest extends Specification {
           mojo.headerFooter == true
     }
 
+    def "should require library"() {
+        setup:
+            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output')
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.requires = ['time'] as List
+            mojo.backend = 'html'
+            mojo.outputDirectory = outputDir
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'sample.asciidoc'
+            mojo.execute()
+        then:
+            outputDir.list().toList().isEmpty() == false
+            outputDir.list().toList().contains('sample.html')
+            assert "constant".equals(org.asciidoctor.internal.JRubyRuntimeContext.get().evalScriptlet('defined? ::DateTime').toString())
+    }
+
     def "embedding resources"() {
         setup:
             File srcDir = new File('target/test-classes/src/asciidoctor')
@@ -489,9 +510,9 @@ class AsciidoctorMojoTest extends Specification {
     }
 
     /**
-     * Tests (currenty not working) Pygments source code highlighting options.
+     * Tests behavior when source code highlighting with Pygments is specified.
      *
-     * Test checks that an exception is thrown.
+     * Test checks that an exception is not thrown.
      */
     def 'code highlighting - pygments'() {
         setup:
@@ -508,7 +529,10 @@ class AsciidoctorMojoTest extends Specification {
             mojo.execute()
 
         then:
-            thrown(org.jruby.exceptions.RaiseException)
+            File mainDocumentOutput = new File(outputDir, 'main-document.html')
+            String text = mainDocumentOutput.getText()
+            text.contains('Pygments is not available.')
+            text.contains('<pre class="pygments highlight">')
     }
 
     /**

@@ -142,7 +142,7 @@ public class AsciidoctorParser extends XhtmlParser {
                 }
                 else {
                     // supports variant:
-                    // <requires>time,base64</requires>
+                    // <requires>time, base64</requires>
                     for (String require : asciidocOpt.getValue().split(",")) {
                         requireLibrary(require);
                     }
@@ -182,8 +182,7 @@ public class AsciidoctorParser extends XhtmlParser {
     private void requireLibrary(String require) {
         if (!(require = require.trim()).isEmpty()) {
             try {
-                // TODO switch to Asciidoctor.requireLibrary after upgrading to AsciidoctorJ 1.5.3.2
-                RubyUtils.requireLibrary(JRubyRuntimeContext.get(), require);
+                asciidoctor.requireLibrary(require);
             } catch (Exception ex) {
                 getLog().error(ex.getLocalizedMessage());
             }

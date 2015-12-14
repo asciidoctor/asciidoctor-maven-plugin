@@ -146,14 +146,9 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         ensureOutputExists();
 
-        final Asciidoctor asciidoctorInstance = getAsciidoctorInstance(gemPath);
+        final Asciidoctor asciidoctor = getAsciidoctorInstance(gemPath);
 
-        if (requires.size() > 0) {
-            for (String require : requires) {
-                // FIXME AsciidoctorJ should provide a public API for requiring paths in the Ruby runtime
-                RubyUtils.requireLibrary(JRubyRuntimeContext.get(), require);
-            }
-        }
+        asciidoctor.requireLibraries(requires);
 
         final OptionsBuilder optionsBuilder = OptionsBuilder.options()
                 .backend(backend)
@@ -170,7 +165,7 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         optionsBuilder.attributes(attributesBuilder);
 
-        ExtensionRegistry extensionRegistry = new AsciidoctorJExtensionRegistry(asciidoctorInstance);
+        ExtensionRegistry extensionRegistry = new AsciidoctorJExtensionRegistry(asciidoctor);
         for (ExtensionConfiguration extension: extensions) {
             try {
                 extensionRegistry.register(extension.getClassName(), extension.getBlockName());
@@ -182,12 +177,12 @@ public class AsciidoctorMojo extends AbstractMojo {
         if (sourceDocumentName == null) {
             for (final File f : scanSourceFiles()) {
                 setDestinationPaths(optionsBuilder, f);
-                renderFile(asciidoctorInstance, optionsBuilder.asMap(), f);
+                renderFile(asciidoctor, optionsBuilder.asMap(), f);
             }
         } else {
             File sourceFile = new File(sourceDirectory, sourceDocumentName);
             setDestinationPaths(optionsBuilder, sourceFile);
-            renderFile(asciidoctorInstance, optionsBuilder.asMap(), sourceFile);
+            renderFile(asciidoctor, optionsBuilder.asMap(), sourceFile);
         }
 
         // #67 -- get all files that aren't adoc/ad/asciidoc and create synchronizations for them
@@ -290,8 +285,8 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
     }
 
-    protected void renderFile(Asciidoctor asciidoctorInstance, Map<String, Object> options, File f) {
-        asciidoctorInstance.renderFile(f, options);
+    protected void renderFile(Asciidoctor asciidoctor, Map<String, Object> options, File f) {
+        asciidoctor.renderFile(f, options);
         logRenderedFile(f);
     }
 
