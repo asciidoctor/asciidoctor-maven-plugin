@@ -1,16 +1,30 @@
-= Maven Site Plugin Test
+= File with TOC
 :toc:
 
-This is an example file to test asciidoctor-maven-plugin with maven-site-plugin.
+[.lead]
+This is an example file that was processed by the site module in the Asciidoctor Maven Plugin.
 
-= First section
+== First section
+
 This is the first section of the page.
 
-== Sub section
+include::_include.adoc[]
+
+=== Sub section
+
 This is a subsection of the first section
 
-= Second section
+TIP: You can control the number of section levels displayed in the TOC using the `toclevels` attribute.
+
+== Second section
+
 This is the first section of the page.
 
-== Sub section
+=== Sub section
+
 This is a subsection of the second section.
+
+[source,xml,indent=0]
+----
+include::../../../pom.xml[tag=plugin-decl]
+----

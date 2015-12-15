@@ -506,7 +506,7 @@ class AsciidoctorMojoTest extends Specification {
         then:
             File mainDocumentOutput = new File(outputDir, 'main-document.html')
             String text = mainDocumentOutput.getText()
-            // No extra CSS is added other than AsciiDoctor's default
+            // No extra CSS is added other than Asciidoctor's default
             text.count('<style>') == 1
     }
     
