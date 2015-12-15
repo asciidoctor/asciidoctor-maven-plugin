@@ -88,8 +88,8 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.BACKEND, defaultValue = "docbook", required = true)
     protected String backend = "";
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Options.DOCTYPE, defaultValue = "article", required = true)
-    protected String doctype = "article";
+    @Parameter(property = AsciidoctorMaven.PREFIX + Options.DOCTYPE, required = false)
+    protected String doctype;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.ERUBY, required = false)
     protected String eruby = "";
@@ -139,6 +139,11 @@ public class AsciidoctorMojo extends AbstractMojo {
             getLog().info("AsciiDoc processing is skipped.");
             return;
         }
+
+        if (sourceDirectory == null) {
+            throw new MojoExecutionException("Required parameter 'asciidoctor.sourceDir' not set.");
+        }
+
         ensureOutputExists();
 
         final Asciidoctor asciidoctorInstance = getAsciidoctorInstance(gemPath);
@@ -150,20 +155,20 @@ public class AsciidoctorMojo extends AbstractMojo {
             }
         }
 
-        final OptionsBuilder optionsBuilder = OptionsBuilder.options().safe(SafeMode.UNSAFE)
-                .eruby(eruby).backend(backend).docType(doctype).headerFooter(headerFooter).mkDirs(true);
-
-        final AttributesBuilder attributesBuilder = AttributesBuilder.attributes();
-
-        if (sourceDirectory == null) {
-            throw new MojoExecutionException("Required parameter 'asciidoctor.sourceDir' not set.");
-        }
+        final OptionsBuilder optionsBuilder = OptionsBuilder.options()
+                .backend(backend)
+                .safe(SafeMode.UNSAFE)
+                .headerFooter(headerFooter)
+                .eruby(eruby)
+                .mkDirs(true);
 
         setOptions(optionsBuilder);
 
+        final AttributesBuilder attributesBuilder = AttributesBuilder.attributes();
+
         setAttributesOnBuilder(attributesBuilder);
 
-        optionsBuilder.attributes(attributesBuilder.get());
+        optionsBuilder.attributes(attributesBuilder);
 
         ExtensionRegistry extensionRegistry = new AsciidoctorJExtensionRegistry(asciidoctorInstance);
         for (ExtensionConfiguration extension: extensions) {
@@ -319,6 +324,10 @@ public class AsciidoctorMojo extends AbstractMojo {
     }
 
     protected void setOptions(OptionsBuilder optionsBuilder) {
+        if (doctype != null) {
+            optionsBuilder.docType(doctype);
+        }
+
         if (templateEngine != null) {
             optionsBuilder.templateEngine(templateEngine);
         }
