@@ -50,7 +50,7 @@ public class UriIncludeProcessor extends IncludeProcessor {
 
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {
-                content.append(line);
+                content.append(line + "\n");
             }
 
             bufferedReader.close();

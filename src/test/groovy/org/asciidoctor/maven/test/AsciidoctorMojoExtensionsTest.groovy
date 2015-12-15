@@ -10,7 +10,6 @@ import org.asciidoctor.maven.test.processors.ManpageInlineMacroProcessor
 import org.asciidoctor.maven.test.processors.MetaDocinfoProcessor
 import org.asciidoctor.maven.test.processors.UriIncludeProcessor
 import org.asciidoctor.maven.test.processors.YellBlockProcessor
-import org.jruby.exceptions.RaiseException
 
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -72,7 +71,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             mojo.execute()
         then:
             outputDir.list().size() == 0
-            thrown(RaiseException)
+            thrown(RuntimeException)
 //            e.message.contains(mojo.processors.get(0).className)
 //            e.message.contains('not found in classpath')
     }
@@ -337,8 +336,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             text.contains("source 'https://rubygems.org'")
     }
     
-    // This test is added to keep track of possible changes in the extension's SPI 
-    def "fails renders html with Preprocessor, DocinfoProcessor"() {
+    def "renders html when using all types of extensions"() {
         setup:
             File srcDir = new File(SRC_DIR)
             File outputDir = new File("${OUTPUT_DIR}/processors/${System.currentTimeMillis()}")
@@ -349,7 +347,9 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             mojo.sourceDocumentName = 'processors-sample.adoc'
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
-            mojo.attributes['toc'] = null
+            mojo.attributes['toc'] = ''
+            mojo.attributes['linkcss'] = ''
+            mojo.attributes['copycss!'] = ''
             mojo.extensions = [
                 // Preprocessor
                 [className: 'org.asciidoctor.maven.test.processors.ChangeAttributeValuePreprocessor'] as ExtensionConfiguration,
@@ -366,9 +366,18 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             ]
             mojo.execute()
         then:
-            def e = thrown(ClassCastException)
-            e.message =~ /org\.jruby\.gen.(.)* cannot be cast to org.jruby.RubyObject/            
-    }   
+            outputDir.list().toList().isEmpty() == false
+            outputDir.list().toList().contains('processors-sample.html')
+    
+            File sampleOutput = new File(outputDir, 'processors-sample.html')
+            sampleOutput.length() > 0
+
+            String text = sampleOutput.text
+            text.contains('<meta name="author" content="asciidoctor">')
+            text.contains('<script src="https://gist.github.com/123456.js"></script>')
+            text.contains('<p>See <a href="gittutorial.html">gittutorial</a> to get started.</p>')
+            text.contains('<p>THE TIME IS NOW. GET A MOVE ON.</p>')
+    }
 
     /**
      *  Manual test to validate automatic extension registration.
