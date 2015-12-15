@@ -341,7 +341,7 @@ Here's an example that shows how to set options, attributes and ignore partial A
         <dependency>
             <groupId>org.asciidoctor</groupId>
             <artifactId>asciidoctor-maven-plugin</artifactId>
-            <version>{release-version}</version>
+            <version>1.5.3</version>
         </dependency>
     </dependencies>
 </plugin>
