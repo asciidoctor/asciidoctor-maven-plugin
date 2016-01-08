@@ -70,7 +70,7 @@
         <asciidoctorj.version>1.5.3.2</asciidoctorj.version>
         <maven.coveralls.plugin.version>3.0.1</maven.coveralls.plugin.version>
         <maven.jacoco.plugin.version>0.7.2.201409121644</maven.jacoco.plugin.version>
-        <jruby.version>1.7.23</jruby.version>
+        <jruby.version>1.7.21</jruby.version>
         <maven.plugin.annotations.version>3.2</maven.plugin.annotations.version>
         <maven.plugin.api.version>2.0</maven.plugin.api.version>
         <maven.project.version>2.2.1</maven.project.version>
