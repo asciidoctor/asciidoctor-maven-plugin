@@ -1,18 +1,27 @@
 package org.asciidoctor.maven.test
 
+import org.apache.commons.io.FileUtils
+import org.apache.maven.model.Resource
 import org.asciidoctor.maven.AsciidoctorRefreshMojo
 import org.asciidoctor.maven.test.io.DoubleOuputStream
 import org.asciidoctor.maven.test.io.PrefilledInputStream
+import org.asciidoctor.maven.test.plexus.mock.MockPlexusContainer
 import spock.lang.Specification
 
 import java.util.concurrent.CountDownLatch
 
 class AsciidoctorRefreshMojoTest extends Specification {
+
+    MockPlexusContainer mockPlexusContainer = new MockPlexusContainer()
+
     def "auto render when source updated"() {
         setup:
             def srcDir = new File('target/test-classes/src/asciidoctor-refresh')
             def outputDir = new File('target/asciidoctor-refresh-output')
 
+            if (srcDir.exists()){
+                FileUtils.deleteDirectory(srcDir)
+            }
             srcDir.mkdirs()
 
             def inputLatch = new CountDownLatch(1)
@@ -39,9 +48,14 @@ class AsciidoctorRefreshMojoTest extends Specification {
             def target = new File(outputDir, content.name.replace('.asciidoc', '.html'))
 
             def mojo = new AsciidoctorRefreshMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html'
-            mojo.sourceDirectory = srcDir
+            mojo.sources = [[
+                    directory : srcDir.getPath()
+                ] as Resource]
             mojo.outputDirectory = outputDir
+
             def mojoThread = new Thread(new Runnable() {
                 @Override
                 void run() {
@@ -52,7 +66,7 @@ class AsciidoctorRefreshMojoTest extends Specification {
             mojoThread.start()
 
             while (!new String(newOut.toByteArray()).contains('Rendered')) {
-                Thread.sleep(200)
+                Thread.sleep(400)
             }
 
             assert target.text.contains('This is test, only a test')
@@ -65,7 +79,7 @@ class AsciidoctorRefreshMojoTest extends Specification {
 
         then:
             while (!new String(newOut.toByteArray()).contains('Re-rendered ')) {
-                Thread.sleep 500
+                Thread.sleep(500)
             }
             assert target.text.contains('Wow, this will be auto refreshed')
 

@@ -1,8 +1,10 @@
 package org.asciidoctor.maven.test
 
+import org.apache.maven.model.Resource
 import org.apache.maven.plugin.MojoExecutionException
 import org.asciidoctor.maven.AsciidoctorMojo
 import org.asciidoctor.maven.extensions.ExtensionConfiguration
+import org.asciidoctor.maven.test.plexus.mock.MockPlexusContainer
 import org.asciidoctor.maven.test.processors.ChangeAttributeValuePreprocessor
 import org.asciidoctor.maven.test.processors.FailingPreprocessor
 import org.asciidoctor.maven.test.processors.GistBlockMacroProcessor
@@ -16,26 +18,29 @@ import spock.lang.Unroll
 
 /**
  * Specific tests to validate usage of AsciidoctorJ extension in AsciidoctorMojo.
- * 
- * Most of the examples have been directly adapted from the ones found in AsciidoctorJ 
+ *
+ * Most of the examples have been directly adapted from the ones found in AsciidoctorJ
  * documentation (https://github.com/asciidoctor/asciidoctorj/blob/master/README.adoc)
  *
  * @author abelsromero
  */
 class AsciidoctorMojoExtensionsTest extends Specification {
 
-    static final String SRC_DIR = 'target/test-classes/src/asciidoctor/'
-    static final String OUTPUT_DIR = 'target/asciidoctor-output-extensions'
+    static final String DEFAULT_SOURCE_DIRECTORY = 'target/test-classes/src/asciidoctor'
+    static final String OUTPUT_DIRECTORY = 'target/asciidoctor-output/extensions'
+
+    MockPlexusContainer mockPlexusContainer = new MockPlexusContainer()
 
     def "fails because processor is not found in classpath"() {
         setup:
-            File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/preprocessor/${System.currentTimeMillis()}")
+            File outputDir = new File("${OUTPUT_DIRECTORY}/preprocessor/${System.currentTimeMillis()}")
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'
-            mojo.sourceDirectory = srcDir
-            mojo.sourceDocumentName = 'processors-sample.adoc'
+            mojo.sources = [[
+                    directory: DEFAULT_SOURCE_DIRECTORY,
+                    includes: ['processors-sample.adoc']
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.attributes['toc'] = null
@@ -50,17 +55,18 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             e.message.contains(mojo.extensions.get(0).className)
             e.message.contains('not found in classpath')
     }
-    
+
     // This test is added to keep track of possible changes in the extension's SPI
     def "plugin fails because processor throws an uncached exception"() {
         setup:
-            File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/preprocessor/${System.currentTimeMillis()}")
+            File outputDir = new File("${OUTPUT_DIRECTORY}/preprocessor/${System.currentTimeMillis()}")
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'
-            mojo.sourceDirectory = srcDir
-            mojo.sourceDocumentName = 'processors-sample.adoc'
+            mojo.sources = [[
+                    directory: DEFAULT_SOURCE_DIRECTORY,
+                    includes: ['processors-sample.adoc']
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.attributes['toc'] = null
@@ -75,10 +81,10 @@ class AsciidoctorMojoExtensionsTest extends Specification {
 //            e.message.contains(mojo.processors.get(0).className)
 //            e.message.contains('not found in classpath')
     }
-    
+
 
     /**
-     * Redirects output to validate specific traces left in the processors  
+     * Redirects output to validate specific traces left in the processors
      */
     @Unroll
     def "tests that a #processorType is registered, initialized and executed"() {
@@ -86,14 +92,17 @@ class AsciidoctorMojoExtensionsTest extends Specification {
         setup:
             ByteArrayOutputStream systemOut = new ByteArrayOutputStream()
             System.out = new PrintStream(systemOut)
-    
-            File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/processors/${System.currentTimeMillis()}")
-    
+
+            File outputDir = new File("${OUTPUT_DIRECTORY}/processors/${System.currentTimeMillis()}")
+
             AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html'
-            mojo.sourceDirectory = srcDir
-            mojo.sourceDocumentName = 'processors-sample.adoc'
+            mojo.sources = [[
+                    directory: DEFAULT_SOURCE_DIRECTORY,
+                    includes: ['processors-sample.adoc']
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.attributes['toc'] = null
@@ -117,13 +126,16 @@ class AsciidoctorMojoExtensionsTest extends Specification {
 
     def "successfully renders html with a preprocessor"() {
         setup:
-            File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/preprocessor/${System.currentTimeMillis()}")
+            File outputDir = new File("${OUTPUT_DIRECTORY}/preprocessor/${System.currentTimeMillis()}")
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html'
-            mojo.sourceDirectory = srcDir
-            mojo.sourceDocumentName = 'processors-sample.adoc'
+            mojo.sources = [[
+                    directory: DEFAULT_SOURCE_DIRECTORY,
+                    includes: ['processors-sample.adoc']
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.attributes['toc'] = null
@@ -134,7 +146,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
         then:
             outputDir.list().toList().isEmpty() == false
             outputDir.list().toList().contains('processors-sample.html')
-    
+
             File sampleOutput = new File(outputDir, 'processors-sample.html')
             sampleOutput.length() > 0
             String text = sampleOutput.getText()
@@ -143,13 +155,16 @@ class AsciidoctorMojoExtensionsTest extends Specification {
 
     def "successfully renders html with a blockprocessor"() {
         setup:
-            File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/blockprocessor/${System.currentTimeMillis()}")
+            File outputDir = new File("${OUTPUT_DIRECTORY}/blockprocessor/${System.currentTimeMillis()}")
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html'
-            mojo.sourceDirectory = srcDir
-            mojo.sourceDocumentName = 'processors-sample.adoc'
+            mojo.sources = [[
+                    directory: DEFAULT_SOURCE_DIRECTORY,
+                    includes: ['processors-sample.adoc']
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.attributes['toc'] = null
@@ -160,21 +175,24 @@ class AsciidoctorMojoExtensionsTest extends Specification {
         then:
             outputDir.list().toList().isEmpty() == false
             outputDir.list().toList().contains('processors-sample.html')
-    
+
             File sampleOutput = new File(outputDir, 'processors-sample.html')
             sampleOutput.length() > 0
             sampleOutput.getText().contains('The time is now. Get a move on.'.toUpperCase())
     }
-    
+
     def "successfully renders html and adds meta tag with a DocinfoProcessor"() {
         setup:
-            File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/docinfoProcessor/${System.currentTimeMillis()}")
+            File outputDir = new File("${OUTPUT_DIRECTORY}/docinfoProcessor/${System.currentTimeMillis()}")
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html'
-            mojo.sourceDirectory = srcDir
-            mojo.sourceDocumentName = 'processors-sample.adoc'
+            mojo.sources = [[
+                    directory: DEFAULT_SOURCE_DIRECTORY,
+                    includes: ['processors-sample.adoc']
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.attributes['toc'] = null
@@ -185,7 +203,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
         then:
             outputDir.list().toList().isEmpty() == false
             outputDir.list().toList().contains('processors-sample.html')
-    
+
             File sampleOutput = new File(outputDir, 'processors-sample.html')
             sampleOutput.length() > 0
             sampleOutput.text.contains("<meta name=\"author\" content=\"asciidoctor\">")
@@ -193,13 +211,16 @@ class AsciidoctorMojoExtensionsTest extends Specification {
 
     def "successfully renders html and modifies output with a BlockMacroProcessor"() {
         setup:
-            File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/blockMacroProcessor/${System.currentTimeMillis()}")
+            File outputDir = new File("${OUTPUT_DIRECTORY}/blockMacroProcessor/${System.currentTimeMillis()}")
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html'
-            mojo.sourceDirectory = srcDir
-            mojo.sourceDocumentName = 'processors-sample.adoc'
+            mojo.sources = [[
+                    directory: DEFAULT_SOURCE_DIRECTORY,
+                    includes: ['processors-sample.adoc']
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.attributes['toc'] = null
@@ -210,7 +231,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
         then:
             outputDir.list().toList().isEmpty() == false
             outputDir.list().toList().contains('processors-sample.html')
-    
+
             File sampleOutput = new File(outputDir, 'processors-sample.html')
             sampleOutput.length() > 0
             sampleOutput.text.contains("<script src=\"https://gist.github.com/123456.js\"></script>")
@@ -218,13 +239,16 @@ class AsciidoctorMojoExtensionsTest extends Specification {
 
     def "successfully renders html and modifies output with a InlineMacroProcessor"() {
         setup:
-            File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/inlineMacroProcessor/${System.currentTimeMillis()}")
+            File outputDir = new File("${OUTPUT_DIRECTORY}/inlineMacroProcessor/${System.currentTimeMillis()}")
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html'
-            mojo.sourceDirectory = srcDir
-            mojo.sourceDocumentName = 'processors-sample.adoc'
+            mojo.sources = [[
+                    directory: DEFAULT_SOURCE_DIRECTORY,
+                    includes: ['processors-sample.adoc']
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.attributes['toc'] = null
@@ -235,21 +259,24 @@ class AsciidoctorMojoExtensionsTest extends Specification {
         then:
             outputDir.list().toList().isEmpty() == false
             outputDir.list().toList().contains('processors-sample.html')
-    
+
             File sampleOutput = new File(outputDir, 'processors-sample.html')
             sampleOutput.length() > 0
             sampleOutput.text.contains("<p>See <a href=\"gittutorial.html\">gittutorial</a> to get started.</p>")
     }
-    
+
     def "successfully renders html and modifies output with an IncludeProcessor"() {
         setup:
-            File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/includeProcessor/${System.currentTimeMillis()}")
+            File outputDir = new File("${OUTPUT_DIRECTORY}/includeProcessor/${System.currentTimeMillis()}")
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html'
-            mojo.sourceDirectory = srcDir
-            mojo.sourceDocumentName = 'processors-sample.adoc'
+            mojo.sources = [[
+                    directory: DEFAULT_SOURCE_DIRECTORY,
+                    includes: ['processors-sample.adoc']
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.attributes['toc'] = null
@@ -260,7 +287,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
         then:
             outputDir.list().toList().isEmpty() == false
             outputDir.list().toList().contains('processors-sample.html')
-    
+
             File sampleOutput = new File(outputDir, 'processors-sample.html')
             sampleOutput.length() > 0
             sampleOutput.text.contains("source 'https://rubygems.org'")
@@ -270,13 +297,16 @@ class AsciidoctorMojoExtensionsTest extends Specification {
         setup:
             ByteArrayOutputStream systemOut = new ByteArrayOutputStream()
             System.out = new PrintStream(systemOut)
-            File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/preprocessor/${System.currentTimeMillis()}")
+            File outputDir = new File("${OUTPUT_DIRECTORY}/preprocessor/${System.currentTimeMillis()}")
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html'
-            mojo.sourceDirectory = srcDir
-            mojo.sourceDocumentName = 'processors-sample.adoc'
+            mojo.sources = [[
+                    directory: DEFAULT_SOURCE_DIRECTORY,
+                    includes: ['processors-sample.adoc']
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.attributes['toc'] = null
@@ -288,12 +318,12 @@ class AsciidoctorMojoExtensionsTest extends Specification {
         then:
             outputDir.list().toList().isEmpty() == false
             outputDir.list().toList().contains('processors-sample.html')
-    
+
             File sampleOutput = new File(outputDir, 'processors-sample.html')
             sampleOutput.length() > 0
             String text = sampleOutput.getText()
             text.count(ChangeAttributeValuePreprocessor.AUTHOR_NAME) == 2
-            
+
             systemOut.toString().count('Processing ChangeAttributeValuePreprocessor') == 2
     }
 
@@ -301,13 +331,16 @@ class AsciidoctorMojoExtensionsTest extends Specification {
     // Adding a BlockMacroProcessor or BlockProcessor makes the conversion fail
     def "successfully renders html with Preprocessor, DocinfoProcessor, InlineMacroProcessor and IncludeProcessor"() {
         setup:
-            File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/processors/${System.currentTimeMillis()}")
+            File outputDir = new File("${OUTPUT_DIRECTORY}/processors/${System.currentTimeMillis()}")
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html'
-            mojo.sourceDirectory = srcDir
-            mojo.sourceDocumentName = 'processors-sample.adoc'
+            mojo.sources = [[
+                    directory: DEFAULT_SOURCE_DIRECTORY,
+                    includes: ['processors-sample.adoc']
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.attributes['toc'] = null
@@ -325,7 +358,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
         then:
             outputDir.list().toList().isEmpty() == false
             outputDir.list().toList().contains('processors-sample.html')
-    
+
             File sampleOutput = new File(outputDir, 'processors-sample.html')
             sampleOutput.length() > 0
 
@@ -335,16 +368,19 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             text.contains("<p>See <a href=\"gittutorial.html\">gittutorial</a> to get started.</p>")
             text.contains("source 'https://rubygems.org'")
     }
-    
+
     def "renders html when using all types of extensions"() {
         setup:
-            File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/processors/${System.currentTimeMillis()}")
+            File outputDir = new File("${OUTPUT_DIRECTORY}/processors/${System.currentTimeMillis()}")
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html'
-            mojo.sourceDirectory = srcDir
-            mojo.sourceDocumentName = 'processors-sample.adoc'
+            mojo.sources = [[
+                    directory: DEFAULT_SOURCE_DIRECTORY,
+                    includes: ['processors-sample.adoc']
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.attributes['toc'] = ''
@@ -368,7 +404,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
         then:
             outputDir.list().toList().isEmpty() == false
             outputDir.list().toList().contains('processors-sample.html')
-    
+
             File sampleOutput = new File(outputDir, 'processors-sample.html')
             sampleOutput.length() > 0
 
@@ -381,19 +417,22 @@ class AsciidoctorMojoExtensionsTest extends Specification {
 
     /**
      *  Manual test to validate automatic extension registration.
-     *  To execute, copy org.asciidoctor.extension.spi.ExtensionRegistry to 
+     *  To execute, copy org.asciidoctor.extension.spi.ExtensionRegistry to
      *  /src/test/resources/META-INF/services/ and execute
      */
     @spock.lang.Ignore
     def "property extension"() {
         setup:
-            File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/preprocessor/${System.currentTimeMillis()}")
+            File outputDir = new File("${OUTPUT_DIRECTORY}/preprocessor/${System.currentTimeMillis()}")
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html'
-            mojo.sourceDirectory = srcDir
-            mojo.sourceDocumentName = 'processors-sample.adoc'
+            mojo.sources = [[
+                    directory: DEFAULT_SOURCE_DIRECTORY,
+                    includes: ['processors-sample.adoc']
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.attributes['toc'] = null
@@ -402,11 +441,11 @@ class AsciidoctorMojoExtensionsTest extends Specification {
         then:
             outputDir.list().toList().isEmpty() == false
             outputDir.list().toList().contains('processors-sample.html')
-    
+
             File sampleOutput = new File(outputDir, 'processors-sample.html')
             sampleOutput.length() > 0
             String text = sampleOutput.getText()
             text.count(ChangeAttributeValuePreprocessor.AUTHOR_NAME) == 2
     }
-    
+
 }

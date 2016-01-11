@@ -1,13 +1,21 @@
 package org.asciidoctor.maven.test
 
+import org.apache.maven.model.Resource
 import org.asciidoctor.maven.AsciidoctorHttpMojo
 import org.asciidoctor.maven.test.io.DoubleOuputStream
 import org.asciidoctor.maven.test.io.PrefilledInputStream
+import org.asciidoctor.maven.test.plexus.mock.MockPlexusContainer
 import spock.lang.Specification
 
 import java.util.concurrent.CountDownLatch
 
 class AsciidoctorHttpMojoTest extends Specification {
+
+    static final String DEFAULT_SOURCE_DIRECTORY = 'target/test-classes/src/asciidoctor-http'
+    static final String DEFAULT_SOURCE_NAME = 'content.asciidoc'
+
+    MockPlexusContainer mockPlexusContainer = new MockPlexusContainer()
+
     def "http front should let access rendered files"() {
         setup:
             def srcDir = new File('target/test-classes/src/asciidoctor-http')
@@ -28,7 +36,7 @@ class AsciidoctorHttpMojoTest extends Specification {
 
             def httpPort = new AsciidoctorMojoTestHelper().availablePort
 
-            def content = new File(srcDir, "content.asciidoc")
+            def content = new File(srcDir, DEFAULT_SOURCE_NAME)
             content.withWriter{ it <<
                 '''Document Title
                 ==============
@@ -36,9 +44,14 @@ class AsciidoctorHttpMojoTest extends Specification {
                 This is test, only a test.'''.stripIndent() }
 
             def mojo = new AsciidoctorHttpMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html5'
             mojo.port = httpPort
-            mojo.sourceDirectory = srcDir
+            mojo.sources =  [[
+                    directory: DEFAULT_SOURCE_DIRECTORY,
+                    includes : [DEFAULT_SOURCE_NAME]
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.home = 'index'
@@ -87,7 +100,7 @@ class AsciidoctorHttpMojoTest extends Specification {
             System.setOut(new PrintStream(newOut))
             System.setIn(newIn)
 
-            def content = new File(srcDir, "content.asciidoc")
+            def content = new File(srcDir, DEFAULT_SOURCE_NAME)
             content.withWriter{ it <<
                     '''Document Title
                     ==============
@@ -95,9 +108,14 @@ class AsciidoctorHttpMojoTest extends Specification {
                     DEFAULT.'''.stripIndent() }
 
             def mojo = new AsciidoctorHttpMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html5'
             mojo.port = httpPort
-            mojo.sourceDirectory = srcDir
+            mojo.sources = [[
+                    directory: "$DEFAULT_SOURCE_DIRECTORY-default",
+                    includes: [DEFAULT_SOURCE_NAME]
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.home = 'content'
