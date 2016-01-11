@@ -13,57 +13,60 @@
 package org.asciidoctor.maven;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.asciidoctor.AbstractDirectoryWalker;
-import org.asciidoctor.AsciiDocDirectoryWalker;
-import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.Attributes;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.DirectoryWalker;
-import org.asciidoctor.Options;
-import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.SafeMode;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.shared.filtering.MavenFilteringException;
+import org.apache.maven.shared.filtering.MavenResourcesExecution;
+import org.apache.maven.shared.filtering.MavenResourcesFiltering;
+import org.asciidoctor.*;
 import org.asciidoctor.internal.JRubyRuntimeContext;
-import org.asciidoctor.internal.RubyUtils;
 import org.asciidoctor.maven.extensions.AsciidoctorJExtensionRegistry;
 import org.asciidoctor.maven.extensions.ExtensionConfiguration;
 import org.asciidoctor.maven.extensions.ExtensionRegistry;
+import org.asciidoctor.maven.monitor.SynchronizingFileAlterationListenerAdaptor;
+import org.asciidoctor.maven.io.AsciidoctorFileScanner;
+import org.sonatype.plexus.build.incremental.BuildContext;
 
 
 /**
  * Basic maven plugin to render AsciiDoc files using Asciidoctor, a ruby port.
+ *
  */
-@Mojo(name = "process-asciidoc")
+@Mojo( name = "process-asciidoc")
 public class AsciidoctorMojo extends AbstractMojo {
     // copied from org.asciidoctor.AsciiDocDirectoryWalker.ASCIIDOC_REG_EXP_EXTENSION
     // should probably be configured in AsciidoctorMojo through @Parameter 'extension'
     protected static final String ASCIIDOC_REG_EXP_EXTENSION = ".*\\.a((sc(iidoc)?)|d(oc)?)$";
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDir", defaultValue = "${basedir}/src/main/asciidoc", required = true)
-    protected File sourceDirectory;
+    // Default source directory
+    protected static final String SOURCE_DIRECTORY = "src/main/asciidoc";
+    // Default output directory
+    protected static final String OUTPUT_DIRECTORY = "${project.build.directory}/generated-docs";
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "outputDir", defaultValue = "${project.build.directory}/generated-docs", required = true)
+    protected static final String FILE_ENCODING = System.getProperty("file.encoding");
+
+    /**
+     * Attributes
+     */
+    @Parameter(property = AsciidoctorMaven.PREFIX + "outputDir", defaultValue = OUTPUT_DIRECTORY, required = true)
     protected File outputDirectory;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "preserveDirectories", defaultValue = "false", required = false)
     protected boolean preserveDirectories = false;
-    
+
     @Parameter(property = AsciidoctorMaven.PREFIX + "relativeBaseDir", defaultValue = "false", required = false)
     protected boolean relativeBaseDir = false;
-    
+
     @Parameter(property = AsciidoctorMaven.PREFIX + "projectDirectory", defaultValue = "${basedir}", required = false, readonly = false)
     protected File projectDirectory;
 
@@ -112,12 +115,6 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.TITLE, required = false)
     protected String title = "";
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDocumentName", required = false)
-    protected String sourceDocumentName;
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDocumentExtensions")
-    protected List<String> sourceDocumentExtensions = new ArrayList<String>();
-
     @Parameter(property = AsciidoctorMaven.PREFIX + "synchronizations", required = false)
     protected List<Synchronization> synchronizations = new ArrayList<Synchronization>();
 
@@ -133,19 +130,46 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "attributeUndefined")
     protected String attributeUndefined = "drop-line";
 
+    // List of AsciiDoc files or directories to render
+    @Parameter(property = AsciidoctorMaven.PREFIX + "sources")
+    protected List<Resource> sources;
+
+    // List of resources to copy to the output directory (e.g., images, css). By default everything is copied
+    @Parameter(property = AsciidoctorMaven.PREFIX + "sources")
+    protected List<Resource> resources;
+
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
+    protected MavenProject project;
+
+    @Parameter(defaultValue = "${session}", readonly = true, required = true )
+    protected MavenSession session;
+
+    @Component
+    protected MavenResourcesFiltering outputResourcesFiltering;
+
+    @Component
+    protected BuildContext buildContext;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+
         if (skip) {
             getLog().info("AsciiDoc processing is skipped.");
             return;
         }
 
-        if (sourceDirectory == null) {
-            throw new MojoExecutionException("Required parameter 'asciidoctor.sourceDir' not set.");
-        }
-
         ensureOutputExists();
 
+        // Validate resources to avoid ugly errors later on
+        if (resources != null) {
+            for (Resource resource: resources) {
+                if (resource.getDirectory() == null || resource.getDirectory().isEmpty()) {
+                    throw new MojoExecutionException("Found empty resource directory");
+                }
+            }
+        }
+
+        // Asciidoctor initialization
         final Asciidoctor asciidoctor = getAsciidoctorInstance(gemPath);
 
         asciidoctor.requireLibraries(requires);
@@ -173,23 +197,66 @@ public class AsciidoctorMojo extends AbstractMojo {
                 throw new MojoExecutionException(e.getMessage(), e);
             }
         }
-        
-        if (sourceDocumentName == null) {
-            for (final File f : scanSourceFiles()) {
-                setDestinationPaths(optionsBuilder, f);
-                renderFile(asciidoctor, optionsBuilder.asMap(), f);
+
+        // Render AsciiDoc documents
+        AsciidoctorFileScanner scanner = new AsciidoctorFileScanner(buildContext);
+        if (sources == null) {
+            sources = Arrays.asList(new Resource());
+        }
+        for (Resource source: sources) {
+            if (source.getDirectory() == null || source.getDirectory().isEmpty()) {
+                source.setDirectory(SOURCE_DIRECTORY);
             }
-        } else {
-            File sourceFile = new File(sourceDirectory, sourceDocumentName);
-            setDestinationPaths(optionsBuilder, sourceFile);
-            renderFile(asciidoctor, optionsBuilder.asMap(), sourceFile);
+            for (final File sourceFile: scanner.scan(source)) {
+                setDestinationPaths(optionsBuilder, sourceFile, new File(source.getDirectory()));
+                renderFile(asciidoctor, optionsBuilder.asMap(), sourceFile);
+            }
         }
 
-        // #67 -- get all files that aren't adoc/ad/asciidoc and create synchronizations for them
+        // Copy output resources
+        // By default everything in the sources directories is copied
+        if (resources == null  || resources.isEmpty()) {
+            resources = new ArrayList<Resource>();
+            // we don't want to copy files considered sources
+            for (Resource source: sources) {
+                Resource resource = new Resource();
+                resource.setDirectory(source.getDirectory());
+                if (source.getIncludes() != null) {
+                    if (resource.getExcludes() == null || resource.getExcludes().isEmpty()) {
+                        resource.setExcludes(new ArrayList<String>());
+                    }
+                }
+                resource.getExcludes().addAll(source.getIncludes());
+                resources.add(resource);
+            }
+        }
+        // All resources must exclude AsciiDoc documents and folders beginning with underscore
+        for (Resource resource: resources) {
+            if (resource.getExcludes() == null || resource.getExcludes().isEmpty()) {
+                resource.setExcludes(new ArrayList<String>());
+            }
+            List<String> excludes = new ArrayList<String>();
+            for (String value: AsciidoctorFileScanner.IGNORED_FOLDERS_AND_FILES) {
+                excludes.add(value);
+            }
+            for (String value: AsciidoctorFileScanner.DEFAULT_FILE_EXTENSIONS) {
+                excludes.add(value);
+            }
+            // in case someone wants to include some of the default excluded files (.e.g., AsciiDoc docs)
+            excludes.removeAll(resource.getIncludes());
+            resource.getExcludes().addAll(excludes);
+        }
+
         try {
-            FileUtils.copyDirectory(sourceDirectory, outputDirectory, new NonAsciiDocExtensionFileFilter(), false);
-        } catch (IOException e) {
-            throw new MojoExecutionException("Error copying resources", e);
+            // TODO check if file encoding is set as property in the project.
+            //      Right now it's not used at all, but could be used to apply resource filters/replacements
+            MavenResourcesExecution resourcesExecution =
+                    new MavenResourcesExecution(resources, outputDirectory, project, FILE_ENCODING,
+                            Collections.<String>emptyList(), Collections.<String>emptyList(), session);
+            resourcesExecution.setIncludeEmptyDirs(true);
+            outputResourcesFiltering.filterResources(resourcesExecution);
+        } catch (MavenFilteringException e) {
+            throw new MojoExecutionException("Could not copy resources", e);
         }
 
         if (synchronizations != null && !synchronizations.isEmpty()) {
@@ -197,15 +264,16 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
     }
 
+
     /**
      * Updates optionsBuilder object's baseDir and destination(s) accordingly to the options.
-     * 
-     * @param optionsBuilder
-     *            AsciidoctorJ options to be updated.
-     * @param sourceFile
-     *           AsciiDoc source file to process.
+     *
+     * @param optionsBuilder  AsciidoctorJ options to be updated
+     * @param sourceFile      AsciiDoc source file to process
+     * @param sourceDirectory Source directory as defined in the configuration of a {@link Resource}
      */
-    private void setDestinationPaths(OptionsBuilder optionsBuilder, final File sourceFile) throws MojoExecutionException {
+    private void setDestinationPaths(OptionsBuilder optionsBuilder, final File sourceFile, final File sourceDirectory)
+            throws MojoExecutionException {
         try {
             if (baseDir != null) {
                 optionsBuilder.baseDir(baseDir);
@@ -231,8 +299,8 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     protected Asciidoctor getAsciidoctorInstance(String gemPath) throws MojoExecutionException {
         Asciidoctor asciidoctor = null;
-        if (gemPath == null) {
-             asciidoctor = Asciidoctor.Factory.create();
+        if (gemPath == null || gemPath.isEmpty()) {
+            asciidoctor = Asciidoctor.Factory.create();
         }
         else {
             // Replace Windows path separator to avoid paths with mixed \ and /.
@@ -252,36 +320,9 @@ public class AsciidoctorMojo extends AbstractMojo {
         return asciidoctor;
     }
 
-    private List<File> scanSourceFiles() {
-        final List<File> asciidoctorFiles;
-        if (sourceDocumentExtensions == null || sourceDocumentExtensions.isEmpty()) {
-            final DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker(sourceDirectory.getAbsolutePath());
-            asciidoctorFiles = directoryWalker.scan();
-        } else {
-            final DirectoryWalker directoryWalker = new CustomExtensionDirectoryWalker(sourceDirectory.getAbsolutePath(), sourceDocumentExtensions);
-            asciidoctorFiles = directoryWalker.scan();
-        }
-        String absoluteSourceDirectory = sourceDirectory.getAbsolutePath();
-        for (Iterator<File> iter = asciidoctorFiles.iterator(); iter.hasNext();) {
-            File f = iter.next();
-            do {
-                // stop when we hit the source directory root
-                if (absoluteSourceDirectory.equals(f.getAbsolutePath())) {
-                    break;
-                }
-                // skip if the filename or directory begins with _
-                if (f.getName().startsWith("_")) {
-                    iter.remove();
-                    break;
-                }
-            } while ((f = f.getParentFile()) != null);
-        }
-        return asciidoctorFiles;
-    }
-
     private void synchronize() {
         for (final Synchronization synchronization : synchronizations) {
-            synchronize(synchronization);
+            SynchronizingFileAlterationListenerAdaptor.synchronize(synchronization, getLog());
         }
     }
 
@@ -292,22 +333,6 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     protected void logRenderedFile(File f) {
         getLog().info("Rendered " + f.getAbsolutePath());
-    }
-
-    protected void synchronize(final Synchronization synchronization) {
-        if (synchronization.getSource().isDirectory()) {
-            try {
-                FileUtils.copyDirectory(synchronization.getSource(), synchronization.getTarget());
-            } catch (IOException e) {
-                getLog().error(String.format("Can't synchronize %s -> %s", synchronization.getSource(), synchronization.getTarget()));
-            }
-        } else {
-            try {
-                FileUtils.copyFile(synchronization.getSource(), synchronization.getTarget());
-            } catch (IOException e) {
-                getLog().error(String.format("Can't synchronize %s -> %s", synchronization.getSource(), synchronization.getTarget()));
-            }
-        }
     }
 
     protected void ensureOutputExists() {
@@ -379,14 +404,6 @@ public class AsciidoctorMojo extends AbstractMojo {
                 attributesBuilder.attribute(attributeEntry.getKey(), val);
             }
         }
-    }
-
-    public File getSourceDirectory() {
-        return sourceDirectory;
-    }
-
-    public void setSourceDirectory(File sourceDirectory) {
-        this.sourceDirectory = sourceDirectory;
     }
 
     public File getOutputDirectory() {
@@ -477,28 +494,12 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.title = title;
     }
 
-    public List<String> getSourceDocumentExtensions() {
-        return sourceDocumentExtensions;
-    }
-
-    public void setSourceDocumentExtensions(final List<String> sourceDocumentExtensions) {
-        this.sourceDocumentExtensions = sourceDocumentExtensions;
-    }
-
     public String getEruby() {
         return eruby;
     }
 
     public void setEruby(String eruby) {
         this.eruby = eruby;
-    }
-
-    public String getSourceDocumentName() {
-        return sourceDocumentName;
-    }
-
-    public void setSourceDocumentName(String sourceDocumentName) {
-        this.sourceDocumentName = sourceDocumentName;
     }
 
     public List<Synchronization> getSynchronizations() {
@@ -571,8 +572,8 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setRelativeBaseDir(boolean relativeBaseDir) {
         this.relativeBaseDir = relativeBaseDir;
-    }    
-    
+    }
+
     public List<ExtensionConfiguration> getExtensions() {
         return extensions;
     }
@@ -581,42 +582,20 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.extensions = extensions;
     }
 
-    private static class CustomExtensionDirectoryWalker extends AbstractDirectoryWalker {
-        private final List<String> fileExtensions;
-
-        public CustomExtensionDirectoryWalker(final String absolutePath, final List<String> fileExtensions) {
-            super(absolutePath);
-            this.fileExtensions = fileExtensions;
-        }
-
-        @Override
-        protected boolean isAcceptedFile(final File filename) {
-            final String name = filename.getName();
-            for (final String extension : fileExtensions) {
-                if (name.endsWith(extension)) {
-                    return true;
-                }
-            }
-            return false;
-        }
+    public List<Resource> getSources() {
+        return sources;
     }
 
-    private static class NonAsciiDocExtensionFileFilter implements FileFilter {
-        private final List<String> fileExtensions;
-
-        public NonAsciiDocExtensionFileFilter() {
-            this.fileExtensions = java.util.Arrays.asList("ad", "adoc", "asciidoc");
-        }
-
-        @Override
-        public boolean accept(File pathname) {
-            final String name = pathname.getName();
-            for (final String extension : fileExtensions) {
-                if (name.endsWith(extension)) {
-                    return false;
-                }
-            }
-            return true;
-        }
+    public void setSources(List<Resource> sources) {
+        this.sources = sources;
     }
+
+    public List<Resource> getResources() {
+        return resources;
+    }
+
+    public void setResources(List<Resource> resources) {
+        this.resources = resources;
+    }
+
 }

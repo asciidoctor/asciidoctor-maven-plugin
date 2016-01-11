@@ -20,7 +20,6 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 import org.asciidoctor.maven.io.Zips;
 
@@ -30,9 +29,6 @@ public class AsciidoctorZipMojo extends AsciidoctorMojo {
 
     @Component
     private MavenProjectHelper projectHelper;
-
-    @Parameter(property = PREFIX, defaultValue = "${project}", readonly = true)
-    private MavenProject project;
 
     @Parameter(property = PREFIX + "attach", defaultValue = "true")
     protected boolean attach;
