@@ -436,7 +436,7 @@
         <repository>
             <id>bintray-asciidoctor-maven-asciidoctor-maven-plugin</id>
             <name>asciidoctor-maven-asciidoctor-maven-plugin</name>
-            <url>https://api.bintray.com/maven/asciidoctor/maven/asciidoctor-maven-plugin</url>
+            <url>https://api.bintray.com/maven/abelsromero/maven/asciidoctor-maven-plugin</url>
         </repository>
     </distributionManagement>
 </project>

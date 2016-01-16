@@ -20,7 +20,11 @@
 				<artifactId>asciidoctor-maven-plugin</artifactId>
 				<version>@project.version@</version>
 				<configuration>
-					<sourceDirectory>src/main/doc</sourceDirectory>
+					<sources>
+						<source>
+							<directory>src/main/doc</directory>
+						</source>
+					</sources>
 					<outputDirectory>target/docs</outputDirectory>
 					<backend>html</backend>
 					<doctype>book</doctype>
