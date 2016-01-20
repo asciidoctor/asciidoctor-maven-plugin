@@ -1,5 +1,8 @@
 package org.asciidoctor.maven.test
 
+import org.apache.maven.model.Resource
+import org.asciidoctor.maven.test.plexus.mock.MockPlexusContainer
+
 import java.util.zip.ZipFile
 
 import org.apache.commons.io.FileUtils
@@ -10,6 +13,8 @@ import spock.lang.Specification
  *
  */
 class AsciidoctorZipMojoTest extends Specification {
+
+    MockPlexusContainer mockPlexusContainer = new MockPlexusContainer()
 
     def "zip it"() {
         given: 'an empty output directory'
@@ -32,9 +37,13 @@ class AsciidoctorZipMojoTest extends Specification {
                 '''.stripIndent()
             }
 
-            def mojo = new AsciidoctorZipMojo()
+            AsciidoctorZipMojo mojo = new AsciidoctorZipMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html'
-            mojo.sourceDirectory = srcDir
+            mojo.sources = [[
+                    directory: srcDir.getPath()
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.zipDestination = zip
             mojo.zip = true
@@ -60,8 +69,12 @@ class AsciidoctorZipMojoTest extends Specification {
 
         when:
             AsciidoctorZipMojo mojo = new AsciidoctorZipMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html5'
-            mojo.sourceDirectory = srcDir
+            mojo.sources = [[
+                    directory: srcDir.getPath()
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.preserveDirectories = true
             mojo.relativeBaseDir = true
@@ -109,8 +122,12 @@ class AsciidoctorZipMojoTest extends Specification {
 
         when:
             AsciidoctorZipMojo mojo = new AsciidoctorZipMojo()
+            mockPlexusContainer.initializeContext(mojo)
+
             mojo.backend = 'html5'
-            mojo.sourceDirectory = srcDir
+            mojo.sources = [[
+                    directory: srcDir.getPath()
+                ] as Resource]
             mojo.outputDirectory = outputDir
             mojo.sourceHighlighter = 'coderay'
             mojo.zipDestination = zip

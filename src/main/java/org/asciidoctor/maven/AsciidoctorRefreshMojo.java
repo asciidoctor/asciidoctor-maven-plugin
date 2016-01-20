@@ -13,9 +13,7 @@
 package org.asciidoctor.maven;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,14 +27,18 @@ import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.monitor.FileAlterationListener;
-import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
+import org.apache.commons.lang.StringUtils;
+import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.maven.monitor.LoggingFileAlterationListenerAdaptor;
+import org.asciidoctor.maven.monitor.SynchronizingFileAlterationListenerAdaptor;
+import org.asciidoctor.maven.io.AsciidoctorFileScanner;
 
 @Mojo(name = "auto-refresh")
 public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
@@ -146,69 +148,38 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
         monitors = new ArrayList<FileAlterationMonitor>();
 
         { // content monitor
-            final FileAlterationObserver observer;
-            if (sourceDocumentName != null) {
-                observer = new FileAlterationObserver(sourceDirectory, new NameFileFilter(sourceDocumentName));
-            } else if (sourceDirectory != null) {
-                observer = new FileAlterationObserver(sourceDirectory, new RegexFileFilter(ASCIIDOC_REG_EXP_EXTENSION));
-            } else {
-                monitors = null; // no need to start anything because there is no content
-                return;
+            List<Resource> _sources = getSources();
+            // If sources is empty, create one with the default simplest options
+            if (_sources == null || _sources.isEmpty()) {
+                Resource defaultSource = new Resource();
+                defaultSource.setDirectory(SOURCE_DIRECTORY);
+                _sources = new ArrayList<Resource>();
+                _sources.add(defaultSource);
             }
 
-            final FileAlterationMonitor monitor = new FileAlterationMonitor(interval);
-            final FileAlterationListener listener = new FileAlterationListenerAdaptor() {
-                @Override
-                public void onFileCreate(final File file) {
-                    getLog().info("File " + file.getAbsolutePath() + " created.");
-                    needsUpdate.set(true);
+            for (Resource source: _sources) {
+                // source is a directory -> create 1 monitor
+                if (!StringUtils.isEmpty(source.getDirectory())
+                        && (source.getIncludes() == null || source.getIncludes().isEmpty())
+                        && (source.getExcludes() == null || source.getExcludes().isEmpty())) {
+
+                    monitors.add(monitorDirectory(new File(source.getDirectory())));
+                } // source is a list of files with includes/excludes -> create 1 monitor for each source file
+                else {
+                    // TODO find a solution with only 1 monitor. Maybe creating a custom FileFilter
+                    AsciidoctorFileScanner scanner = new AsciidoctorFileScanner(buildContext);
+                    for (File sourceFile: scanner.scan(source)) {
+                        monitors.add(monitorFile(sourceFile));
+                    }
                 }
-
-                @Override
-                public void onFileChange(final File file) {
-                    getLog().info("File " + file.getAbsolutePath() + " updated.");
-                    needsUpdate.set(true);
-                }
-
-                @Override
-                public void onFileDelete(final File file) {
-                    getLog().info("File " + file.getAbsolutePath() + " deleted.");
-                    needsUpdate.set(true);
-                }
-            };
-
-            observer.addListener(listener);
-            monitor.addObserver(observer);
-
-            monitors.add(monitor);
+            }
         }
 
         { // resources monitors
             if (synchronizations != null) {
                 for (final Synchronization s : synchronizations) {
                     final FileAlterationMonitor monitor = new FileAlterationMonitor(interval);
-                    final FileAlterationListener listener = new FileAlterationListenerAdaptor() {
-                        @Override
-                        public void onFileCreate(final File file) {
-                            getLog().info("File " + file.getAbsolutePath() + " created.");
-                            synchronize(s);
-                            needsUpdate.set(true);
-                        }
-
-                        @Override
-                        public void onFileChange(final File file) {
-                            getLog().info("File " + file.getAbsolutePath() + " updated.");
-                            synchronize(s);
-                            needsUpdate.set(true);
-                        }
-
-                        @Override
-                        public void onFileDelete(final File file) {
-                            getLog().info("File " + file.getAbsolutePath() + " deleted.");
-                            FileUtils.deleteQuietly(file);
-                            needsUpdate.set(true);
-                        }
-                    };
+                    final FileAlterationListener listener = new SynchronizingFileAlterationListenerAdaptor(getLog(), needsUpdate, s);
 
                     final File source = s.getSource();
 
@@ -234,6 +205,42 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
                 throw new MojoExecutionException(e.getMessage(), e);
             }
         }
+    }
+
+    /**
+     * Creates a monitor on a directory
+     *
+     * @param directory directory to monitor
+     * @return FileAlterationMonitor instance fully configured
+     */
+    private FileAlterationMonitor monitorDirectory (File directory) {
+        final FileAlterationObserver observer;
+        observer = new FileAlterationObserver(directory, new RegexFileFilter(ASCIIDOC_REG_EXP_EXTENSION));
+        final FileAlterationMonitor monitor = new FileAlterationMonitor(interval);
+        final FileAlterationListener listener = new LoggingFileAlterationListenerAdaptor(getLog(), needsUpdate);
+
+        observer.addListener(listener);
+        monitor.addObserver(observer);
+
+        return monitor;
+    }
+
+    /**
+     * Creates a monitor on a single file (not a directory)
+     *
+     * @param file file to monitor
+     * @return FileAlterationMonitor instance fully configured
+     */
+    private FileAlterationMonitor monitorFile (File file) {
+        final FileAlterationObserver observer;
+        observer = new FileAlterationObserver(file.getParent(), new NameFileFilter(file.getName()));
+        final FileAlterationMonitor monitor = new FileAlterationMonitor(interval);
+        final FileAlterationListener listener = new LoggingFileAlterationListenerAdaptor(getLog(), needsUpdate);
+
+        observer.addListener(listener);
+        monitor.addObserver(observer);
+
+        return monitor;
     }
 
     private void createAsciidoctor() {
