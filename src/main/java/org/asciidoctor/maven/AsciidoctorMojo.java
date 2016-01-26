@@ -133,6 +133,9 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "attributeUndefined")
     protected String attributeUndefined = "drop-line";
 
+    @Parameter(property = AsciidoctorMaven.PREFIX + "failOnMissingSourceDirectory")
+    protected boolean failOnMissingSourceDirectory = true;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
@@ -142,6 +145,15 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         if (sourceDirectory == null) {
             throw new MojoExecutionException("Required parameter 'asciidoctor.sourceDir' not set.");
+        }
+
+        if (!sourceDirectory.exists()) {
+            if (failOnMissingSourceDirectory) {
+                throw new MojoExecutionException("sourceDirectory " + sourceDirectory + " does not exist");
+            } else {
+                getLog().info("sourceDirectory does not exist. Skip processing");
+                return;
+            }
         }
 
         ensureOutputExists();
