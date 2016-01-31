@@ -52,10 +52,10 @@ public class AsciidoctorMojo extends AbstractMojo {
     // should probably be configured in AsciidoctorMojo through @Parameter 'extension'
     protected static final String ASCIIDOC_REG_EXP_EXTENSION = ".*\\.a((sc(iidoc)?)|d(oc)?)$";
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDir", defaultValue = "${basedir}/src/main/asciidoc", required = true)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDirectory", defaultValue = "${basedir}/src/main/asciidoc", required = true)
     protected File sourceDirectory;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "outputDir", defaultValue = "${project.build.directory}/generated-docs", required = true)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "outputDirectory", defaultValue = "${project.build.directory}/generated-docs", required = true)
     protected File outputDirectory;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "preserveDirectories", defaultValue = "false", required = false)
@@ -141,7 +141,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
 
         if (sourceDirectory == null) {
-            throw new MojoExecutionException("Required parameter 'asciidoctor.sourceDir' not set.");
+            throw new MojoExecutionException("Required parameter 'asciidoctor.sourceDirectory' not set.");
         }
 
         ensureOutputExists();
