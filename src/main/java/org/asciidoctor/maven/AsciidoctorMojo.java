@@ -144,6 +144,11 @@ public class AsciidoctorMojo extends AbstractMojo {
             throw new MojoExecutionException("Required parameter 'asciidoctor.sourceDir' not set.");
         }
 
+        if (!sourceDirectory.exists()) {
+            getLog().info("sourceDirectory does not exist. Skip processing");
+            return;
+        }
+
         ensureOutputExists();
 
         final Asciidoctor asciidoctor = getAsciidoctorInstance(gemPath);
