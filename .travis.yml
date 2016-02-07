@@ -1,5 +1,7 @@
 language: java
 sudo: false
+before_script:
+  - export MAVEN_SKIP_RC=true
 jdk:
   - oraclejdk8
   - oraclejdk7
