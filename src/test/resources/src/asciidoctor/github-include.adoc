@@ -1,0 +1,24 @@
+= Document Title
+Doc Writer <thedoc@asciidoctor.org>
+
+Preamble paragraph.
+
+NOTE: This is test, only a test.
+
+== Includes a file from GitHub
+
+Note that this will only works with jruby 9k
+
+[source,xml]
+----
+include::https://raw.githubusercontent.com/cometd/cometd/master/pom.xml[]
+----
+
+
+== Includes a local file
+
+[source,groovy]
+.groovy-include.groovy
+----
+include::includes/groovy-include.groovy[]
+----
