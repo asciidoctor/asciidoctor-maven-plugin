@@ -4,7 +4,7 @@ import groovy.io.FileType
 
 import org.apache.commons.io.FileUtils
 import org.asciidoctor.maven.AsciidoctorMojo
-
+import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
@@ -836,4 +836,26 @@ class AsciidoctorMojoTest extends Specification {
             assert text =~ /[vV]ersion 1\.0-SNAPSHOT/
             text.contains( "This is the project version: 1.0-SNAPSHOT" )
     }
+
+    def 'github files can be included'() {
+        setup:
+            File srcDir = new File( 'target/test-classes/src/asciidoctor' )
+            File outputDir = new File('target/test-resources/github-include')
+            String documentName = 'github-include.adoc'
+
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDocumentName = documentName
+            mojo.backend = 'html5'
+            mojo.sourceDirectory = srcDir
+            mojo.outputDirectory = outputDir
+            mojo.sourceHighlighter = 'coderay'
+            mojo.attributes = ['allow-uri-read':'true']
+            mojo.execute()
+
+        then:
+            outputDir.list().toList().isEmpty() == false
+            !(new File(outputDir, 'github-include.html').text.contains('modelVersion'))
+    }
+
 }
