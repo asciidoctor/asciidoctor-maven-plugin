@@ -466,7 +466,7 @@ class AsciidoctorMojoTest extends Specification {
     /**
      * Tests Highlight.js source code highlighting options.
      */
-    def 'code highlighting - highlightjs'() {
+    def 'code highlighting - highlight.js'() {
         setup:
             File srcDir = new File('src/test/resources/src/asciidoctor')
             File outputDir = new File('target/asciidoctor-output-sourceHighlighting/highlightjs')
@@ -475,7 +475,7 @@ class AsciidoctorMojoTest extends Specification {
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.sourceHighlighter = 'highlightjs'
+            mojo.sourceHighlighter = 'highlight.js'
             mojo.sourceDocumentName = new File('main-document.adoc')
             mojo.backend = 'html'
             mojo.execute()
@@ -856,6 +856,34 @@ class AsciidoctorMojoTest extends Specification {
         then:
             outputDir.list().toList().isEmpty() == false
             !(new File(outputDir, 'github-include.html').text.contains('modelVersion'))
+    }
+
+    def "command line attributes replace configurations"() {
+        setup:
+            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File outputDir = new File('target/asciidoctor-output/command-line-options')
+
+            if (!outputDir.exists())
+                outputDir.mkdirs()
+        when: 'set toc and sourceHighlighter as XML configuration and command line attributes'
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.backend = 'html'
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'sample.asciidoc'
+            mojo.outputDirectory = outputDir
+            mojo.sourceHighlighter = 'coderay'
+            mojo.attributes['toc'] = 'left'
+            // replace some options
+            mojo.attributesChain = 'toc=right source-highlighter=highlight.js'
+            mojo.execute()
+        then: 'command line options are applied instead of xml configuration'
+            outputDir.list().toList().isEmpty() == false
+            outputDir.list().toList().contains('sample.html')
+            File sampleOutput = new File('sample.html', outputDir)
+            sampleOutput.length() > 0
+            String text = sampleOutput.getText()
+            text.contains('<body class="article toc2 toc-right">')
+            text.contains('<pre class="highlightjs highlight">')
     }
 
 }
