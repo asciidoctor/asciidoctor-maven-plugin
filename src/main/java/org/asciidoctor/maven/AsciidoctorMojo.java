@@ -82,8 +82,11 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "requires")
     protected List<String> requires = new ArrayList<String>();
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Options.ATTRIBUTES, required = false)
+    @Parameter(required = false)
     protected Map<String, Object> attributes = new HashMap<String, Object>();
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + Options.ATTRIBUTES, required = false)
+    protected String attributesChain = "";
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.BACKEND, defaultValue = "docbook", required = true)
     protected String backend = "";
@@ -384,6 +387,12 @@ public class AsciidoctorMojo extends AbstractMojo {
                 attributesBuilder.attribute(attributeEntry.getKey(), val);
             }
         }
+
+        if (!attributesChain.isEmpty()) {
+            getLog().info("Attributes: " + attributesChain);
+            attributesBuilder.arguments(attributesChain);
+        }
+
     }
 
     public File getSourceDirectory() {

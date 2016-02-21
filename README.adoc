@@ -92,7 +92,7 @@ eruby:: defaults to erb, the version used in JRuby
 headerFooter:: defaults to `true`
 templateDir:: disabled by default, defaults to `null`
 templateEngine:: disabled by default
-sourceHighlighter:: enables and sets the source highlighter (currently `coderay` or `highlightjs` are supported)
+sourceHighlighter:: enables and sets the source highlighter (currently `coderay` or `highlight.js` are supported)
 attributes:: a `Map<String,Object>` of attributes to pass to Asciidoctor, defaults to `null`
 embedAssets:: Embedd the CSS file, etc into the output, defaults to `false`
 gemPaths:: enables to specify the location to one or more gem installation directories (same as GEM_PATH environment var), `empty` by default
@@ -204,6 +204,36 @@ In the `<attributes>` part of the Asciidoctor Maven Plugin configuration:
 ----
 
 You can find more information and many examples ready to copy-paste in the {uri-examples}[Asciidoctor Maven examples] project.
+
+==== Command line configuration
+
+Configuration options can be set (but not replaced) using system properties directly in the command line as follows:
+
+ mvn generate-resources -Dasciidoctor.sourceDirectory=src/docs -Dasciidoctor.outputDirectory=target/docs
+
+All options follow the naming convention _`asciidoctor.` + option_name_.
+
+In order to provide a higher degree of flexibility `attributes` configuration follows a different behavior.
+Attributes defined through the command line are added to the ones already found in the XML configuration.
+The result of it is that attributes and other configuration options can be updated if they are added to the command line as attributes.
+For example, the following configuration could be modified with the command options as seen below.
+
+[source,xml]
+----
+<configuration>
+    <backend>html5</backend>
+    <sourceHighlighter>coderay</sourceHighlighter>
+    <attributes>
+        <toc>left</toc>
+    </attributes>
+</configuration>
+----
+
+ mvn generate-resources -Dasciidoctor.attributes=toc=right
+
+ mvn generate-resources -Dasciidoctor.attributes="toc=right source-highlighter=highlight.js imagesdir=my_images"
+
+Note that in the second case we need to use quotes due to the spaces, and that `source-highlighter` is the asciidoctor attribute name used to update the configuration.
 
 === Multiple outputs for the same file
 
