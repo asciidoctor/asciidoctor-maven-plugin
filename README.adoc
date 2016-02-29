@@ -343,7 +343,7 @@ This is necessary since the `<configuration>` element is used to configure more 
 
 Here's an example that shows how to set options, attributes and ignore partial AsciiDoc files (i.e., files that begin with an underscore).
 
-[source,xml]
+[source,xml,subs=attributes+]
 .Maven site integration with Asciidoctor configuration
 ----
 <plugin>
@@ -371,7 +371,7 @@ Here's an example that shows how to set options, attributes and ignore partial A
         <dependency>
             <groupId>org.asciidoctor</groupId>
             <artifactId>asciidoctor-maven-plugin</artifactId>
-            <version>1.5.3</version>
+            <version>{release-version}</version>
         </dependency>
     </dependencies>
 </plugin>
@@ -460,7 +460,7 @@ When using Asciidoctor Diagram from the maven plugin you need a couple of things
 
 First you need to enable Asciidoctor Diagram by adding the gem to the maven plugin and instructing it to look for the generated images in the target folder:
 
-[source,xml]
+[source,xml,subs=attributes+]
 ----
 <plugin>
   <groupId>org.asciidoctor</groupId>
