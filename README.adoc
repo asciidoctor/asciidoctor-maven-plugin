@@ -460,7 +460,8 @@ When using Asciidoctor Diagram from the maven plugin you need a couple of things
 
 First you need to enable Asciidoctor Diagram by adding the gem to the maven plugin and instructing it to look for the generated images in the target folder:
 
-```xml
+[source,xml]
+----
 <plugin>
   <groupId>org.asciidoctor</groupId>
   <artifactId>asciidoctor-maven-plugin</artifactId>
@@ -496,7 +497,7 @@ First you need to enable Asciidoctor Diagram by adding the gem to the maven plug
     </dependency>
   </dependencies>
 </plugin>
-```
+----
 <1> provide a location for the `dot` program used by e.g. graphviz
 <2> set the source images folder to the place where the generated images end up
 <3> configure the place where the gems are to be downloaded
@@ -507,7 +508,8 @@ However when you do this, asciidoctor won't be able to find static images from y
 Therefore you should also instruct Maven to copy the static assets at an earlier phase during the build.
 This is achieved by configuring the Maven Resources Plugin:
 
-```xml
+[source,xml]
+----
 <plugin>
   <groupId>org.apache.maven.plugins</groupId>
   <artifactId>maven-resources-plugin</artifactId>
@@ -531,5 +533,5 @@ This is achieved by configuring the Maven Resources Plugin:
     </execution>
   </executions>
 </plugin>
-```
+----
 
