@@ -26,7 +26,7 @@ import org.asciidoctor.maven.io.Zips;
 
 @Mojo(name = "zip")
 public class AsciidoctorZipMojo extends AsciidoctorMojo {
-    public static final String PREFIX = AsciidoctorMaven.PREFIX + ".zip.";
+    public static final String PREFIX = AsciidoctorMaven.PREFIX + "zip.";
 
     @Component
     private MavenProjectHelper projectHelper;
