@@ -252,59 +252,27 @@ public class AsciidoctorMojo extends AbstractMojo {
             String normalizedGemPath = (File.separatorChar == '\\') ? gemPath.replaceAll("\\\\", "/") : gemPath;
             asciidoctor = Asciidoctor.Factory.create(normalizedGemPath);
         }
-
+        
         Ruby rubyInstance = null;
-        try
-		{
-        	rubyInstance = (Ruby) JRubyRuntimeContext.class.getMethod("get").invoke(null);
-		}
-		catch (NoSuchMethodException e)
-		{
-	        if(rubyInstance == null)
-	        {
-				try
-				{
-		        	rubyInstance = (Ruby) JRubyRuntimeContext.class.getMethod("get", Asciidoctor.class).invoke(null, asciidoctor);
-				}
-				catch (NoSuchMethodException e1)
-				{
-		            throw new MojoExecutionException("Failed to invoke get(AsciiDoctor) for JRubyRuntimeContext",e);
-				}
-				catch (SecurityException e1)
-				{
-		            throw new MojoExecutionException("Failed to invoke get(AsciiDoctor) for JRubyRuntimeContext",e);
-				}
-				catch (IllegalAccessException e1)
-				{
-		            throw new MojoExecutionException("Failed to invoke get(AsciiDoctor) for JRubyRuntimeContext",e);
-				}
-				catch (IllegalArgumentException e1)
-				{
-		            throw new MojoExecutionException("Failed to invoke get(AsciiDoctor) for JRubyRuntimeContext",e);
-				}
-				catch (InvocationTargetException e1)
-				{
-		            throw new MojoExecutionException("Failed to invoke get(AsciiDoctor) for JRubyRuntimeContext",e);
-				}
-	        	
-	        }
-		}
-		catch (SecurityException e)
-		{
-            throw new MojoExecutionException("Failed to retrieve get method information from JRubyRuntimeContext",e);
-		}
-		catch (IllegalAccessException e)
-		{
-            throw new MojoExecutionException("Failed to invoke get for JRubyRuntimeContext",e);
-		}
-		catch (IllegalArgumentException e)
-		{
-            throw new MojoExecutionException("Failed to invoke get for JRubyRuntimeContext",e);
-		}
-		catch (InvocationTargetException e)
-		{
-            throw new MojoExecutionException("Failed to invoke get for JRubyRuntimeContext",e);
-		}
+        try {
+            rubyInstance = (Ruby) JRubyRuntimeContext.class.getMethod("get")
+                    .invoke(null);
+        } catch (NoSuchMethodException e) {
+            if (rubyInstance == null) {
+                try {
+                    rubyInstance = (Ruby) JRubyRuntimeContext.class.getMethod(
+                            "get", Asciidoctor.class).invoke(null, asciidoctor);
+                } catch (ReflectiveOperationException e1) {
+                    throw new MojoExecutionException(
+                            "Failed to invoke get(AsciiDoctor) for JRubyRuntimeContext",
+                            e);
+                }
+
+            }
+        } catch (ReflectiveOperationException e) {
+            throw new MojoExecutionException(
+                    "Failed to invoke get for JRubyRuntimeContext", e);
+        }
         
         String gemHome = rubyInstance.evalScriptlet("ENV['GEM_HOME']").toString();
         String gemHomeExpected = (gemPath == null || "".equals(gemPath)) ? "" : gemPath.split(java.io.File.pathSeparator)[0];
