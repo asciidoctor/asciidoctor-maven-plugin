@@ -262,14 +262,14 @@ public class AsciidoctorMojo extends AbstractMojo {
                 try {
                     rubyInstance = (Ruby) JRubyRuntimeContext.class.getMethod(
                             "get", Asciidoctor.class).invoke(null, asciidoctor);
-                } catch (ReflectiveOperationException e1) {
+                } catch (Exception e1) {
                     throw new MojoExecutionException(
                             "Failed to invoke get(AsciiDoctor) for JRubyRuntimeContext",
-                            e);
+                            e1);
                 }
 
             }
-        } catch (ReflectiveOperationException e) {
+        } catch (Exception e) {
             throw new MojoExecutionException(
                     "Failed to invoke get for JRubyRuntimeContext", e);
         }
