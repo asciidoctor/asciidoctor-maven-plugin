@@ -15,6 +15,8 @@ package org.asciidoctor.maven;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,6 +43,7 @@ import org.asciidoctor.internal.RubyUtils;
 import org.asciidoctor.maven.extensions.AsciidoctorJExtensionRegistry;
 import org.asciidoctor.maven.extensions.ExtensionConfiguration;
 import org.asciidoctor.maven.extensions.ExtensionRegistry;
+import org.jruby.Ruby;
 
 
 /**
@@ -249,8 +252,29 @@ public class AsciidoctorMojo extends AbstractMojo {
             String normalizedGemPath = (File.separatorChar == '\\') ? gemPath.replaceAll("\\\\", "/") : gemPath;
             asciidoctor = Asciidoctor.Factory.create(normalizedGemPath);
         }
+        
+        Ruby rubyInstance = null;
+        try {
+            rubyInstance = (Ruby) JRubyRuntimeContext.class.getMethod("get")
+                    .invoke(null);
+        } catch (NoSuchMethodException e) {
+            if (rubyInstance == null) {
+                try {
+                    rubyInstance = (Ruby) JRubyRuntimeContext.class.getMethod(
+                            "get", Asciidoctor.class).invoke(null, asciidoctor);
+                } catch (Exception e1) {
+                    throw new MojoExecutionException(
+                            "Failed to invoke get(AsciiDoctor) for JRubyRuntimeContext",
+                            e1);
+                }
 
-        String gemHome = JRubyRuntimeContext.get().evalScriptlet("ENV['GEM_HOME']").toString();
+            }
+        } catch (Exception e) {
+            throw new MojoExecutionException(
+                    "Failed to invoke get for JRubyRuntimeContext", e);
+        }
+        
+        String gemHome = rubyInstance.evalScriptlet("ENV['GEM_HOME']").toString();
         String gemHomeExpected = (gemPath == null || "".equals(gemPath)) ? "" : gemPath.split(java.io.File.pathSeparator)[0];
 
         if (!"".equals(gemHome) && !gemHomeExpected.equals(gemHome)) {
