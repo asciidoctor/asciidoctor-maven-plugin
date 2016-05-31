@@ -1,0 +1,9 @@
+toc:
+  indent: 18
+footer:
+  new_entry: 'yes'
+page:
+  new_one: 879
+  size: Letter
+base:
+  font_size_large: round($base_font_size * 2)

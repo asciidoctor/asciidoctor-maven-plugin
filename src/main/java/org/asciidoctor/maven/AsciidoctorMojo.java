@@ -12,18 +12,11 @@
 
 package org.asciidoctor.maven;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
+import com.esotericsoftware.yamlbeans.YamlException;
+import com.esotericsoftware.yamlbeans.YamlReader;
+import com.esotericsoftware.yamlbeans.YamlWriter;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -39,11 +32,24 @@ import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.internal.JRubyRuntimeContext;
-import org.asciidoctor.internal.RubyUtils;
 import org.asciidoctor.maven.extensions.AsciidoctorJExtensionRegistry;
 import org.asciidoctor.maven.extensions.ExtensionConfiguration;
 import org.asciidoctor.maven.extensions.ExtensionRegistry;
+import org.asciidoctor.maven.pdf.Yamls;
 import org.jruby.Ruby;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -139,6 +145,10 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "attributeUndefined")
     protected String attributeUndefined = "drop-line";
 
+    protected PdfTheme pdfTheme;
+
+    private final Collection<Runnable> postTasks = new ArrayList<Runnable>();
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
@@ -157,9 +167,29 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         ensureOutputExists();
 
+        try {
+            simpleExecute();
+        } finally {
+            for (final Runnable postTask : postTasks) {
+                try {
+                    postTask.run();
+                } catch (final Exception e) {
+                    getLog().error(e.getMessage(), e);
+                }
+            }
+            postTasks.clear();
+        }
+    }
+
+    private void simpleExecute() throws MojoExecutionException {
         final Asciidoctor asciidoctor = getAsciidoctorInstance(gemPath);
 
         asciidoctor.requireLibraries(requires);
+
+        if (pdfTheme != null && !"pdf".equals(backend)) {
+            getLog().info("Forcing backend to pdf cause pdfTheme is defined");
+            backend = "pdf";
+        }
 
         final OptionsBuilder optionsBuilder = OptionsBuilder.options()
                 .backend(backend)
@@ -184,7 +214,7 @@ public class AsciidoctorMojo extends AbstractMojo {
                 throw new MojoExecutionException(e.getMessage(), e);
             }
         }
-        
+
         if (sourceDocumentName == null) {
             for (final File f : scanSourceFiles()) {
                 setDestinationPaths(optionsBuilder, f);
@@ -362,6 +392,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         if (templateDir != null) {
             optionsBuilder.templateDir(templateDir);
         }
+
     }
 
     protected void setAttributesOnBuilder(AttributesBuilder attributesBuilder) throws MojoExecutionException {
@@ -417,6 +448,52 @@ public class AsciidoctorMojo extends AbstractMojo {
             attributesBuilder.arguments(attributesChain);
         }
 
+        if (pdfTheme != null) {
+            if (pdfTheme.getStylesDir() != null) {
+                attributesBuilder.attribute("pdf-stylesdir", pdfTheme.getStylesDir().getAbsolutePath());
+            }
+            if (pdfTheme.getFontsDir() != null) {
+                attributesBuilder.attribute("pdf-fontsdir", pdfTheme.getFontsDir().getAbsolutePath());
+            }
+            if (pdfTheme.getStyle() != null) {
+                if (pdfTheme.getThemePatch() != null) {
+                    if (pdfTheme.getStylesDir() == null) {
+                        throw new IllegalArgumentException("For pdf theme patch feature to work you need to set stylesDir too");
+                    }
+
+                    // 1. load the theme
+                    // 2. load the patch
+                    // 3. merge
+                    // 4. create a temp file and use it as rendering theme
+
+                    final Yamls yamls = new Yamls();
+                    final Object theme1 = yamls.read(new File(pdfTheme.getStylesDir(), pdfTheme.getStyle() + "-theme.yml"));
+                    final Object patch = yamls.read(pdfTheme.getThemePatch());
+                    final Object theme = yamls.mergeYamls(theme1, patch);
+
+                    // temp file
+                    final String originalTheme = pdfTheme.getStyle();
+                    pdfTheme.setStyle(originalTheme + "_patched");
+
+                    final File tempTheme = new File(pdfTheme.getStylesDir(), pdfTheme.getStyle() + "-theme.yml");
+                    yamls.write(tempTheme, theme);
+
+                    attributesBuilder.attribute("pdf-style", pdfTheme.getStyle());
+
+                    postTasks.add(new Runnable() { // reset config
+                        @Override
+                        public void run() {
+                            pdfTheme.setStyle(originalTheme);
+                            if (!tempTheme.delete()) {
+                                tempTheme.deleteOnExit();
+                            }
+                        }
+                    });
+                } else {
+                    attributesBuilder.attribute("pdf-style", pdfTheme.getStyle());
+                }
+            }
+        }
     }
 
     public File getSourceDirectory() {
