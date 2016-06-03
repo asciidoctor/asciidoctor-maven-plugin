@@ -23,15 +23,15 @@ image:http://img.shields.io/coveralls/{project-repo}/master.svg["Coverage Status
 image:https://maven-badges.herokuapp.com/maven-central/org.asciidoctor/asciidoctor-maven-plugin/badge.svg["Maven Central",link="https://maven-badges.herokuapp.com/maven-central/org.asciidoctor/asciidoctor-maven-plugin"]
 endif::[]
 
-Asciidoctor Maven 插件
-The Asciidoctor Maven Plugin is the official way to convert your {uri-asciidoc}[AsciiDoc] documentation using {uri-asciidoctor}[Asciidoctor] from an {uri-maven}[Apache Maven] build.
+Asciidoctor Maven 插件是一种官方支持的方式，它可以在 {uri-maven}[Apache Maven] 构建过程中使用 {uri-asciidoctor}[Asciidoctor] 转化你的 {uri-asciidoc}[AsciiDoc]  文档。
 
+[[installation]]
 == Installation
 
-As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` section of your POM file:
+作为一个典型的 Maven 插件，可以很容易地在 POM 文件的 `<plugins>` 部分声明使用：
 
 [source,xml,subs=attributes+]
-.Plugin declaration in pom.xml
+.pom.xml 中的插件声明
 ----
 <plugins>
     <plugin>
@@ -42,12 +42,13 @@ As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` 
     </plugin>
 </plugins>
 ----
-<1> As this plugin tracks the version of Asciidoctor, you can use whichever version of Asciidoctor you prefer.
+<1> 这个插件的版本紧跟 Asciidoctor 的版本，你可以使用任意喜欢的 Asciidoctor 版本。
 
-== Usage
+[[usage]]
+== 使用
 
 [source,xml]
-.Execution setup
+.执行配置
 ----
 <plugin>
     ...
@@ -62,22 +63,23 @@ As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` 
     </executions>
 </plugin>
 ----
-<1> This is simply an unique id for the execution
-<2> The asciidoctor-maven-plugin does not run in a specific phase, so one must be specified
-<3> The (only for the moment) Asciidoctor Maven plugin goal
+<1> 这是执行唯一ID。This is simply an unique id for the execution
+<2> asciidoctor-maven-plugin 不在任意环节运行，所以必须指定一个环节。
+<3> Asciidoctor Maven 插件在此时的执行目标。
 
-=== Configuration options
+[[configuration-options]]
+=== 配置选项
 
-There are several configuration options that the asciidoctor-maven-plugin uses, which parallel the options in Asciidoctor:
+asciidoctor-maven-plugin 有很多配置选项，这些配置在 Asciidoctor 也是可用的：
 
-sourceDirectory:: defaults to `${basedir}/src/main/asciidoc`
-sourceDocumentName:: an override to process a single source file; defaults to all files in `${sourceDirectory}`
-sourceDocumentExtensions:: (named `extensions` in v1.5.3 and below) a `List<String>` of non-standard file extensions to render. Currently ad, adoc, and asciidoc will be rendered by default
-outputDirectory:: defaults to `${project.build.directory}/generated-docs`
-baseDir:: (not Maven's basedir) enables to set the root path for resouces (e.g. included files), defaults to `${sourceDirectory}`
-skip:: set this to `true` to bypass generation, defaults to `false`
-preserveDirectories:: enables to specify whether the documents should be rendered in the same folder structure as in the source directory or not, defaults to `false`.
-When `true`, instead of generating all output in a single folder, output files are generated in the same structure. See the following example
+sourceDirectory:: 默认指向 `${basedir}/src/main/asciidoc`
+sourceDocumentName:: an override to process a single source file; 默认指向 `${sourceDirectory}` 中的所有文件
+sourceDocumentExtensions:: （在 v1.5.3 及其以下版本中被命名为 `extensions`) 一系列需要渲染的不标准的文件扩展名。目前，ad、adoc 和 asciidoc 默认就会被渲染。
+outputDirectory:: 默认指向 `${project.build.directory}/generated-docs`
+baseDir:: （不是 Maven 的 basedir）设置资源（例如被包含的文件）的根目录，默认指向 `${sourceDirectory}`。
+skip:: 跳过生成则设置为 `true`， 默认`false`。
+preserveDirectories:: 指明是否渲染成和源文件相同的目录结构。默认为 `false`。
+当为 `true` 时，不在将所有文件都生成到同一个目录中，而是将输出文件生成到相同的目录结构中。看下面的例子。
 +
 [source]
 ----
@@ -88,7 +90,7 @@ When `true`, instead of generating all output in a single folder, output files a
     │       └── docbook.adoc          │       └── docbook.html
     └── index.adoc                    └── index.html
 ----
-relativeBaseDir:: only used when baseDir is not set, enables to specify that each AsciiDoc file must search for its resources in the same folder (for example, included files). Internally, for each AsciiDoc source, sets `baseDir` to the same path as the source file. Defaults to `false`
+relativeBaseDir:: 只有在 `baseDir` 没有指明的情况下才使用。启用则指明每一个 AsciiDoc 文件都必须从同一个目录下搜索它的资源文件（例如被包含的文件）。在内部，对于每一个 AsciiDoc 源文件，设置 `baseDir` 与源文件相同的路径。默认为 `false`。
 imagesDir:: defaults to `images`, which will be relative to the directory containing the source files
 backend:: defaults to `docbook`
 doctype:: defaults to `null` (which trigger's Asciidoctor's default of `article`)
@@ -239,6 +241,7 @@ For example, the following configuration could be modified with the command opti
 
 Note that in the second case we need to use quotes due to the spaces, and that `source-highlighter` is the asciidoctor attribute name used to update the configuration.
 
+[[multiple-outputs-for-the-same-file]]
 === Multiple outputs for the same file
 
 Maven has the ability to execute a Mojo multiple times.
@@ -292,6 +295,7 @@ An example of this setup is below:
 Any configuration specified outside the executions section is inherited by each execution.
 This allows an easier way of defining common configuration options.
 
+[[maven-site-integration]]
 == Maven Site Integration
 
 To author your Maven-generated site in AsciiDoc, you must first add a dependency on the Asciidoctor plugin to your maven-site-plugin declaration.
@@ -338,6 +342,7 @@ Make sure you add a `menu` item for each page so you can access it from the site
 </body>
 -----
 
+[[configuration]]
 === Configuration
 
 As of version 1.5.3 of the plugin, you can configure Asciidoctor by specifying configuration properties in the plugin declaration, just like with the main plugin goal.
@@ -404,6 +409,7 @@ Custom templates can be extremely helpful when trying to customize the appearanc
 
 // TODO
 
+[[hacking]]
 == Hacking
 
 Developer setup for hacking on this project isn't very difficult. The requirements are very small:
@@ -414,12 +420,14 @@ Developer setup for hacking on this project isn't very difficult. The requiremen
 Everything else will be brought in by Maven. This is a typical Maven Java project, nothing special. You should be able to use IntelliJ, Eclipse, or Netbeans
 without any issue for hacking on the project.
 
+[[building]]
 == Building
 
 Standard Maven build:
 
  mvn clean install
 
+[[testing]]
 == Testing
 
 http://spockframework.org/[Spock] is used for testing the calling of the Mojo. This will be downloaded by Maven. Tests are run simply by:
@@ -430,8 +438,10 @@ Or any of the other goals which run tests.
 
 NOTE: If I can figure out a good way to setup a Ruby testing environment I'll do that as well, but none exists at this time.
 
+[[tips-tricks]]
 == Tips & Tricks
 
+[[generate-your-documentation-in-separate-folders-per-version]]
 === Generate your documentation in separate folders per version
 
 [source, xml]
@@ -443,6 +453,7 @@ NOTE: If I can figure out a good way to setup a Ruby testing environment I'll do
 </configuration>
 -----
 
+[[enable-section-numbering]]
 === Enable section numbering
 
 [source, xml]
