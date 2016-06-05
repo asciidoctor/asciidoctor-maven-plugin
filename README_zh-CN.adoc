@@ -91,19 +91,21 @@ preserveDirectories:: 指明是否渲染成和源文件相同的目录结构。�
     └── index.adoc                    └── index.html
 ----
 relativeBaseDir:: 只有在 `baseDir` 没有指明的情况下才使用。启用则指明每一个 AsciiDoc 文件都必须从同一个目录下搜索它的资源文件（例如被包含的文件）。在内部，对于每一个 AsciiDoc 源文件，设置 `baseDir` 与源文件相同的路径。默认为 `false`。
-imagesDir:: defaults to `images`, which will be relative to the directory containing the source files
-backend:: defaults to `docbook`
-doctype:: defaults to `null` (which trigger's Asciidoctor's default of `article`)
-eruby:: defaults to erb, the version used in JRuby
-headerFooter:: defaults to `true`
-templateDir:: disabled by default, defaults to `null`
-templateEngine:: disabled by default
-sourceHighlighter:: enables and sets the source highlighter (currently `coderay` or `highlight.js` are supported)
-attributes:: a `Map<String,Object>` of attributes to pass to Asciidoctor, defaults to `null`
-embedAssets:: Embedd the CSS file, etc into the output, defaults to `false`
-gemPaths:: enables to specify the location to one or more gem installation directories (same as GEM_PATH environment var), `empty` by default
+imagesDir:: 默认指向 `images`，它是相对于源码目录的相对路径。
+backend:: 默认是 `docbook`。
+doctype:: 默认为 `null` （它将触发 Asciidoctor 的默认值 `article`）
+eruby:: 默认为 erb，被 JRuby 使用
+// eruby:: defaults to erb, the version used in JRuby
+headerFooter:: 默认为 `true`
+templateDir:: 默认不可用，默认值为 `null`
+templateEngine:: 默认不可用
+sourceHighlighter:: 启用语法高亮，设置语法高亮器（当前仅支持 `coderay` 和 `highlight.js`）
+attributes:: 包含传递给 Asciidoctor 的属性的 `Map<String,Object>`，默认为 `null`
+embedAssets:: 内嵌的 CSS 文件，指向输出，默认为 `false`
+// embedAssets:: Embedd the CSS file, etc into the output, defaults to `false`
+gemPaths:: 用于指明一个或多个 gem 安装路径（等同 GEM_PATH 环境变量），默认为 `empty`
 requires:: a `List<String>` to specify additional Ruby libraries not packaged in AsciidoctorJ, `empty` by default
-extensions:: `List of extensions` to include during the conversion process (see link:https://github.com/asciidoctor/asciidoctorj/blob/master/README.adoc#extension-api[AsciidoctorJ's Extension API] for information about the available options). For each extension, the implementation class must be specified in the `className` parameter, the `blockName` is only required when configuring a _BlockProcessor_, _BlockMacroProcessor_ or _InlineMacroProcessor_. Here follows a configuration example:
+extensions:: 被包含进转化过程的扩展列表（可从 link:https://github.com/asciidoctor/asciidoctorj/blob/master/README.adoc#extension-api[AsciidoctorJ's Extension API] 更多可选项的信息）。对于每一个扩展，实现类必须在 `className` 参数中指明，`blockName` 参数只有在配置 _BlockProcessor_， _BlockMacroProcessor_ 或 _InlineMacroProcessor_ 才需要指定。下面是一个配置例子：
 +
 [source,xml]
 ----
@@ -134,26 +136,27 @@ extensions:: `List of extensions` to include during the conversion process (see 
     </dependencies>
 </plugin>
 ----
-<1> Note that processors must be included in the plugin's execution classpath, not in the project's.
+<1> 注意：处理器必须被包含在插件的执行类路径中，而不是项目的。
 
-NOTE: Extensions can also be integrated through the SPI interface implementation. This method does not require any configuration in the `pom.xml`, see link:https://github.com/asciidoctor/asciidoctorj#extension-spi[Extension SPI] for details.
+NOTE: 扩展也可以通过 SPI 接口实现整合进来。这种方法就不需要在 `pom.xml` 中作任何配置，查看 link:https://github.com/asciidoctor/asciidoctorj#extension-spi[Extension SPI] 获得更多细节。
 
-==== Built-in attributes
+[[built-in-attributes]]
+==== 内置属性
 
-There are various attributes Asciidoctor recognizes. Below is a list of them and what they do.
+Asciidoctor 包含了一系列属性。下面是它们的一个列表以及它们的作用。
 
-title:: An override for the title of the document.
+title:: 一个文档的概要标题。
 
-NOTE: This one, for backwards compatibility, can still be used in the top level configuration options.
+NOTE: 为了向后兼容性，这个属性还可以在顶级配置项中使用。
 
-Many other attributes are possible. Until a canonical list is created for asciidoctor, you may find http://asciidoc.org/userguide.html#X88[this list] to be helpful.
+很多其他属性可用。在 Asciidoctor 给出一个权威列表之前，你可以在 http://asciidoc.org/userguide.html#X88[属性列表] 中看到更多帮助。
 
-More will be added in the future to take advantage of other options and attributes of Asciidoctor.
-Any setting in the attributes section that conflicts with an explicitly named attribute configuration will be overidden by the explicitly named attribute configuration.
-These settings can all be changed in the `<configuration>` section of the plugin section:
+为了利用 Asciidoctor 的其他选项和属性，将来会有更多属性被添加进来。
+属性部分的任何设置如果和命名属性配置相冲突，将会被命名属性配置所覆盖。
+这些设置都可以在插件部分的 `<configuration>` 部分中改变：
 
 [source,xml]
-.Plugin configuration options
+.插件配置选项
 ----
 <plugin>
     <configuration>
@@ -168,12 +171,13 @@ These settings can all be changed in the `<configuration>` section of the plugin
 </plugin>
 ----
 
-==== Passing POM properties
+[[passing-pom-properties]]
+==== 传递 POM 属性
 
-It is possible to pass properties defined in the POM to the Asciidoctor processor. This is handy for example to include in the generated document the POM artifact version number.
+可以将在 POM 中定义的属性传递给 Asciidoctor 处理器。下面的例子演示在生成文档中包含 POM artifact 版本号。
 
-This is done by creating a custom AsciiDoc property in the `attributes` section of the `configuration`.
-The AsciiDoc property value is defined in the usual Maven way: `${myMavenProperty}`.
+这些要在 `configuration` 部分的 `attributes` 小节中，通过创建自定义 AsciiDoc 属性来完成。
+AsciiDoc 属性值使用常用的 Maven 方式来定义： `${myMavenProperty}`。
 
 [source,xml]
 ----
@@ -182,26 +186,28 @@ The AsciiDoc property value is defined in the usual Maven way: `${myMavenPropert
 </attributes>
 ----
 
-The custom AsciiDoc property can then be used in the document like this:
+这个自定义的 AsciiDoc 属性接下来就可以在文档中像如下方式使用：
 
  The latest version of the project is {project-version}.
 
 [TIP]
 ====
-If you want to have the project version as the revision number of the document, use this construct:
+如果你想使用项目的版本作为文档的修订版，使用如下结构：
 
  :revnumber: {project-version}
 
-This will make the version number appear in the header and footer of the output.
+这样，版本号将会出现在输出文档的头部和尾部。
 ====
 
-==== Setting boolean values
+[[setting-boolean-values]]
+==== 设置布尔值
 
-Boolean attributes in asciidoctor, such as `sectnums`, `linkcss` or `copycss` can be set with a value of `true` and unset with a value of `false`.
+sciidoctor 中的布尔属性，例如 `sectnums`， `linkcss` 或 `copycss` 可以使用 `true` 值来设置，也可以使用 `false` 来取消设置。
 
-==== Examples
+[[examples]]
+==== 示例
 
-In the `<attributes>` part of the Asciidoctor Maven Plugin configuration:
+在 Asciidoctor Maven 插件配置的 `<attributes>` 部分：
 
 [source,xml]
 ----
@@ -209,17 +215,19 @@ In the `<attributes>` part of the Asciidoctor Maven Plugin configuration:
 <linkcss>false</linkcss>
 ----
 
-You can find more information and many examples ready to copy-paste in the {uri-examples}[Asciidoctor Maven examples] project.
+在 {uri-examples}[Asciidoctor Maven 示例] 项目中，你可以发现更多信息以及可以直接复制粘贴的示例。
 
-==== Command line configuration
+[[command-line-configuration]]
+==== 命令行配置
 
-Configuration options can be set (but not replaced) using system properties directly in the command line as follows:
+配置选项可以直接在命令行中使用系统属性来设置（但不可删除），如下：
 
  mvn generate-resources -Dasciidoctor.sourceDirectory=src/docs -Dasciidoctor.outputDirectory=target/docs
 
-All options follow the naming convention _`asciidoctor.` + option_name_.
+所有选项按照这样的命名规范： _`asciidoctor.` + option_name_。
 
-In order to provide a higher degree of flexibility `attributes` configuration follows a different behavior.
+为了属性配置有更高的灵活性，请遵循不同的行为。
+// In order to provide a higher degree of flexibility `attributes` configuration follows a different behavior
 Attributes defined through the command line are added to the ones already found in the XML configuration.
 The result of it is that attributes and other configuration options can be updated if they are added to the command line as attributes.
 For example, the following configuration could be modified with the command options as seen below.
@@ -239,17 +247,17 @@ For example, the following configuration could be modified with the command opti
 
  mvn generate-resources -Dasciidoctor.attributes="toc=right source-highlighter=highlight.js imagesdir=my_images"
 
-Note that in the second case we need to use quotes due to the spaces, and that `source-highlighter` is the asciidoctor attribute name used to update the configuration.
+注意在第二种情况，你需要引号把属性设置括起来，其中，`source-highlighter` 是 asciidoctor 的属性值名，用于更新配置。
 
 [[multiple-outputs-for-the-same-file]]
-=== Multiple outputs for the same file
+=== 相同文件的多个输出
 
-Maven has the ability to execute a Mojo multiple times.
+Maven 可以多次执行 Mojo。
 Instead of reinventing the wheel inside the Mojo, we'll push this off to Maven to handle the multiple executions.
 An example of this setup is below:
 
 [source,xml,subs=attributes+]
-.Multiple configuration extract
+.多个配置输出
 ----
 <plugin>
     <groupId>org.asciidoctor</groupId>
