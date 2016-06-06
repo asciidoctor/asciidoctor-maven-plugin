@@ -23,6 +23,9 @@ endif::[]
 
 The Asciidoctor Maven Plugin is the official way to convert your {uri-asciidoc}[AsciiDoc] documentation using {uri-asciidoctor}[Asciidoctor] from an {uri-maven}[Apache Maven] build.
 
+.Translations of the document are available in the following languages:
+* link:README_zh-CN.adoc[汉语]
+
 == Installation
 
 As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` section of your POM file:
@@ -103,7 +106,7 @@ extensions:: `List of extensions` to include during the conversion process (see 
 [source,xml]
 ----
 <plugin>
-    ... 
+    ...
     <executions>
         <execution>
             <configuration>
@@ -196,7 +199,7 @@ Boolean attributes in asciidoctor, such as `sectnums`, `linkcss` or `copycss` ca
 
 ==== Examples
 
-In the `<attributes>` part of the Asciidoctor Maven Plugin configuration: 
+In the `<attributes>` part of the Asciidoctor Maven Plugin configuration:
 
 [source,xml]
 ----

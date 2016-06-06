@@ -25,6 +25,9 @@ endif::[]
 
 Asciidoctor Maven 插件是一种官方支持的方式，它可以在 {uri-maven}[Apache Maven] 构建过程中使用 {uri-asciidoctor}[Asciidoctor] 转化你的 {uri-asciidoc}[AsciiDoc]  文档。
 
+.该文档有如下语言的翻译版：
+* link:README.adoc[English]
+
 [[installation]]
 == Installation
 
