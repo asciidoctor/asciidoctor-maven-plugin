@@ -28,6 +28,8 @@ Asciidoctor Maven 插件是一种官方支持的方式，它可以在 {uri-maven
 .该文档有如下语言的翻译版：
 * link:README.adoc[English]
 
+TIP: 本文档是 link:README.adoc[README] 的翻译版。如果发现有什么不一致或者错误的地方，请以原文档为准。
+
 [[installation]]
 == Installation
 
