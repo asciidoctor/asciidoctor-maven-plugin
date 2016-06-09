@@ -1,0 +1,484 @@
+= Asciidoctor Maven 插件
+:translators: D瓜哥
+ifdef::env-github[Translated by: {translators}]
+// Metadata
+:release-version: 1.5.2
+// Settings
+:page-layout: base
+:idprefix:
+:idseparator: -
+:toc: preamble
+ifdef::env-github[:badges:]
+// URIs
+:project-repo: asciidoctor/asciidoctor-maven-plugin
+:uri-asciidoc: http://asciidoc.org
+:uri-asciidoctor: http://asciidoctor.org
+:uri-examples: https://github.com/asciidoctor/asciidoctor-maven-examples
+:uri-maven: http://maven.apache.org
+
+ifdef::badges[]
+image:https://ci.appveyor.com/api/projects/status/chebmu91f08dlmsc/branch/master?svg=true["Build Status (AppVeyor)", link="https://ci.appveyor.com/project/asciidoctor/asciidoctor-maven-plugin"]
+image:http://img.shields.io/travis/asciidoctor/asciidoctor-maven-plugin/master.svg["Build Status (Travis CI)", link="https://travis-ci.org/asciidoctor/asciidoctor-maven-plugin"]
+image:http://img.shields.io/coveralls/{project-repo}/master.svg["Coverage Status", link="https://coveralls.io/r/{project-repo}?branch=master"]
+image:https://maven-badges.herokuapp.com/maven-central/org.asciidoctor/asciidoctor-maven-plugin/badge.svg["Maven Central",link="https://maven-badges.herokuapp.com/maven-central/org.asciidoctor/asciidoctor-maven-plugin"]
+endif::[]
+
+Asciidoctor Maven 插件是一种官方支持的方式，它可以在 {uri-maven}[Apache Maven] 构建过程中使用 {uri-asciidoctor}[Asciidoctor] 转化你的 {uri-asciidoc}[AsciiDoc]  文档。
+
+.该文档有如下语言的翻译版：
+* link:README.adoc[English]
+
+TIP: 本文档是 link:README.adoc[README] 的翻译版。如果发现有什么不一致或者错误的地方，请以原文档为准。
+
+[[installation]]
+== Installation
+
+作为一个典型的 Maven 插件，可以很容易地在 POM 文件的 `<plugins>` 部分声明使用：
+
+[source,xml,subs=attributes+]
+.pom.xml 中的插件声明
+----
+<plugins>
+    <plugin>
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-plugin</artifactId>
+        <version>{release-version}</version> <!--1-->
+        ...
+    </plugin>
+</plugins>
+----
+<1> 这个插件的版本紧跟 Asciidoctor 的版本，你可以使用任意喜欢的 Asciidoctor 版本。
+
+[[usage]]
+== 使用
+
+[source,xml]
+.执行配置
+----
+<plugin>
+    ...
+    <executions>
+        <execution>
+            <id>output-html</id>              <!--1-->
+            <phase>generate-resources</phase> <!--2-->
+            <goals>
+                <goal>process-asciidoc</goal> <!--3-->
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+----
+<1> 这是执行唯一ID。This is simply an unique id for the execution
+<2> asciidoctor-maven-plugin 不在任意环节运行，所以必须指定一个环节。
+<3> Asciidoctor Maven 插件在此时的执行目标。
+
+[[configuration-options]]
+=== 配置选项
+
+asciidoctor-maven-plugin 有很多配置选项，这些配置在 Asciidoctor 也是可用的：
+
+sourceDirectory:: 默认指向 `${basedir}/src/main/asciidoc`
+sourceDocumentName:: an override to process a single source file; 默认指向 `${sourceDirectory}` 中的所有文件
+sourceDocumentExtensions:: （在 v1.5.3 及其以下版本中被命名为 `extensions`) 一系列需要渲染的不标准的文件扩展名。目前，ad、adoc 和 asciidoc 默认就会被渲染。
+outputDirectory:: 默认指向 `${project.build.directory}/generated-docs`
+baseDir:: （不是 Maven 的 basedir）设置资源（例如被包含的文件）的根目录，默认指向 `${sourceDirectory}`。
+skip:: 跳过生成则设置为 `true`， 默认`false`。
+preserveDirectories:: 指明是否渲染成和源文件相同的目录结构。默认为 `false`。
+当为 `true` 时，不在将所有文件都生成到同一个目录中，而是将输出文件生成到相同的目录结构中。看下面的例子。
++
+[source]
+----
+    ├── docs                          ├── docs
+    │   ├── examples.adoc             │   ├── examples.html
+    │   └── examples            =>    │   └── examples
+    │       ├── html.adoc             │       ├── html.html
+    │       └── docbook.adoc          │       └── docbook.html
+    └── index.adoc                    └── index.html
+----
+relativeBaseDir:: 只有在 `baseDir` 没有指明的情况下才使用。启用则指明每一个 AsciiDoc 文件都必须从同一个目录下搜索它的资源文件（例如被包含的文件）。在内部，对于每一个 AsciiDoc 源文件，设置 `baseDir` 与源文件相同的路径。默认为 `false`。
+imagesDir:: 默认指向 `images`，它是相对于源码目录的相对路径。
+backend:: 默认是 `docbook`。
+doctype:: 默认为 `null` （它将触发 Asciidoctor 的默认值 `article`）
+eruby:: 默认为 erb，被 JRuby 使用
+// eruby:: defaults to erb, the version used in JRuby
+headerFooter:: 默认为 `true`
+templateDir:: 默认不可用，默认值为 `null`
+templateEngine:: 默认不可用
+sourceHighlighter:: 启用语法高亮，设置语法高亮器（当前仅支持 `coderay` 和 `highlight.js`）
+attributes:: 包含传递给 Asciidoctor 的属性的 `Map<String,Object>`，默认为 `null`
+embedAssets:: 内嵌的 CSS 文件，指向输出，默认为 `false`
+// embedAssets:: Embedd the CSS file, etc into the output, defaults to `false`
+gemPaths:: 用于指明一个或多个 gem 安装路径（等同 GEM_PATH 环境变量），默认为 `empty`
+requires:: a `List<String>` to specify additional Ruby libraries not packaged in AsciidoctorJ, `empty` by default
+extensions:: 被包含进转化过程的扩展列表（可从 link:https://github.com/asciidoctor/asciidoctorj/blob/master/README.adoc#extension-api[AsciidoctorJ's Extension API] 更多可选项的信息）。对于每一个扩展，实现类必须在 `className` 参数中指明，`blockName` 参数只有在配置 _BlockProcessor_， _BlockMacroProcessor_ 或 _InlineMacroProcessor_ 才需要指定。下面是一个配置例子：
++
+[source,xml]
+----
+<plugin>
+    ...
+    <executions>
+        <execution>
+            <configuration>
+                ...
+                <extensions>
+                    <extension>
+                        <className>org.asciidoctor.maven.SomePreprocessor</className>
+                    </extension>
+                    <extension>
+                        <className>org.asciidoctor.maven.SomeBlockProcessor</className>
+                        <blockName>yell</blockName>
+                    </extension>
+                </extensions>
+            </configuration>
+        </execution>
+    </executions>
+    <dependencies>
+        <dependency> <!--1-->
+            <groupId>org.asciidoctor.maven</groupId>
+            <artifactId>my-asciidoctor-extensions</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
+</plugin>
+----
+<1> 注意：处理器必须被包含在插件的执行类路径中，而不是项目的。
+
+NOTE: 扩展也可以通过 SPI 接口实现整合进来。这种方法就不需要在 `pom.xml` 中作任何配置，查看 link:https://github.com/asciidoctor/asciidoctorj#extension-spi[Extension SPI] 获得更多细节。
+
+[[built-in-attributes]]
+==== 内置属性
+
+Asciidoctor 包含了一系列属性。下面是它们的一个列表以及它们的作用。
+
+title:: 一个文档的概要标题。
+
+NOTE: 为了向后兼容性，这个属性还可以在顶级配置项中使用。
+
+很多其他属性可用。在 Asciidoctor 给出一个权威列表之前，你可以在 http://asciidoc.org/userguide.html#X88[属性列表] 中看到更多帮助。
+
+为了利用 Asciidoctor 的其他选项和属性，将来会有更多属性被添加进来。
+属性部分的任何设置如果和命名属性配置相冲突，将会被命名属性配置所覆盖。
+这些设置都可以在插件部分的 `<configuration>` 部分中改变：
+
+[source,xml]
+.插件配置选项
+----
+<plugin>
+    <configuration>
+        <sourceDirectory>src/docs/asciidoc</sourceDirectory>
+        <outputDirectory>target/docs/asciidoc</outputDirectory>
+        <backend>html</backend>
+        <doctype>book</doctype>
+        <attributes>
+            <stylesheet>my-theme.css</stylesheet>
+        </attributes>
+    </configuration>
+</plugin>
+----
+
+[[passing-pom-properties]]
+==== 传递 POM 属性
+
+可以将在 POM 中定义的属性传递给 Asciidoctor 处理器。下面的例子演示在生成文档中包含 POM artifact 版本号。
+
+这些要在 `configuration` 部分的 `attributes` 小节中，通过创建自定义 AsciiDoc 属性来完成。
+AsciiDoc 属性值使用常用的 Maven 方式来定义： `${myMavenProperty}`。
+
+[source,xml]
+----
+<attributes>
+    <project-version>${project.version}</project-version>
+</attributes>
+----
+
+这个自定义的 AsciiDoc 属性接下来就可以在文档中像如下方式使用：
+
+ The latest version of the project is {project-version}.
+
+[TIP]
+====
+如果你想使用项目的版本作为文档的修订版，使用如下结构：
+
+ :revnumber: {project-version}
+
+这样，版本号将会出现在输出文档的头部和尾部。
+====
+
+[[setting-boolean-values]]
+==== 设置布尔值
+
+sciidoctor 中的布尔属性，例如 `sectnums`， `linkcss` 或 `copycss` 可以使用 `true` 值来设置，也可以使用 `false` 来取消设置。
+
+[[examples]]
+==== 示例
+
+在 Asciidoctor Maven 插件配置的 `<attributes>` 部分：
+
+[source,xml]
+----
+<sectnums>true</sectnums>
+<linkcss>false</linkcss>
+----
+
+在 {uri-examples}[Asciidoctor Maven 示例] 项目中，你可以发现更多信息以及可以直接复制粘贴的示例。
+
+[[command-line-configuration]]
+==== 命令行配置
+
+配置选项可以直接在命令行中使用系统属性来设置（但不可删除），如下：
+
+ mvn generate-resources -Dasciidoctor.sourceDirectory=src/docs -Dasciidoctor.outputDirectory=target/docs
+
+所有选项按照这样的命名规范： _`asciidoctor.` + option_name_。
+
+为了属性配置有更高的灵活性，请遵循不同的行为。
+// In order to provide a higher degree of flexibility `attributes` configuration follows a different behavior
+通过命令行定义的属性将会追加到在 XML 中配置的属性列表上。
+这样导致的结果就是如果这些属性添加命令行中，这些属性或者其他配置选项会被更新。
+例如，下面的这个配置将会被后面的命令行选项修改掉。
+
+[source,xml]
+----
+<configuration>
+    <backend>html5</backend>
+    <sourceHighlighter>coderay</sourceHighlighter>
+    <attributes>
+        <toc>left</toc>
+    </attributes>
+</configuration>
+----
+
+ mvn generate-resources -Dasciidoctor.attributes=toc=right
+
+ mvn generate-resources -Dasciidoctor.attributes="toc=right source-highlighter=highlight.js imagesdir=my_images"
+
+注意在第二种情况，你需要引号把属性设置括起来，其中，`source-highlighter` 是 asciidoctor 的属性值名，用于更新配置。
+
+[[multiple-outputs-for-the-same-file]]
+=== 相同文件的多个输出
+
+Maven 可以多次执行 Mojo。
+为了避免重新发明类似 Mojo 的轮子，我们将会由 Maven 来处理多次执行。
+搭建的例子如下：
+
+[source,xml,subs=attributes+]
+.多个配置输出
+----
+<plugin>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctor-maven-plugin</artifactId>
+    <version>{release-version}</version>
+    <executions>
+        <execution>
+            <id>output-html</id>
+            <phase>generate-resources</phase>
+            <goals>
+                <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+                <sourceHighlighter>coderay</sourceHighlighter>
+                <backend>html</backend>
+                <attributes>
+                    <toc/>
+                    <linkcss>false</linkcss>
+                </attributes>
+            </configuration>
+        </execution>
+        <execution>
+            <id>output-docbook</id>
+            <phase>generate-resources</phase>
+            <goals>
+                <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+                <backend>docbook</backend>
+                <doctype>book</doctype>
+            </configuration>
+        </execution>
+    </executions>
+    <configuration>
+        <sourceDirectory>src/main/asciidoc</sourceDirectory>
+        <headerFooter>true</headerFooter>
+        <imagesDir>../resources/images</imagesDir> <!--1-->
+    </configuration>
+</plugin>
+----
+<1> `imagesDir` 应该是源文件的相对路径。它默认指向 `images`，但是在这里示例中，用于文档的图片还可以用于项目中的任何地方。
+
+在 `executions` 外定义的任何配置都会被每一个执行过程所继承。
+这展示了定义公用选项的最简单方式。
+
+[[maven-site-integration]]
+== Maven 站点集成
+
+为了使用 AsciiDoc 创建你的 Maven 生成的站点，你必须添加一个关于 Asciidoctor 插件的依赖到 maven-site-plugin 声明中。
+
+[source,xml,subs=attributes+]
+.Maven 站点集成
+-----
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>3.4</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.asciidoctor</groupId>
+                    <artifactId>asciidoctor-maven-plugin</artifactId>
+                    <version>{release-version}</version>
+                </dependency>
+            </dependencies>
+        </plugin>
+    </plugins>
+</build>
+-----
+
+所有基于 AsciiDoc 的文件都应该放在 `src/site/asciidoc`中，并且扩展名为 `.adoc`。
+这些文件都会被渲染到 `target/site` 目录中。
+例如，`src/site/asciidoc/usage.adoc` 文件将会被渲染到 `target/site/usage.html`。
+
+Asciidoctor 基础目录默认配置为 `src/site/asciidoc`，这可以被覆盖。
+同样需要注意 AsciiDoc 文件可以转化成嵌入 HTML 并被插入到网站的页面布局中。
+这样，某些特性，例如边框目录，将不可用。
+
+确保你添加了 `menu` 元素为每一个页面，这样你就可以从网站导航栏来访问它：
+
+[source,xml]
+-----
+<body>
+    ...
+    <menu name="User guide">
+        <item href="usage.html" name="Usage" />
+    </menu>
+    ...
+</body>
+-----
+
+[[configuration]]
+=== 配置
+
+从 插件的 1.5.3 版，你可以在插件声明中通过特殊的配置文件来配置 Asciidoctor，就像插件的主要目录。
+虽然，这里有一个非常重要的不同。
+在站点集成的所有 Asciidoctor 配置必须嵌入到 `<asciidoc>` 元素中。
+至从 `<configuration>` 元素比 Asciidoctor 集成更多地用于配置，这就成为必须的。
+// This is necessary since the `<configuration>` element is used to configure more than just the Asciidoctor integration.
+
+这有一个例子来展示如果设置这些选项、属性以及忽略局部 AsciiDoc 文件（比如以下划线开头的文件）。
+
+[source,xml]
+.使用 Asciidoctor 来配置 Maven 站点集成
+----
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-site-plugin</artifactId>
+    <version>3.4</version>
+    <configuration>
+        <asciidoc>
+            <templateDirs>
+                <dir>src/site/asciidoc/templates</dir>
+            </templateDirs>
+            <requires>
+                <require>asciidoctor-diagram</require>
+            </requires>
+            <attributes>
+                <source-highlighter>coderay</source-highlighter>
+                <coderay-css>style</coderay-css>
+            </attributes>
+        </asciidoc>
+        <moduleExcludes>
+            <asciidoc>**/_*.adoc</asciidoc>
+        </moduleExcludes>
+    </configuration>
+    <dependencies>
+        <dependency>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctor-maven-plugin</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+    </dependencies>
+</plugin>
+----
+
+IMPORTANT: Asciidoctor 基本目录（比如文档根目录）默认配置为 `src/site/asciidoc`，它可以被 `baseDir` 选项覆盖。
+
+你将会注意到某些 AsciiDoc 文件被排除在外。
+// You'll notice that excludes have been added for certain AsciiDoc files.
+这可以防止站点集成将局部文件（例如被包含文件）处理成独立文件。
+你可以根据自己的喜欢来设置这个模式。
+现在还没有方式来自动配置这个。
+
+你可以通过指定模板目录来激活内置的模板转化器（例如： `templatesDir`）。
+这个特性可以让你提供自定义的目标来转化文档树的任意节点（例如文档、章节、列表等等）。
+当努力定制网站外观时，自定义目标就显得特别有帮助了。
+
+// == Watching for changes
+
+// TODO
+
+// == Zipping output into a bundle
+
+// TODO
+
+// == Previewing generated content in the browser
+
+// TODO
+
+[[hacking]]
+== 黑客
+
+开发者想搭建起来黑客这个项目也不难。要求很简单：
+
+* Java
+* Maven 3
+
+其他的将会被 Maven 自动下载下来。这是一个典型的 Maven Java 项目，没有什么特别。你可以使用 IntelliJ、Eclipse 或 Netbeans 来开发项目，不需求起奇技淫巧。
+
+[[building]]
+== 构建
+
+标准 Maven 构建：
+
+ mvn clean install
+
+[[testing]]
+== 测试
+
+http://spockframework.org/[Spock] 被用于测试 Mojo 调用。它会被 Maven 自动下载。运行测试非常简单，如下：
+
+ mvn clean test
+
+或通过其他目标来运行测试。
+
+NOTE: 如果我能选择到好多方法来搭建 Ruby 测试环境，我也会这样做。但是，现在没有。
+
+[[tips-tricks]]
+== 提示和技巧
+
+[[generate-your-documentation-in-separate-folders-per-version]]
+=== 为每个版本在不同目录中生成文档
+
+[source, xml]
+-----
+<configuration>
+    ...
+    <outputDirectory>target/generated-docs/${project.version}</outputDirectory>
+    ...
+</configuration>
+-----
+
+[[enable-section-numbering]]
+=== 启用章节数值
+
+[source, xml]
+-----
+<configuration>
+    ...
+    <attributes>
+        ...
+        <sectnums>true</sectnums>
+        ...
+    </attributes>
+    ...
+</configuration>
+-----
