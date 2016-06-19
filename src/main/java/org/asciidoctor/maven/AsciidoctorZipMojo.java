@@ -12,17 +12,16 @@
 
 package org.asciidoctor.maven;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 import org.asciidoctor.maven.io.Zips;
+
+import java.io.File;
+import java.io.IOException;
 
 @Mojo(name = "zip")
 public class AsciidoctorZipMojo extends AsciidoctorMojo {
@@ -30,9 +29,6 @@ public class AsciidoctorZipMojo extends AsciidoctorMojo {
 
     @Component
     private MavenProjectHelper projectHelper;
-
-    @Parameter(property = PREFIX, defaultValue = "${project}", readonly = true)
-    private MavenProject project;
 
     @Parameter(property = PREFIX + "attach", defaultValue = "true")
     protected boolean attach;

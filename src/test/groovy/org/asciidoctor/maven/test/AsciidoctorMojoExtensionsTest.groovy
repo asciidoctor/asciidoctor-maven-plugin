@@ -2,7 +2,9 @@ package org.asciidoctor.maven.test
 
 import org.apache.maven.plugin.MojoExecutionException
 import org.asciidoctor.maven.AsciidoctorMojo
+import org.asciidoctor.maven.AsciidoctorZipMojo
 import org.asciidoctor.maven.extensions.ExtensionConfiguration
+import org.asciidoctor.maven.test.plexus.MockPlexusContainer
 import org.asciidoctor.maven.test.processors.ChangeAttributeValuePreprocessor
 import org.asciidoctor.maven.test.processors.FailingPreprocessor
 import org.asciidoctor.maven.test.processors.GistBlockMacroProcessor
@@ -23,6 +25,21 @@ import spock.lang.Unroll
  * @author abelsromero
  */
 class AsciidoctorMojoExtensionsTest extends Specification {
+
+    /**
+     * Intercept Asciidoctor mojo constructor to mock and inject required
+     * plexus objects
+     */
+    def setupSpec() {
+        MockPlexusContainer mockPlexusContainer = new MockPlexusContainer()
+        def oldConstructor = AsciidoctorMojo.constructors[0]
+
+        AsciidoctorMojo.metaClass.constructor = {
+            def mojo = oldConstructor.newInstance()
+            mockPlexusContainer.initializeContext(mojo)
+            return mojo
+        }
+    }
 
     static final String SRC_DIR = 'target/test-classes/src/asciidoctor/'
     static final String OUTPUT_DIR = 'target/asciidoctor-output-extensions'
@@ -52,7 +69,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
     }
     
     // This test is added to keep track of possible changes in the extension's SPI
-    def "plugin fails because processor throws an uncached exception"() {
+    def "plugin fails because processor throws an uncaught exception"() {
         setup:
             File srcDir = new File(SRC_DIR)
             File outputDir = new File("${OUTPUT_DIR}/preprocessor/${System.currentTimeMillis()}")
@@ -70,10 +87,9 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             ]
             mojo.execute()
         then:
-            outputDir.list().size() == 0
+            // since v 1.5.4 resources are copied before rendering, so some files remain
+            outputDir.list().size() > 0
             thrown(RuntimeException)
-//            e.message.contains(mojo.processors.get(0).className)
-//            e.message.contains('not found in classpath')
     }
     
 

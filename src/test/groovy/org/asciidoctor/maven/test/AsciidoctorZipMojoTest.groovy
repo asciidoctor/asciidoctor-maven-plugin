@@ -1,15 +1,31 @@
 package org.asciidoctor.maven.test
 
-import java.util.zip.ZipFile
-
 import org.apache.commons.io.FileUtils
 import org.asciidoctor.maven.AsciidoctorZipMojo
-
+import org.asciidoctor.maven.test.plexus.MockPlexusContainer
 import spock.lang.Specification
+
+import java.util.zip.ZipFile
+
 /**
  *
  */
 class AsciidoctorZipMojoTest extends Specification {
+
+    /**
+     * Intercept Asciidoctor mojo constructor to mock and inject required
+     * plexus objects
+     */
+    def setupSpec() {
+        MockPlexusContainer mockPlexusContainer = new MockPlexusContainer()
+        def oldConstructor = AsciidoctorZipMojo.constructors[0]
+
+        AsciidoctorZipMojo.metaClass.constructor = {
+            def mojo = oldConstructor.newInstance()
+            mockPlexusContainer.initializeContext(mojo)
+            return mojo
+        }
+    }
 
     def "zip it"() {
         given: 'an empty output directory'
