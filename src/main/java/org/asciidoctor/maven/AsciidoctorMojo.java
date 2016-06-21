@@ -206,7 +206,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
 
         // Copy output resources
-        repareResources();
+        prepareResources();
         copyResources();
 
         if (sourceDocumentName == null) {
@@ -230,7 +230,7 @@ public class AsciidoctorMojo extends AbstractMojo {
      * underscore).
      * By default everything in the sources directories is copied.
      */
-    private void repareResources() {
+    private void prepareResources() {
         if (resources == null || resources.isEmpty()) {
             resources = new ArrayList<Resource>();
             // we don't want to copy files considered sources
@@ -319,7 +319,7 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     protected Asciidoctor getAsciidoctorInstance(String gemPath) throws MojoExecutionException {
         Asciidoctor asciidoctor = null;
-        if (gemPath == null || gemPath.isEmpty()) {
+        if (gemPath == null) {
             asciidoctor = Asciidoctor.Factory.create();
         } else {
             // Replace Windows path separator to avoid paths with mixed \ and /.
