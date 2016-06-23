@@ -73,6 +73,21 @@ There are several configuration options that the asciidoctor-maven-plugin uses, 
 sourceDirectory:: defaults to `${basedir}/src/main/asciidoc`
 sourceDocumentName:: an override to process a single source file; defaults to all files in `${sourceDirectory}`
 sourceDocumentExtensions:: (named `extensions` in v1.5.3 and below) a `List<String>` of non-standard file extensions to render. Currently ad, adoc, and asciidoc will be rendered by default
+resources:: list of resource files to copy to the output directory (e.g., images, css). By default everything is copied
++
+[source, xml]
+----
+    <resources>
+        <resource>
+            <directory>DIRECTORY</directory>
+            <include>**/*.jpg</include>
+            <include>**/*.gif</include>
+            <exclude>**/.svn</exclude>
+        </resource>
+        <resource>
+            ...
+    <resources>
+----
 outputDirectory:: defaults to `${project.build.directory}/generated-docs`
 baseDir:: (not Maven's basedir) enables to set the root path for resouces (e.g. included files), defaults to `${sourceDirectory}`
 skip:: set this to `true` to bypass generation, defaults to `false`

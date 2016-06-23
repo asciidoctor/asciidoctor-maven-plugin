@@ -12,38 +12,31 @@
 
 package org.asciidoctor.maven;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.io.FileUtils;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.asciidoctor.AbstractDirectoryWalker;
-import org.asciidoctor.AsciiDocDirectoryWalker;
-import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.Attributes;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.DirectoryWalker;
-import org.asciidoctor.Options;
-import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.SafeMode;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.shared.filtering.MavenFilteringException;
+import org.apache.maven.shared.filtering.MavenResourcesExecution;
+import org.apache.maven.shared.filtering.MavenResourcesFiltering;
+import org.asciidoctor.*;
 import org.asciidoctor.internal.JRubyRuntimeContext;
-import org.asciidoctor.internal.RubyUtils;
 import org.asciidoctor.maven.extensions.AsciidoctorJExtensionRegistry;
 import org.asciidoctor.maven.extensions.ExtensionConfiguration;
 import org.asciidoctor.maven.extensions.ExtensionRegistry;
+import org.asciidoctor.maven.io.AsciidoctorFileScanner;
 import org.jruby.Ruby;
+import org.sonatype.plexus.build.incremental.BuildContext;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 
 /**
@@ -54,6 +47,8 @@ public class AsciidoctorMojo extends AbstractMojo {
     // copied from org.asciidoctor.AsciiDocDirectoryWalker.ASCIIDOC_REG_EXP_EXTENSION
     // should probably be configured in AsciidoctorMojo through @Parameter 'extension'
     protected static final String ASCIIDOC_REG_EXP_EXTENSION = ".*\\.a((sc(iidoc)?)|d(oc)?)$";
+
+    protected static final String FILE_ENCODING = System.getProperty("file.encoding");
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDirectory", defaultValue = "${basedir}/src/main/asciidoc", required = true)
     protected File sourceDirectory;
@@ -139,6 +134,22 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "attributeUndefined")
     protected String attributeUndefined = "drop-line";
 
+    // List of resources to copy to the output directory (e.g., images, css). By default everything is copied
+    @Parameter(property = AsciidoctorMaven.PREFIX + "sources")
+    protected List<Resource> resources;
+
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
+    protected MavenProject project;
+
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
+    protected MavenSession session;
+
+    @Component
+    protected MavenResourcesFiltering outputResourcesFiltering;
+
+    @Component
+    protected BuildContext buildContext;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
@@ -156,6 +167,15 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
 
         ensureOutputExists();
+
+        // Validate resources to avoid errors later on
+        if (resources != null) {
+            for (Resource resource : resources) {
+                if (resource.getDirectory() == null || resource.getDirectory().isEmpty()) {
+                    throw new MojoExecutionException("Found empty resource directory");
+                }
+            }
+        }
 
         final Asciidoctor asciidoctor = getAsciidoctorInstance(gemPath);
 
@@ -184,7 +204,11 @@ public class AsciidoctorMojo extends AbstractMojo {
                 throw new MojoExecutionException(e.getMessage(), e);
             }
         }
-        
+
+        // Copy output resources
+        prepareResources();
+        copyResources();
+
         if (sourceDocumentName == null) {
             for (final File f : scanSourceFiles()) {
                 setDestinationPaths(optionsBuilder, f);
@@ -196,15 +220,68 @@ public class AsciidoctorMojo extends AbstractMojo {
             renderFile(asciidoctor, optionsBuilder.asMap(), sourceFile);
         }
 
-        // #67 -- get all files that aren't adoc/ad/asciidoc and create synchronizations for them
-        try {
-            FileUtils.copyDirectory(sourceDirectory, outputDirectory, new NonAsciiDocExtensionFileFilter(), false);
-        } catch (IOException e) {
-            throw new MojoExecutionException("Error copying resources", e);
-        }
-
         if (synchronizations != null && !synchronizations.isEmpty()) {
             synchronize();
+        }
+    }
+
+    /**
+     * Initializes resources attribute excluding AsciiDoc documents and hidden directories/files (those prefixed with
+     * underscore).
+     * By default everything in the sources directories is copied.
+     */
+    private void prepareResources() {
+        if (resources == null || resources.isEmpty()) {
+            resources = new ArrayList<Resource>();
+            // we don't want to copy files considered sources
+            Resource resource = new Resource();
+            resource.setDirectory(sourceDirectory.getAbsolutePath());
+            resource.setExcludes(new ArrayList<String>());
+            // exclude sourceDocumentName if defined
+            if (sourceDocumentName != null && sourceDocumentName.isEmpty()) {
+                resource.getExcludes().add(sourceDocumentName);
+            }
+            // exclude filename extensions if defined
+            if (sourceDocumentExtensions == null || sourceDocumentExtensions.isEmpty()) {
+                for (String docExtension : sourceDocumentExtensions) {
+                    resource.getExcludes().add(docExtension);
+                }
+            }
+            resources.add(resource);
+        }
+
+        // All resources must exclude AsciiDoc documents and folders beginning with underscore
+        for (Resource resource : resources) {
+            if (resource.getExcludes() == null || resource.getExcludes().isEmpty()) {
+                resource.setExcludes(new ArrayList<String>());
+            }
+            List<String> excludes = new ArrayList<String>();
+            for (String value : AsciidoctorFileScanner.IGNORED_FOLDERS_AND_FILES) {
+                excludes.add(value);
+            }
+            for (String value : AsciidoctorFileScanner.DEFAULT_FILE_EXTENSIONS) {
+                excludes.add(value);
+            }
+            // in case someone wants to include some of the default excluded files (.e.g., AsciiDoc docs)
+            excludes.removeAll(resource.getIncludes());
+            resource.getExcludes().addAll(excludes);
+        }
+    }
+
+    /**
+     * Copies the resources defined in the 'resources' attribute
+     */
+    private void copyResources() throws MojoExecutionException {
+        try {
+            // Right now it's not used at all, but could be used to apply resource filters/replacements
+            MavenResourcesExecution resourcesExecution =
+                    new MavenResourcesExecution(resources, outputDirectory, project, FILE_ENCODING,
+                            Collections.<String>emptyList(), Collections.<String>emptyList(), session);
+            resourcesExecution.setIncludeEmptyDirs(true);
+            outputResourcesFiltering.filterResources(resourcesExecution);
+        } catch (MavenFilteringException e) {
+            throw new MojoExecutionException("Could not copy resources", e);
+
         }
     }
 
@@ -243,9 +320,8 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected Asciidoctor getAsciidoctorInstance(String gemPath) throws MojoExecutionException {
         Asciidoctor asciidoctor = null;
         if (gemPath == null) {
-             asciidoctor = Asciidoctor.Factory.create();
-        }
-        else {
+            asciidoctor = Asciidoctor.Factory.create();
+        } else {
             // Replace Windows path separator to avoid paths with mixed \ and /.
             // This happens for instance when setting: <gemPath>${project.build.directory}/gems-provided</gemPath>
             // because the project's path is converted to string.
@@ -619,6 +695,14 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.extensions = extensions;
     }
 
+    public List<Resource> getResources() {
+        return resources;
+    }
+
+    public void setResources(List<Resource> resources) {
+        this.resources = resources;
+    }
+
     private static class CustomExtensionDirectoryWalker extends AbstractDirectoryWalker {
         private final List<String> fileExtensions;
 
@@ -639,22 +723,4 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
     }
 
-    private static class NonAsciiDocExtensionFileFilter implements FileFilter {
-        private final List<String> fileExtensions;
-
-        public NonAsciiDocExtensionFileFilter() {
-            this.fileExtensions = java.util.Arrays.asList("ad", "adoc", "asciidoc");
-        }
-
-        @Override
-        public boolean accept(File pathname) {
-            final String name = pathname.getName();
-            for (final String extension : fileExtensions) {
-                if (name.endsWith(extension)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
 }
