@@ -1021,7 +1021,7 @@ class AsciidoctorMojoTest extends Specification {
             // all folders and files are created because only image files are excluded
             assertEqualsStructure(new File(relativeTestsPath).listFiles(DIRECTORY_FILTER), outputDir.listFiles(DIRECTORY_FILTER))
             // images are excluded but not the rest of files
-            FileUtils.listFiles(outputDir, ['groovy'] as String[], true).size == 5
+            FileUtils.listFiles(outputDir, ['groovy'] as String[], true).size() == 5
             FileUtils.listFiles(outputDir, ["jpg"] as String[], true).size() == 0
     }
 
@@ -1069,6 +1069,57 @@ class AsciidoctorMojoTest extends Specification {
                 assert new File(relativeTestsPath, directoryPath).exists()
                 assert !(new File(outputDir, directoryPath).exists())
             }
+    }
+
+    def "should not crash when enabling maven-resource filtering"() {
+        setup:
+            File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/readme/${System.currentTimeMillis()}")
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = new File('.')
+            mojo.sourceDocumentName = 'README.adoc'
+            mojo.resources = [[
+                                      directory: ".",
+                                      excludes : ['**/**'],
+                                      filtering: true
+                              ] as Resource]
+            mojo.backend = 'html5'
+            mojo.outputDirectory = outputDir
+            mojo.execute()
+        then:
+            def files = outputDir.listFiles({File f -> f.isFile()} as FileFilter)
+            // includes only 1 rendered AsciiDoc document
+            files.size() == 1
+            files.first().text.contains('Asciidoctor Maven Plugin')
+    }
+
+    def "should exclude custom source document Extensions by default"() {
+        setup:
+            File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/readme/${System.currentTimeMillis()}")
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = new File(DEFAULT_SOURCE_DIRECTORY)
+            mojo.sourceDocumentExtensions = ['ext']
+            mojo.resources = [[
+                                      directory: DEFAULT_SOURCE_DIRECTORY,
+                                      includes: ['**/*.adoc'],
+                                      excludes: ['**/**']
+                              ] as Resource]
+            mojo.backend = 'html5'
+            mojo.outputDirectory = outputDir
+            mojo.execute()
+        then:
+            def files = outputDir.listFiles({File f -> f.isFile()} as FileFilter)
+            FileUtils.listFiles(outputDir, ['ext'] as String[], true).isEmpty()
+            // includes only 1 rendered AsciiDoc document
+            def file = new File(outputDir, 'sample.html')
+            file.text.contains('Asciidoctor default stylesheet')
     }
 
 }
