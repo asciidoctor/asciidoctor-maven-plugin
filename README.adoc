@@ -83,7 +83,7 @@ resources:: list of resource files to copy to the output directory (e.g., images
             <directory>DIRECTORY</directory>
             <!-- (Optional) Directory to copy to. By default uses the option `sourceDirectory` -->
             <targetPath>OUTPUT_DIR</targetPath>
-            <!-- (Optional) SVN, GIT and other version control files are excluded by default, there's no need to add them -->
+            <!-- (Optional) NOTE: SVN, GIT and other version control files are excluded by default, there's no need to add them -->
             <excludes>
                 <exclude>**/.txt</exclude>
             </excludes>
