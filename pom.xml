@@ -78,7 +78,7 @@
         <maven.compiler.plugin.version>3.1</maven.compiler.plugin.version>
         <maven.plugin.plugin.version>3.2</maven.plugin.plugin.version>
         <maven.filtering.version>3.1.0</maven.filtering.version>
-        <plexus.utils.version>3.0.10</plexus.utils.version>
+        <plexus.utils.version>3.0.23</plexus.utils.version>
         <plexus.component.metadata.version>1.5.5</plexus.component.metadata.version>
         <netty.version>4.0.38.Final</netty.version>
         <commons.io.version>2.4</commons.io.version>
