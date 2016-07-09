@@ -12,6 +12,7 @@
 package org.asciidoctor.maven.http;
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -27,6 +28,8 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.util.concurrent.Future;
+
 import org.apache.maven.plugin.logging.Log;
 
 public class AsciidoctorHttpServer {
@@ -40,6 +43,7 @@ public class AsciidoctorHttpServer {
     private final String defaultPage;
 
     private ServerBootstrap bootstrap;
+    private NioEventLoopGroup workerGroup;
 
     public AsciidoctorHttpServer(final Log logger, final int port, final File outputDirectory, final String defaultPage) {
         this.logger = logger;
@@ -50,7 +54,7 @@ public class AsciidoctorHttpServer {
 
     public void start() {
         final AtomicInteger threadId = new AtomicInteger(1);
-        final NioEventLoopGroup workerGroup = new NioEventLoopGroup(THREAD_NUMBER, new ThreadFactory() {
+        workerGroup = new NioEventLoopGroup(THREAD_NUMBER, new ThreadFactory() {
             @Override
             public Thread newThread(final Runnable r) {
                 final Thread t = new Thread(r, THREAD_PREFIX + threadId.getAndIncrement());
@@ -98,8 +102,17 @@ public class AsciidoctorHttpServer {
         }
     }
 
-    public void stop() {
-        bootstrap.shutdown();
-        logger.info("Server stopped");
-    }
+   public void stop() {
+      Future<?> shutdownGracefully = workerGroup.shutdownGracefully();
+      logger.info("Server stopping...");
+      try {
+         shutdownGracefully.get();
+         logger.info("Server stopped");
+      } catch (InterruptedException e) {
+         logger.error(e);
+      } catch (ExecutionException e) {
+         logger.error(e);
+      }
+   }
+
 }
