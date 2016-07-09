@@ -6,7 +6,7 @@
 	<artifactId>test</artifactId>
 	<version>1.0-SNAPSHOT</version>
 
-	<name>Run Asciidoctor Article to Html with command line arguments</name>
+	<name>Converts Asciidoctor Article to Html with command line arguments</name>
 	<description>Runs asciidoctor-maven-plugin:process-asciidoc</description>
 
 	<properties>
