@@ -242,11 +242,6 @@ public class AsciidoctorMojo extends AbstractMojo {
                 resource.getExcludes().add(sourceDocumentName);
             }
             // exclude filename extensions if defined
-            if (sourceDocumentExtensions == null || sourceDocumentExtensions.isEmpty()) {
-                for (String docExtension : sourceDocumentExtensions) {
-                    resource.getExcludes().add(docExtension);
-                }
-            }
             resources.add(resource);
         }
 
@@ -261,6 +256,9 @@ public class AsciidoctorMojo extends AbstractMojo {
             }
             for (String value : AsciidoctorFileScanner.DEFAULT_FILE_EXTENSIONS) {
                 excludes.add(value);
+            }
+            for (String docExtension : sourceDocumentExtensions) {
+                resource.getExcludes().add("**/*." + docExtension);
             }
             // in case someone wants to include some of the default excluded files (.e.g., AsciiDoc docs)
             excludes.removeAll(resource.getIncludes());
@@ -278,6 +276,7 @@ public class AsciidoctorMojo extends AbstractMojo {
                     new MavenResourcesExecution(resources, outputDirectory, project, FILE_ENCODING,
                             Collections.<String>emptyList(), Collections.<String>emptyList(), session);
             resourcesExecution.setIncludeEmptyDirs(true);
+            resourcesExecution.setAddDefaultExcludes(true);
             outputResourcesFiltering.filterResources(resourcesExecution);
         } catch (MavenFilteringException e) {
             throw new MojoExecutionException("Could not copy resources", e);

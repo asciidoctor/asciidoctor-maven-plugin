@@ -73,19 +73,28 @@ There are several configuration options that the asciidoctor-maven-plugin uses, 
 sourceDirectory:: defaults to `${basedir}/src/main/asciidoc`
 sourceDocumentName:: an override to process a single source file; defaults to all files in `${sourceDirectory}`
 sourceDocumentExtensions:: (named `extensions` in v1.5.3 and below) a `List<String>` of non-standard file extensions to render. Currently ad, adoc, and asciidoc will be rendered by default
-resources:: list of resource files to copy to the output directory (e.g., images, css). By default everything is copied
+resources:: list of resource files to copy to the output directory (e.g., images, css). The configuration follows the same patterns as the `maven-resources-plugin`. If not set, all resources inside `sourceDirectory` are copied
 +
 [source, xml]
 ----
     <resources>
         <resource>
+            <!-- (Mandatory) Directory to copy from. Paths are relative to maven's ${baseDir} -->
             <directory>DIRECTORY</directory>
-            <include>**/*.jpg</include>
-            <include>**/*.gif</include>
-            <exclude>**/.svn</exclude>
+            <!-- (Optional) Directory to copy to. By default uses the option `outputDirectory` -->
+            <targetPath>OUTPUT_DIR</targetPath>
+            <!-- (Optional) NOTE: SVN, GIT and other version control files are excluded by default, there's no need to add them -->
+            <excludes>
+                <exclude>**/.txt</exclude>
+            </excludes>
+            <!-- (Optional) If not set, includes all files but default exceptions mentioned -->
+            <includes>
+                <include>**/*.jpg</include>
+                <include>**/*.gif</include>
+            </includes>
         </resource>
         <resource>
-            ...
+                ...
     <resources>
 ----
 outputDirectory:: defaults to `${project.build.directory}/generated-docs`
