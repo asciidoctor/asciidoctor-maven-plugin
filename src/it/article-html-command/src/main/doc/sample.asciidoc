@@ -23,3 +23,16 @@ NOTE: This is test, only a test.
 * Item 1
 * Item 2
 * Item 3
+
+== Section C
+
+[source,java]
+----
+public class HelloWorld {
+
+    public static void main(String[] args) {
+        System.out.println("Hello, World!!");
+    }
+
+}
+----
