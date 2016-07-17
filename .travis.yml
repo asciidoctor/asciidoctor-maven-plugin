@@ -15,3 +15,6 @@ after_success:
   # 'coveralls:report' goal is responsible for updating coverall.io stats once travisCI build completes
   # Look for the article 'Coveralls.io configuration for maven projects' in the wiki (https://github.com/asciidoctor/asciidoctor/wiki) for more details
   - mvn coveralls:report
+cache:
+  directories:
+    - $HOME/.m2
