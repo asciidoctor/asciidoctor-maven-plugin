@@ -65,6 +65,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.backend = 'html'
             mojo.sourceDirectory = srcDir
             mojo.sourceDocumentName = 'sample.asciidoc'
+            mojo.resources = [new Resource(directory: '.', excludes: ['**/**'])]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.sourceHighlighter = 'coderay'
@@ -460,6 +461,27 @@ class AsciidoctorMojoTest extends Specification {
         text.contains('<img src="data:image/jpg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/4gzESUNDX1BST0ZJTEUAAQEAAA')
     }
 
+    def 'code highlighting should be rendered when set in the document header'() {
+        setup:
+        File srcDir = new File('src/test/resources/src/asciidoctor')
+        File outputDir = new File('target/asciidoctor-output-sourceHighlighting/header')
+        String documentName = 'sample-with-source-highlining'
+
+        when:
+        AsciidoctorMojo mojo = new AsciidoctorMojo()
+        mojo.sourceDirectory = srcDir
+        mojo.outputDirectory = outputDir
+        mojo.sourceDocumentName = new File("${documentName}.adoc")
+        mojo.resources = [new Resource(directory: '.', excludes: ['**/**'])]
+        mojo.backend = 'html5'
+        mojo.execute()
+
+        then:
+        File mainDocumentOutput = new File(outputDir, "${documentName}.html")
+        String text = mainDocumentOutput.getText()
+        text.contains('<pre class="CodeRay highlight">')
+    }
+
     /**
      * Tests CodeRay source code highlighting options.
      */
@@ -480,7 +502,7 @@ class AsciidoctorMojoTest extends Specification {
         then:
             File mainDocumentOutput = new File(outputDir, 'main-document.html')
             String text = mainDocumentOutput.getText()
-            text.contains('CodeRay')
+            text.contains('<pre class="CodeRay highlight">')
     }
 
     /**
