@@ -108,7 +108,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected String imagesDir = "images"; // use a string because otherwise html doc uses absolute path
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceHighlighter", required = false)
-    protected String sourceHighlighter = "";
+    protected String sourceHighlighter;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.TITLE, required = false)
     protected String title = "";
