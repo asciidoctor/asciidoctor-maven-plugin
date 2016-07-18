@@ -465,7 +465,7 @@ class AsciidoctorMojoTest extends Specification {
         setup:
         File srcDir = new File('src/test/resources/src/asciidoctor')
         File outputDir = new File('target/asciidoctor-output-sourceHighlighting/header')
-        String documentName = 'sample-with-source-highlining'
+        String documentName = 'sample-with-source-highlighting'
 
         when:
         AsciidoctorMojo mojo = new AsciidoctorMojo()
