@@ -73,10 +73,10 @@
         <maven.jacoco.plugin.version>0.7.2.201409121644</maven.jacoco.plugin.version>
         <jruby.version>1.7.21</jruby.version>
         <maven.plugin.annotations.version>3.4</maven.plugin.annotations.version>
-        <maven.plugin.api.version>2.0</maven.plugin.api.version>
-        <maven.project.version>2.2.1</maven.project.version>
+        <maven.plugin.api.version>3.0</maven.plugin.api.version>
+        <maven.project.version>3.0</maven.project.version>
         <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
-        <maven.plugin.plugin.version>3.2</maven.plugin.plugin.version>
+        <maven.plugin.plugin.version>3.4</maven.plugin.plugin.version>
         <maven.filtering.version>3.1.0</maven.filtering.version>
         <plexus.utils.version>3.0.23</plexus.utils.version>
         <plexus.component.metadata.version>1.5.5</plexus.component.metadata.version>
@@ -109,7 +109,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
-            <artifactId>maven-project</artifactId>
+            <artifactId>maven-core</artifactId>
             <version>${maven.project.version}</version>
         </dependency>
         <dependency>
