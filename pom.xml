@@ -190,23 +190,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-plugin-plugin</artifactId>
-                <version>${maven.plugin.plugin.version}</version>
-                <configuration>
-                    <goalPrefix>asciidoctor</goalPrefix>
-                    <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>mojo-descriptor</id>
-                        <goals>
-                            <goal>descriptor</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.codehaus.gmaven</groupId>
                 <artifactId>gmaven-plugin</artifactId>
                 <version>${gmaven.version}</version>
@@ -261,6 +244,15 @@
 
         <pluginManagement>
           <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>${maven.plugin.plugin.version}</version>
+                <configuration>
+                    <goalPrefix>asciidoctor</goalPrefix>
+                    <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+                </configuration>
+            </plugin>
             <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
             <plugin>
               <groupId>org.eclipse.m2e</groupId>
@@ -302,6 +294,7 @@
                         <versionRange>[${maven.plugin.plugin.version},)</versionRange>
                         <goals>
                           <goal>descriptor</goal>
+                          <goal>helpmojo</goal>
                         </goals>
                       </pluginExecutionFilter>
                       <action>
