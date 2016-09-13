@@ -118,9 +118,12 @@ backend:: defaults to `docbook`
 doctype:: defaults to `null` (which trigger's Asciidoctor's default of `article`)
 eruby:: defaults to erb, the version used in JRuby
 headerFooter:: defaults to `true`
-templateDir:: disabled by default, defaults to `null`
-templateEngine:: disabled by default
+templateDir:: directory of Tilt-compatible templates to be used instead of the default built-in templates, disabled by default (`null`)
+templateEngine:: template engine to use for the custom converter templates, disabled by default (`null`)
+templateCache:: enables the built-in cache used by the template converter when reading the source of template files. Only relevant if the :template_dir option is specified, defaults to `true`
 sourceHighlighter:: enables and sets the source highlighter (currently `coderay` or `highlight.js` are supported)
+sourcemap:: adds file and line number information to each parsed block (`lineno` and `source_location` attributes), defaults to `false`
+catalogAssets:: tells the parser to capture images and links in the reference table available via the `references property on the document AST object (experimental), defaults to `false`
 attributes:: a `Map<String,Object>` of attributes to pass to Asciidoctor, defaults to `null`
 embedAssets:: Embedd the CSS file, etc into the output, defaults to `false`
 gemPaths:: enables to specify the location to one or more gem installation directories (same as GEM_PATH environment var), `empty` by default
