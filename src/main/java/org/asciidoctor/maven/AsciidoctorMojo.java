@@ -58,10 +58,10 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "preserveDirectories", defaultValue = "false", required = false)
     protected boolean preserveDirectories = false;
-    
+
     @Parameter(property = AsciidoctorMaven.PREFIX + "relativeBaseDir", defaultValue = "false", required = false)
     protected boolean relativeBaseDir = false;
-    
+
     @Parameter(property = AsciidoctorMaven.PREFIX + "projectDirectory", defaultValue = "${basedir}", required = false, readonly = false)
     protected File projectDirectory;
 
@@ -104,6 +104,9 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "templateEngine", required = false)
     protected String templateEngine;
 
+    @Parameter(property = AsciidoctorMaven.PREFIX + "templateCache")
+    protected boolean templateCache = true;
+
     @Parameter(property = AsciidoctorMaven.PREFIX + "imagesDir", required = false)
     protected String imagesDir = "images"; // use a string because otherwise html doc uses absolute path
 
@@ -118,6 +121,12 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDocumentExtensions")
     protected List<String> sourceDocumentExtensions = new ArrayList<String>();
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + "sourcemap")
+    protected boolean sourcemap = false;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + "catalogAssets")
+    protected boolean catalogAssets = false;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "synchronizations", required = false)
     protected List<Synchronization> synchronizations = new ArrayList<Synchronization>();
@@ -181,17 +190,10 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         asciidoctor.requireLibraries(requires);
 
-        final OptionsBuilder optionsBuilder = OptionsBuilder.options()
-                .backend(backend)
-                .safe(SafeMode.UNSAFE)
-                .headerFooter(headerFooter)
-                .eruby(eruby)
-                .mkDirs(true);
-
-        setOptions(optionsBuilder);
+        final OptionsBuilder optionsBuilder = OptionsBuilder.options();
+        setOptionsOnBuilder(optionsBuilder);
 
         final AttributesBuilder attributesBuilder = AttributesBuilder.attributes();
-
         setAttributesOnBuilder(attributesBuilder);
 
         optionsBuilder.attributes(attributesBuilder);
@@ -286,7 +288,7 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     /**
      * Updates optionsBuilder object's baseDir and destination(s) accordingly to the options.
-     * 
+     *
      * @param optionsBuilder
      *            AsciidoctorJ options to be updated.
      * @param sourceFile
@@ -327,7 +329,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             String normalizedGemPath = (File.separatorChar == '\\') ? gemPath.replaceAll("\\\\", "/") : gemPath;
             asciidoctor = Asciidoctor.Factory.create(normalizedGemPath);
         }
-        
+
         Ruby rubyInstance = null;
         try {
             rubyInstance = (Ruby) JRubyRuntimeContext.class.getMethod("get")
@@ -348,7 +350,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             throw new MojoExecutionException(
                     "Failed to invoke get for JRubyRuntimeContext", e);
         }
-        
+
         String gemHome = rubyInstance.evalScriptlet("ENV['GEM_HOME']").toString();
         String gemHomeExpected = (gemPath == null || "".equals(gemPath)) ? "" : gemPath.split(java.io.File.pathSeparator)[0];
 
@@ -425,18 +427,38 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
     }
 
-    protected void setOptions(OptionsBuilder optionsBuilder) {
-        if (doctype != null) {
+    /**
+     * Updates and OptionsBuilder instance with the options defined in the configuration.
+     *
+     * @param optionsBuilder
+     *            AsciidoctorJ options to be updated.
+     */
+    protected void setOptionsOnBuilder(OptionsBuilder optionsBuilder) {
+        optionsBuilder
+                .backend(backend)
+                .safe(SafeMode.UNSAFE)
+                .headerFooter(headerFooter)
+                .eruby(eruby)
+                .mkDirs(true);
+
+        // Following options are only set when the value is different than the default
+        if (sourcemap)
+            optionsBuilder.option("sourcemap", true);
+
+        if (catalogAssets)
+            optionsBuilder.option("catalog_assets", true);
+
+        if (!templateCache)
+            optionsBuilder.option("template_cache", false);
+
+        if (doctype != null)
             optionsBuilder.docType(doctype);
-        }
 
-        if (templateEngine != null) {
+        if (templateEngine != null)
             optionsBuilder.templateEngine(templateEngine);
-        }
 
-        if (templateDir != null) {
+        if (templateDir != null)
             optionsBuilder.templateDir(templateDir);
-        }
     }
 
     protected void setAttributesOnBuilder(AttributesBuilder attributesBuilder) throws MojoExecutionException {
@@ -480,8 +502,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             // NOTE Maven can't assign a Boolean value from the XML-based configuration, but a client may
             else if (val instanceof Boolean) {
                 attributesBuilder.attribute(attributeEntry.getKey(), Attributes.toAsciidoctorFlag((Boolean) val));
-            }
-            else {
+            } else {
                 // Can't do anything about dates and times because all that logic is private in Attributes
                 attributesBuilder.attribute(attributeEntry.getKey(), val);
             }
@@ -684,8 +705,8 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setRelativeBaseDir(boolean relativeBaseDir) {
         this.relativeBaseDir = relativeBaseDir;
-    }    
-    
+    }
+
     public List<ExtensionConfiguration> getExtensions() {
         return extensions;
     }
