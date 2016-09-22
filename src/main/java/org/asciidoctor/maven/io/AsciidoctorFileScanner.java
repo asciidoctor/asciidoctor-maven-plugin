@@ -26,7 +26,13 @@ public class AsciidoctorFileScanner {
             "**/docinfo-footer.html",
             "**/*-docinfo.html",
             "**/*-docinfo-header.html",
-            "**/*-docinfo-footer.html"};
+            "**/*-docinfo-footer.html",
+            "**/docinfo.xml",
+            "**/docinfo-header.xml",
+            "**/docinfo-footer.xml",
+            "**/*-docinfo.xml",
+            "**/*-docinfo-header.xml",
+            "**/*-docinfo-footer.xml"};
 
     private BuildContext buildContext;
 
