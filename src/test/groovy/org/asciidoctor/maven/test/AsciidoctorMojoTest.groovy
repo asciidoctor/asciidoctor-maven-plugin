@@ -88,6 +88,36 @@ class AsciidoctorMojoTest extends Specification {
             text.contains('<pre class="CodeRay highlight">')
     }
 
+    def "docinfo file should be ignored html"() {
+        setup:
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
+            File outputDir = new File('target/asciidoctor-output-docinfo')
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.backend = 'html'
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'sample-with-doc-info.asciidoc'
+            mojo.outputDirectory = outputDir
+            mojo.execute()
+        then:
+            outputDir.list().toList().isEmpty() == false
+            outputDir.list().toList().contains('sample-with-doc-info.html')
+            !outputDir.list().toList().contains('sample-with-doc-info-docinfo.html')
+            !outputDir.list().toList().contains('sample-with-doc-info-docinfo-footer.html')
+            !outputDir.list().toList().contains('sample-with-doc-info-docinfo.xml')
+            !outputDir.list().toList().contains('sample-with-doc-info-docinfo-footer.xml')
+
+            File sampleOutput = new File('sample-with-doc-info.html', outputDir)
+            sampleOutput.length() > 0
+            String text = sampleOutput.getText()
+            text.contains('This is the sample-with-doc-info file.')
+            text.contains('This is the docinfo html file.')
+            text.contains('This is the docinfo html footer.')
+    }
+
     def "should honor doctype set in document"() {
         setup:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)

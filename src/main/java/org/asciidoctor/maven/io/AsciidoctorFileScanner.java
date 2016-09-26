@@ -14,8 +14,25 @@ import java.util.*;
 public class AsciidoctorFileScanner {
 
     public static String[] DEFAULT_FILE_EXTENSIONS = {"**/*.adoc", "**/*.ad", "**/*.asc","**/*.asciidoc"};
-    // Files and directories beginning with underscore are ignored
-    public static String[] IGNORED_FOLDERS_AND_FILES = {"**/_*.*", "**/_*", "**/_*/**/*.*"};
+
+    public static String[] IGNORED_FOLDERS_AND_FILES = {
+            // Files and directories beginning with underscore are ignored
+            "**/_*.*",
+            "**/_*",
+            "**/_*/**/*.*",
+            // docinfo snippets should not be copied
+            "**/docinfo.html",
+            "**/docinfo-header.html",
+            "**/docinfo-footer.html",
+            "**/*-docinfo.html",
+            "**/*-docinfo-header.html",
+            "**/*-docinfo-footer.html",
+            "**/docinfo.xml",
+            "**/docinfo-header.xml",
+            "**/docinfo-footer.xml",
+            "**/*-docinfo.xml",
+            "**/*-docinfo-header.xml",
+            "**/*-docinfo-footer.xml"};
 
     private BuildContext buildContext;
 
