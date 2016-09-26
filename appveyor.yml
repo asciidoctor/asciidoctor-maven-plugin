@@ -19,8 +19,8 @@ install:
   - cmd: mvn --version
   - cmd: java -version
 build_script:
-  - mvn clean package -B -Dmaven.test.skip=true
+  - mvn -Dmaven.repo.local=C:\maven clean package -B -Dmaven.test.skip=true
 test_script:
-  - mvn -Prun-its verify -B
+  - mvn -Dmaven.repo.local=C:\maven -Prun-its verify -B
 cache:
   - C:\maven
