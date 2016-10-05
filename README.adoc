@@ -98,7 +98,7 @@ resources:: list of resource files to copy to the output directory (e.g., images
     <resources>
 ----
 outputDirectory:: defaults to `${project.build.directory}/generated-docs`
-baseDir:: (not Maven's basedir) enables to set the root path for resouces (e.g. included files), defaults to `${sourceDirectory}`
+baseDir:: (not Maven's basedir) enables to set the root path for resources (e.g. included files), defaults to `${sourceDirectory}`
 skip:: set this to `true` to bypass generation, defaults to `false`
 preserveDirectories:: enables to specify whether the documents should be rendered in the same folder structure as in the source directory or not, defaults to `false`.
 When `true`, instead of generating all output in a single folder, output files are generated in the same structure. See the following example
