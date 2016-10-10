@@ -28,9 +28,7 @@ install:
   - cmd: mvn --version
   - cmd: java -version
 build_script:
-  - mvn clean package -B -Dmaven.test.skip=true
-test_script:
-  - mvn -Prun-its verify -B %TESTS_OPTS%
+  - mvn -B -V -Prun-its clean verify %TESTS_OPTS%
 cache:
   - C:\maven\ -> appveyor.yml
   - C:\Users\appveyor\.m2\ -> pom.xml
