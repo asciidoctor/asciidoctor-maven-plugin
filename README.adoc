@@ -211,7 +211,7 @@ The custom AsciiDoc property can then be used in the document like this:
 
  The latest version of the project is {project-version}.
 
-[TIP]
+[NOTE]
 ====
 If you want to have the project version as the revision number of the document, use this construct:
 
@@ -461,6 +461,8 @@ NOTE: If I can figure out a good way to setup a Ruby testing environment I'll do
 
 === Generate your documentation in separate folders per version
 
+Use Maven `project.version` property to create dedicated custom output directories.
+
 [source, xml]
 -----
 <configuration>
@@ -472,6 +474,8 @@ NOTE: If I can figure out a good way to setup a Ruby testing environment I'll do
 
 === Enable section numbering
 
+Enable section numbering in the build using the `attributes` section.
+
 [source, xml]
 -----
 <configuration>
@@ -480,6 +484,24 @@ NOTE: If I can figure out a good way to setup a Ruby testing environment I'll do
         ...
         <sectnums>true</sectnums>
         ...
+    </attributes>
+    ...
+</configuration>
+-----
+
+=== Add version and build date to the header
+
+Automatically add version details to header and footer to all documents.
+
+[source, xml]
+-----
+<configuration>
+    ...
+    <attributes>
+        ...
+        <revnumber>${project.version}</revnumber>
+        <revdate>${maven.build.date}</revdate>
+        <organization>${project.organization.name}</organization>
     </attributes>
     ...
 </configuration>
