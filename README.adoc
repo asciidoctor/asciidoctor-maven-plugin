@@ -486,14 +486,20 @@ Automatically add version details to header and footer to all documents.
 
 [source, xml]
 -----
+
+<properties>
+   <maven.build.timestamp.format>yyyy-MM-dd HH</maven.build.timestamp.format>  <1>
+</properties>
+
 <configuration>
     ...
     <attributes>
         ...
         <revnumber>${project.version}</revnumber>
-        <revdate>${maven.build.date}</revdate>
+        <revdate>${maven.build.timestamp}</revdate>
         <organization>${project.organization.name}</organization>
     </attributes>
     ...
 </configuration>
 -----
+<1> Add `maven.build.timestamp.format` to the pom's properties section to set a custom date format.
