@@ -211,15 +211,6 @@ The custom AsciiDoc property can then be used in the document like this:
 
  The latest version of the project is {project-version}.
 
-[TIP]
-====
-If you want to have the project version as the revision number of the document, use this construct:
-
- :revnumber: {project-version}
-
-This will make the version number appear in the header and footer of the output.
-====
-
 ==== Setting boolean values
 
 Boolean attributes in asciidoctor, such as `sectnums`, `linkcss` or `copycss` can be set with a value of `true` and unset with a value of `false`.
@@ -461,6 +452,8 @@ NOTE: If I can figure out a good way to setup a Ruby testing environment I'll do
 
 === Generate your documentation in separate folders per version
 
+Use Maven `project.version` property to create dedicated custom output directories.
+
 [source, xml]
 -----
 <configuration>
@@ -471,6 +464,8 @@ NOTE: If I can figure out a good way to setup a Ruby testing environment I'll do
 -----
 
 === Enable section numbering
+
+Enable section numbering in the build using the `attributes` section.
 
 [source, xml]
 -----
@@ -484,3 +479,27 @@ NOTE: If I can figure out a good way to setup a Ruby testing environment I'll do
     ...
 </configuration>
 -----
+
+=== Add version and build date to the header
+
+Automatically add version details to header and footer to all documents.
+
+[source, xml]
+-----
+
+<properties>
+   <maven.build.timestamp.format>yyyy-MM-dd HH</maven.build.timestamp.format>  <1>
+</properties>
+
+<configuration>
+    ...
+    <attributes>
+        ...
+        <revnumber>${project.version}</revnumber>
+        <revdate>${maven.build.timestamp}</revdate>
+        <organization>${project.organization.name}</organization>
+    </attributes>
+    ...
+</configuration>
+-----
+<1> Add `maven.build.timestamp.format` to the pom's properties section to set a custom date format.
