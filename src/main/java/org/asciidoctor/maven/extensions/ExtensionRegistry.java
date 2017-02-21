@@ -1,5 +1,6 @@
 package org.asciidoctor.maven.extensions;
 
+import org.apache.maven.plugin.MojoExecutionException;
 import org.asciidoctor.extension.Processor;
 
 public interface ExtensionRegistry {
@@ -14,6 +15,6 @@ public interface ExtensionRegistry {
      *            required when declaring
      * 
      */
-    public abstract void register(String extensionClassName, String blockName);
+    public abstract void register(String extensionClassName, String blockName) throws MojoExecutionException;
 
 }

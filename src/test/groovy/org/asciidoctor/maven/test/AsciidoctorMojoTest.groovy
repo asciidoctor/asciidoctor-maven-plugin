@@ -1,19 +1,39 @@
 package org.asciidoctor.maven.test
 
 import groovy.io.FileType
-
 import org.apache.commons.io.FileUtils
+import org.apache.maven.model.Resource
 import org.asciidoctor.maven.AsciidoctorMojo
-
+import org.asciidoctor.maven.io.AsciidoctorFileScanner
+import org.asciidoctor.maven.test.plexus.MockPlexusContainer
 import spock.lang.Specification
 
 /**
  *
  */
 class AsciidoctorMojoTest extends Specification {
+
+    static final String DEFAULT_SOURCE_DIRECTORY = 'target/test-classes/src/asciidoctor'
+    static final String MULTIPLE_RESOURCES_OUTPUT = 'target/asciidoctor-output/multiple-resources'
+
+    /**
+     * Intercept Asciidoctor mojo constructor to mock and inject required
+     * plexus objects
+     */
+    def setupSpec() {
+        MockPlexusContainer mockPlexusContainer = new MockPlexusContainer()
+        def oldConstructor = AsciidoctorMojo.constructors[0]
+
+        AsciidoctorMojo.metaClass.constructor = {
+            def mojo = oldConstructor.newInstance()
+            mockPlexusContainer.initializeContext(mojo)
+            return mojo
+        }
+    }
+
     def "renders docbook"() {
         setup:
-            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output')
 
             if (!outputDir.exists())
@@ -35,7 +55,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def "renders html"() {
         setup:
-            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output')
 
             if (!outputDir.exists())
@@ -45,6 +65,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.backend = 'html'
             mojo.sourceDirectory = srcDir
             mojo.sourceDocumentName = 'sample.asciidoc'
+            mojo.resources = [new Resource(directory: '.', excludes: ['**/**'])]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
             mojo.sourceHighlighter = 'coderay'
@@ -67,9 +88,39 @@ class AsciidoctorMojoTest extends Specification {
             text.contains('<pre class="CodeRay highlight">')
     }
 
+    def "docinfo file should be ignored html"() {
+        setup:
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
+            File outputDir = new File('target/asciidoctor-output-docinfo')
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.backend = 'html'
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'sample-with-doc-info.asciidoc'
+            mojo.outputDirectory = outputDir
+            mojo.execute()
+        then:
+            outputDir.list().toList().isEmpty() == false
+            outputDir.list().toList().contains('sample-with-doc-info.html')
+            !outputDir.list().toList().contains('sample-with-doc-info-docinfo.html')
+            !outputDir.list().toList().contains('sample-with-doc-info-docinfo-footer.html')
+            !outputDir.list().toList().contains('sample-with-doc-info-docinfo.xml')
+            !outputDir.list().toList().contains('sample-with-doc-info-docinfo-footer.xml')
+
+            File sampleOutput = new File('sample-with-doc-info.html', outputDir)
+            sampleOutput.length() > 0
+            String text = sampleOutput.getText()
+            text.contains('This is the sample-with-doc-info file.')
+            text.contains('This is the docinfo html file.')
+            text.contains('This is the docinfo html footer.')
+    }
+
     def "should honor doctype set in document"() {
         setup:
-            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output')
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -98,7 +149,7 @@ class AsciidoctorMojoTest extends Specification {
             outputDir.delete()
 
         when: 'asciidoctor mojo is called with extension foo and bar and it exists a sample1.foo and a sample2.bar'
-            def srcDir = new File('target/test-classes/src/asciidoctor')
+            def srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
 
             outputDir.mkdirs()
 
@@ -145,7 +196,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def "should require library"() {
         setup:
-            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output')
 
             if (!outputDir.exists())
@@ -166,7 +217,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def "embedding resources"() {
         setup:
-            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output')
 
             if (!outputDir.exists())
@@ -196,7 +247,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def "missing-attribute skip"() {
         given:
-            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output')
 
             if (!outputDir.exists())
@@ -217,7 +268,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def "missing-attribute drop"() {
         given:
-            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output')
 
             if (!outputDir.exists())
@@ -239,7 +290,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def "missing-attribute drop-line"() {
         given:
-            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output')
 
             if (!outputDir.exists())
@@ -261,7 +312,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def "undefined-attribute drop"() {
         given:
-            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output')
 
             if (!outputDir.exists())
@@ -283,7 +334,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def "undefined-attribute drop-line"() {
         given:
-            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output')
 
             if (!outputDir.exists())
@@ -306,7 +357,7 @@ class AsciidoctorMojoTest extends Specification {
     // Test for Issue 62
     def 'setting_boolean_values'() {
         given:
-            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output-issue-62')
 
             if (!outputDir.exists())
@@ -331,7 +382,7 @@ class AsciidoctorMojoTest extends Specification {
     // Test for Issue 62 (unset)
     def 'unsetting_boolean_values'() {
         given:
-        File srcDir = new File('target/test-classes/src/asciidoctor')
+        File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
         File outputDir = new File('target/asciidoctor-output-issue-62-unset')
 
         if (!outputDir.exists())
@@ -354,7 +405,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def 'test_imageDir_properly_passed'() {
         given:
-            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output-imageDir')
 
             if (!outputDir.exists())
@@ -375,7 +426,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def 'includes_test'() {
         given:
-            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output-include-test')
 
             if (!outputDir.exists())
@@ -396,7 +447,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def 'skip'() {
         given:
-            File srcDir = new File('target/test-classes/src/asciidoctor')
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output-skip-test')
             if (outputDir.exists())
                 outputDir.delete()
@@ -440,6 +491,27 @@ class AsciidoctorMojoTest extends Specification {
         text.contains('<img src="data:image/jpg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/4gzESUNDX1BST0ZJTEUAAQEAAA')
     }
 
+    def 'code highlighting should be rendered when set in the document header'() {
+        setup:
+        File srcDir = new File('src/test/resources/src/asciidoctor')
+        File outputDir = new File('target/asciidoctor-output-sourceHighlighting/header')
+        String documentName = 'sample-with-source-highlighting'
+
+        when:
+        AsciidoctorMojo mojo = new AsciidoctorMojo()
+        mojo.sourceDirectory = srcDir
+        mojo.outputDirectory = outputDir
+        mojo.sourceDocumentName = new File("${documentName}.adoc")
+        mojo.resources = [new Resource(directory: '.', excludes: ['**/**'])]
+        mojo.backend = 'html5'
+        mojo.execute()
+
+        then:
+        File mainDocumentOutput = new File(outputDir, "${documentName}.html")
+        String text = mainDocumentOutput.getText()
+        text.contains('<pre class="CodeRay highlight">')
+    }
+
     /**
      * Tests CodeRay source code highlighting options.
      */
@@ -460,13 +532,13 @@ class AsciidoctorMojoTest extends Specification {
         then:
             File mainDocumentOutput = new File(outputDir, 'main-document.html')
             String text = mainDocumentOutput.getText()
-            text.contains('CodeRay')
-    }   
+            text.contains('<pre class="CodeRay highlight">')
+    }
 
     /**
      * Tests Highlight.js source code highlighting options.
      */
-    def 'code highlighting - highlightjs'() {
+    def 'code highlighting - highlight.js'() {
         setup:
             File srcDir = new File('src/test/resources/src/asciidoctor')
             File outputDir = new File('target/asciidoctor-output-sourceHighlighting/highlightjs')
@@ -475,7 +547,7 @@ class AsciidoctorMojoTest extends Specification {
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.sourceHighlighter = 'highlightjs'
+            mojo.sourceHighlighter = 'highlight.js'
             mojo.sourceDocumentName = new File('main-document.adoc')
             mojo.backend = 'html'
             mojo.execute()
@@ -499,7 +571,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
             mojo.sourceHighlighter = 'prettify'
-            mojo.sourceDocumentName = new File('main-document.adoc')   
+            mojo.sourceDocumentName = new File('main-document.adoc')
             mojo.backend = 'html'
             mojo.execute()
 
@@ -560,13 +632,13 @@ class AsciidoctorMojoTest extends Specification {
             // No extra CSS is added other than Asciidoctor's default
             text.count('<style>') == 1
     }
-    
+
     /**
      * Tests for relative folder structures treatment
      */
     static final FileFilter DIRECTORY_FILTER = {File f -> f.isDirectory()} as FileFilter
     static final String ASCIIDOC_REG_EXP_EXTENSION = '.*\\.a((sc(iidoc)?)|d(oc)?)$'
-    
+
     /**
      * Validates that the folder structures under certain files are the same
      *
@@ -574,17 +646,25 @@ class AsciidoctorMojoTest extends Specification {
      *         list of expected folders
      * @param actual
      *         list of actual folders (the ones to validate)
+     * @param ignoreUnderscore
+     *         tells where to ignore hidden Asciidoctor files (prefixed with underscore) in the expected parameter
      */
-    private void assertEqualsStructure (File[] expected, File[] actual) {
+    private void assertEqualsStructure (File[] expected, File[] actual, Boolean ignoreUnderscore = true) {
+        if (ignoreUnderscore)
+            expected = expected.findAll { !it.name.startsWith('_')}
+
         assert expected.length == actual.length
         expected*.name.containsAll(actual*.name)
-        actual*.name.containsAll(expected*.name) 
+        actual*.name.containsAll(expected*.name)
         for (File actualFile in actual) {
-            File expectedFile = expected.find {it.getName() == actualFile.getName()}
+            File expectedFile = expected.find { it.getName() == actualFile.getName() }
             assert expectedFile != null
-            
+
             // check that at least the number of html files and asciidoc are the same in each folder
-            File[] expectedChildren =  expectedFile.listFiles(DIRECTORY_FILTER)
+            File[] expectedChildren = expectedFile.listFiles(DIRECTORY_FILTER)
+            if (ignoreUnderscore)
+                expectedChildren = expectedChildren.findAll { !it.name.startsWith('_')}
+
             File[] htmls =  actualFile.listFiles({File f -> f.getName() ==~ /.+html/} as FileFilter)
             if (htmls) {
                 File[] asciidocs =  expectedFile.listFiles({File f -> f.getName() ==~ ASCIIDOC_REG_EXP_EXTENSION} as FileFilter)
@@ -595,13 +675,13 @@ class AsciidoctorMojoTest extends Specification {
         }
     }
 
-    
+
     /**
-     * Tests the behaviour when: 
+     * Tests the behaviour when:
      *  - simple paths are used
      *  - preserveDirectories = true
      *  - relativeBaseDir = true
-     *  
+     *
      *  Expected:
      *   - all documents are rendered in the same folder structure found in the sourceDirectory
      *   - all documents are correctly rendered with the import
@@ -641,11 +721,11 @@ class AsciidoctorMojoTest extends Specification {
     }
 
     /**
-     * Tests the behaviour when: 
+     * Tests the behaviour when:
      *  - complex paths are used
      *  - preserveDirectories = true
      *  - relativeBaseDir = true
-     *  
+     *
      *  Expected:
      *   - all documents are rendered in the same folder structure found in the sourceDirectory
      *   - all documents are correctly rendered with the import
@@ -665,7 +745,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.sourceHighlighter = 'coderay'
             mojo.attributes = ['icons':'font']
             mojo.execute()
-        
+
         then:
             outputDir.list().toList().isEmpty() == false
             outputDir.listFiles({File f -> f.getName().endsWith('html')} as FileFilter).length == 1
@@ -685,11 +765,11 @@ class AsciidoctorMojoTest extends Specification {
     }
 
     /**
-     * Tests the behaviour when: 
+     * Tests the behaviour when:
      *  - complex paths are used
      *  - preserveDirectories = false
      *  - relativeBaseDir = false
-     *  
+     *
      *  Expected:
      *   - all documents are rendered in the same outputDirectory. 1 document is overwritten
      *   - all documents but 1 (in the root) are incorrectly rendered because they cannot find the imported file
@@ -725,11 +805,11 @@ class AsciidoctorMojoTest extends Specification {
     }
 
     /**
-     * Tests the behaviour when: 
+     * Tests the behaviour when:
      *  - simple paths are used
      *  - preserveDirectories = true
      *  - relativeBaseDir = false
-     *  
+     *
      *  Expected:
      *   - all documents are rendered in the same folder structure found in the sourceDirectory
      *   - all documents but 1 (in the root) are incorrectly rendered because they cannot find the imported file
@@ -766,19 +846,19 @@ class AsciidoctorMojoTest extends Specification {
                     assert renderedFile.text.contains('Unresolved directive')
                 }
             }
-        
+
         cleanup:
             // Avoids false positives in other tests
             FileUtils.deleteDirectory(outputDir)
     }
 
     /**
-     * Tests the behaviour when: 
-     *  - simple paths are used 
+     * Tests the behaviour when:
+     *  - simple paths are used
      *  - preserveDirectories = false
      *  - relativeBaseDir = true
-     *  
-     *  Expected: all documents are correctly rendered in the same folder 
+     *
+     *  Expected: all documents are correctly rendered in the same folder
      */
     def 'should not replicate source structure-baseDir rewrite'() {
         setup:
@@ -807,7 +887,7 @@ class AsciidoctorMojoTest extends Specification {
             for (File renderedFile in asciidocs) {
                 assert renderedFile.text.contains('Unresolved directive') == false
             }
-        
+
         cleanup:
             // Avoids false positives in other tests
             FileUtils.deleteDirectory(outputDir)
@@ -816,7 +896,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'project-version test'()
     {
         given:
-            File srcDir = new File( 'target/test-classes/src/asciidoctor' )
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File( 'target/asciidoctor-output-project-version-test' )
 
             if (!outputDir.exists()) {
@@ -836,4 +916,262 @@ class AsciidoctorMojoTest extends Specification {
             assert text =~ /[vV]ersion 1\.0-SNAPSHOT/
             text.contains( "This is the project version: 1.0-SNAPSHOT" )
     }
+
+    def 'github files can be included'() {
+        setup:
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
+            File outputDir = new File('target/test-resources/github-include')
+            String documentName = 'github-include.adoc'
+
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDocumentName = documentName
+            mojo.backend = 'html5'
+            mojo.sourceDirectory = srcDir
+            mojo.outputDirectory = outputDir
+            mojo.sourceHighlighter = 'coderay'
+            mojo.attributes = ['allow-uri-read':'true']
+            mojo.execute()
+
+        then:
+            outputDir.list().toList().isEmpty() == false
+            !(new File(outputDir, 'github-include.html').text.contains('modelVersion'))
+    }
+
+    def "command line attributes replace configurations"() {
+        setup:
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
+            File outputDir = new File('target/asciidoctor-output/command-line-options')
+
+            if (!outputDir.exists())
+                outputDir.mkdirs()
+        when: 'set toc and sourceHighlighter as XML configuration and command line attributes'
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.backend = 'html'
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'sample.asciidoc'
+            mojo.outputDirectory = outputDir
+            mojo.sourceHighlighter = 'coderay'
+            mojo.attributes['toc'] = 'left'
+            // replace some options
+            mojo.attributesChain = 'toc=right source-highlighter=highlight.js'
+            mojo.execute()
+        then: 'command line options are applied instead of xml configuration'
+            outputDir.list().toList().isEmpty() == false
+            outputDir.list().toList().contains('sample.html')
+            File sampleOutput = new File('sample.html', outputDir)
+            sampleOutput.length() > 0
+            String text = sampleOutput.getText()
+            text.contains('<body class="article toc2 toc-right">')
+            text.contains('<pre class="highlightjs highlight">')
+    }
+
+    def "should skip processing when source directory does no exist"() {
+        setup:
+            def originalOut = System.out
+            def newOut = new ByteArrayOutputStream()
+            System.setOut(new PrintStream(newOut))
+
+            File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/skipped-process/${System.currentTimeMillis()}")
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = new File(UUID.randomUUID().toString())
+            mojo.backend = 'html5'
+            mojo.outputDirectory = outputDir
+            mojo.execute()
+        then:
+            newOut.toString().contains('sourceDirectory does not exist. Skip processing')
+            !outputDir.exists()
+        cleanup:
+            System.setOut(originalOut)
+    }
+
+    def "should only convert documents and not copy any resources when resources directory does no exist"() {
+        setup:
+            File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/multi-sources/error-source-not-found/${System.currentTimeMillis()}")
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when: 'resource directory does not exist but source AsciiDoc documents do'
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = new File(DEFAULT_SOURCE_DIRECTORY)
+            mojo.resources = [
+                    [
+                            directory: UUID.randomUUID().toString()
+                    ] as Resource
+            ]
+            mojo.backend = 'html5'
+            mojo.outputDirectory = outputDir
+            mojo.execute()
+        then: 'only rendered (html) files are found in the target directory'
+            def allFiles = outputDir.listFiles({File f -> f.isFile()} as FileFilter)
+            def htmlFiles = FileUtils.listFiles(outputDir, ['html'] as String[], true)
+            allFiles.size() == htmlFiles.size()
+            outputDir.listFiles({File f -> f.isDirectory()} as FileFilter).size() == 0
+
+    }
+
+    def "should only render a single file and not copy any resource"() {
+        setup:
+            File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/file-pattern/${System.currentTimeMillis()}")
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+            else
+                FileUtils.deleteDirectory(outputDir)
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = new File(DEFAULT_SOURCE_DIRECTORY)
+            mojo.sourceDocumentName = 'attribute-missing.adoc'
+            // excludes all, nothing at all is copied
+            mojo.resources = [[
+                                      directory: DEFAULT_SOURCE_DIRECTORY,
+                                      excludes : ['**/**']
+                              ] as Resource]
+            mojo.backend = 'html5'
+            mojo.outputDirectory = outputDir
+            mojo.execute()
+        then:
+            def files = outputDir.listFiles({File f -> f.isFile()} as FileFilter)
+            files.size() == 1
+            files*.name.containsAll(['attribute-missing.html'])
+    }
+
+    def "should copy all resources (2 directories with filters) into output folder"() {
+        setup:
+            File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/multi-sources/${System.currentTimeMillis()}")
+            String relativeTestsPath = "$DEFAULT_SOURCE_DIRECTORY/relative-path-treatment"
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = new File("$DEFAULT_SOURCE_DIRECTORY/issue-78")
+            mojo.resources = [[
+                                      directory: "$DEFAULT_SOURCE_DIRECTORY/issue-78",
+                                      includes : ['**/*.adoc']
+                              ] as Resource, [
+                                      directory: relativeTestsPath,
+                                      excludes : ['**/*.jpg']
+                              ] as Resource]
+            mojo.preserveDirertories = true
+            mojo.backend = 'html5'
+            mojo.outputDirectory = outputDir
+            mojo.execute()
+        then:
+            def files = outputDir.listFiles({File f -> f.isFile()} as FileFilter)
+            // includes 2 rendered AsciiDoc documents and 3 resources
+            files.size() == 5
+            // from 'issue-78' directory
+            // resource files obtained using the include
+            files*.name.findAll({it.endsWith('html')}).containsAll(['main.html', 'image-test.html'])
+            // 'images' folder is not copied because it's not included
+            files*.name.findAll({it == 'images'}) ==  []
+            // from 'relative-path-treatment' directory
+            // all folders and files are created because only image files are excluded
+            assertEqualsStructure(new File(relativeTestsPath).listFiles(DIRECTORY_FILTER), outputDir.listFiles(DIRECTORY_FILTER))
+            // images are excluded but not the rest of files
+            FileUtils.listFiles(outputDir, ['groovy'] as String[], true).size() == 5
+            FileUtils.listFiles(outputDir, ["jpg"] as String[], true).size() == 0
+    }
+
+    def "should render GitHub README alone"() {
+        setup:
+            File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/readme/${System.currentTimeMillis()}")
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = new File('.')
+            mojo.sourceDocumentName = 'README.adoc'
+            mojo.resources = [[
+                                      directory: ".",
+                                      excludes : ['**/**']
+                              ] as Resource]
+            mojo.backend = 'html5'
+            mojo.outputDirectory = outputDir
+            mojo.execute()
+        then:
+            def files = outputDir.listFiles({File f -> f.isFile()} as FileFilter)
+            // includes only 1 rendered AsciiDoc document
+            files.size() == 1
+            files.first().text.contains('Asciidoctor Maven Plugin')
+    }
+
+    def "should not include files in hidden directories (prefixes with underscore)"() {
+        setup:
+            File outputDir = new File("target/asciidoctor-output/hidden/${System.currentTimeMillis()}")
+            String relativeTestsPath = "$DEFAULT_SOURCE_DIRECTORY/relative-path-treatment"
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = new File(relativeTestsPath)
+            mojo.preserveDirertories = true
+            mojo.backend = 'html5'
+            mojo.outputDirectory = outputDir
+            mojo.execute()
+        then:
+            def hiddenDirectories = ['_this_is_ignored', 'level-1-1/level-2-2/_this_is_ignored']
+            hiddenDirectories. each { directoryPath ->
+                assert new File(relativeTestsPath, directoryPath).exists()
+                assert !(new File(outputDir, directoryPath).exists())
+            }
+    }
+
+    def "should not crash when enabling maven-resource filtering"() {
+        setup:
+            File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/readme/${System.currentTimeMillis()}")
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = new File('.')
+            mojo.sourceDocumentName = 'README.adoc'
+            mojo.resources = [[
+                                      directory: ".",
+                                      excludes : ['**/**'],
+                                      filtering: true
+                              ] as Resource]
+            mojo.backend = 'html5'
+            mojo.outputDirectory = outputDir
+            mojo.execute()
+        then:
+            def files = outputDir.listFiles({File f -> f.isFile()} as FileFilter)
+            // includes only 1 rendered AsciiDoc document
+            files.size() == 1
+            files.first().text.contains('Asciidoctor Maven Plugin')
+    }
+
+    def "should exclude custom source document Extensions by default"() {
+        setup:
+            File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/readme/${System.currentTimeMillis()}")
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = new File(DEFAULT_SOURCE_DIRECTORY)
+            mojo.sourceDocumentExtensions = ['ext']
+            mojo.resources = [[
+                                      directory: DEFAULT_SOURCE_DIRECTORY,
+                                      includes: ['**/*.adoc'],
+                                      excludes: ['**/**']
+                              ] as Resource]
+            mojo.backend = 'html5'
+            mojo.outputDirectory = outputDir
+            mojo.execute()
+        then:
+            def files = outputDir.listFiles({File f -> f.isFile()} as FileFilter)
+            FileUtils.listFiles(outputDir, ['ext'] as String[], true).isEmpty()
+            // includes only 1 rendered AsciiDoc document
+            def file = new File(outputDir, 'sample.html')
+            file.text.contains('Asciidoctor default stylesheet')
+    }
+
 }

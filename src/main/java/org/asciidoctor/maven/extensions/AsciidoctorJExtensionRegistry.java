@@ -1,5 +1,7 @@
 package org.asciidoctor.maven.extensions;
 
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.extension.BlockMacroProcessor;
 import org.asciidoctor.extension.BlockProcessor;
@@ -11,6 +13,10 @@ import org.asciidoctor.extension.Postprocessor;
 import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.extension.Processor;
 import org.asciidoctor.extension.Treeprocessor;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 /**
  * Class responsible for registering extensions. This class is inspired by
@@ -34,7 +40,7 @@ public class AsciidoctorJExtensionRegistry implements ExtensionRegistry {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public void register(String extensionClassName, String blockName) {
+    public void register(String extensionClassName, String blockName) throws MojoExecutionException {
 
         Class<? extends Processor> clazz;
         try {
@@ -46,23 +52,68 @@ public class AsciidoctorJExtensionRegistry implements ExtensionRegistry {
             throw new RuntimeException("'" + extensionClassName + "' not found in classpath");
         }
 
+        // TODO: Replace with direct method calls again as soon as this project compiles against AsciidoctorJ 1.6.0
         if (DocinfoProcessor.class.isAssignableFrom(clazz)) {
-            javaExtensionRegistry.docinfoProcessor((Class<? extends DocinfoProcessor>) clazz);
+            register(javaExtensionRegistry, "docinfoProcessor", clazz);
         } else if (Preprocessor.class.isAssignableFrom(clazz)) {
-            javaExtensionRegistry.preprocessor((Class<? extends Preprocessor>) clazz);
+            register(javaExtensionRegistry, "preprocessor", clazz);
         } else if (Postprocessor.class.isAssignableFrom(clazz)) {
-            javaExtensionRegistry.postprocessor((Class<? extends Postprocessor>) clazz);
+            register(javaExtensionRegistry, "postprocessor", clazz);
         } else if (Treeprocessor.class.isAssignableFrom(clazz)) {
-            javaExtensionRegistry.treeprocessor((Class<? extends Treeprocessor>) clazz);
+            register(javaExtensionRegistry, "treeprocessor", clazz);
         } else if (BlockProcessor.class.isAssignableFrom(clazz)) {
-            javaExtensionRegistry.block(blockName, (Class<? extends BlockProcessor>) clazz);
+            if (blockName == null) {
+                register(javaExtensionRegistry, "block", clazz);
+            } else {
+                register(javaExtensionRegistry, "block", blockName, clazz);
+            }
         } else if (IncludeProcessor.class.isAssignableFrom(clazz)) {
-            javaExtensionRegistry.includeProcessor((Class<? extends IncludeProcessor>) clazz);
+            register(javaExtensionRegistry, "includeProcessor", clazz);
         } else if (BlockMacroProcessor.class.isAssignableFrom(clazz)) {
-            javaExtensionRegistry.blockMacro(blockName, (Class<? extends BlockMacroProcessor>) clazz);
+            if (blockName == null) {
+                register(javaExtensionRegistry, "blockMacro", clazz);
+            } else {
+                register(javaExtensionRegistry, "blockMacro", blockName, clazz);
+            }
         } else if (InlineMacroProcessor.class.isAssignableFrom(clazz)) {
-            javaExtensionRegistry.inlineMacro(blockName, (Class<? extends InlineMacroProcessor>) clazz);
+            if (blockName == null) {
+                register(javaExtensionRegistry, "inlineMacro", clazz);
+            } else {
+                register(javaExtensionRegistry, "inlineMacro", blockName, clazz);
+            }
         }
+    }
+
+    private void register(Object target, String methodName, Object... args) throws MojoExecutionException {
+        for (Method method: javaExtensionRegistry.getClass().getMethods()) {
+
+            if (isMethodMatching(method, methodName, args)) {
+                try {
+                    method.invoke(target, args);
+                    return;
+                } catch (Exception e) {
+                    throw new MojoExecutionException("Unexpected exception while registering extensions", e);
+                }
+            }
+
+        }
+        throw new MojoExecutionException("Internal Error. Could not register " + methodName + " with arguments " + Arrays.asList(args));
+    }
+
+    private boolean isMethodMatching(Method method, String methodName, Object[] args) {
+        if (!method.getName().equals(methodName)) {
+            return false;
+        }
+        if (method.getParameterTypes().length != args.length) {
+            return false;
+        }
+        // Don't care for primitives here, there's no method on JavaExtensionRegistry with primitives.
+        for (int i = 0; i < method.getParameterTypes().length; i++) {
+            if (args[i] != null && !method.getParameterTypes()[i].isAssignableFrom(args[i].getClass())) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

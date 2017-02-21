@@ -3,11 +3,28 @@ package org.asciidoctor.maven.test
 import org.asciidoctor.maven.AsciidoctorRefreshMojo
 import org.asciidoctor.maven.test.io.DoubleOuputStream
 import org.asciidoctor.maven.test.io.PrefilledInputStream
+import org.asciidoctor.maven.test.plexus.MockPlexusContainer
 import spock.lang.Specification
 
 import java.util.concurrent.CountDownLatch
 
 class AsciidoctorRefreshMojoTest extends Specification {
+
+    /**
+     * Intercept Asciidoctor mojo constructor to mock and inject required
+     * plexus objects
+     */
+    def setupSpec() {
+        MockPlexusContainer mockPlexusContainer = new MockPlexusContainer()
+        def oldConstructor = AsciidoctorRefreshMojo.constructors[0]
+
+        AsciidoctorRefreshMojo.metaClass.constructor = {
+            def mojo = oldConstructor.newInstance()
+            mockPlexusContainer.initializeContext(mojo)
+            return mojo
+        }
+    }
+
     def "auto render when source updated"() {
         setup:
             def srcDir = new File('target/test-classes/src/asciidoctor-refresh')

@@ -1,13 +1,31 @@
 package org.asciidoctor.maven.test
 
 import org.asciidoctor.maven.AsciidoctorHttpMojo
+import org.asciidoctor.maven.AsciidoctorMojo
 import org.asciidoctor.maven.test.io.DoubleOuputStream
 import org.asciidoctor.maven.test.io.PrefilledInputStream
+import org.asciidoctor.maven.test.plexus.MockPlexusContainer
 import spock.lang.Specification
 
 import java.util.concurrent.CountDownLatch
 
 class AsciidoctorHttpMojoTest extends Specification {
+
+    /**
+     * Intercept Asciidoctor mojo constructor to mock and inject required
+     * plexus objects
+     */
+    def setupSpec() {
+        MockPlexusContainer mockPlexusContainer = new MockPlexusContainer()
+        def oldConstructor = AsciidoctorHttpMojo.constructors[0]
+
+        AsciidoctorHttpMojo.metaClass.constructor = {
+            def mojo = oldConstructor.newInstance()
+            mockPlexusContainer.initializeContext(mojo)
+            return mojo
+        }
+    }
+
     def "http front should let access rendered files"() {
         setup:
             def srcDir = new File('target/test-classes/src/asciidoctor-http')

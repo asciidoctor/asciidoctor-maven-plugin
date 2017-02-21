@@ -1,6 +1,6 @@
 = Asciidoctor Maven Plugin
 // Metadata
-:release-version: 1.5.2
+:release-version: 1.5.3
 // Settings
 :page-layout: base
 :idprefix:
@@ -18,9 +18,13 @@ ifdef::badges[]
 image:https://ci.appveyor.com/api/projects/status/chebmu91f08dlmsc/branch/master?svg=true["Build Status (AppVeyor)", link="https://ci.appveyor.com/project/asciidoctor/asciidoctor-maven-plugin"]
 image:http://img.shields.io/travis/asciidoctor/asciidoctor-maven-plugin/master.svg["Build Status (Travis CI)", link="https://travis-ci.org/asciidoctor/asciidoctor-maven-plugin"]
 image:http://img.shields.io/coveralls/{project-repo}/master.svg["Coverage Status", link="https://coveralls.io/r/{project-repo}?branch=master"]
+image:https://maven-badges.herokuapp.com/maven-central/org.asciidoctor/asciidoctor-maven-plugin/badge.svg["Maven Central",link="https://maven-badges.herokuapp.com/maven-central/org.asciidoctor/asciidoctor-maven-plugin"]
 endif::[]
 
 The Asciidoctor Maven Plugin is the official way to convert your {uri-asciidoc}[AsciiDoc] documentation using {uri-asciidoctor}[Asciidoctor] from an {uri-maven}[Apache Maven] build.
+
+.Translations of the document are available in the following languages:
+* link:README_zh-CN.adoc[汉语]
 
 == Installation
 
@@ -69,8 +73,32 @@ There are several configuration options that the asciidoctor-maven-plugin uses, 
 sourceDirectory:: defaults to `${basedir}/src/main/asciidoc`
 sourceDocumentName:: an override to process a single source file; defaults to all files in `${sourceDirectory}`
 sourceDocumentExtensions:: (named `extensions` in v1.5.3 and below) a `List<String>` of non-standard file extensions to render. Currently ad, adoc, and asciidoc will be rendered by default
+resources:: list of resource files to copy to the output directory (e.g., images, css). The configuration follows the same patterns as the `maven-resources-plugin`. If not set, all resources inside `sourceDirectory` are copied
++
+[source, xml]
+----
+    <resources>
+        <resource>
+            <!-- (Mandatory) Directory to copy from. Paths are relative to maven's ${baseDir} -->
+            <directory>DIRECTORY</directory>
+            <!-- (Optional) Directory to copy to. By default uses the option `outputDirectory` -->
+            <targetPath>OUTPUT_DIR</targetPath>
+            <!-- (Optional) NOTE: SVN, GIT and other version control files are excluded by default, there's no need to add them -->
+            <excludes>
+                <exclude>**/.txt</exclude>
+            </excludes>
+            <!-- (Optional) If not set, includes all files but default exceptions mentioned -->
+            <includes>
+                <include>**/*.jpg</include>
+                <include>**/*.gif</include>
+            </includes>
+        </resource>
+        <resource>
+                ...
+    <resources>
+----
 outputDirectory:: defaults to `${project.build.directory}/generated-docs`
-baseDir:: (not Maven's basedir) enables to set the root path for resouces (e.g. included files), defaults to `${sourceDirectory}`
+baseDir:: (not Maven's basedir) enables to set the root path for resources (e.g. included files), defaults to `${sourceDirectory}`
 skip:: set this to `true` to bypass generation, defaults to `false`
 preserveDirectories:: enables to specify whether the documents should be rendered in the same folder structure as in the source directory or not, defaults to `false`.
 When `true`, instead of generating all output in a single folder, output files are generated in the same structure. See the following example
@@ -90,9 +118,12 @@ backend:: defaults to `docbook`
 doctype:: defaults to `null` (which trigger's Asciidoctor's default of `article`)
 eruby:: defaults to erb, the version used in JRuby
 headerFooter:: defaults to `true`
-templateDir:: disabled by default, defaults to `null`
-templateEngine:: disabled by default
-sourceHighlighter:: enables and sets the source highlighter (currently `coderay` or `highlightjs` are supported)
+templateDir:: directory of Tilt-compatible templates to be used instead of the default built-in templates, disabled by default (`null`)
+templateEngine:: template engine to use for the custom converter templates, disabled by default (`null`)
+templateCache:: enables the built-in cache used by the template converter when reading the source of template files. Only relevant if the :template_dir option is specified, defaults to `true`
+sourceHighlighter:: enables and sets the source highlighter (currently `coderay` or `highlight.js` are supported)
+sourcemap:: adds file and line number information to each parsed block (`lineno` and `source_location` attributes), defaults to `false`
+catalogAssets:: tells the parser to capture images and links in the reference table available via the `references property on the document AST object (experimental), defaults to `false`
 attributes:: a `Map<String,Object>` of attributes to pass to Asciidoctor, defaults to `null`
 embedAssets:: Embedd the CSS file, etc into the output, defaults to `false`
 gemPaths:: enables to specify the location to one or more gem installation directories (same as GEM_PATH environment var), `empty` by default
@@ -102,7 +133,7 @@ extensions:: `List of extensions` to include during the conversion process (see 
 [source,xml]
 ----
 <plugin>
-    ... 
+    ...
     <executions>
         <execution>
             <configuration>
@@ -180,22 +211,13 @@ The custom AsciiDoc property can then be used in the document like this:
 
  The latest version of the project is {project-version}.
 
-[TIP]
-====
-If you want to have the project version as the revision number of the document, use this construct:
-
- :revnumber: {project-version}
-
-This will make the version number appear in the header and footer of the output.
-====
-
 ==== Setting boolean values
 
 Boolean attributes in asciidoctor, such as `sectnums`, `linkcss` or `copycss` can be set with a value of `true` and unset with a value of `false`.
 
 ==== Examples
 
-In the `<attributes>` part of the Asciidoctor Maven Plugin configuration: 
+In the `<attributes>` part of the Asciidoctor Maven Plugin configuration:
 
 [source,xml]
 ----
@@ -204,6 +226,36 @@ In the `<attributes>` part of the Asciidoctor Maven Plugin configuration:
 ----
 
 You can find more information and many examples ready to copy-paste in the {uri-examples}[Asciidoctor Maven examples] project.
+
+==== Command line configuration
+
+Configuration options can be set (but not replaced) using system properties directly in the command line as follows:
+
+ mvn generate-resources -Dasciidoctor.sourceDirectory=src/docs -Dasciidoctor.outputDirectory=target/docs
+
+All options follow the naming convention _`asciidoctor.` + option_name_.
+
+In order to provide a higher degree of flexibility `attributes` configuration follows a different behavior.
+Attributes defined through the command line are added to the ones already found in the XML configuration.
+The result of it is that attributes and other configuration options can be updated if they are added to the command line as attributes.
+For example, the following configuration could be modified with the command options as seen below.
+
+[source,xml]
+----
+<configuration>
+    <backend>html5</backend>
+    <sourceHighlighter>coderay</sourceHighlighter>
+    <attributes>
+        <toc>left</toc>
+    </attributes>
+</configuration>
+----
+
+ mvn generate-resources -Dasciidoctor.attributes=toc=right
+
+ mvn generate-resources -Dasciidoctor.attributes="toc=right source-highlighter=highlight.js imagesdir=my_images"
+
+Note that in the second case we need to use quotes due to the spaces, and that `source-highlighter` is the asciidoctor attribute name used to update the configuration.
 
 === Multiple outputs for the same file
 
@@ -400,6 +452,8 @@ NOTE: If I can figure out a good way to setup a Ruby testing environment I'll do
 
 === Generate your documentation in separate folders per version
 
+Use Maven `project.version` property to create dedicated custom output directories.
+
 [source, xml]
 -----
 <configuration>
@@ -410,6 +464,8 @@ NOTE: If I can figure out a good way to setup a Ruby testing environment I'll do
 -----
 
 === Enable section numbering
+
+Enable section numbering in the build using the `attributes` section.
 
 [source, xml]
 -----
@@ -423,3 +479,27 @@ NOTE: If I can figure out a good way to setup a Ruby testing environment I'll do
     ...
 </configuration>
 -----
+
+=== Add version and build date to the header
+
+Automatically add version details to header and footer to all documents.
+
+[source, xml]
+-----
+
+<properties>
+   <maven.build.timestamp.format>yyyy-MM-dd HH</maven.build.timestamp.format>  <1>
+</properties>
+
+<configuration>
+    ...
+    <attributes>
+        ...
+        <revnumber>${project.version}</revnumber>
+        <revdate>${maven.build.timestamp}</revdate>
+        <organization>${project.organization.name}</organization>
+    </attributes>
+    ...
+</configuration>
+-----
+<1> Add `maven.build.timestamp.format` to the pom's properties section to set a custom date format.
