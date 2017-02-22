@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
@@ -73,7 +72,6 @@ public class AsciidoctorParser extends XhtmlParser {
 			getLog().error("Could not read AsciiDoc source: " + ex.getLocalizedMessage());
 			return;
 		}
-
 		MavenProject project = mavenProjectProvider.get();
 
 		Xpp3Dom siteConfig = getSiteConfig(project);
@@ -124,13 +122,6 @@ public class AsciidoctorParser extends XhtmlParser {
 		if (asciidocConfig == null) {
 			return options.attributes(attributes);
 		}
-
-		if (project.getProperties() != null) {
-			for ( Map.Entry<Object, Object> entry : project.getProperties().entrySet() ) {
-				attributes.attribute(((String) entry.getKey()).replaceAll("\\.", "_"), entry.getValue());
-			}
-		}
-
 
 		for (Xpp3Dom asciidocOpt : asciidocConfig.getChildren()) {
 			String optName = asciidocOpt.getName();
