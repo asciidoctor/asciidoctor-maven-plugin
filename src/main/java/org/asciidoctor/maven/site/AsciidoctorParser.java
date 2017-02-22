@@ -38,6 +38,8 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * This class is used by the Doxia framework to handle the actual parsing of the
@@ -50,8 +52,8 @@ import java.util.Map;
 @Component(role = Parser.class, hint = AsciidoctorParser.ROLE_HINT)
 public class AsciidoctorParser extends XhtmlParser {
 
-    @Requirement
-    protected MavenProject project;
+	@Inject
+	protected Provider<MavenProject> mavenProjectProvider;
 
     /**
      * The role hint for the {@link AsciidoctorParser} Plexus component.
@@ -75,9 +77,13 @@ public class AsciidoctorParser extends XhtmlParser {
             getLog().error("Could not read AsciiDoc source: " + ex.getLocalizedMessage());
             return;
         }
+
+		MavenProject project = mavenProjectProvider.get();
+
         Xpp3Dom siteConfig = getSiteConfig(project);
         File siteDirectory = resolveSiteDirectory(project, siteConfig);
         OptionsBuilder options = processAsciiDocConfig(
+				project,
                 siteConfig,
                 initOptions(project, siteDirectory),
                 initAttributes(project, siteDirectory));
@@ -113,7 +119,7 @@ public class AsciidoctorParser extends XhtmlParser {
             .attribute("showtitle", "@");
     }
 
-    protected OptionsBuilder processAsciiDocConfig(Xpp3Dom siteConfig, OptionsBuilder options, AttributesBuilder attributes) {
+    protected OptionsBuilder processAsciiDocConfig(MavenProject project, Xpp3Dom siteConfig, OptionsBuilder options, AttributesBuilder attributes) {
         if (siteConfig == null) {
             return options.attributes(attributes);
         }
@@ -123,8 +129,8 @@ public class AsciidoctorParser extends XhtmlParser {
             return options.attributes(attributes);
         }
 
-        if (this.project.getProperties() != null) {
-            for ( Map.Entry<Object, Object> entry : this.project.getProperties().entrySet() ) {
+        if (project.getProperties() != null) {
+            for ( Map.Entry<Object, Object> entry : project.getProperties().entrySet() ) {
                 attributes.attribute(((String) entry.getKey()).replaceAll("\\.", "_"), entry.getValue());
             }
         }
