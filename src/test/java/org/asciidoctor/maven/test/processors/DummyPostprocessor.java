@@ -16,7 +16,7 @@ public class DummyPostprocessor extends Postprocessor {
     @Override
     public String process(Document document, String output) {
         System.out.println("Processing "+ this.getClass().getSimpleName());
-        System.out.println("Processing: blocks found: " + document.blocks().size());
+        System.out.println("Processing: blocks found: " + document.getBlocks().size());
         System.out.println("Processing: output size: " + output.length());
         return output;
     }
