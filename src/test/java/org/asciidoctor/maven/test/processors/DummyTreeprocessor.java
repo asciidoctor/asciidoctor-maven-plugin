@@ -21,7 +21,7 @@ public class DummyTreeprocessor extends Treeprocessor {
     @Override
     public Document process(Document document) {
         System.out.println("Processing "+ this.getClass().getSimpleName());
-        System.out.println("Processing: blocks found: " + document.blocks().size());
+        System.out.println("Processing: blocks found: " + document.getBlocks().size());
         return document;
     }
 
