@@ -7,7 +7,7 @@ NOTE: This is test, only a test.
 
 == Includes a file from GitHub
 
-Note that this will only works with jruby 9k
+This works using jRuby 9k or >= 1.7.22.
 
 [source,xml]
 ----
