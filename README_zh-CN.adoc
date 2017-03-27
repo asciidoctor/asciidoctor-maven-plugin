@@ -2,7 +2,7 @@
 :translators: D瓜哥
 ifdef::env-github[Translated by: {translators}]
 // Metadata
-:release-version: 1.5.2
+:release-version: 1.5.5
 // Settings
 :page-layout: base
 :idprefix:
