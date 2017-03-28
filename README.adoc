@@ -314,7 +314,7 @@ This allows an easier way of defining common configuration options.
 
 To author your Maven-generated site in AsciiDoc, you must first add a dependency on the Asciidoctor plugin to your maven-site-plugin declaration.
 
-IMPORTANT: Since asciidoctor-maven-plugin v1.5.6 it is required to use maven-site-plugin v3.4 or above.
+IMPORTANT: Maven v3.2.1 or above required, and since asciidoctor-maven-plugin v1.5.6 only maven-site-plugin v3.4 or above is supported.
 
 [source,xml,subs=attributes+]
 .Maven site integration
