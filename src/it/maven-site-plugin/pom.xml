@@ -12,7 +12,8 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.3</version>
+                <!-- doxia 1.7 is only compatible with maven-site-plugin 3.4 or + -->
+                <version>3.4</version>
                 <configuration>
                     <asciidoc>
                         <templateDirs>
