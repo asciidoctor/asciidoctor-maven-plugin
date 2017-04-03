@@ -101,8 +101,10 @@ resources:: list of resource files to copy to the output directory (e.g., images
 +
 [NOTE]
 ====
-Backends that embed resources, need to locate them at the time of conversion.
-For example, in the case of pdf and images, all reosurces should be aggregated under a single directory, and `imagesdir` attribute should be set to point to it.
+Converters that embed resources such as images into the output document need to be able to locate those resources at conversion time.
+For example, when generating a PDF (or HTML with the `data-uri` attribute set), all images need to be aggregated under a common root (i.e., image catalog).
+The `imagesdir` attribute should be overridden to point to that folder.
+When converting to HTML, images must be copied to the output location so that the browser can resolve those images when the user views the page.
 ====
 +
 [source, xml]
