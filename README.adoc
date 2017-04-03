@@ -99,6 +99,14 @@ sourceDocumentName:: an override to process a single source file; defaults to al
 sourceDocumentExtensions:: (named `extensions` in v1.5.3 and below) a `List<String>` of non-standard file extensions to render. Currently ad, adoc, and asciidoc will be rendered by default
 resources:: list of resource files to copy to the output directory (e.g., images, css). The configuration follows the same patterns as the `maven-resources-plugin`. If not set, all resources inside `sourceDirectory` are copied
 +
+[NOTE]
+====
+Converters that embed resources such as images into the output document need to be able to locate those resources at conversion time.
+For example, when generating a PDF (or HTML with the `data-uri` attribute set), all images need to be aggregated under a common root (i.e., image catalog).
+The `imagesdir` attribute should be overridden to point to that folder.
+When converting to HTML, images must be copied to the output location so that the browser can resolve those images when the user views the page.
+====
++
 [source, xml]
 ----
     <resources>
