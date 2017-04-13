@@ -108,7 +108,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected boolean templateCache = true;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "imagesDir", required = false)
-    protected String imagesDir = "images"; // use a string because otherwise html doc uses absolute path
+    protected String imagesDir = "images@"; // '@' Allows override by :imagesdir: document properties
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceHighlighter", required = false)
     protected String sourceHighlighter;
