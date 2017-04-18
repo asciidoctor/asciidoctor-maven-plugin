@@ -171,7 +171,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
 
         if (!sourceDirectory.exists()) {
-            getLog().info("sourceDirectory does not exist. Skip processing");
+            getLog().info("sourceDirectory " + sourceDirectory.getPath() + " does not exist. Skip processing");
             return;
         }
 

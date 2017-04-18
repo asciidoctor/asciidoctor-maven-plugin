@@ -986,7 +986,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.outputDirectory = outputDir
             mojo.execute()
         then:
-            newOut.toString().contains('sourceDirectory does not exist. Skip processing')
+            newOut.toString().contains("sourceDirectory ${mojo.sourceDirectory} does not exist. Skip processing")
             !outputDir.exists()
         cleanup:
             System.setOut(originalOut)
