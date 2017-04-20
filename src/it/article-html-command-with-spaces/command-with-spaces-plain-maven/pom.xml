@@ -1,0 +1,51 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.asciidoctor</groupId>
+	<artifactId>command-with-spaces-plain-maven</artifactId>
+	<version>1.0-SNAPSHOT</version>
+
+	<name>Run Asciidoctor Article to Html with command line arguments</name>
+	<description>Runs asciidoctor-maven-plugin:process-asciidoc</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<repositories>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>bintray-abelsromero-maven</id>
+			<name>bintray</name>
+			<url>http://dl.bintray.com/abelsromero/maven</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>bintray-abelsromero-maven</id>
+			<name>bintray-plugins</name>
+			<url>http://dl.bintray.com/abelsromero/maven</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+				<version>1.5.4-preview.2</version>
+				<configuration>
+					<backend>html</backend>
+					<doctype>article</doctype>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
