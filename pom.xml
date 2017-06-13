@@ -421,12 +421,39 @@
             </build>
         </profile>
     </profiles>
-
     <distributionManagement>
+
+        <site>
+
+            <id>nemesis-docs</id>
+
+            <url>scp://178.62.150.204/var/www/html/docs/${project.version}/</url>
+
+        </site>
+
         <repository>
-            <id>bintray-asciidoctor-maven-asciidoctor-maven-plugin</id>
-            <name>asciidoctor-maven-asciidoctor-maven-plugin</name>
-            <url>https://api.bintray.com/maven/asciidoctor/maven/asciidoctor-maven-plugin</url>
+
+            <id>nemesis-repository</id>
+
+            <uniqueVersion>true</uniqueVersion>
+
+            <name>nemesis-repository-releases</name>
+
+            <url>https://repository.nemesis.io/artifactory/libs-release-local</url>
+
         </repository>
+
+        <snapshotRepository>
+
+            <id>nemesis-repository</id>
+
+            <uniqueVersion>false</uniqueVersion>
+
+            <name>nemesis-repository-snapshots</name>
+
+            <url>https://repository.nemesis.io/artifactory/libs-snapshot-local</url>
+
+        </snapshotRepository>
+
     </distributionManagement>
 </project>
