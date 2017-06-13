@@ -920,7 +920,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'github files can be included'() {
         setup:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/test-resources/github-include')
+            File outputDir = new File("target/test-resources/github-include/${System.currentTimeMillis()}")
             String documentName = 'github-include.adoc'
 
         when:
@@ -931,11 +931,15 @@ class AsciidoctorMojoTest extends Specification {
             mojo.outputDirectory = outputDir
             mojo.sourceHighlighter = 'coderay'
             mojo.attributes = ['allow-uri-read':'true']
+            mojo.resources = [[
+                                  directory: '.',
+                                  excludes : ['**/**']
+                          ] as Resource]
             mojo.execute()
 
         then:
             outputDir.list().toList().isEmpty() == false
-            !(new File(outputDir, 'github-include.html').text.contains('modelVersion'))
+            (new File(outputDir, 'github-include.html').text.contains('modelVersion'))
     }
 
     def "command line attributes replace configurations"() {
@@ -982,7 +986,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.outputDirectory = outputDir
             mojo.execute()
         then:
-            newOut.toString().contains('sourceDirectory does not exist. Skip processing')
+            newOut.toString().contains("sourceDirectory ${mojo.sourceDirectory} does not exist. Skip processing")
             !outputDir.exists()
         cleanup:
             System.setOut(originalOut)

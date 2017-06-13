@@ -108,7 +108,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected boolean templateCache = true;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "imagesDir", required = false)
-    protected String imagesDir = "images"; // use a string because otherwise html doc uses absolute path
+    protected String imagesDir = "images@"; // '@' Allows override by :imagesdir: document attribute
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceHighlighter", required = false)
     protected String sourceHighlighter;
@@ -171,7 +171,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
 
         if (!sourceDirectory.exists()) {
-            getLog().info("sourceDirectory does not exist. Skip processing");
+            getLog().info("sourceDirectory " + sourceDirectory.getPath() + " does not exist. Skip processing");
             return;
         }
 

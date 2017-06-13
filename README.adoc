@@ -1,6 +1,6 @@
 = Asciidoctor Maven Plugin
 // Metadata
-:release-version: 1.5.3
+:release-version: 1.5.5
 // Settings
 :page-layout: base
 :idprefix:
@@ -9,11 +9,22 @@
 ifdef::env-github[:badges:]
 // URIs
 :project-repo: asciidoctor/asciidoctor-maven-plugin
+:uri-repo: https://github.com/{project-repo}
 :uri-asciidoc: http://asciidoc.org
 :uri-asciidoctor: http://asciidoctor.org
 :uri-examples: https://github.com/asciidoctor/asciidoctor-maven-examples
 :uri-maven: http://maven.apache.org
-
+// GitHub customization
+ifdef::env-github[]
+:tag: master
+:!toc-title:
+:tip-caption: :bulb:
+:note-caption: :paperclip:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+// Badges
 ifdef::badges[]
 image:https://ci.appveyor.com/api/projects/status/chebmu91f08dlmsc/branch/master?svg=true["Build Status (AppVeyor)", link="https://ci.appveyor.com/project/asciidoctor/asciidoctor-maven-plugin"]
 image:http://img.shields.io/travis/asciidoctor/asciidoctor-maven-plugin/master.svg["Build Status (Travis CI)", link="https://travis-ci.org/asciidoctor/asciidoctor-maven-plugin"]
@@ -25,6 +36,19 @@ The Asciidoctor Maven Plugin is the official way to convert your {uri-asciidoc}[
 
 .Translations of the document are available in the following languages:
 * link:README_zh-CN.adoc[汉语]
+
+ifeval::['{tag}' == 'master']
+[NOTE]
+====
+You're viewing the documentation for the upcoming release.
+If you're looking for the documentation for an older release, please refer to one of the following tags: +
+{uri-repo}/tree/asciidoctor-maven-plugin-1.5.5#readme[1.5.5]
+&hybull;
+{uri-repo}/tree/asciidoctor-maven-plugin-1.5.3#readme[1.5.3]
+&hybull;
+{uri-repo}/tree/asciidoctor-maven-plugin-1.5.2.1#readme[1.5.2.1]
+====
+endif::[]
 
 == Installation
 
@@ -74,6 +98,14 @@ sourceDirectory:: defaults to `${basedir}/src/main/asciidoc`
 sourceDocumentName:: an override to process a single source file; defaults to all files in `${sourceDirectory}`
 sourceDocumentExtensions:: (named `extensions` in v1.5.3 and below) a `List<String>` of non-standard file extensions to render. Currently ad, adoc, and asciidoc will be rendered by default
 resources:: list of resource files to copy to the output directory (e.g., images, css). The configuration follows the same patterns as the `maven-resources-plugin`. If not set, all resources inside `sourceDirectory` are copied
++
+[NOTE]
+====
+Converters that embed resources such as images into the output document need to be able to locate those resources at conversion time.
+For example, when generating a PDF (or HTML with the `data-uri` attribute set), all images need to be aggregated under a common root (i.e., image catalog).
+The `imagesdir` attribute should be overridden to point to that folder.
+When converting to HTML, images must be copied to the output location so that the browser can resolve those images when the user views the page.
+====
 +
 [source, xml]
 ----
@@ -313,6 +345,8 @@ This allows an easier way of defining common configuration options.
 == Maven Site Integration
 
 To author your Maven-generated site in AsciiDoc, you must first add a dependency on the Asciidoctor plugin to your maven-site-plugin declaration.
+
+IMPORTANT: Maven v3.2.1 or above required, and since asciidoctor-maven-plugin v1.5.6 only maven-site-plugin v3.4 or above is supported.
 
 [source,xml,subs=attributes+]
 .Maven site integration
