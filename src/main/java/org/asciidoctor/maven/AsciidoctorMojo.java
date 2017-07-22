@@ -538,6 +538,14 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.outputDirectory = outputDirectory;
     }
 
+    public File getOutputFile() {
+        return outputFile;
+    }
+
+    public void setOutputFile(File outputFile) {
+        this.outputFile = outputFile;
+    }
+
     public String getBackend() {
         return backend;
     }
