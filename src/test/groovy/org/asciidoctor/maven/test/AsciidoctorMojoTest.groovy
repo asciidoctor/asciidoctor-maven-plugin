@@ -234,7 +234,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.execute()
         then:
             outputDir.list().toList().isEmpty() == false
-            outputDir.list().toList().contains('sample.html')
+            outputDir.list().toList().contains('sample-embedded.html')
 
             File sampleOutput = new File(outputDir, 'sample-embedded.html')
             sampleOutput.length() > 0
@@ -243,6 +243,38 @@ class AsciidoctorMojoTest extends Specification {
             text.contains('data:image/png;base64,iVBORw0KGgo')
             text.contains('font-awesome.min.css')
             text.contains('i class="fa icon-tip"')
+    }
+
+    def "override output file"() {
+        setup:
+        File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
+        File outputDir = new File('target/asciidoctor-output')
+        File outputFile = new File( 'custom_output_file.html')
+
+        if (!outputDir.exists())
+            outputDir.mkdir()
+        when:
+        AsciidoctorMojo mojo = new AsciidoctorMojo()
+        mojo.attributes["icons"] = "font"
+        mojo.embedAssets = true
+        mojo.imagesDir = ''
+        mojo.outputDirectory = outputDir
+        mojo.outputFile = outputFile
+        mojo.sourceDirectory = srcDir
+        mojo.sourceDocumentName = 'sample-embedded.adoc'
+        mojo.backend = 'html'
+        mojo.execute()
+        then:
+        outputDir.list().toList().isEmpty() == false
+        outputDir.list().toList().contains('custom_output_file.html')
+
+        File sampleOutput = new File(outputDir, 'custom_output_file.html')
+        sampleOutput.length() > 0
+        String text = sampleOutput.getText()
+        text.contains('Asciidoctor default stylesheet')
+        text.contains('data:image/png;base64,iVBORw0KGgo')
+        text.contains('font-awesome.min.css')
+        text.contains('i class="fa icon-tip"')
     }
 
     def "missing-attribute skip"() {

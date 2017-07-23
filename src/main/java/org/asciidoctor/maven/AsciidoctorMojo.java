@@ -56,6 +56,9 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "outputDirectory", defaultValue = "${project.build.directory}/generated-docs", required = true)
     protected File outputDirectory;
 
+    @Parameter(property = AsciidoctorMaven.PREFIX + "outputFile", required = false)
+    protected File outputFile;
+
     @Parameter(property = AsciidoctorMaven.PREFIX + "preserveDirectories", defaultValue = "false", required = false)
     protected boolean preserveDirectories = false;
 
@@ -313,6 +316,10 @@ public class AsciidoctorMojo extends AbstractMojo {
             } else {
                 optionsBuilder.toDir(outputDirectory).destinationDir(outputDirectory);
             }
+            if (outputFile != null) {
+                //allow overriding the output file name
+                optionsBuilder.toFile(outputFile);
+            }
         } catch (IOException e) {
             throw new MojoExecutionException("Unable to locate output directory", e);
         }
@@ -529,6 +536,14 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setOutputDirectory(File outputDirectory) {
         this.outputDirectory = outputDirectory;
+    }
+
+    public File getOutputFile() {
+        return outputFile;
+    }
+
+    public void setOutputFile(File outputFile) {
+        this.outputFile = outputFile;
     }
 
     public String getBackend() {
