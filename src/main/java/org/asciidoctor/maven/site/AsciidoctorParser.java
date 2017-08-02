@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is used by the Doxia framework to handle the actual parsing of the
@@ -121,6 +122,13 @@ public class AsciidoctorParser extends XhtmlParser {
         if (asciidocConfig == null) {
             return options.attributes(attributes);
         }
+
+        if (this.project.getProperties() != null) {
+            for ( Map.Entry<Object, Object> entry : this.project.getProperties().entrySet() ) {
+                attributes.attribute(((String) entry.getKey()).replaceAll("\\.", "_"), entry.getValue());
+            }
+        }
+
 
         for (Xpp3Dom asciidocOpt : asciidocConfig.getChildren()) {
             String optName = asciidocOpt.getName();
