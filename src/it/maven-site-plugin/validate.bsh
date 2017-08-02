@@ -85,6 +85,19 @@ for (String expectedFile : expectedFiles) {
     if (!sourceHighlighted) {
         throw new Exception("Source code was not highlighted.");
     }
+
+    // validate that maven properties are replaced same as attributes
+    boolean foundReplacement = false;
+    for (String line: lines) {
+    System.out.println(line);
+        if (line.contains("v1.2.3")) {
+            foundReplacement = true;
+            break;
+        }
+    }
+    if (!foundReplacement) {
+        throw new Exception("Maven properties not replaced.");
+    }
 }
 
 for (String unexpectedFile : unexpectedFiles) {

@@ -3,6 +3,7 @@
 
 [.lead]
 This is an example file that was processed by the site module in the Asciidoctor Maven Plugin.
+Version {docs-version}.
 
 == First section
 

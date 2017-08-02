@@ -29,9 +29,6 @@ import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
-import org.asciidoctor.internal.JRubyRuntimeContext;
-import org.asciidoctor.internal.RubyUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -125,7 +122,7 @@ public class AsciidoctorParser extends XhtmlParser {
 
         if (this.project.getProperties() != null) {
             for ( Map.Entry<Object, Object> entry : this.project.getProperties().entrySet() ) {
-                attributes.attribute(((String) entry.getKey()).replaceAll("\\.", "_"), entry.getValue());
+                attributes.attribute(((String) entry.getKey()).replaceAll("\\.", "-"), entry.getValue());
             }
         }
 
