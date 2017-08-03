@@ -6,6 +6,11 @@
 	<artifactId>maven-site-plugin-it</artifactId>
 	<version>1.0-SNAPSHOT</version>
     <name>Maven Site Plugin IT</name>
+
+    <properties>
+        <docs.version>v1.2.3</docs.version>
+    </properties>
+
     <build>
         <plugins>
             <!-- tag::plugin-decl[] -->
