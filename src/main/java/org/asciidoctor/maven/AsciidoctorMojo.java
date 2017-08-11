@@ -48,7 +48,8 @@ public class AsciidoctorMojo extends AbstractMojo {
     // should probably be configured in AsciidoctorMojo through @Parameter 'extension'
     protected static final String ASCIIDOC_REG_EXP_EXTENSION = ".*\\.a((sc(iidoc)?)|d(oc)?)$";
 
-    protected static final String FILE_ENCODING = System.getProperty("file.encoding");
+    @Parameter(defaultValue = "${project.build.sourceEncoding}")
+    protected String encoding;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDirectory", defaultValue = "${basedir}/src/main/asciidoc", required = true)
     protected File sourceDirectory;
@@ -202,7 +203,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         optionsBuilder.attributes(attributesBuilder);
 
         ExtensionRegistry extensionRegistry = new AsciidoctorJExtensionRegistry(asciidoctor);
-        for (ExtensionConfiguration extension: extensions) {
+        for (ExtensionConfiguration extension : extensions) {
             try {
                 extensionRegistry.register(extension.getClassName(), extension.getBlockName());
             } catch (Exception e) {
@@ -278,7 +279,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         try {
             // Right now it's not used at all, but could be used to apply resource filters/replacements
             MavenResourcesExecution resourcesExecution =
-                    new MavenResourcesExecution(resources, outputDirectory, project, FILE_ENCODING,
+                    new MavenResourcesExecution(resources, outputDirectory, project, encoding,
                             Collections.<String>emptyList(), Collections.<String>emptyList(), session);
             resourcesExecution.setIncludeEmptyDirs(true);
             resourcesExecution.setAddDefaultExcludes(true);
@@ -292,10 +293,8 @@ public class AsciidoctorMojo extends AbstractMojo {
     /**
      * Updates optionsBuilder object's baseDir and destination(s) accordingly to the options.
      *
-     * @param optionsBuilder
-     *            AsciidoctorJ options to be updated.
-     * @param sourceFile
-     *           AsciiDoc source file to process.
+     * @param optionsBuilder AsciidoctorJ options to be updated.
+     * @param sourceFile     AsciiDoc source file to process.
      */
     private void setDestinationPaths(OptionsBuilder optionsBuilder, final File sourceFile) throws MojoExecutionException {
         try {
@@ -378,7 +377,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             asciidoctorFiles = directoryWalker.scan();
         }
         String absoluteSourceDirectory = sourceDirectory.getAbsolutePath();
-        for (Iterator<File> iter = asciidoctorFiles.iterator(); iter.hasNext();) {
+        for (Iterator<File> iter = asciidoctorFiles.iterator(); iter.hasNext(); ) {
             File f = iter.next();
             do {
                 // stop when we hit the source directory root
@@ -437,8 +436,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     /**
      * Updates and OptionsBuilder instance with the options defined in the configuration.
      *
-     * @param optionsBuilder
-     *            AsciidoctorJ options to be updated.
+     * @param optionsBuilder AsciidoctorJ options to be updated.
      */
     protected void setOptionsOnBuilder(OptionsBuilder optionsBuilder) {
         optionsBuilder
