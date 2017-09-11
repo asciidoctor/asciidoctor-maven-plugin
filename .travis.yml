@@ -4,9 +4,20 @@ before_script:
   - export MAVEN_SKIP_RC=true
 jdk:
   - oraclejdk8
-  - oraclejdk7
+  - openjdk8
   - openjdk7
-  - openjdk6
+matrix:
+  include:
+    - addons:
+        apt:
+          packages:
+            - oracle-java7-installer
+      jdk: oraclejdk78
+    - addons:
+        apt:
+          packages:
+            - openjdk-6-jdk
+      jdk: openjdk6
 # skip installation step entirely
 install: true
 script:
