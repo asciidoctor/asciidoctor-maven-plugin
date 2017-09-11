@@ -11,11 +11,6 @@ matrix:
     - addons:
         apt:
           packages:
-            - oracle-java7-installer
-      jdk: oraclejdk7
-    - addons:
-        apt:
-          packages:
             - openjdk-6-jdk
       jdk: openjdk6
 # skip installation step entirely
