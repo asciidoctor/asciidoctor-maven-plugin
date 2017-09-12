@@ -1,18 +1,12 @@
-language: java
+dist: trusty
 sudo: false
+language: java
 before_script:
   - export MAVEN_SKIP_RC=true
 jdk:
   - oraclejdk8
   - openjdk8
   - openjdk7
-matrix:
-  include:
-    - addons:
-        apt:
-          packages:
-            - openjdk-6-jdk
-      jdk: openjdk6
 # skip installation step entirely
 install: true
 script:
