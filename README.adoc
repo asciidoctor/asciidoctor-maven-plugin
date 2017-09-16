@@ -130,7 +130,7 @@ When converting to HTML, images must be copied to the output location so that th
     <resources>
 ----
 outputDirectory:: defaults to `${project.build.directory}/generated-docs`
-outputFile:: defaults to `null`, can be used to override the name of the generated output file. This is useful for backends, that create a single file, e.g. the pdf backend. All output will be redirected to the same file, the same way as the `-o, --out-file=OUT_FILE` option from the `asciidoctor` CLI command.
+outputFile:: defaults to `null`, used to override the name of the generated output file, can be a relative or absolute path. Useful for backends that create a single file, e.g. the pdf backend. All output will be redirected to the same file, the same way as the `-o, --out-file=OUT_FILE` option from the `asciidoctor` CLI command.
 baseDir:: (not Maven's basedir) enables to set the root path for resources (e.g. included files), defaults to `${sourceDirectory}`
 skip:: set this to `true` to bypass generation, defaults to `false`
 preserveDirectories:: enables to specify whether the documents should be rendered in the same folder structure as in the source directory or not, defaults to `false`.
