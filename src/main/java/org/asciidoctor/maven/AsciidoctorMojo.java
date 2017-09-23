@@ -215,15 +215,17 @@ public class AsciidoctorMojo extends AbstractMojo {
         prepareResources();
         copyResources();
 
-        if (sourceDocumentName == null) {
-            for (final File f : scanSourceFiles()) {
-                setDestinationPaths(optionsBuilder, f);
-                renderFile(asciidoctor, optionsBuilder.asMap(), f);
-            }
-        } else {
-            File sourceFile = new File(sourceDirectory, sourceDocumentName);
-            setDestinationPaths(optionsBuilder, sourceFile);
-            renderFile(asciidoctor, optionsBuilder.asMap(), sourceFile);
+        // Prepare sources
+        final List<File> sourceFiles = sourceDocumentName == null ?
+                scanSourceFiles() : Arrays.asList(new File(sourceDirectory, sourceDocumentName));
+
+        final Set<File> dirs = new HashSet<File>();
+        for (final File source : sourceFiles) {
+            final File destinationPath = setDestinationPaths(optionsBuilder, source);
+            if (!dirs.add(destinationPath))
+                getLog().warn("Duplicated destination found: overwriting file: " + destinationPath.getAbsolutePath());
+
+            renderFile(asciidoctor, optionsBuilder.asMap(), source);
         }
 
         if (synchronizations != null && !synchronizations.isEmpty()) {
@@ -286,7 +288,6 @@ public class AsciidoctorMojo extends AbstractMojo {
             outputResourcesFiltering.filterResources(resourcesExecution);
         } catch (MavenFilteringException e) {
             throw new MojoExecutionException("Could not copy resources", e);
-
         }
     }
 
@@ -295,8 +296,9 @@ public class AsciidoctorMojo extends AbstractMojo {
      *
      * @param optionsBuilder AsciidoctorJ options to be updated.
      * @param sourceFile     AsciiDoc source file to process.
+     * @return the final destination file path.
      */
-    private void setDestinationPaths(OptionsBuilder optionsBuilder, final File sourceFile) throws MojoExecutionException {
+    private File setDestinationPaths(OptionsBuilder optionsBuilder, final File sourceFile) throws MojoExecutionException {
         try {
             if (baseDir != null) {
                 optionsBuilder.baseDir(baseDir);
@@ -309,8 +311,8 @@ public class AsciidoctorMojo extends AbstractMojo {
                 }
             }
             if (preserveDirectories) {
-                String propostalPath = sourceFile.getParentFile().getCanonicalPath().substring(sourceDirectory.getCanonicalPath().length());
-                File relativePath = new File(outputDirectory.getCanonicalPath() + propostalPath);
+                final String candidatePath = sourceFile.getParentFile().getCanonicalPath().substring(sourceDirectory.getCanonicalPath().length());
+                final File relativePath = new File(outputDirectory.getCanonicalPath() + candidatePath);
                 optionsBuilder.toDir(relativePath).destinationDir(relativePath);
             } else {
                 optionsBuilder.toDir(outputDirectory).destinationDir(outputDirectory);
@@ -319,6 +321,12 @@ public class AsciidoctorMojo extends AbstractMojo {
                 //allow overriding the output file name
                 optionsBuilder.toFile(outputFile);
             }
+            // return destination file path
+            if (outputFile != null) {
+                return outputFile.isAbsolute() ?
+                        outputFile : new File((String) optionsBuilder.asMap().get(Options.DESTINATION_DIR), outputFile.getPath());
+            } else
+                return new File((String) optionsBuilder.asMap().get(Options.DESTINATION_DIR), sourceFile.getName());
         } catch (IOException e) {
             throw new MojoExecutionException("Unable to locate output directory", e);
         }
@@ -712,8 +720,8 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.baseDir = baseDir;
     }
 
-    public void setPreserveDirertories(boolean preserveDirertories) {
-        this.preserveDirectories = preserveDirertories;
+    public void setPreserveDirectories(boolean preserveDirectories) {
+        this.preserveDirectories = preserveDirectories;
     }
 
     public void setRelativeBaseDir(boolean relativeBaseDir) {
