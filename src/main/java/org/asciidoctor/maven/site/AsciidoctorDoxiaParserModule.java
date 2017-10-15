@@ -21,17 +21,19 @@ import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * This class is the entry point for integration with the Maven Site Plugin
- * integration since Doxia 1.6 (i.e., maven-site-plugin 3.4 and above).
+ * integration since Doxia 1.6 (i.e., maven-site-plugin 3.4 and above):
+ * it defines source directory and file extensions to be added to
+ * <a href="https://maven.apache.org/doxia/references/">Doxia provided modules</a>.
  *
  * @author jdlee
  */
-@Component(role = ParserModule.class, hint = AsciidoctorParser.ROLE_HINT)
-public class AsciidoctorParserModule extends AbstractParserModule {
+@Component(role = ParserModule.class, hint = AsciidoctorDoxiaParser.ROLE_HINT)
+public class AsciidoctorDoxiaParserModule extends AbstractParserModule {
 
     /**
      * The source directory for AsciiDoc files.
      */
-    public static final String SOURCE_DIRECTORY = AsciidoctorParser.ROLE_HINT;
+    public static final String SOURCE_DIRECTORY = AsciidoctorDoxiaParser.ROLE_HINT;
 
     /**
      * The extension for AsciiDoc files.
@@ -40,9 +42,9 @@ public class AsciidoctorParserModule extends AbstractParserModule {
     public static final String FILE_EXTENSION = "adoc";
 
     /**
-     * Build a new instance of {@link AsciidoctorParserModule}.
+     * Build a new instance of {@link AsciidoctorDoxiaParserModule}.
      */
-    public AsciidoctorParserModule() {
-        super(SOURCE_DIRECTORY, FILE_EXTENSION, AsciidoctorParser.ROLE_HINT);
+    public AsciidoctorDoxiaParserModule() {
+        super(SOURCE_DIRECTORY, FILE_EXTENSION, AsciidoctorDoxiaParser.ROLE_HINT);
     }
 }

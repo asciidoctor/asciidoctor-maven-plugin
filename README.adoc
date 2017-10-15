@@ -34,6 +34,13 @@ endif::[]
 
 The Asciidoctor Maven Plugin is the official way to convert your {uri-asciidoc}[AsciiDoc] documentation using {uri-asciidoctor}[Asciidoctor] from an {uri-maven}[Apache Maven] build.
 
+The conversion can happen in 2 flavors:
+
+. as a Maven plugin: AsciiDoc files are converted at full Asciidoctor power independently from Maven site,
+
+. as a Maven site integration: AsciiDoc files are integrated with Maven reports, which comes with
+a few limitations (see below for details).
+
 .Translations of the document are available in the following languages:
 * link:README_zh-CN.adoc[汉语]
 
@@ -50,7 +57,9 @@ If you're looking for the documentation for an older release, please refer to on
 ====
 endif::[]
 
-== Installation
+== Maven Plugin
+
+=== Setup
 
 As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` section of your POM file:
 
@@ -67,8 +76,6 @@ As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` 
 </plugins>
 ----
 <1> As this plugin tracks the version of Asciidoctor, you can use whichever version of Asciidoctor you prefer.
-
-== Usage
 
 [source,xml]
 .Execution setup
@@ -87,10 +94,10 @@ As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` 
 </plugin>
 ----
 <1> This is simply an unique id for the execution
-<2> The asciidoctor-maven-plugin does not run in a specific phase, so one must be specified
+<2> The asciidoctor-maven-plugin does not run in any phase by default, so one must be specified
 <3> The (only for the moment) Asciidoctor Maven plugin goal
 
-=== Configuration options
+=== Configuration
 
 There are several configuration options that the asciidoctor-maven-plugin uses, which parallel the options in Asciidoctor:
 
@@ -345,7 +352,9 @@ This allows an easier way of defining common configuration options.
 
 == Maven Site Integration
 
-To author your Maven-generated site in AsciiDoc, you must first add a dependency on the Asciidoctor plugin to your maven-site-plugin declaration.
+=== Setup
+
+To author your Maven-generated site in AsciiDoc, you must first add a dependency on the Asciidoctor plugin to your maven-site-plugin declaration (which more precisely adds a Doxia Parser Module).
 
 IMPORTANT: Maven v3.2.1 or above required, and since asciidoctor-maven-plugin v1.5.6 only maven-site-plugin v3.4 or above is supported.
 
@@ -359,7 +368,7 @@ IMPORTANT: Maven v3.2.1 or above required, and since asciidoctor-maven-plugin v1
             <artifactId>maven-site-plugin</artifactId>
             <version>3.4</version>
             <dependencies>
-                <dependency>
+                <dependency><!-- add Asciidoctor Doxia Parser Module -->
                     <groupId>org.asciidoctor</groupId>
                     <artifactId>asciidoctor-maven-plugin</artifactId>
                     <version>{release-version}</version>
