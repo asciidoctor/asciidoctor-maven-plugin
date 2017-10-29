@@ -40,7 +40,7 @@ import java.util.*;
 
 
 /**
- * Basic maven plugin to render AsciiDoc files using Asciidoctor, a ruby port.
+ * Basic maven plugin goal to render AsciiDoc files using Asciidoctor, a ruby port.
  */
 @Mojo(name = "process-asciidoc")
 public class AsciidoctorMojo extends AbstractMojo {

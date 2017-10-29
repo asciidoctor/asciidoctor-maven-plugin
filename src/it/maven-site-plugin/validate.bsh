@@ -70,7 +70,7 @@ for (String expectedFile : expectedFiles) {
     boolean sourceHighlighted = false;
 
     for (String line : lines) {
-        if (!includeResolved && line.contains("Content included from the file _include.adoc")) {
+        if (!includeResolved && line.contains("Content included from the file ")) {
             includeResolved = true;
         }
         else if (!sourceHighlighted && line.contains("<span style=\"color:#070;font-weight:bold\">&lt;plugin&gt;</span>")) {

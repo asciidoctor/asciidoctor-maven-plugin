@@ -37,21 +37,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This class is used by the Doxia framework to handle the actual parsing of the
- * AsciiDoc input files into HTML to be consumed/wrapped by the site generation
- * process.
+ * This class is used by <a href="https://maven.apache.org/doxia/overview.html">the Doxia framework</a>
+ * to handle the actual parsing of the AsciiDoc input files into HTML to be consumed/wrapped
+ * by the Maven site generation process
+ * (see <a href="https://maven.apache.org/plugins/maven-site-plugin/">maven-site-plugin</a>).
  *
  * @author jdlee
  * @author mojavelinux
  */
-@Component(role = Parser.class, hint = AsciidoctorParser.ROLE_HINT)
-public class AsciidoctorParser extends XhtmlParser {
+@Component(role = Parser.class, hint = AsciidoctorDoxiaParser.ROLE_HINT)
+public class AsciidoctorDoxiaParser extends XhtmlParser {
 
     @Requirement
     protected MavenProject project;
 
     /**
-     * The role hint for the {@link AsciidoctorParser} Plexus component.
+     * The role hint for the {@link AsciidoctorDoxiaParser} Plexus component.
      */
     public static final String ROLE_HINT = "asciidoc";
 
