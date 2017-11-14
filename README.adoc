@@ -1,6 +1,6 @@
 = Asciidoctor Maven Plugin
 // Metadata
-:release-version: 1.5.5
+:release-version: 1.5.6
 // Settings
 :page-layout: base
 :idprefix:
