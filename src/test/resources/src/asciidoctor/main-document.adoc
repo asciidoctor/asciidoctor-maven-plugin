@@ -10,3 +10,13 @@ include::includes/new-include.adoc[]
 ----
 include::includes/groovy-include.groovy[]
 ----
+
+ifdef::my-label[]
+== Optional section
+
+This shows how to add optional text.
+For example, this {my-label}.
+
+TIP: Use `ifdef` to control what is shown.
+
+endif::[]
