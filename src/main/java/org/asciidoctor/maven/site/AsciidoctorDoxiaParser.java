@@ -155,16 +155,19 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
                 }
             }
             else if ("templateDir".equals(optName) || "template_dir".equals(optName)) {
-                options.templateDir(resolveTemplateDir(project, asciidocOpt.getValue()));
+                options.templateDir(resolveProjectDir(project, asciidocOpt.getValue()));
             }
             else if ("templateDirs".equals(optName) || "template_dirs".equals(optName)) {
                 List<File> templateDirs = new ArrayList<File>();
                 for (Xpp3Dom dir : asciidocOpt.getChildren("dir")) {
-                    templateDirs.add(resolveTemplateDir(project, dir.getValue()));
+                    templateDirs.add(resolveProjectDir(project, dir.getValue()));
                 }
                 if (!templateDirs.isEmpty()) {
                     options.templateDirs(templateDirs.toArray(new File[templateDirs.size()]));
                 }
+            }
+            else if ("baseDir".equals(optName)) {
+                options.baseDir(resolveProjectDir(project, asciidocOpt.getValue()));
             }
             else {
                 options.option(optName.replaceAll("(?<!_)([A-Z])", "_$1").toLowerCase(), asciidocOpt.getValue());
@@ -177,12 +180,12 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
         return asciidoctor.convert(source, options);
     }
 
-    protected File resolveTemplateDir(MavenProject project, String path) {
-        File templateDir = new File(path);
-        if (!templateDir.isAbsolute()) {
-            templateDir = new File(project.getBasedir(), templateDir.toString());
+    protected File resolveProjectDir(MavenProject project, String path) {
+        File filePath = new File(path);
+        if (!filePath.isAbsolute()) {
+            filePath = new File(project.getBasedir(), filePath.toString());
         }
-        return templateDir;
+        return filePath;
     }
 
     private void requireLibrary(String require) {

@@ -22,6 +22,7 @@
                 <version>3.4</version>
                 <configuration>
                     <asciidoc>
+                        <baseDir>${project.basedir}/src/site/asciidoc</baseDir>
                         <templateDirs>
                             <dir>src/site/asciidoc/templates</dir>
                         </templateDirs>
