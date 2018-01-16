@@ -78,6 +78,28 @@ class AsciidoctorDoxiaParserTest extends Specification {
         outputText.contains 'println "HelloWorld from Groovy on ${new Date()}"'
     }
 
+    def "should render html with relative baseDir option"() {
+        given:
+        final File srcAsciidoc = new File("$TEST_DOCS_PATH/main-document.adoc")
+        final Sink sink = createSinkMock()
+
+        AsciidoctorDoxiaParser parser = new AsciidoctorDoxiaParser()
+        parser.@project = createMavenProjectMock("""
+                     <configuration>
+                        <asciidoc>
+                            <baseDir>${TEST_DOCS_PATH}</baseDir>
+                        </asciidoc>
+                     </configuration>""")
+
+        when:
+        parser.parse(new FileReader(srcAsciidoc), sink)
+
+        then: 'include works'
+        String outputText = sink.sinkedText
+        outputText.contains '<h1>Include test</h1>'
+        outputText.contains 'println "HelloWorld from Groovy on ${new Date()}"'
+    }
+
     def "should render html with templateDir option"() {
         given:
         final File srcAsciidoc = new File("$TEST_DOCS_PATH/sample.asciidoc")
