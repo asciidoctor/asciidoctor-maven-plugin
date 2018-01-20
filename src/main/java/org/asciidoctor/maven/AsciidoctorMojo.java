@@ -500,26 +500,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             throw new MojoExecutionException(attributeUndefined + " is not valid. Must be one of 'drop' or 'drop-line'");
         }
 
-        // TODO Figure out how to reliably set other values (like boolean values, dates, times, etc)
-        for (Map.Entry<String, Object> attributeEntry : attributes.entrySet()) {
-            Object val = attributeEntry.getValue();
-            // NOTE Maven interprets an empty value as null, so we need to explicitly convert it to empty string (see #36)
-            // NOTE In Asciidoctor, an empty string represents a true value
-            if (val == null || "true".equals(val)) {
-                attributesBuilder.attribute(attributeEntry.getKey(), "");
-            }
-            // NOTE a value of false is effectively the same as a null value, so recommend the use of the string "false"
-            else if ("false".equals(val)) {
-                attributesBuilder.attribute(attributeEntry.getKey(), null);
-            }
-            // NOTE Maven can't assign a Boolean value from the XML-based configuration, but a client may
-            else if (val instanceof Boolean) {
-                attributesBuilder.attribute(attributeEntry.getKey(), Attributes.toAsciidoctorFlag((Boolean) val));
-            } else {
-                // Can't do anything about dates and times because all that logic is private in Attributes
-                attributesBuilder.attribute(attributeEntry.getKey(), val);
-            }
-        }
+        AsciidoctorHelper.addAttributes(attributes, attributesBuilder);
 
         if (!attributesChain.isEmpty()) {
             getLog().info("Attributes: " + attributesChain);

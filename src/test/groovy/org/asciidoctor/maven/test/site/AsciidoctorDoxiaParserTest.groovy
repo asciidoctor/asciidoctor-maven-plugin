@@ -153,6 +153,53 @@ class AsciidoctorDoxiaParserTest extends Specification {
         outputText.contains '<i class="fa icon-tip" title="Tip"></i>'
     }
 
+    def "should process empty self-closing XML attributes"() {
+        given:
+        final File srcAsciidoc = new File("$TEST_DOCS_PATH/sample.asciidoc")
+        final Sink sink = createSinkMock()
+
+        AsciidoctorDoxiaParser parser = new AsciidoctorDoxiaParser()
+        parser.@project = createMavenProjectMock("""
+                     <configuration>
+                       <asciidoc>
+                         <attributes>
+                           <sectnums/>
+                         </attributes>
+                       </asciidoc>
+                     </configuration>""")
+
+        when:
+        parser.parse(new FileReader(srcAsciidoc), sink)
+
+        then:
+        String outputText = sink.sinkedText
+        outputText.contains '<h2 id="id_section_a">1. Section A</h2>'
+        outputText.contains '<h3 id="id_section_a_subsection">1.1. Section A Subsection</h3>'
+    }
+
+    def "should process empty value XML attributes"() {
+        given:
+        final File srcAsciidoc = new File("$TEST_DOCS_PATH/sample.asciidoc")
+        final Sink sink = createSinkMock()
+
+        AsciidoctorDoxiaParser parser = new AsciidoctorDoxiaParser()
+        parser.@project = createMavenProjectMock("""
+                     <configuration>
+                       <asciidoc>
+                         <attributes>
+                           <sectnums></sectnums>
+                         </attributes>
+                       </asciidoc>
+                     </configuration>""")
+
+        when:
+        parser.parse(new FileReader(srcAsciidoc), sink)
+
+        then:
+        String outputText = sink.sinkedText
+        outputText.contains '<h2 id="id_section_a">1. Section A</h2>'
+        outputText.contains '<h3 id="id_section_a_subsection">1.1. Section A Subsection</h3>'
+    }
 
     private MavenProject createMavenProjectMock(final String configuration = null) {
         [getGoalConfiguration: { pluginGroupId, pluginArtifactId, executionId, goalId ->

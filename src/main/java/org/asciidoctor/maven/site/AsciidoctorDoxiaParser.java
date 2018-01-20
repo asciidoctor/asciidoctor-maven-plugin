@@ -24,6 +24,7 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
+import org.asciidoctor.maven.AsciidoctorHelper;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.IOUtil;
@@ -132,7 +133,7 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
             String optName = asciidocOpt.getName();
             if ("attributes".equals(optName)) {
                 for (Xpp3Dom asciidocAttr : asciidocOpt.getChildren()) {
-                    attributes.attribute(asciidocAttr.getName(), asciidocAttr.getValue());
+                    AsciidoctorHelper.addAttribute(asciidocAttr.getName(), asciidocAttr.getValue(), attributes);
                 }
             }
             else if ("requires".equals(optName)) {
