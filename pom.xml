@@ -1,12 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
-    </parent>
-
     <groupId>org.asciidoctor</groupId>
     <artifactId>asciidoctor-maven-plugin</artifactId>
     <version>1.5.7-SNAPSHOT</version>
@@ -56,7 +50,21 @@
         <developerConnection>scm:git:git@github.com:asciidoctor/asciidoctor-maven-plugin.git</developerConnection>
     </scm>
 
-    <issueManagement>
+    <repositories>
+        <repository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+              <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+  <issueManagement>
         <url>https://github.com/asciidoctor/asciidoctor-maven-plugin/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
@@ -167,6 +175,26 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.0.4</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.codehaus.plexus</groupId>
                 <artifactId>plexus-component-metadata</artifactId>
                 <version>${plexus.component.metadata.version}</version>
@@ -243,6 +271,16 @@
         <pluginManagement>
           <plugins>
             <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-release-plugin</artifactId>
+              <version>2.1</version>
+              <configuration>
+                <mavenExecutorId>forked-path</mavenExecutorId>
+                <useReleaseProfile>false</useReleaseProfile>
+                <arguments>-Psonatype-oss-release</arguments>
+              </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
                 <version>${maven.plugin.plugin.version}</version>
@@ -308,6 +346,53 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>sonatype-oss-release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.1.2</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.7</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.1</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <!--
               To release to bintray, add your credentials to ~/.m2/settings.xml and run:
@@ -421,11 +506,16 @@
         </profile>
     </profiles>
 
-    <distributionManagement>
-        <repository>
-            <id>bintray-asciidoctor-maven-asciidoctor-maven-plugin</id>
-            <name>asciidoctor-maven-asciidoctor-maven-plugin</name>
-            <url>https://api.bintray.com/maven/asciidoctor/maven/asciidoctor-maven-plugin</url>
-        </repository>
+  <distributionManagement>
+      <snapshotRepository>
+        <id>sonatype-nexus-snapshots</id>
+        <name>Sonatype Nexus Snapshots</name>
+        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+      </snapshotRepository>
+    <repository>
+        <id>bintray-asciidoctor-maven-asciidoctor-maven-plugin</id>
+        <name>asciidoctor-maven-asciidoctor-maven-plugin</name>
+        <url>https://api.bintray.com/maven/asciidoctor/maven/asciidoctor-maven-plugin</url>
+     </repository>
     </distributionManagement>
 </project>
