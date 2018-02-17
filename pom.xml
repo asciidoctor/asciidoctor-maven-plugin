@@ -47,7 +47,7 @@
     </licenses>
 
     <prerequisites>
-        <maven>3.0.0</maven>
+        <maven>3.0.5</maven>
     </prerequisites>
 
     <scm>
@@ -72,8 +72,7 @@
         <maven.jacoco.plugin.version>0.7.9</maven.jacoco.plugin.version>
         <jruby.version>1.7.26</jruby.version>
         <maven.plugin.plugin.version>3.4</maven.plugin.plugin.version>
-        <maven.plugin.api.version>2.0</maven.plugin.api.version>
-        <maven.project.version>2.2.1</maven.project.version>
+        <maven.project.version>3.0.5</maven.project.version>
         <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
         <maven.filtering.version>3.1.1</maven.filtering.version>
         <plexus.utils.version>3.0.23</plexus.utils.version>
@@ -103,11 +102,11 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>${maven.plugin.api.version}</version>
+            <version>${maven.project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
-            <artifactId>maven-project</artifactId>
+            <artifactId>maven-core</artifactId>
             <version>${maven.project.version}</version>
         </dependency>
         <dependency>
