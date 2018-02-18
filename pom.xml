@@ -50,21 +50,7 @@
         <developerConnection>scm:git:git@github.com:asciidoctor/asciidoctor-maven-plugin.git</developerConnection>
     </scm>
 
-    <repositories>
-        <repository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>Sonatype Nexus Snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-              <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
-  <issueManagement>
+    <issueManagement>
         <url>https://github.com/asciidoctor/asciidoctor-maven-plugin/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
@@ -276,8 +262,6 @@
               <version>2.1</version>
               <configuration>
                 <mavenExecutorId>forked-path</mavenExecutorId>
-                <useReleaseProfile>false</useReleaseProfile>
-                <arguments>-Psonatype-oss-release</arguments>
               </configuration>
             </plugin>
             <plugin>
@@ -347,59 +331,12 @@
 
     <profiles>
         <profile>
-            <id>sonatype-oss-release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>2.1.2</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.7</version>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.1</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
             <!--
               To release to bintray, add your credentials to ~/.m2/settings.xml and run:
 
-               $ mvn deploy -Prelease
+               $ mvn deploy
             -->
-            <id>release</id>
+            <id>release-profile</id>
             <build>
                 <plugins>
                     <plugin>
@@ -507,11 +444,6 @@
     </profiles>
 
   <distributionManagement>
-      <snapshotRepository>
-        <id>sonatype-nexus-snapshots</id>
-        <name>Sonatype Nexus Snapshots</name>
-        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-      </snapshotRepository>
     <repository>
         <id>bintray-asciidoctor-maven-asciidoctor-maven-plugin</id>
         <name>asciidoctor-maven-asciidoctor-maven-plugin</name>
