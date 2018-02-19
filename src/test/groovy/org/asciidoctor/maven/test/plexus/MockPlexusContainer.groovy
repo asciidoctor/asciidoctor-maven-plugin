@@ -43,6 +43,7 @@ class MockPlexusContainer {
         resourceFilter.@buildContext = mojo.@buildContext
         resourceFilter.initialize()
         resourceFilter.enableLogging(logger)
+        mojo.encoding = "UTF-8"
         mojo.@outputResourcesFiltering = resourceFilter
 
     }
