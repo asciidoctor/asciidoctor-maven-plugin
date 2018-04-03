@@ -44,8 +44,10 @@ The conversion can happen in 2 flavors:
 . as a Maven site integration: AsciiDoc files are integrated with Maven reports, which comes with
 a few limitations (see below for details).
 
+ifndef::env-site[]
 .Translations of the document are available in the following languages:
 * link:README_zh-CN.adoc[汉语]
+endif::[]
 
 ifeval::['{tag}' == 'master']
 [NOTE]
