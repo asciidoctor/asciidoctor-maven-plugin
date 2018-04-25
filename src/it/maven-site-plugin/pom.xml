@@ -6,6 +6,12 @@
 	<artifactId>maven-site-plugin-it</artifactId>
 	<version>1.0-SNAPSHOT</version>
     <name>Maven Site Plugin IT</name>
+    <description>Checks asciidoctor integration in Maven Site Plugin through Doxia Parser Module</description>
+
+    <properties>
+        <docs.version>v1.2.3</docs.version>
+    </properties>
+
     <build>
         <plugins>
             <!-- tag::plugin-decl[] -->
@@ -16,6 +22,7 @@
                 <version>3.4</version>
                 <configuration>
                     <asciidoc>
+                        <baseDir>${project.basedir}/src/site/asciidoc</baseDir>
                         <templateDirs>
                             <dir>src/site/asciidoc/templates</dir>
                         </templateDirs>
@@ -40,7 +47,7 @@
                     </moduleExcludes>
                 </configuration>
                 <dependencies>
-                    <dependency>
+                    <dependency><!-- add Asciidoctor Doxia Parser Module to maven-site-plugin -->
                         <groupId>org.asciidoctor</groupId>
                         <artifactId>asciidoctor-maven-plugin</artifactId>
                         <version>@project.version@</version>

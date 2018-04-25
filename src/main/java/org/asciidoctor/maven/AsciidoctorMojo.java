@@ -40,7 +40,7 @@ import java.util.*;
 
 
 /**
- * Basic maven plugin to render AsciiDoc files using Asciidoctor, a ruby port.
+ * Basic maven plugin goal to render AsciiDoc files using Asciidoctor, a ruby port.
  */
 @Mojo(name = "process-asciidoc")
 public class AsciidoctorMojo extends AbstractMojo {
@@ -48,13 +48,17 @@ public class AsciidoctorMojo extends AbstractMojo {
     // should probably be configured in AsciidoctorMojo through @Parameter 'extension'
     protected static final String ASCIIDOC_REG_EXP_EXTENSION = ".*\\.a((sc(iidoc)?)|d(oc)?)$";
 
-    protected static final String FILE_ENCODING = System.getProperty("file.encoding");
+    @Parameter(defaultValue = "${project.build.sourceEncoding}")
+    protected String encoding;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDirectory", defaultValue = "${basedir}/src/main/asciidoc", required = true)
     protected File sourceDirectory;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "outputDirectory", defaultValue = "${project.build.directory}/generated-docs", required = true)
     protected File outputDirectory;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + "outputFile", required = false)
+    protected File outputFile;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "preserveDirectories", defaultValue = "false", required = false)
     protected boolean preserveDirectories = false;
@@ -199,7 +203,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         optionsBuilder.attributes(attributesBuilder);
 
         ExtensionRegistry extensionRegistry = new AsciidoctorJExtensionRegistry(asciidoctor);
-        for (ExtensionConfiguration extension: extensions) {
+        for (ExtensionConfiguration extension : extensions) {
             try {
                 extensionRegistry.register(extension.getClassName(), extension.getBlockName());
             } catch (Exception e) {
@@ -211,15 +215,17 @@ public class AsciidoctorMojo extends AbstractMojo {
         prepareResources();
         copyResources();
 
-        if (sourceDocumentName == null) {
-            for (final File f : scanSourceFiles()) {
-                setDestinationPaths(optionsBuilder, f);
-                renderFile(asciidoctor, optionsBuilder.asMap(), f);
-            }
-        } else {
-            File sourceFile = new File(sourceDirectory, sourceDocumentName);
-            setDestinationPaths(optionsBuilder, sourceFile);
-            renderFile(asciidoctor, optionsBuilder.asMap(), sourceFile);
+        // Prepare sources
+        final List<File> sourceFiles = sourceDocumentName == null ?
+                scanSourceFiles() : Arrays.asList(new File(sourceDirectory, sourceDocumentName));
+
+        final Set<File> dirs = new HashSet<File>();
+        for (final File source : sourceFiles) {
+            final File destinationPath = setDestinationPaths(optionsBuilder, source);
+            if (!dirs.add(destinationPath))
+                getLog().warn("Duplicated destination found: overwriting file: " + destinationPath.getAbsolutePath());
+
+            renderFile(asciidoctor, optionsBuilder.asMap(), source);
         }
 
         if (synchronizations != null && !synchronizations.isEmpty()) {
@@ -275,26 +281,24 @@ public class AsciidoctorMojo extends AbstractMojo {
         try {
             // Right now it's not used at all, but could be used to apply resource filters/replacements
             MavenResourcesExecution resourcesExecution =
-                    new MavenResourcesExecution(resources, outputDirectory, project, FILE_ENCODING,
+                    new MavenResourcesExecution(resources, outputDirectory, project, encoding,
                             Collections.<String>emptyList(), Collections.<String>emptyList(), session);
             resourcesExecution.setIncludeEmptyDirs(true);
             resourcesExecution.setAddDefaultExcludes(true);
             outputResourcesFiltering.filterResources(resourcesExecution);
         } catch (MavenFilteringException e) {
             throw new MojoExecutionException("Could not copy resources", e);
-
         }
     }
 
     /**
      * Updates optionsBuilder object's baseDir and destination(s) accordingly to the options.
      *
-     * @param optionsBuilder
-     *            AsciidoctorJ options to be updated.
-     * @param sourceFile
-     *           AsciiDoc source file to process.
+     * @param optionsBuilder AsciidoctorJ options to be updated.
+     * @param sourceFile     AsciiDoc source file to process.
+     * @return the final destination file path.
      */
-    private void setDestinationPaths(OptionsBuilder optionsBuilder, final File sourceFile) throws MojoExecutionException {
+    private File setDestinationPaths(OptionsBuilder optionsBuilder, final File sourceFile) throws MojoExecutionException {
         try {
             if (baseDir != null) {
                 optionsBuilder.baseDir(baseDir);
@@ -307,12 +311,22 @@ public class AsciidoctorMojo extends AbstractMojo {
                 }
             }
             if (preserveDirectories) {
-                String propostalPath = sourceFile.getParentFile().getCanonicalPath().substring(sourceDirectory.getCanonicalPath().length());
-                File relativePath = new File(outputDirectory.getCanonicalPath() + propostalPath);
+                final String candidatePath = sourceFile.getParentFile().getCanonicalPath().substring(sourceDirectory.getCanonicalPath().length());
+                final File relativePath = new File(outputDirectory.getCanonicalPath() + candidatePath);
                 optionsBuilder.toDir(relativePath).destinationDir(relativePath);
             } else {
                 optionsBuilder.toDir(outputDirectory).destinationDir(outputDirectory);
             }
+            if (outputFile != null) {
+                //allow overriding the output file name
+                optionsBuilder.toFile(outputFile);
+            }
+            // return destination file path
+            if (outputFile != null) {
+                return outputFile.isAbsolute() ?
+                        outputFile : new File((String) optionsBuilder.asMap().get(Options.DESTINATION_DIR), outputFile.getPath());
+            } else
+                return new File((String) optionsBuilder.asMap().get(Options.DESTINATION_DIR), sourceFile.getName());
         } catch (IOException e) {
             throw new MojoExecutionException("Unable to locate output directory", e);
         }
@@ -371,7 +385,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             asciidoctorFiles = directoryWalker.scan();
         }
         String absoluteSourceDirectory = sourceDirectory.getAbsolutePath();
-        for (Iterator<File> iter = asciidoctorFiles.iterator(); iter.hasNext();) {
+        for (Iterator<File> iter = asciidoctorFiles.iterator(); iter.hasNext(); ) {
             File f = iter.next();
             do {
                 // stop when we hit the source directory root
@@ -430,8 +444,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     /**
      * Updates and OptionsBuilder instance with the options defined in the configuration.
      *
-     * @param optionsBuilder
-     *            AsciidoctorJ options to be updated.
+     * @param optionsBuilder AsciidoctorJ options to be updated.
      */
     protected void setOptionsOnBuilder(OptionsBuilder optionsBuilder) {
         optionsBuilder
@@ -487,26 +500,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             throw new MojoExecutionException(attributeUndefined + " is not valid. Must be one of 'drop' or 'drop-line'");
         }
 
-        // TODO Figure out how to reliably set other values (like boolean values, dates, times, etc)
-        for (Map.Entry<String, Object> attributeEntry : attributes.entrySet()) {
-            Object val = attributeEntry.getValue();
-            // NOTE Maven interprets an empty value as null, so we need to explicitly convert it to empty string (see #36)
-            // NOTE In Asciidoctor, an empty string represents a true value
-            if (val == null || "true".equals(val)) {
-                attributesBuilder.attribute(attributeEntry.getKey(), "");
-            }
-            // NOTE a value of false is effectively the same as a null value, so recommend the use of the string "false"
-            else if ("false".equals(val)) {
-                attributesBuilder.attribute(attributeEntry.getKey(), null);
-            }
-            // NOTE Maven can't assign a Boolean value from the XML-based configuration, but a client may
-            else if (val instanceof Boolean) {
-                attributesBuilder.attribute(attributeEntry.getKey(), Attributes.toAsciidoctorFlag((Boolean) val));
-            } else {
-                // Can't do anything about dates and times because all that logic is private in Attributes
-                attributesBuilder.attribute(attributeEntry.getKey(), val);
-            }
-        }
+        AsciidoctorHelper.addAttributes(attributes, attributesBuilder);
 
         if (!attributesChain.isEmpty()) {
             getLog().info("Attributes: " + attributesChain);
@@ -529,6 +523,14 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setOutputDirectory(File outputDirectory) {
         this.outputDirectory = outputDirectory;
+    }
+
+    public File getOutputFile() {
+        return outputFile;
+    }
+
+    public void setOutputFile(File outputFile) {
+        this.outputFile = outputFile;
     }
 
     public String getBackend() {
@@ -699,8 +701,8 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.baseDir = baseDir;
     }
 
-    public void setPreserveDirertories(boolean preserveDirertories) {
-        this.preserveDirectories = preserveDirertories;
+    public void setPreserveDirectories(boolean preserveDirectories) {
+        this.preserveDirectories = preserveDirectories;
     }
 
     public void setRelativeBaseDir(boolean relativeBaseDir) {

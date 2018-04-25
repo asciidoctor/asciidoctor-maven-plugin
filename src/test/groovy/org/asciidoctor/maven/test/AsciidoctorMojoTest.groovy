@@ -234,7 +234,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.execute()
         then:
             outputDir.list().toList().isEmpty() == false
-            outputDir.list().toList().contains('sample.html')
+            outputDir.list().toList().contains('sample-embedded.html')
 
             File sampleOutput = new File(outputDir, 'sample-embedded.html')
             sampleOutput.length() > 0
@@ -243,6 +243,70 @@ class AsciidoctorMojoTest extends Specification {
             text.contains('data:image/png;base64,iVBORw0KGgo')
             text.contains('font-awesome.min.css')
             text.contains('i class="fa icon-tip"')
+    }
+
+    def "override output file"() {
+        setup:
+        File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
+        File outputDir = new File('target/asciidoctor-output')
+        File outputFile = new File( 'custom_output_file.html')
+
+        if (!outputDir.exists())
+            outputDir.mkdir()
+        when:
+        AsciidoctorMojo mojo = new AsciidoctorMojo()
+        mojo.attributes["icons"] = "font"
+        mojo.embedAssets = true
+        mojo.imagesDir = ''
+        mojo.outputDirectory = outputDir
+        mojo.outputFile = outputFile
+        mojo.sourceDirectory = srcDir
+        mojo.sourceDocumentName = 'sample-embedded.adoc'
+        mojo.backend = 'html'
+        mojo.execute()
+        then:
+        outputDir.list().toList().isEmpty() == false
+        outputDir.list().toList().contains('custom_output_file.html')
+
+        File sampleOutput = new File(outputDir, 'custom_output_file.html')
+        sampleOutput.length() > 0
+        String text = sampleOutput.getText()
+        text.contains('Asciidoctor default stylesheet')
+        text.contains('data:image/png;base64,iVBORw0KGgo')
+        text.contains('font-awesome.min.css')
+        text.contains('i class="fa icon-tip"')
+    }
+
+    def "override output file with absolute path"() {
+        setup:
+        File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
+        File outputDir = new File('target/asciidoctor-output')
+        File outputFile = new File(System.getProperty('java.io.tmpdir'), 'custom_output_file.html')
+
+        if (!outputDir.exists())
+            outputDir.mkdir()
+        when:
+        AsciidoctorMojo mojo = new AsciidoctorMojo()
+        mojo.attributes["icons"] = "font"
+        mojo.embedAssets = true
+        mojo.imagesDir = ''
+        mojo.outputDirectory = outputDir
+        mojo.outputFile = outputFile
+        mojo.sourceDirectory = srcDir
+        mojo.sourceDocumentName = 'sample-embedded.adoc'
+        mojo.backend = 'html'
+        mojo.execute()
+        then:
+        outputDir.list().toList().isEmpty() == false
+        outputDir.list().toList().contains('custom_output_file.html')
+
+        File sampleOutput = new File(outputDir, 'custom_output_file.html')
+        sampleOutput.length() > 0
+        String text = sampleOutput.getText()
+        text.contains('Asciidoctor default stylesheet')
+        text.contains('data:image/png;base64,iVBORw0KGgo')
+        text.contains('font-awesome.min.css')
+        text.contains('i class="fa icon-tip"')
     }
 
     def "missing-attribute skip"() {
@@ -1060,7 +1124,7 @@ class AsciidoctorMojoTest extends Specification {
                                       directory: relativeTestsPath,
                                       excludes : ['**/*.jpg']
                               ] as Resource]
-            mojo.preserveDirertories = true
+            mojo.preserveDirectories = true
             mojo.backend = 'html5'
             mojo.outputDirectory = outputDir
             mojo.execute()
@@ -1115,7 +1179,7 @@ class AsciidoctorMojoTest extends Specification {
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.sourceDirectory = new File(relativeTestsPath)
-            mojo.preserveDirertories = true
+            mojo.preserveDirectories = true
             mojo.backend = 'html5'
             mojo.outputDirectory = outputDir
             mojo.execute()
@@ -1176,6 +1240,107 @@ class AsciidoctorMojoTest extends Specification {
             // includes only 1 rendered AsciiDoc document
             def file = new File(outputDir, 'sample.html')
             file.text.contains('Asciidoctor default stylesheet')
+    }
+
+    def "should show message when overwriting files without outputFile"() {
+        setup:
+            def originalOut = System.out
+            def newOut = new ByteArrayOutputStream()
+            System.setOut(new PrintStream(newOut))
+            def originalErr = System.err
+            def newErr = new ByteArrayOutputStream()
+            System.setErr(new PrintStream(newErr))
+
+            // srcDir contains 6 documents, 2 of them with the same name (HellowWorld3.adoc)
+            File srcDir = new File("$DEFAULT_SOURCE_DIRECTORY/relative-path-treatment/")
+            File outputDir = new File("target/asciidoctor-output/overlapping-outputFile/${System.currentTimeMillis()}")
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = srcDir
+            mojo.backend = 'html5'
+            mojo.outputDirectory = outputDir
+            mojo.execute()
+        then:
+            def asciidocs = []
+            outputDir.eachFileRecurse(FileType.FILES) {
+                if (it.getName() ==~ /.+html/) asciidocs << it
+            }
+            asciidocs.size() == 5
+            newOut.toString().count("Rendered") == 6
+            newOut.toString().count("Duplicated destination found") == 1
+        cleanup:
+            System.setOut(originalOut)
+            System.setErr(originalErr)
+    }
+
+    def "should show message when overwriting files using outputFile"() {
+        setup:
+            def originalOut = System.out
+            def newOut = new ByteArrayOutputStream()
+            System.setOut(new PrintStream(newOut))
+            def originalErr = System.err
+            def newErr = new ByteArrayOutputStream()
+            System.setErr(new PrintStream(newErr))
+
+            File srcDir = new File("$DEFAULT_SOURCE_DIRECTORY/relative-path-treatment/")
+            File outputDir = new File("target/asciidoctor-output/overlapping-outputFile/${System.currentTimeMillis()}")
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = srcDir
+            mojo.backend = 'html5'
+            mojo.outputDirectory = outputDir
+            mojo.outputFile = new File('single-output.html')
+            mojo.execute()
+        then:
+            def asciidocs = []
+            outputDir.eachFileRecurse(FileType.FILES) {
+                if (it.getName() ==~ /.+html/) asciidocs << it
+            }
+            asciidocs.size() == 1
+            newOut.toString().count("Rendered") == 6
+            newOut.toString().count("Duplicated destination found") == 5
+        cleanup:
+            System.setOut(originalOut)
+            System.setErr(originalErr)
+    }
+
+    def "should not show message when overwriting files using outputFile and preserveDirectories"() {
+        setup:
+            def originalOut = System.out
+            def newOut = new ByteArrayOutputStream()
+            System.setOut(new PrintStream(newOut))
+            def originalErr = System.err
+            def newErr = new ByteArrayOutputStream()
+            System.setErr(new PrintStream(newErr))
+
+            File srcDir = new File("$DEFAULT_SOURCE_DIRECTORY/relative-path-treatment/")
+            File outputDir = new File("target/asciidoctor-output/overlapping-outputFile/${System.currentTimeMillis()}")
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.getLog().errorEnabled
+            mojo.sourceDirectory = srcDir
+            mojo.backend = 'html5'
+            mojo.outputDirectory = outputDir
+            mojo.preserveDirectories = true
+            mojo.outputFile = new File('single-output.html')
+            mojo.execute()
+        then:
+            def asciidocs = []
+            outputDir.eachFileRecurse(FileType.FILES) {
+                if (it.getName() ==~ /.+html/) asciidocs << it
+            }
+            asciidocs.size() == 5
+            newOut.toString().count("Rendered") == 6
+            newOut.toString().count("Duplicated destination found") == 1
+        cleanup:
+            System.setOut(originalOut)
+            System.setErr(originalErr)
     }
 
 }
