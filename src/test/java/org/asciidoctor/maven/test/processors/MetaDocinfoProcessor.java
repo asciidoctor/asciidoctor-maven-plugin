@@ -16,7 +16,7 @@ public class MetaDocinfoProcessor extends DocinfoProcessor {
     @Override
     public String process(Document document) {
         System.out.println("Processing "+ this.getClass().getSimpleName());
-        System.out.println("Processing: blocks found: " + document.blocks().size());
+        System.out.println("Processing: blocks found: " + document.getBlocks().size());
         return "<meta name=\"author\" content=\"asciidoctor\">";
     }
 

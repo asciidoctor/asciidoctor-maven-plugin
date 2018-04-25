@@ -2,7 +2,7 @@
 :translators: D瓜哥
 ifdef::env-github[Translated by: {translators}]
 // Metadata
-:release-version: 1.5.2
+:release-version: 1.5.5
 // Settings
 :page-layout: base
 :idprefix:
@@ -15,7 +15,17 @@ ifdef::env-github[:badges:]
 :uri-asciidoctor: http://asciidoctor.org
 :uri-examples: https://github.com/asciidoctor/asciidoctor-maven-examples
 :uri-maven: http://maven.apache.org
-
+// GitHub customization
+ifdef::env-github[]
+:tag: master
+:!toc-title:
+:tip-caption: :bulb:
+:note-caption: :paperclip:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+// Badges
 ifdef::badges[]
 image:https://ci.appveyor.com/api/projects/status/chebmu91f08dlmsc/branch/master?svg=true["Build Status (AppVeyor)", link="https://ci.appveyor.com/project/asciidoctor/asciidoctor-maven-plugin"]
 image:http://img.shields.io/travis/asciidoctor/asciidoctor-maven-plugin/master.svg["Build Status (Travis CI)", link="https://travis-ci.org/asciidoctor/asciidoctor-maven-plugin"]

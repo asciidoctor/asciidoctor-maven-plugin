@@ -19,7 +19,7 @@ public class ChangeAttributeValuePreprocessor extends Preprocessor {
     @Override
     public PreprocessorReader process(Document document, PreprocessorReader reader) {
         System.out.println("Processing "+ this.getClass().getSimpleName());
-        System.out.println("Processing: blocks found: " + document.blocks().size());
+        System.out.println("Processing: blocks found: " + document.getBlocks().size());
         document.getAttributes().put("author", AUTHOR_NAME);
         return reader;
     }

@@ -24,7 +24,9 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
+import org.asciidoctor.maven.AsciidoctorHelper;
 import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
@@ -34,25 +36,24 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.inject.Inject;
-import javax.inject.Provider;
 
 /**
- * This class is used by the Doxia framework to handle the actual parsing of the
- * AsciiDoc input files into HTML to be consumed/wrapped by the site generation
- * process.
+ * This class is used by <a href="https://maven.apache.org/doxia/overview.html">the Doxia framework</a>
+ * to handle the actual parsing of the AsciiDoc input files into HTML to be consumed/wrapped
+ * by the Maven site generation process
+ * (see <a href="https://maven.apache.org/plugins/maven-site-plugin/">maven-site-plugin</a>).
  *
  * @author jdlee
  * @author mojavelinux
  */
-@Component(role = Parser.class, hint = AsciidoctorParser.ROLE_HINT)
-public class AsciidoctorParser extends XhtmlParser {
+@Component(role = Parser.class, hint = AsciidoctorDoxiaParser.ROLE_HINT)
+public class AsciidoctorDoxiaParser extends XhtmlParser {
 
-    @Inject
-    protected Provider<MavenProject> mavenProjectProvider;
+    @Requirement
+    protected MavenProject project;
 
     /**
-     * The role hint for the {@link AsciidoctorParser} Plexus component.
+     * The role hint for the {@link AsciidoctorDoxiaParser} Plexus component.
      */
     public static final String ROLE_HINT = "asciidoc";
 
@@ -73,13 +74,9 @@ public class AsciidoctorParser extends XhtmlParser {
             getLog().error("Could not read AsciiDoc source: " + ex.getLocalizedMessage());
             return;
         }
-
-        MavenProject project = mavenProjectProvider.get();
-
         Xpp3Dom siteConfig = getSiteConfig(project);
         File siteDirectory = resolveSiteDirectory(project, siteConfig);
         OptionsBuilder options = processAsciiDocConfig(
-                project,
                 siteConfig,
                 initOptions(project, siteDirectory),
                 initAttributes(project, siteDirectory));
@@ -111,11 +108,11 @@ public class AsciidoctorParser extends XhtmlParser {
 
     protected AttributesBuilder initAttributes(MavenProject project, File siteDirectory) {
         return AttributesBuilder.attributes()
-                .attribute("idprefix", "@")
-                .attribute("showtitle", "@");
+            .attribute("idprefix", "@")
+            .attribute("showtitle", "@");
     }
 
-    protected OptionsBuilder processAsciiDocConfig(MavenProject project, Xpp3Dom siteConfig, OptionsBuilder options, AttributesBuilder attributes) {
+    protected OptionsBuilder processAsciiDocConfig(Xpp3Dom siteConfig, OptionsBuilder options, AttributesBuilder attributes) {
         if (siteConfig == null) {
             return options.attributes(attributes);
         }
@@ -125,9 +122,9 @@ public class AsciidoctorParser extends XhtmlParser {
             return options.attributes(attributes);
         }
 
-        if (project.getProperties() != null) {
-            for ( Map.Entry<Object, Object> entry : project.getProperties().entrySet() ) {
-                attributes.attribute(((String) entry.getKey()).replaceAll("\\.", "_"), entry.getValue());
+        if (this.project.getProperties() != null) {
+            for ( Map.Entry<Object, Object> entry : this.project.getProperties().entrySet() ) {
+                attributes.attribute(((String) entry.getKey()).replaceAll("\\.", "-"), entry.getValue());
             }
         }
 
@@ -136,7 +133,7 @@ public class AsciidoctorParser extends XhtmlParser {
             String optName = asciidocOpt.getName();
             if ("attributes".equals(optName)) {
                 for (Xpp3Dom asciidocAttr : asciidocOpt.getChildren()) {
-                    attributes.attribute(asciidocAttr.getName(), asciidocAttr.getValue());
+                    AsciidoctorHelper.addAttribute(asciidocAttr.getName(), asciidocAttr.getValue(), attributes);
                 }
             }
             else if ("requires".equals(optName)) {
@@ -159,16 +156,19 @@ public class AsciidoctorParser extends XhtmlParser {
                 }
             }
             else if ("templateDir".equals(optName) || "template_dir".equals(optName)) {
-                options.templateDir(resolveTemplateDir(project, asciidocOpt.getValue()));
+                options.templateDir(resolveProjectDir(project, asciidocOpt.getValue()));
             }
             else if ("templateDirs".equals(optName) || "template_dirs".equals(optName)) {
                 List<File> templateDirs = new ArrayList<File>();
                 for (Xpp3Dom dir : asciidocOpt.getChildren("dir")) {
-                    templateDirs.add(resolveTemplateDir(project, dir.getValue()));
+                    templateDirs.add(resolveProjectDir(project, dir.getValue()));
                 }
                 if (!templateDirs.isEmpty()) {
                     options.templateDirs(templateDirs.toArray(new File[templateDirs.size()]));
                 }
+            }
+            else if ("baseDir".equals(optName)) {
+                options.baseDir(resolveProjectDir(project, asciidocOpt.getValue()));
             }
             else {
                 options.option(optName.replaceAll("(?<!_)([A-Z])", "_$1").toLowerCase(), asciidocOpt.getValue());
@@ -181,12 +181,12 @@ public class AsciidoctorParser extends XhtmlParser {
         return asciidoctor.convert(source, options);
     }
 
-    protected File resolveTemplateDir(MavenProject project, String path) {
-        File templateDir = new File(path);
-        if (!templateDir.isAbsolute()) {
-            templateDir = new File(project.getBasedir(), templateDir.toString());
+    protected File resolveProjectDir(MavenProject project, String path) {
+        File filePath = new File(path);
+        if (!filePath.isAbsolute()) {
+            filePath = new File(project.getBasedir(), filePath.toString());
         }
-        return templateDir;
+        return filePath;
     }
 
     private void requireLibrary(String require) {

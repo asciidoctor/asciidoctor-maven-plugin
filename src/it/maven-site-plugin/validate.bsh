@@ -70,7 +70,7 @@ for (String expectedFile : expectedFiles) {
     boolean sourceHighlighted = false;
 
     for (String line : lines) {
-        if (!includeResolved && line.contains("Content included from the file _include.adoc")) {
+        if (!includeResolved && line.contains("Content included from the file ")) {
             includeResolved = true;
         }
         else if (!sourceHighlighted && line.contains("<span style=\"color:#070;font-weight:bold\">&lt;plugin&gt;</span>")) {
@@ -84,6 +84,19 @@ for (String expectedFile : expectedFiles) {
 
     if (!sourceHighlighted) {
         throw new Exception("Source code was not highlighted.");
+    }
+
+    // validate that maven properties are replaced same as attributes
+    boolean foundReplacement = false;
+    for (String line: lines) {
+    System.out.println(line);
+        if (line.contains("v1.2.3")) {
+            foundReplacement = true;
+            break;
+        }
+    }
+    if (!foundReplacement) {
+        throw new Exception("Maven properties not replaced.");
     }
 }
 
