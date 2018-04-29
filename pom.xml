@@ -41,7 +41,7 @@
     </licenses>
 
     <prerequisites>
-        <maven>3.0.0</maven>
+        <maven>3.0.5</maven>
     </prerequisites>
 
     <scm>
@@ -66,14 +66,13 @@
         <maven.jacoco.plugin.version>0.7.9</maven.jacoco.plugin.version>
         <jruby.version>1.7.26</jruby.version>
         <maven.plugin.plugin.version>3.4</maven.plugin.plugin.version>
-        <maven.plugin.api.version>2.0</maven.plugin.api.version>
-        <maven.project.version>2.2.1</maven.project.version>
+        <maven.project.version>3.0.5</maven.project.version>
         <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
         <maven.filtering.version>3.1.1</maven.filtering.version>
         <plexus.utils.version>3.0.23</plexus.utils.version>
         <plexus.component.metadata.version>1.5.5</plexus.component.metadata.version>
         <netty.version>4.0.38.Final</netty.version>
-        <commons.io.version>2.4</commons.io.version>
+        <commons.io.version>2.5</commons.io.version>
         <doxia.version>1.7</doxia.version>
         <gmaven.version>1.5</gmaven.version>
     </properties>
@@ -97,11 +96,11 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>${maven.plugin.api.version}</version>
+            <version>${maven.project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
-            <artifactId>maven-project</artifactId>
+            <artifactId>maven-core</artifactId>
             <version>${maven.project.version}</version>
         </dependency>
         <dependency>
@@ -325,6 +324,37 @@
                 </lifecycleMappingMetadata>
               </configuration>
             </plugin>
+              <!-- default plugins for build, if not defined in parent-pom -->
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+              </plugin>
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.0</version>
+              </plugin>
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+              </plugin>
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18.1</version>
+              </plugin>
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+              </plugin>
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-invoker-plugin</artifactId>
+                <version>3.0.1</version>
+              </plugin>
           </plugins>
         </pluginManagement>
     </build>
@@ -342,7 +372,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -355,7 +384,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.4</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -368,7 +396,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
                         <configuration>
                             <executable>gpg2</executable>
                             <passphrase>${gpg.passphrase}</passphrase>
