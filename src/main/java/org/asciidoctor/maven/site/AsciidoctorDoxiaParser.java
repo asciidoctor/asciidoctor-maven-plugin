@@ -16,9 +16,10 @@
 package org.asciidoctor.maven.site;
 
 import org.apache.maven.doxia.module.xhtml.XhtmlParser;
-import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
+import org.apache.maven.doxia.siterenderer.RenderingContext;
+import org.apache.maven.doxia.siterenderer.sink.SiteRendererSink;
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.AttributesBuilder;
@@ -57,14 +58,16 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
      */
     public static final String ROLE_HINT = "asciidoc";
 
+    public static final String MODULE_BASE_DIR_MAGIC_PROPERTY = "@{project.basedir}";
+
     protected final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void parse(Reader reader, Sink sink) throws ParseException {
-        String source = null;
+    public void parse(Reader reader, Sink sink) {
+        String source;
         try {
             if ((source = IOUtil.toString(reader)) == null) {
                 source = "";
@@ -74,12 +77,23 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
             getLog().error("Could not read AsciiDoc source: " + ex.getLocalizedMessage());
             return;
         }
+
+        File moduleBaseDirectory = null;
+        if(sink instanceof SiteRendererSink) {
+            SiteRendererSink siteRendererSink = (SiteRendererSink) sink;
+            RenderingContext renderingContext = siteRendererSink.getRenderingContext();
+            String asciidocBaseDir = renderingContext.getBasedir().getAbsolutePath();
+            String asciidocRelativeDir = renderingContext.getBasedirRelativePath();
+            moduleBaseDirectory = new File(asciidocBaseDir.substring(0, asciidocBaseDir.length() - asciidocRelativeDir.length()));
+        }
+
         Xpp3Dom siteConfig = getSiteConfig(project);
         File siteDirectory = resolveSiteDirectory(project, siteConfig);
         OptionsBuilder options = processAsciiDocConfig(
                 siteConfig,
                 initOptions(project, siteDirectory),
-                initAttributes(project, siteDirectory));
+                initAttributes(project, siteDirectory),
+                moduleBaseDirectory);
         // QUESTION should we keep OptionsBuilder & AttributesBuilder separate for call to convertAsciiDoc?
         sink.rawText(convertAsciiDoc(source, options));
     }
@@ -112,7 +126,8 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
             .attribute("showtitle", "@");
     }
 
-    protected OptionsBuilder processAsciiDocConfig(Xpp3Dom siteConfig, OptionsBuilder options, AttributesBuilder attributes) {
+    protected OptionsBuilder processAsciiDocConfig(Xpp3Dom siteConfig, OptionsBuilder options, AttributesBuilder attributes,
+                                                   File moduleBaseDirectory) {
         if (siteConfig == null) {
             return options.attributes(attributes);
         }
@@ -128,12 +143,16 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
             }
         }
 
-
         for (Xpp3Dom asciidocOpt : asciidocConfig.getChildren()) {
             String optName = asciidocOpt.getName();
             if ("attributes".equals(optName)) {
                 for (Xpp3Dom asciidocAttr : asciidocOpt.getChildren()) {
-                    AsciidoctorHelper.addAttribute(asciidocAttr.getName(), asciidocAttr.getValue(), attributes);
+                    String attrValue = asciidocAttr.getValue();
+                    if((attrValue != null) && attrValue.contains(MODULE_BASE_DIR_MAGIC_PROPERTY)) {
+                        attrValue = attrValue.replace(
+                                MODULE_BASE_DIR_MAGIC_PROPERTY, moduleBaseDirectory.getAbsolutePath());
+                    }
+                    AsciidoctorHelper.addAttribute(asciidocAttr.getName(), attrValue, attributes);
                 }
             }
             else if ("requires".equals(optName)) {
@@ -164,7 +183,7 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
                     templateDirs.add(resolveProjectDir(project, dir.getValue()));
                 }
                 if (!templateDirs.isEmpty()) {
-                    options.templateDirs(templateDirs.toArray(new File[templateDirs.size()]));
+                    options.templateDirs(templateDirs.toArray(new File[0]));
                 }
             }
             else if ("baseDir".equals(optName)) {
