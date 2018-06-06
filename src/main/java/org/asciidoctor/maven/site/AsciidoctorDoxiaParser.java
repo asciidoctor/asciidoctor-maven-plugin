@@ -15,7 +15,9 @@
  */
 package org.asciidoctor.maven.site;
 
+import org.apache.commons.beanutils.MethodUtils;
 import org.apache.maven.doxia.module.xhtml.XhtmlParser;
+import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.siterenderer.RenderingContext;
@@ -34,6 +36,8 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +70,7 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
      * {@inheritDoc}
      */
     @Override
-    public void parse(Reader reader, Sink sink) {
+    public void parse(Reader reader, Sink sink) throws ParseException {
         String source;
         try {
             if ((source = IOUtil.toString(reader)) == null) {
@@ -83,8 +87,22 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
             SiteRendererSink siteRendererSink = (SiteRendererSink) sink;
             RenderingContext renderingContext = siteRendererSink.getRenderingContext();
             String asciidocBaseDir = renderingContext.getBasedir().getAbsolutePath();
-            String asciidocRelativeDir = renderingContext.getBasedirRelativePath();
-            moduleBaseDirectory = new File(asciidocBaseDir.substring(0, asciidocBaseDir.length() - asciidocRelativeDir.length()));
+            // This is a hack to support both doxia 1.7 as well as 1.8 (1.7 being a somewhat hackish solution)
+            Method method = MethodUtils.getAccessibleMethod(
+                    renderingContext.getClass(), "getBasedirRelativePath", new Class[0]);
+            if(method != null) {
+                String asciidocRelativeDir;
+                try {
+                    asciidocRelativeDir = (String) method.invoke(renderingContext);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    throw new ParseException("Error invoking getBasedirRelativePath on RenderingContext", e);
+                }
+                moduleBaseDirectory = new File(asciidocBaseDir.substring(0,
+                        asciidocBaseDir.length() - asciidocRelativeDir.length()));
+            } else if(asciidocBaseDir.contains("src/site/asciidoc")) {
+                moduleBaseDirectory = new File(asciidocBaseDir.substring(0,
+                        asciidocBaseDir.length() - "src/site/asciidoc".length()));
+            }
         }
 
         Xpp3Dom siteConfig = getSiteConfig(project);
