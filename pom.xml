@@ -452,8 +452,6 @@
                             <preBuildHookScript>setup</preBuildHookScript>
                             <postBuildHookScript>validate</postBuildHookScript>
                             <showErrors>true</showErrors>
-                          <!-- Try to find out why the ci builds are failing -->
-                          <streamLogs>true</streamLogs>
                             <debug>true</debug>
                             <!-- <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>-->
                             <!-- <settingsFile>src/it/settings.xml</settingsFile>-->
