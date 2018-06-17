@@ -143,7 +143,7 @@ When converting to HTML, images must be copied to the output location so that th
     ...
 <resources>
 ----
-outputDirectory:: defaults to [.path]_${project.build.directory}/generated-docs_
+outputDirectory:: relative paths are added to the project root path. Defaults to [.path]_${project.build.directory}/generated-docs_.
 outputFile:: defaults to `null`, used to override the name of the generated output file, can be a relative or absolute path.
 Useful for backends that create a single file, e.g. the pdf backend.
 All output will be redirected to the same file, the same way as the `-o, --out-file=OUT_FILE` option from the `asciidoctor` CLI command.
@@ -539,15 +539,20 @@ Standard Maven build:
 
 == Testing
 
-http://spockframework.org/[Spock] is used for testing the calling of the Mojo.
-This will be downloaded by Maven.
+Unit tests are written with http://spockframework.org/[Spock].
+This will be downloaded by Maven and can be run from IntelliJ without any additional setup.
 Tests are run simply by:
 
  mvn clean test
 
 Or any of the other goals which run tests.
 
-NOTE: If I can figure out a good way to setup a Ruby testing environment I'll do that as well, but none exists at this time.
+Integration tests under `src/it` are run using link:https://maven.apache.org/plugins/maven-invoker-plugin/[maven-invoker-plugin] and the `runt-its` profile.
+To only run them without excluding unit tests, use:
+
+ mvn clean verify -DskipTests -Prun-its
+
+To run all tests at once just use `mvn clean verify -DskipTests -Prun-its`.
 
 == Tips & Tricks
 
