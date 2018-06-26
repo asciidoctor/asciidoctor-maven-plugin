@@ -16,7 +16,7 @@ class AsciidoctorDoxiaParserTest extends Specification {
         final Sink sink = createSinkMock()
 
         AsciidoctorDoxiaParser parser = new AsciidoctorDoxiaParser()
-        parser.@project = createMavenProjectMock()
+        parser.@mavenProjectProvider = createMavenProjectMock()
 
         when:
         parser.parse(new FileReader(srcAsciidoc), sink)
@@ -38,7 +38,7 @@ class AsciidoctorDoxiaParserTest extends Specification {
         final Sink sink = createSinkMock()
 
         AsciidoctorDoxiaParser parser = new AsciidoctorDoxiaParser()
-        parser.@project = createMavenProjectMock('''
+        parser.@mavenProjectProvider = createMavenProjectMock('''
                     <configuration>
                         <asciidoc>
                             <attributes>
@@ -62,7 +62,7 @@ class AsciidoctorDoxiaParserTest extends Specification {
         final Sink sink = createSinkMock()
 
         AsciidoctorDoxiaParser parser = new AsciidoctorDoxiaParser()
-        parser.@project = createMavenProjectMock("""
+        parser.@mavenProjectProvider = createMavenProjectMock("""
                      <configuration>
                         <asciidoc>
                             <baseDir>${new File(srcAsciidoc.parent).absolutePath}</baseDir>
@@ -84,7 +84,7 @@ class AsciidoctorDoxiaParserTest extends Specification {
         final Sink sink = createSinkMock()
 
         AsciidoctorDoxiaParser parser = new AsciidoctorDoxiaParser()
-        parser.@project = createMavenProjectMock("""
+        parser.@mavenProjectProvider = createMavenProjectMock("""
                      <configuration>
                         <asciidoc>
                             <baseDir>${TEST_DOCS_PATH}</baseDir>
@@ -106,7 +106,7 @@ class AsciidoctorDoxiaParserTest extends Specification {
         final Sink sink = createSinkMock()
 
         AsciidoctorDoxiaParser parser = new AsciidoctorDoxiaParser()
-        parser.@project = createMavenProjectMock("""
+        parser.@mavenProjectProvider = createMavenProjectMock("""
                      <configuration>
                         <asciidoc>
                             <templateDir>${TEST_DOCS_PATH}/templates</templateDir>
@@ -128,7 +128,7 @@ class AsciidoctorDoxiaParserTest extends Specification {
         final Sink sink = createSinkMock()
 
         AsciidoctorDoxiaParser parser = new AsciidoctorDoxiaParser()
-        parser.@project = createMavenProjectMock("""
+        parser.@mavenProjectProvider = createMavenProjectMock("""
                     <configuration>
                         <asciidoc>
                             <baseDir>${new File(srcAsciidoc.parent).absolutePath}</baseDir>
@@ -159,7 +159,7 @@ class AsciidoctorDoxiaParserTest extends Specification {
         final Sink sink = createSinkMock()
 
         AsciidoctorDoxiaParser parser = new AsciidoctorDoxiaParser()
-        parser.@project = createMavenProjectMock("""
+        parser.@mavenProjectProvider = createMavenProjectMock("""
                      <configuration>
                        <asciidoc>
                          <attributes>
@@ -183,7 +183,7 @@ class AsciidoctorDoxiaParserTest extends Specification {
         final Sink sink = createSinkMock()
 
         AsciidoctorDoxiaParser parser = new AsciidoctorDoxiaParser()
-        parser.@project = createMavenProjectMock("""
+        parser.@mavenProjectProvider = createMavenProjectMock("""
                      <configuration>
                        <asciidoc>
                          <attributes>
@@ -201,13 +201,15 @@ class AsciidoctorDoxiaParserTest extends Specification {
         outputText.contains '<h3 id="id_section_a_subsection">1.1. Section A Subsection</h3>'
     }
 
-    private MavenProject createMavenProjectMock(final String configuration = null) {
-        [getGoalConfiguration: { pluginGroupId, pluginArtifactId, executionId, goalId ->
+    private javax.inject.Provider<MavenProject> createMavenProjectMock(final String configuration = null) {
+        MavenProject mp = [getGoalConfiguration: { pluginGroupId, pluginArtifactId, executionId, goalId ->
             configuration ? Xpp3DomBuilder.build(new StringReader(configuration)) : null
         },
-         getBasedir          : {
-             new File('.')
-         }] as MavenProject
+                           getBasedir          : {
+                               new File('.')
+                           }] as MavenProject
+
+        return [get: { mp }] as javax.inject.Provider<MavenProject>
     }
 
     /**

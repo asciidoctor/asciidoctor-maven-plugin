@@ -26,10 +26,11 @@ import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.maven.AsciidoctorHelper;
 import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -49,8 +50,8 @@ import java.util.Map;
 @Component(role = Parser.class, hint = AsciidoctorDoxiaParser.ROLE_HINT)
 public class AsciidoctorDoxiaParser extends XhtmlParser {
 
-    @Requirement
-    protected MavenProject project;
+    @Inject
+    protected Provider<MavenProject> mavenProjectProvider;
 
     /**
      * The role hint for the {@link AsciidoctorDoxiaParser} Plexus component.
@@ -74,9 +75,13 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
             getLog().error("Could not read AsciiDoc source: " + ex.getLocalizedMessage());
             return;
         }
+
+        MavenProject project = mavenProjectProvider.get();
+
         Xpp3Dom siteConfig = getSiteConfig(project);
         File siteDirectory = resolveSiteDirectory(project, siteConfig);
         OptionsBuilder options = processAsciiDocConfig(
+                project,
                 siteConfig,
                 initOptions(project, siteDirectory),
                 initAttributes(project, siteDirectory));
@@ -112,7 +117,7 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
             .attribute("showtitle", "@");
     }
 
-    protected OptionsBuilder processAsciiDocConfig(Xpp3Dom siteConfig, OptionsBuilder options, AttributesBuilder attributes) {
+    protected OptionsBuilder processAsciiDocConfig(MavenProject project, Xpp3Dom siteConfig, OptionsBuilder options, AttributesBuilder attributes) {
         if (siteConfig == null) {
             return options.attributes(attributes);
         }
@@ -122,8 +127,8 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
             return options.attributes(attributes);
         }
 
-        if (this.project.getProperties() != null) {
-            for ( Map.Entry<Object, Object> entry : this.project.getProperties().entrySet() ) {
+        if (project.getProperties() != null) {
+            for ( Map.Entry<Object, Object> entry : project.getProperties().entrySet() ) {
                 attributes.attribute(((String) entry.getKey()).replaceAll("\\.", "-"), entry.getValue());
             }
         }
