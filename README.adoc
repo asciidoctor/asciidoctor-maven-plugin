@@ -112,7 +112,7 @@ sourceDirectory:: defaults to [.path]_$\{basedir}/src/main/asciidoc_
 ====
 All paths and AsciiDoc documents that start with `pass:[_]` are considered _internal_ and are skipped.
 That is, AsciiDocs are not rendered and resources are not copied to target, but you can include them normally from other AsciiDocs. +
-This is useful to split your sources in smaller files of master documents and included parts.
+This is useful to split your sources in sets of master documents and included parts.
 ====
 
 sourceDocumentName:: an override to process a single source file; defaults to all files in `$\{sourceDirectory}`
