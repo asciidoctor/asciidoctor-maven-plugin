@@ -107,6 +107,14 @@ As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` 
 There are several configuration options that the Asciidoctor Maven plugin accepts, which parallel the options in Asciidoctor:
 
 sourceDirectory:: defaults to [.path]_$\{basedir}/src/main/asciidoc_
+
+[NOTE]
+====
+All paths and AsciiDoc documents that start with `pass:[_]` are considered _internal_ and are skipped.
+That is, AsciiDocs are not rendered and resources are not copied to target, but you can include them normally from other AsciiDocs. +
+This is useful to split your sources in sets of master documents and included parts.
+====
+
 sourceDocumentName:: an override to process a single source file; defaults to all files in `$\{sourceDirectory}`
 sourceDocumentExtensions:: (named `extensions` in v1.5.3 and below) a `List<String>` of non-standard file extensions to render.
 Currently ad, adoc, and asciidoc will be rendered by default
