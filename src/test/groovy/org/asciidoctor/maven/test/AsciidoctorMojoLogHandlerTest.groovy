@@ -72,10 +72,10 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
 
         and: 'all messages (ERR & WARN) are logged as info'
         def consoleOutput = newOut.toString()
-        consoleOutput.contains('[info] asciidoctor: ERROR: errors\\document-with-missing-include.adoc: line 3: include file not found:')
-        consoleOutput.contains('[info] asciidoctor: ERROR: errors\\document-with-missing-include.adoc: line 5: include file not found:')
-        consoleOutput.contains('[info] asciidoctor: ERROR: errors\\document-with-missing-include.adoc: line 9: include file not found:')
-        consoleOutput.contains('[info] asciidoctor: WARN: errors\\document-with-missing-include.adoc: line 25: no callout found for <1>')
+        consoleOutput.contains(fixOSseparator('[info] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 3: include file not found:'))
+        consoleOutput.contains(fixOSseparator('[info] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 5: include file not found:'))
+        consoleOutput.contains(fixOSseparator('[info] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 9: include file not found:'))
+        consoleOutput.contains(fixOSseparator('[info] asciidoctor: WARN: errors/document-with-missing-include.adoc: line 25: no callout found for <1>'))
 
         cleanup:
         System.setOut(originalOut)
@@ -185,9 +185,9 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         and: 'all messages (ERR & WARN) are logged as error'
         def consoleError = newOut.toString()
 
-        consoleError.contains('[error] asciidoctor: ERROR: errors\\document-with-missing-include.adoc: line 3: include file not found:')
-        consoleError.contains('[error] asciidoctor: ERROR: errors\\document-with-missing-include.adoc: line 5: include file not found:')
-        consoleError.contains('[error] asciidoctor: ERROR: errors\\document-with-missing-include.adoc: line 9: include file not found:')
+        consoleError.contains(fixOSseparator('[error] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 3: include file not found:'))
+        consoleError.contains(fixOSseparator('[error] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 5: include file not found:'))
+        consoleError.contains(fixOSseparator('[error] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 9: include file not found:'))
 
         cleanup:
         System.setErr(originalOut)
@@ -204,7 +204,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         File outputDir = new File("target/asciidoctor-output/${System.currentTimeMillis()}")
         def handler = new LogHandler()
         handler.failIf = [
-                severity       : WARN,
+                severity    : WARN,
                 containsText: 'no'
         ]
 
@@ -226,10 +226,14 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
 
         and:
         def consoleError = newOut.toString()
-        consoleError.contains('[error] asciidoctor: WARN: errors\\document-with-missing-include.adoc: line 25: no callout found for <1>')
+        consoleError.contains(fixOSseparator('[error] asciidoctor: WARN: errors/document-with-missing-include.adoc: line 25: no callout found for <1>'))
 
         cleanup:
         System.setErr(originalOut)
+    }
+
+    private String fixOSseparator(String text) {
+        File.separatorChar == '\\' ? text.replaceAll("/", "\\\\") : text
     }
 
 }
