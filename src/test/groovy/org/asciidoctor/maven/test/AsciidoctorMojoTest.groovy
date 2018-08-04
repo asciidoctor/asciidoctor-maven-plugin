@@ -4,7 +4,6 @@ import groovy.io.FileType
 import org.apache.commons.io.FileUtils
 import org.apache.maven.model.Resource
 import org.asciidoctor.maven.AsciidoctorMojo
-import org.asciidoctor.maven.io.AsciidoctorFileScanner
 import org.asciidoctor.maven.test.plexus.MockPlexusContainer
 import spock.lang.Specification
 
@@ -16,19 +15,8 @@ class AsciidoctorMojoTest extends Specification {
     static final String DEFAULT_SOURCE_DIRECTORY = 'target/test-classes/src/asciidoctor'
     static final String MULTIPLE_RESOURCES_OUTPUT = 'target/asciidoctor-output/multiple-resources'
 
-    /**
-     * Intercept Asciidoctor mojo constructor to mock and inject required
-     * plexus objects
-     */
     def setupSpec() {
-        MockPlexusContainer mockPlexusContainer = new MockPlexusContainer()
-        def oldConstructor = AsciidoctorMojo.constructors[0]
-
-        AsciidoctorMojo.metaClass.constructor = {
-            def mojo = oldConstructor.newInstance()
-            mockPlexusContainer.initializeContext(mojo)
-            return mojo
-        }
+        MockPlexusContainer.initializeMockContext(AsciidoctorMojo)
     }
 
     def "renders docbook"() {

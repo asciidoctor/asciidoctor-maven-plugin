@@ -2,7 +2,6 @@ package org.asciidoctor.maven.test
 
 import org.apache.maven.plugin.MojoExecutionException
 import org.asciidoctor.maven.AsciidoctorMojo
-import org.asciidoctor.maven.AsciidoctorZipMojo
 import org.asciidoctor.maven.extensions.ExtensionConfiguration
 import org.asciidoctor.maven.test.plexus.MockPlexusContainer
 import org.asciidoctor.maven.test.processors.ChangeAttributeValuePreprocessor
@@ -26,19 +25,8 @@ import spock.lang.Unroll
  */
 class AsciidoctorMojoExtensionsTest extends Specification {
 
-    /**
-     * Intercept Asciidoctor mojo constructor to mock and inject required
-     * plexus objects
-     */
     def setupSpec() {
-        MockPlexusContainer mockPlexusContainer = new MockPlexusContainer()
-        def oldConstructor = AsciidoctorMojo.constructors[0]
-
-        AsciidoctorMojo.metaClass.constructor = {
-            def mojo = oldConstructor.newInstance()
-            mockPlexusContainer.initializeContext(mojo)
-            return mojo
-        }
+        MockPlexusContainer.initializeMockContext(AsciidoctorMojo)
     }
 
     static final String SRC_DIR = 'target/test-classes/src/asciidoctor/'
@@ -397,7 +385,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
 
     /**
      *  Manual test to validate automatic extension registration.
-     *  To execute, copy org.asciidoctor.extension.spi.ExtensionRegistry to 
+     *  To execute, copy _org.asciidoctor.extension.spi.ExtensionRegistry to
      *  /src/test/resources/META-INF/services/ and execute
      */
     @spock.lang.Ignore

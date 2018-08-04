@@ -10,19 +10,8 @@ import java.util.concurrent.CountDownLatch
 
 class AsciidoctorRefreshMojoTest extends Specification {
 
-    /**
-     * Intercept Asciidoctor mojo constructor to mock and inject required
-     * plexus objects
-     */
     def setupSpec() {
-        MockPlexusContainer mockPlexusContainer = new MockPlexusContainer()
-        def oldConstructor = AsciidoctorRefreshMojo.constructors[0]
-
-        AsciidoctorRefreshMojo.metaClass.constructor = {
-            def mojo = oldConstructor.newInstance()
-            mockPlexusContainer.initializeContext(mojo)
-            return mojo
-        }
+        MockPlexusContainer.initializeMockContext(AsciidoctorRefreshMojo)
     }
 
     def "auto render when source updated"() {
