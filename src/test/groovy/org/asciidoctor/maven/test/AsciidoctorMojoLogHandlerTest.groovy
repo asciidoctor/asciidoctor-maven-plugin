@@ -156,7 +156,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
 
     def "should fail when containsText matches"() {
         setup:
-        def originalOut = System.out
+        def originalOut = System.err
         def newOut = new ByteArrayOutputStream()
         System.setErr(new PrintStream(newOut))
 
@@ -195,7 +195,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
 
     def "should fail and filter errors that match both severity and text"() {
         setup:
-        def originalOut = System.out
+        def originalOut = System.err
         def newOut = new ByteArrayOutputStream()
         System.setErr(new PrintStream(newOut))
 
@@ -227,6 +227,43 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         and:
         def consoleError = newOut.toString()
         consoleError.contains(fixOSseparator('[error] asciidoctor: WARN: errors/document-with-missing-include.adoc: line 25: no callout found for <1>'))
+
+        cleanup:
+        System.setErr(originalOut)
+    }
+
+    // `asciidoctor` JUL logger inherits a ConsoleHandler that needs to be disabled
+    // to avoid redundant messages in error channel
+    def "should not print default AsciidoctorJ messages"() {
+        setup:
+        def originalOut = System.err
+        def newOut = new ByteArrayOutputStream()
+        System.setErr(new PrintStream(newOut))
+
+        String sourceDocument = 'errors/document-with-missing-include.adoc'
+        File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
+        File outputDir = new File("target/asciidoctor-output/${System.currentTimeMillis()}")
+        def handler = new LogHandler()
+        handler.outputToConsole = true
+
+        when:
+        AsciidoctorMojo mojo = new AsciidoctorMojo()
+        mojo.backend = 'html'
+        mojo.sourceDirectory = srcDir
+        mojo.sourceDocumentName = sourceDocument
+        mojo.outputDirectory = outputDir
+        mojo.headerFooter = true
+        mojo.attributes['toc'] = null
+        mojo.logHandler = handler
+        mojo.execute()
+
+        then: 'output file exists & shows include error'
+        def file = new File(outputDir, 'document-with-missing-include.html')
+        file.exists()
+        file.text.contains('<p>Unresolved directive in document-with-missing-include.adoc - include::unexistingdoc.adoc[]</p>')
+
+        and: 'no undesired messages appear in err channel'
+        newOut.toString().size() == 0
 
         cleanup:
         System.setErr(originalOut)

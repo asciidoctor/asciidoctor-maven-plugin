@@ -42,6 +42,7 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Logger;
 
 
 /**
@@ -234,6 +235,8 @@ public class AsciidoctorMojo extends AbstractMojo {
         final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(outputToConsole, sourceDirectory, getLog());
         if (!sourceFiles.isEmpty()) {
             asciidoctor.registerLogHandler(memoryLogHandler);
+            // disable default console output of AsciidoctorJ
+            Logger.getLogger("asciidoctor").setUseParentHandlers(false);
         }
 
         for (final File source : sourceFiles) {
