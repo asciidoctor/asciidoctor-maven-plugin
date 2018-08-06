@@ -39,20 +39,20 @@ public class MemoryLogHandler implements LogHandler {
     }
 
     /**
-     * Returns LogRecords that belong to a severity level
+     * Returns LogRecords that are equal or above the severity level
      */
     public List<LogRecord> filter(Severity severity) {
         // FIXME: find better name or replace with stream
         final List<LogRecord> records = new ArrayList<>();
         for (LogRecord record : this.records) {
-            if (record.getSeverity().equals(severity))
+            if (record.getSeverity().getRubyId() >= severity.getRubyId())
                 records.add(record);
         }
         return records;
     }
 
     /**
-     * Returns LogRecords whose message contains a text
+     * Returns LogRecords whose message contains text
      */
     public List<LogRecord> filter(String text) {
         final List<LogRecord> records = new ArrayList<>();
@@ -64,12 +64,12 @@ public class MemoryLogHandler implements LogHandler {
     }
 
     /**
-     * Returns LogRecords that belong to a severity level & whose message contains a text
+     * Returns LogRecords that are equal or above the severity level & whose message contains text
      */
     public List<LogRecord> filter(Severity severity, String text) {
         final List<LogRecord> records = new ArrayList<>();
         for (LogRecord record : this.records) {
-            if (record.getSeverity().equals(severity) && record.getMessage().contains(text))
+            if (record.getSeverity().getRubyId() >= severity.getRubyId() && record.getMessage().contains(text))
                 records.add(record);
         }
         return records;

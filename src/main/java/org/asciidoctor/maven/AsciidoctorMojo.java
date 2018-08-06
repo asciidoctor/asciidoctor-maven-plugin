@@ -256,7 +256,7 @@ public class AsciidoctorMojo extends AbstractMojo {
                     for (LogRecord record : records) {
                         getLog().error(LogRecordHelper.format(record, sourceDirectory));
                     }
-                    throw new MojoExecutionException(String.format("Found %s issue(s) matching severity %s and text '%s'", records.size(), severity, textToSearch));
+                    throw new MojoExecutionException(String.format("Found %s issue(s) matching severity %s or higher and text '%s'", records.size(), severity, textToSearch));
                 }
             } else if (logHandler.isSeveritySet()) {
                 final Severity severity = logHandler.getFailIf().getSeverity();
@@ -265,7 +265,7 @@ public class AsciidoctorMojo extends AbstractMojo {
                     for (LogRecord record : records) {
                         getLog().error(LogRecordHelper.format(record, sourceDirectory));
                     }
-                    throw new MojoExecutionException(String.format("Found %s issue(s) of severity %s during rendering", records.size(), severity));
+                    throw new MojoExecutionException(String.format("Found %s issue(s) of severity %s or higher during rendering", records.size(), severity));
                 }
             } else if (logHandler.isContainsTextNotBlank()) {
                 final String textToSearch = logHandler.getFailIf().getContainsText();

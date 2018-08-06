@@ -100,9 +100,9 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         mojo.logHandler = handler
         mojo.execute()
 
-        then:
+        then: 'issues with WARN and ERROR are returned'
         def e = thrown(MojoExecutionException)
-        e.message.contains('Found 1 issue(s) of severity WARN during rendering')
+        e.message.contains('Found 4 issue(s) of severity WARN or higher during rendering')
     }
 
     def "should fail when logHandler failIf = ERROR"() {
@@ -126,7 +126,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
 
         then:
         def e = thrown(MojoExecutionException)
-        e.message.contains('Found 3 issue(s) of severity ERROR during rendering')
+        e.message.contains('Found 3 issue(s) of severity ERROR or higher during rendering')
     }
 
     def "should not fail if containsText does not match any message"() {
@@ -222,7 +222,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         then:
         new File(outputDir, 'document-with-missing-include.html').exists()
         def e = thrown(MojoExecutionException)
-        e.message.contains("Found 1 issue(s) matching severity WARN and text 'no'")
+        e.message.contains("Found 4 issue(s) matching severity WARN or higher and text 'no'")
 
         and:
         def consoleError = newOut.toString()
