@@ -227,6 +227,45 @@ Here follows a configuration example:
 NOTE: Extensions can also be integrated through the SPI interface implementation.
 This method does not require any configuration in the [.path]_pom.xml_, see link:https://github.com/asciidoctor/asciidoctorj#extension-spi[Extension SPI] for details.
 
+logHandler:: enables processing of Asciidoctor messages (e.g. errors on missing included files), to hide messages as well setup build fail conditions based on them.
+Contains the following configuration elements:
+
+* `outputToConsole`: `Boolean`, defaults to `true`.
+Redirects all Asciidoctor messages to Maven's console logger as INFO during renderization.
+* `failIf`: build fail conditions, disabled by default.
+Allows setting one or many conditions that when met, abort the Maven build with `BUILD FAILURE` status.
++
+[NOTE]
+====
+Note that the plugin matches that all conditions are met together.
+Unless you are controlling a very specific case, setting one condition should be enough. +
+Also, messages matching fail conditions will be sent to Maven's logger as ERROR.
+So, when enabling `outputToConsole`, some messages will appear duplicated as both INFO and ERROR.
+====
++
+Currently, two conditions can be defined:
+
+** `severity`: severity of the Asciidoctor message, in order: `INFO`,`WARN`,`ERROR`,`FATAL`,`UNKNOWN`.
+Build will fail if a message is found of severity equal or higher.
+
+** `containsText`: text to search inside messages.
+Build will fail if the text is found. +
+For example, set `include` to fail on any issue related to included files regardless the severity level.
++
+[source,xml]
+.example: fail on any message
+----
+<logHandler>
+    <outputToConsole>false</outputToConsole> <!--1-->
+    <failIf>
+        <severity>DEBUG</severity> <!--2-->
+    </failIf>
+</logHandler>
+----
+<1> Do not show messages as INFO in Maven output
+<2> Build will fail on any message of severity `DEBUG` or higher, that includes all.
+All matching messages will appear as ERROR in Maven output.
+
 ==== Built-in attributes
 
 There are various attributes Asciidoctor recognizes.
