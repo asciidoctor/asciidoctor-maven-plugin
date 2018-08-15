@@ -42,7 +42,7 @@ import java.util.*;
 /**
  * Basic maven plugin goal to render AsciiDoc files using Asciidoctor, a ruby port.
  */
-@Mojo(name = "process-asciidoc")
+@Mojo(name = "process-asciidoc", threadSafe = true)
 public class AsciidoctorMojo extends AbstractMojo {
     // copied from org.asciidoctor.AsciiDocDirectoryWalker.ASCIIDOC_REG_EXP_EXTENSION
     // should probably be configured in AsciidoctorMojo through @Parameter 'extension'
