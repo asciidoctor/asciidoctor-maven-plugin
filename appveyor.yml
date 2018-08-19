@@ -2,11 +2,11 @@ version: '{build}'
 skip_tags: true
 clone_depth: 10
 environment:
-  MAVEN_VERSION: 3.5.0
+  MAVEN_VERSION: 3.5.4
   matrix:
     - JAVA_HOME: C:\Program Files\Java\jdk1.7.0
     - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
-    - JAVA_HOME: C:\Program Files\Java\jdk9
+    - JAVA_HOME: C:\Program Files\Java\jdk10
 install:
   - ps: |
       Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -26,5 +26,5 @@ install:
 build_script:
   - mvn -B -V -Prun-its clean verify
 cache:
-  - C:\maven\ -> appveyor.yml
-  - C:\Users\appveyor\.m2\ -> pom.xml
+  - C:\maven\
+  - C:\Users\appveyor\.m2\
