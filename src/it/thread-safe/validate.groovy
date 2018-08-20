@@ -1,3 +1,4 @@
+import java.nio.charset.Charset
 import java.nio.file.Files
 
 String fileTemplate = "asciidoctor-project-%s/target/docs/sample.html"
@@ -12,7 +13,7 @@ for (int i = 1; i <= 3; i++) {
     }
 
     StringBuilder contentOfFile = new StringBuilder()
-    for (String line : Files.readAllLines(file.toPath())) {
+    for (String line : Files.readAllLines(file.toPath(), Charset.forName("UTF-8"))) {
         contentOfFile.append(line)
     }
     contentOfFiles.add(contentOfFile.toString())
