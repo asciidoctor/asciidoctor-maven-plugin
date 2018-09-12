@@ -27,16 +27,22 @@ import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
 import org.asciidoctor.*;
 import org.asciidoctor.internal.JRubyRuntimeContext;
+import org.asciidoctor.log.LogRecord;
+import org.asciidoctor.log.Severity;
 import org.asciidoctor.maven.extensions.AsciidoctorJExtensionRegistry;
 import org.asciidoctor.maven.extensions.ExtensionConfiguration;
 import org.asciidoctor.maven.extensions.ExtensionRegistry;
 import org.asciidoctor.maven.io.AsciidoctorFileScanner;
+import org.asciidoctor.maven.log.LogHandler;
+import org.asciidoctor.maven.log.LogRecordHelper;
+import org.asciidoctor.maven.log.MemoryLogHandler;
 import org.jruby.Ruby;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Logger;
 
 
 /**
@@ -157,6 +163,9 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     protected MavenSession session;
 
+    @Parameter
+    private LogHandler logHandler = new LogHandler();
+
     @Component
     protected MavenResourcesFiltering outputResourcesFiltering;
 
@@ -220,12 +229,54 @@ public class AsciidoctorMojo extends AbstractMojo {
                 scanSourceFiles() : Arrays.asList(new File(sourceDirectory, sourceDocumentName));
 
         final Set<File> dirs = new HashSet<File>();
+
+        // register LogHandler to capture asciidoctor messages
+        final Boolean outputToConsole = logHandler == null ? Boolean.TRUE : logHandler.getOutputToConsole();
+        final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(outputToConsole, sourceDirectory, getLog());
+        if (!sourceFiles.isEmpty()) {
+            asciidoctor.registerLogHandler(memoryLogHandler);
+            // disable default console output of AsciidoctorJ
+            Logger.getLogger("asciidoctor").setUseParentHandlers(false);
+        }
+
         for (final File source : sourceFiles) {
             final File destinationPath = setDestinationPaths(optionsBuilder, source);
             if (!dirs.add(destinationPath))
                 getLog().warn("Duplicated destination found: overwriting file: " + destinationPath.getAbsolutePath());
 
             renderFile(asciidoctor, optionsBuilder.asMap(), source);
+
+            // process log messages according to mojo configuration
+            if (logHandler.isSeveritySet() && logHandler.isContainsTextNotBlank()) {
+                final Severity severity = logHandler.getFailIf().getSeverity();
+                final String textToSearch = logHandler.getFailIf().getContainsText();
+
+                final List<LogRecord> records = memoryLogHandler.filter(severity, textToSearch);
+                if (records.size() > 0) {
+                    for (LogRecord record : records) {
+                        getLog().error(LogRecordHelper.format(record, sourceDirectory));
+                    }
+                    throw new MojoExecutionException(String.format("Found %s issue(s) matching severity %s or higher and text '%s'", records.size(), severity, textToSearch));
+                }
+            } else if (logHandler.isSeveritySet()) {
+                final Severity severity = logHandler.getFailIf().getSeverity();
+                final List<LogRecord> records = memoryLogHandler.filter(severity);
+                if (records.size() > 0) {
+                    for (LogRecord record : records) {
+                        getLog().error(LogRecordHelper.format(record, sourceDirectory));
+                    }
+                    throw new MojoExecutionException(String.format("Found %s issue(s) of severity %s or higher during rendering", records.size(), severity));
+                }
+            } else if (logHandler.isContainsTextNotBlank()) {
+                final String textToSearch = logHandler.getFailIf().getContainsText();
+                final List<LogRecord> records = memoryLogHandler.filter(textToSearch);
+                if (records.size() > 0) {
+                    for (LogRecord record : records) {
+                        getLog().error(LogRecordHelper.format(record, sourceDirectory));
+                    }
+                    throw new MojoExecutionException(String.format("Found %s issue(s) containing '%s'", records.size(), textToSearch));
+                }
+            }
         }
 
         if (synchronizations != null && !synchronizations.isEmpty()) {

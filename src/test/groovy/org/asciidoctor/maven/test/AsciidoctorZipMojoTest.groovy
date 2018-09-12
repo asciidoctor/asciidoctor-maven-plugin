@@ -12,19 +12,8 @@ import java.util.zip.ZipFile
  */
 class AsciidoctorZipMojoTest extends Specification {
 
-    /**
-     * Intercept Asciidoctor mojo constructor to mock and inject required
-     * plexus objects
-     */
     def setupSpec() {
-        MockPlexusContainer mockPlexusContainer = new MockPlexusContainer()
-        def oldConstructor = AsciidoctorZipMojo.constructors[0]
-
-        AsciidoctorZipMojo.metaClass.constructor = {
-            def mojo = oldConstructor.newInstance()
-            mockPlexusContainer.initializeContext(mojo)
-            return mojo
-        }
+        MockPlexusContainer.initializeMockContext(AsciidoctorZipMojo)
     }
 
     def "zip it"() {

@@ -11,19 +11,8 @@ import java.util.concurrent.CountDownLatch
 
 class AsciidoctorHttpMojoTest extends Specification {
 
-    /**
-     * Intercept Asciidoctor mojo constructor to mock and inject required
-     * plexus objects
-     */
     def setupSpec() {
-        MockPlexusContainer mockPlexusContainer = new MockPlexusContainer()
-        def oldConstructor = AsciidoctorHttpMojo.constructors[0]
-
-        AsciidoctorHttpMojo.metaClass.constructor = {
-            def mojo = oldConstructor.newInstance()
-            mockPlexusContainer.initializeContext(mojo)
-            return mojo
-        }
+        MockPlexusContainer.initializeMockContext(AsciidoctorHttpMojo)
     }
 
     def "http front should let access rendered files"() {
