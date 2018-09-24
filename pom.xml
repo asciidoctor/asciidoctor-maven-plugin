@@ -3,7 +3,7 @@
 
     <groupId>org.asciidoctor</groupId>
     <artifactId>asciidoctor-maven-plugin</artifactId>
-    <version>1.5.7-SNAPSHOT</version>
+    <version>1.5.7</version>
     <packaging>maven-plugin</packaging>
 
     <name>Asciidoctor Maven Plugin and Doxia Parser</name>
