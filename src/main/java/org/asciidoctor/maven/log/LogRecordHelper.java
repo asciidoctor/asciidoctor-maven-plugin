@@ -14,8 +14,11 @@ public class LogRecordHelper {
     public static final String ASCIIDOCTOR_LOG_FORMAT = "asciidoctor: %s: %s: line %s: %s";
 
     /**
-     * Formats the logRecords in a similar manner to original Asciidoctor.
+     * Formats the logRecord in a similar manner to original Asciidoctor.
      * Note: prints the absolute path of the file.
+     *
+     * @param logRecord Asciidoctor logRecord to format
+     * @return Asciidoctor-like formatted string
      */
     public static String format(LogRecord logRecord) {
         final Cursor cursor = logRecord.getCursor();
@@ -23,8 +26,12 @@ public class LogRecordHelper {
     }
 
     /**
-     * Formats the logRecords in a similar manner to original Asciidoctor.
+     * Formats the logRecord in a similar manner to original Asciidoctor.
      * Note: prints the relative path of the file to `sourceDirectory`.
+     *
+     * @param logRecord       Asciidoctor logRecord to format
+     * @param sourceDirectory source directory of the converted AsciiDoc document
+     * @return Asciidoctor-like formatted string
      */
     public static String format(LogRecord logRecord, File sourceDirectory) {
         final Cursor cursor = logRecord.getCursor();

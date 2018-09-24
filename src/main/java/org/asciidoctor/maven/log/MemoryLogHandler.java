@@ -39,7 +39,10 @@ public class MemoryLogHandler implements LogHandler {
     }
 
     /**
-     * Returns LogRecords that are equal or above the severity level
+     * Returns LogRecords that are equal or above the severity level.
+     *
+     * @param severity Asciidoctor severity level
+     * @return list of filtered logRecords
      */
     public List<LogRecord> filter(Severity severity) {
         // FIXME: find better name or replace with stream
@@ -52,7 +55,10 @@ public class MemoryLogHandler implements LogHandler {
     }
 
     /**
-     * Returns LogRecords whose message contains text
+     * Returns LogRecords whose message contains text.
+     *
+     * @param text text to search for in the LogRecords
+     * @return list of filtered logRecords
      */
     public List<LogRecord> filter(String text) {
         final List<LogRecord> records = new ArrayList<>();
@@ -64,7 +70,11 @@ public class MemoryLogHandler implements LogHandler {
     }
 
     /**
-     * Returns LogRecords that are equal or above the severity level & whose message contains text
+     * Returns LogRecords that are equal or above the severity level and whose message contains text.
+     *
+     * @param severity Asciidoctor severity level
+     * @param text     text to search for in the LogRecords
+     * @return list of filtered logRecords
      */
     public List<LogRecord> filter(Severity severity, String text) {
         final List<LogRecord> records = new ArrayList<>();
