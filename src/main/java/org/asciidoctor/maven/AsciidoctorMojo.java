@@ -584,6 +584,8 @@ public class AsciidoctorMojo extends AbstractMojo {
      * Maven sets it as an absolute path relative to project root.
      * Using a string circumvents it.
      * Maven properties (e.g. ${project.build.directory}) are resolved as string into absolute paths.
+     *
+     * @param outputFile output file path
      */
     public void setOutputFile(String outputFile) {
         this.outputFile = new File(outputFile);

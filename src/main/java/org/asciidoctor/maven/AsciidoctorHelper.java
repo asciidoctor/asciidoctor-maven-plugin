@@ -25,6 +25,9 @@ public class AsciidoctorHelper {
     /**
      * Adds attributes from a {@link Map} into a {@link AttributesBuilder} taking care of Maven's XML parsing special
      * cases like toggles, nulls, etc.
+     *
+     * @param attributes        map of Asciidoctor attributes
+     * @param attributesBuilder AsciidoctorJ AttributesBuilder
      */
     public static void addAttributes(final Map<String, Object> attributes, AttributesBuilder attributesBuilder) {
         // TODO Figure out how to reliably set other values (like boolean values, dates, times, etc)
@@ -36,6 +39,10 @@ public class AsciidoctorHelper {
     /**
      * Adds an attribute into a {@link AttributesBuilder} taking care of Maven's XML parsing special cases like
      * toggles toggles, nulls, etc.
+     *
+     * @param attribute         Asciidoctor attribute name
+     * @param value             Asciidoctor attribute value
+     * @param attributesBuilder AsciidoctorJ AttributesBuilder
      */
     public static void addAttribute(String attribute, Object value, AttributesBuilder attributesBuilder) {
         // NOTE Maven interprets an empty value as null, so we need to explicitly convert it to empty string (see #36)
