@@ -71,15 +71,52 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         file.text.contains('<p>Unresolved directive in document-with-missing-include.adoc - include::unexistingdoc.adoc[]</p>')
 
         and: 'all messages (ERR & WARN) are logged as info'
-        def consoleOutput = newOut.toString()
-        consoleOutput.contains(fixOSseparator('[info] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 3: include file not found:'))
-        consoleOutput.contains(fixOSseparator('[info] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 5: include file not found:'))
-        consoleOutput.contains(fixOSseparator('[info] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 9: include file not found:'))
-        consoleOutput.contains(fixOSseparator('[info] asciidoctor: WARN: errors/document-with-missing-include.adoc: line 25: no callout found for <1>'))
+        def consoleOutput = newOut.toString().readLines().findAll { it.startsWith('[info] asciidoctor') }
+        consoleOutput[0].startsWith(fixOSseparator('[info] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 3: include file not found:'))
+        consoleOutput[1].startsWith(fixOSseparator('[info] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 5: include file not found:'))
+        consoleOutput[2].startsWith(fixOSseparator('[info] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 9: include file not found:'))
+        consoleOutput[3].startsWith(fixOSseparator('[info] asciidoctor: WARN: errors/document-with-missing-include.adoc: line 25: no callout found for <1>'))
 
         cleanup:
         System.setOut(originalOut)
     }
+
+    def "should not fail & log errors as INFO when outputToConsole is set and doc contains messages without cursor"() {
+        setup:
+        def originalOut = System.out
+        def newOut = new ByteArrayOutputStream()
+        System.setOut(new PrintStream(newOut))
+
+        String sourceDocument = 'errors/document-with-invalid-reference.adoc'
+        File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
+        File outputDir = new File("target/asciidoctor-output/${System.currentTimeMillis()}")
+        def handler = new LogHandler()
+        handler.outputToConsole = true
+
+        when:
+        AsciidoctorMojo mojo = new AsciidoctorMojo()
+        mojo.backend = 'html'
+        mojo.sourceDirectory = srcDir
+        mojo.sourceDocumentName = sourceDocument
+        mojo.outputDirectory = outputDir
+        mojo.headerFooter = true
+        mojo.attributes['toc'] = null
+        mojo.logHandler = handler
+        mojo.execute()
+
+        then: 'output file exists & shows include error'
+        def file = new File(outputDir, 'document-with-invalid-reference.html')
+        file.exists()
+
+        and: 'all messages (WARN) are logged as info'
+        def consoleOutput = newOut.toString().readLines().findAll { it.startsWith('[info] asciidoctor') }
+        consoleOutput[0].startsWith('[info] asciidoctor: WARN: invalid reference: ../path/some-file.adoc')
+        consoleOutput[1].startsWith('[info] asciidoctor: WARN: invalid reference: section-id')
+
+        cleanup:
+        System.setOut(originalOut)
+    }
+
 
     def "should fail when logHandler failIf = WARNING"() {
         setup:

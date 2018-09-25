@@ -43,8 +43,9 @@ public class TestLogHandlerService implements LogHandler {
     private void writeLine(String message) {
         try {
             logFile.write(message.getBytes());
+            logFile.write("\n".getBytes());
             logFile.flush();
-            logFile.close();
+            // logFile.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

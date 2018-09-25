@@ -1,0 +1,7 @@
+= My Document
+
+== Code example
+
+Missing file reference to <<../path/some-file.adoc,the lost doc>>.
+
+Missing section reference to <<section-id,the lost doc>>.
