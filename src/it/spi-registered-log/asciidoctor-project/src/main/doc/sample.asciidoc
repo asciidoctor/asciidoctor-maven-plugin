@@ -27,3 +27,5 @@ NOTE: This is test, only a test.
 == Missing include
 
 include::something.adoc[]
+
+<<invalid,reference>>

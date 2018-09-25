@@ -11,7 +11,9 @@ import java.io.IOException;
  */
 public class LogRecordHelper {
 
-    public static final String ASCIIDOCTOR_LOG_FORMAT = "asciidoctor: %s: %s: line %s: %s";
+    // includes replacers for cursor (file & line)
+    public static final String ASCIIDOCTOR_FULL_LOG_FORMAT = "asciidoctor: %s: %s: line %s: %s";
+    public static final String ASCIIDOCTOR_SIMPLE_LOG_FORMAT = "asciidoctor: %s: %s";
 
     /**
      * Formats the logRecord in a similar manner to original Asciidoctor.
@@ -22,7 +24,7 @@ public class LogRecordHelper {
      */
     public static String format(LogRecord logRecord) {
         final Cursor cursor = logRecord.getCursor();
-        return String.format(ASCIIDOCTOR_LOG_FORMAT, logRecord.getSeverity(), cursor.getFile(), cursor.getLineNumber(), logRecord.getMessage());
+        return String.format(ASCIIDOCTOR_FULL_LOG_FORMAT, logRecord.getSeverity(), cursor.getFile(), cursor.getLineNumber(), logRecord.getMessage());
     }
 
     /**
@@ -35,15 +37,21 @@ public class LogRecordHelper {
      */
     public static String format(LogRecord logRecord, File sourceDirectory) {
         final Cursor cursor = logRecord.getCursor();
-        String relativePath;
+        String relativePath = "";
         try {
-            relativePath = new File(cursor.getFile()).getCanonicalPath()
-                    .substring(sourceDirectory.getCanonicalPath().length() + 1);
+            if (cursor != null) {
+                relativePath = new File(cursor.getFile()).getCanonicalPath()
+                        .substring(sourceDirectory.getCanonicalPath().length() + 1);
+            }
         } catch (IOException e) {
             // use the absolute path as fail-safe
             relativePath = cursor.getFile();
         }
-        return String.format(ASCIIDOCTOR_LOG_FORMAT, logRecord.getSeverity(), relativePath, cursor.getLineNumber(), logRecord.getMessage());
+        return relativePath.length() > 0 ?
+                String.format(ASCIIDOCTOR_FULL_LOG_FORMAT, logRecord.getSeverity(), relativePath, cursor.getLineNumber(), logRecord.getMessage())
+                :
+                String.format(ASCIIDOCTOR_SIMPLE_LOG_FORMAT, logRecord.getSeverity(), logRecord.getMessage())
+                ;
     }
 
 }
