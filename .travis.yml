@@ -4,8 +4,11 @@ language: java
 before_script:
   - export MAVEN_SKIP_RC=true
 jdk:
+  - oraclejdk10
   - oraclejdk9
   - oraclejdk8
+  - openjdk10
+  - openjdk9
   - openjdk8
   - openjdk7
 # skip installation step entirely
