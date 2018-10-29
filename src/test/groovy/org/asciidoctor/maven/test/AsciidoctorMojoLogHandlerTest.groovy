@@ -42,6 +42,35 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         file.text.contains('<p>Unresolved directive in document-with-missing-include.adoc - include::unexistingdoc.adoc[]</p>')
     }
 
+    def "should show Asciidoctor messages as info by default"() {
+        setup:
+        def originalOut = System.out
+        def newOut = new ByteArrayOutputStream()
+        System.setOut(new PrintStream(newOut))
+        String sourceDocument = 'errors/document-with-missing-include.adoc'
+        File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
+        File outputDir = new File("target/asciidoctor-output/${System.currentTimeMillis()}")
+
+        when:
+        AsciidoctorMojo mojo = new AsciidoctorMojo()
+        mojo.backend = 'html'
+        mojo.sourceDirectory = srcDir
+        mojo.sourceDocumentName = sourceDocument
+        mojo.outputDirectory = outputDir
+        mojo.headerFooter = true
+        mojo.attributes['toc'] = null
+        mojo.execute()
+
+        then:
+        def messageLies = newOut.toString()
+                .split('\n')
+                .findAll { it.contains('asciidoctor:') }
+        messageLies.size() == 4
+
+        cleanup:
+        System.setOut(originalOut)
+    }
+
     def "should not fail & log errors as INFO when outputToConsole is set"() {
         setup:
         def originalOut = System.out

@@ -231,7 +231,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         final Set<File> dirs = new HashSet<File>();
 
         // register LogHandler to capture asciidoctor messages
-        final Boolean outputToConsole = logHandler == null ? Boolean.TRUE : logHandler.getOutputToConsole();
+        final Boolean outputToConsole = logHandler.getOutputToConsole() == null ? Boolean.TRUE : logHandler.getOutputToConsole();
         final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(outputToConsole, sourceDirectory, getLog());
         if (!sourceFiles.isEmpty()) {
             asciidoctor.registerLogHandler(memoryLogHandler);
