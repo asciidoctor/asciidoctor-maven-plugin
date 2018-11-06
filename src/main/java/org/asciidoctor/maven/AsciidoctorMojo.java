@@ -460,7 +460,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     }
 
     protected void renderFile(Asciidoctor asciidoctor, Map<String, Object> options, File f) {
-        asciidoctor.renderFile(f, options);
+        asciidoctor.convertFile(f, options);
         logRenderedFile(f);
     }
 

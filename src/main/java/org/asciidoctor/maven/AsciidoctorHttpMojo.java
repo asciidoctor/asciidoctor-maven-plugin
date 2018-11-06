@@ -48,7 +48,7 @@ public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
 
     @Override
     protected void renderFile(final Asciidoctor asciidoctorInstance, final Map<String, Object> options, final File f) {
-        asciidoctorInstance.renderFile(f, options);
+        asciidoctorInstance.convertFile(f, options);
 
         if (autoReloadInterval > 0 && backend.toLowerCase().startsWith("html")) {
             final String filename = f.getName();
@@ -82,7 +82,7 @@ public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
                 }
             }
         } else {
-            asciidoctorInstance.renderFile(f, options);
+            asciidoctorInstance.convertFile(f, options);
         }
 
         logRenderedFile(f);
