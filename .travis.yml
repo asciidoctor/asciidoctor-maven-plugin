@@ -1,5 +1,3 @@
-dist: trusty
-sudo: false
 language: java
 before_script:
   - export MAVEN_SKIP_RC=true
