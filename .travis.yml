@@ -1,3 +1,4 @@
+dist: trusty
 language: java
 before_script:
   - export MAVEN_SKIP_RC=true
