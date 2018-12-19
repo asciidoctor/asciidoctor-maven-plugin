@@ -658,3 +658,10 @@ Automatically add version details to header and footer to all documents.
 </configuration>
 -----
 <1> Add `maven.build.timestamp.format` to the pom's properties section to set a custom date format.
+
+=== Show Asciidoctor version
+
+If you are not sure what version of the Asciidoctor converter is being used.
+You can obtain it using the version attribute like in the example blow.
+
+ Asciidoctor version: {asciidoctor-version}
