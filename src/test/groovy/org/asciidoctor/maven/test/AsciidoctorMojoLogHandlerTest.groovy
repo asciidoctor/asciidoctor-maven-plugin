@@ -110,6 +110,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         System.setOut(originalOut)
     }
 
+    @spock.lang.Ignore("Broke in 1.5.8: https://github.com/asciidoctor/asciidoctor/issues/2722")
     def "should not fail & log errors as INFO when outputToConsole is set and doc contains messages without cursor"() {
         setup:
         def originalOut = System.out

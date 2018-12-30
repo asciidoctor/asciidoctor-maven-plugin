@@ -268,6 +268,12 @@ For example, set `include` to fail on any issue related to included files regard
 <2> Build will fail on any message of severity `DEBUG` or higher, that includes all.
 All matching messages will appear as ERROR in Maven output.
 
+[WARNING]
+====
+Due to link:https://github.com/asciidoctor/asciidoctor/issues/2722[issue #2722] in `asciidoctor`, versions >1.5.8.x of AsciidoctorJ cause internal reference warning messages not to be shown.
+Note however that using versions 1.5.7 and below may show false positives messages which may affect the build.
+====
+
 ==== Built-in attributes
 
 There are various attributes Asciidoctor recognizes.
