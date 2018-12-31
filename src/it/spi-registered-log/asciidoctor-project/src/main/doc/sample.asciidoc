@@ -28,4 +28,5 @@ NOTE: This is test, only a test.
 
 include::something.adoc[]
 
+// use <enableVerbose> to show this message
 <<invalid,reference>>

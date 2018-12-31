@@ -163,6 +163,9 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     protected MavenSession session;
 
+    @Parameter(property = AsciidoctorMaven.PREFIX + "verbose")
+    protected boolean enableVerbose = false;
+
     @Parameter
     private LogHandler logHandler = new LogHandler();
 
@@ -200,6 +203,9 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
 
         final Asciidoctor asciidoctor = getAsciidoctorInstance(gemPath);
+        if (enableVerbose) {
+            asciidoctor.requireLibrary("enable_verbose.rb");
+        }
 
         asciidoctor.requireLibraries(requires);
 

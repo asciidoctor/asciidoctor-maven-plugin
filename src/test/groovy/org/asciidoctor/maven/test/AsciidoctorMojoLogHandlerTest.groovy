@@ -9,9 +9,6 @@ import spock.lang.Specification
 import static org.asciidoctor.log.Severity.ERROR
 import static org.asciidoctor.log.Severity.WARN
 
-/**
- *
- */
 class AsciidoctorMojoLogHandlerTest extends Specification {
 
     static final String DEFAULT_SOURCE_DIRECTORY = 'target/test-classes/src/asciidoctor'
@@ -110,8 +107,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         System.setOut(originalOut)
     }
 
-    @spock.lang.Ignore("Broke in 1.5.8: https://github.com/asciidoctor/asciidoctor/issues/2722")
-    def "should not fail & log errors as INFO when outputToConsole is set and doc contains messages without cursor"() {
+    def "should not fail & log errors as INFO when outputToConsole is set and doc contains messages without cursor and verbose is enabled"() {
         setup:
         def originalOut = System.out
         def newOut = new ByteArrayOutputStream()
@@ -131,6 +127,45 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         mojo.outputDirectory = outputDir
         mojo.headerFooter = true
         mojo.attributes['toc'] = null
+        mojo.enableVerbose = true
+        mojo.logHandler = handler
+        mojo.execute()
+
+        then: 'output file exists & shows include error'
+        def file = new File(outputDir, 'document-with-invalid-reference.html')
+        file.exists()
+
+        and: 'all messages (WARN) are logged as info'
+        def consoleOutput = newOut.toString().readLines().findAll { it.startsWith('[info] asciidoctor') }
+        consoleOutput[0].startsWith('[info] asciidoctor: WARN: invalid reference: ../path/some-file.adoc')
+        consoleOutput[1].startsWith('[info] asciidoctor: WARN: invalid reference: section-id')
+
+        cleanup:
+        System.setOut(originalOut)
+    }
+
+    def "should not fail & log verbose errors when gempath is set"() {
+        setup:
+        def originalOut = System.out
+        def newOut = new ByteArrayOutputStream()
+        System.setOut(new PrintStream(newOut))
+
+        String sourceDocument = 'errors/document-with-invalid-reference.adoc'
+        File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
+        File outputDir = new File("target/asciidoctor-output/${System.currentTimeMillis()}")
+        def handler = new LogHandler()
+        handler.outputToConsole = true
+
+        when:
+        AsciidoctorMojo mojo = new AsciidoctorMojo()
+        mojo.backend = 'html'
+        mojo.sourceDirectory = srcDir
+        mojo.sourceDocumentName = sourceDocument
+        mojo.outputDirectory = outputDir
+        mojo.headerFooter = true
+        mojo.attributes['toc'] = null
+        mojo.enableVerbose = true
+        mojo.gemPath = System.getProperty("java.io.tmpdir")
         mojo.logHandler = handler
         mojo.execute()
 
