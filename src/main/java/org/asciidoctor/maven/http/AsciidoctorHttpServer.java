@@ -33,6 +33,7 @@ import io.netty.util.concurrent.Future;
 import org.apache.maven.plugin.logging.Log;
 
 public class AsciidoctorHttpServer {
+    private static final String HOST = "localhost";
     private static final int THREAD_NUMBER = 3;
     private static final String THREAD_PREFIX = "asciidoctor-thread-";
 
