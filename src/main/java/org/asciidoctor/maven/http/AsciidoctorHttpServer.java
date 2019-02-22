@@ -33,7 +33,6 @@ import io.netty.util.concurrent.Future;
 import org.apache.maven.plugin.logging.Log;
 
 public class AsciidoctorHttpServer {
-    private static final String HOST = "localhost";
     private static final int THREAD_NUMBER = 3;
     private static final String THREAD_PREFIX = "asciidoctor-thread-";
 
@@ -87,7 +86,7 @@ public class AsciidoctorHttpServer {
                             .addLast("asciidoctor", new AsciidoctorHandler(workDir, defaultPage));
                     }
                 })
-                .bind(HOST, port).addListener(new ChannelFutureListener() {
+                .bind(port).addListener(new ChannelFutureListener() {
                 @Override
                 public void operationComplete(final ChannelFuture future) throws Exception {
                     if (!future.isSuccess()) {
