@@ -87,7 +87,7 @@ public class AsciidoctorHttpServer {
                             .addLast("asciidoctor", new AsciidoctorHandler(workDir, defaultPage));
                     }
                 })
-                .bind(HOST, port).addListener(new ChannelFutureListener() {
+                .bind(port).addListener(new ChannelFutureListener() {
                 @Override
                 public void operationComplete(final ChannelFuture future) throws Exception {
                     if (!future.isSuccess()) {
