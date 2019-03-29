@@ -26,7 +26,8 @@ import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
 import org.asciidoctor.*;
-import org.asciidoctor.internal.JRubyRuntimeContext;
+import org.asciidoctor.jruby.*;
+import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
 import org.asciidoctor.maven.extensions.AsciidoctorJExtensionRegistry;
@@ -392,13 +393,13 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected Asciidoctor getAsciidoctorInstance(String gemPath) throws MojoExecutionException {
         Asciidoctor asciidoctor = null;
         if (gemPath == null) {
-            asciidoctor = Asciidoctor.Factory.create();
+            asciidoctor = AsciidoctorJRuby.Factory.create();
         } else {
             // Replace Windows path separator to avoid paths with mixed \ and /.
             // This happens for instance when setting: <gemPath>${project.build.directory}/gems-provided</gemPath>
             // because the project's path is converted to string.
             String normalizedGemPath = (File.separatorChar == '\\') ? gemPath.replaceAll("\\\\", "/") : gemPath;
-            asciidoctor = Asciidoctor.Factory.create(normalizedGemPath);
+            asciidoctor = AsciidoctorJRuby.Factory.create(normalizedGemPath);
         }
 
         Ruby rubyInstance = null;

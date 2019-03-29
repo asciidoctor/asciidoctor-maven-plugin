@@ -2,7 +2,7 @@ package org.asciidoctor.maven.test.processors;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.extension.JavaExtensionRegistry;
-import org.asciidoctor.extension.spi.ExtensionRegistry;
+import org.asciidoctor.jruby.extension.spi.ExtensionRegistry;
 
 public class AutoregisteredProcessor implements ExtensionRegistry {
 

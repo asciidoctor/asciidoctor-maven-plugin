@@ -15,7 +15,7 @@ public class FailingPreprocessor extends Preprocessor {
     }
 
     @Override
-    public PreprocessorReader process(Document document, PreprocessorReader reader) {
+    public void process(Document document, PreprocessorReader reader) {
         System.out.println("Processing "+ this.getClass().getSimpleName());
         System.out.println("Processing: blocks found: " + document.getBlocks().size());
         throw new RuntimeException("That's all folks");

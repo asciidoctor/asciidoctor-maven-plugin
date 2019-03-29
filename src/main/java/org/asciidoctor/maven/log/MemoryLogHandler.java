@@ -48,7 +48,7 @@ public class MemoryLogHandler implements LogHandler {
         // FIXME: find better name or replace with stream
         final List<LogRecord> records = new ArrayList<>();
         for (LogRecord record : this.records) {
-            if (record.getSeverity().getRubyId() >= severity.getRubyId())
+            if (record.getSeverity().ordinal() >= severity.ordinal())
                 records.add(record);
         }
         return records;
@@ -79,7 +79,7 @@ public class MemoryLogHandler implements LogHandler {
     public List<LogRecord> filter(Severity severity, String text) {
         final List<LogRecord> records = new ArrayList<>();
         for (LogRecord record : this.records) {
-            if (record.getSeverity().getRubyId() >= severity.getRubyId() && record.getMessage().contains(text))
+            if (record.getSeverity().ordinal() >= severity.ordinal() && record.getMessage().contains(text))
                 records.add(record);
         }
         return records;
