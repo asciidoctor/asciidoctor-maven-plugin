@@ -11,7 +11,7 @@ This works using jRuby 9k or >= 1.7.22.
 
 [source,xml]
 ----
-include::https://raw.githubusercontent.com/cometd/cometd/master/pom.xml[]
+include::https://raw.githubusercontent.com/cometd/cometd/4.0.x/pom.xml[]
 ----
 
 
