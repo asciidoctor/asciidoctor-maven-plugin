@@ -3,8 +3,11 @@ language: java
 before_script:
   - export MAVEN_SKIP_RC=true
 jdk:
+  - oraclejdk11
+  # oraclejdk10 not included for being deprecated
   - oraclejdk9
   - oraclejdk8
+  - openjdk11
   - openjdk10
   - openjdk9
   - openjdk8
