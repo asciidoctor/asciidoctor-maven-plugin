@@ -1,13 +1,13 @@
 package org.asciidoctor.maven.test.processors;
 
+import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.extension.BlockProcessor;
+import org.asciidoctor.extension.Reader;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.asciidoctor.ast.AbstractBlock;
-import org.asciidoctor.extension.BlockProcessor;
-import org.asciidoctor.extension.Reader;
 
 public class YellBlockProcessor extends BlockProcessor {
 
@@ -22,7 +22,7 @@ public class YellBlockProcessor extends BlockProcessor {
     }
 
     @Override
-    public Object process(AbstractBlock parent, Reader reader, Map<String, Object> attributes) {
+    public Object process(StructuralNode parent, Reader reader, Map<String, Object> attributes) {
         List<String> lines = reader.readLines();
         String upperLines = null;
         for (String line : lines) {
@@ -33,7 +33,7 @@ public class YellBlockProcessor extends BlockProcessor {
             }
         }
 
-        return createBlock(parent, "paragraph", Arrays.asList(upperLines), attributes, new HashMap<Object, Object>());
+        return createBlock(parent, "paragraph", Arrays.asList(upperLines), attributes, new HashMap<>());
     }
 
 }

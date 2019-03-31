@@ -4,6 +4,7 @@ import org.apache.maven.plugin.MojoExecutionException
 import org.asciidoctor.maven.AsciidoctorMojo
 import org.asciidoctor.maven.log.LogHandler
 import org.asciidoctor.maven.test.plexus.MockPlexusContainer
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import static org.asciidoctor.log.Severity.ERROR
@@ -107,6 +108,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         System.setOut(originalOut)
     }
 
+    @Ignore
     def "should not fail & log errors as INFO when outputToConsole is set and doc contains messages without cursor and verbose is enabled"() {
         setup:
         def originalOut = System.out
@@ -144,6 +146,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         System.setOut(originalOut)
     }
 
+    @Ignore
     def "should not fail & log verbose errors when gempath is set"() {
         setup:
         def originalOut = System.out

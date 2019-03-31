@@ -4,7 +4,10 @@ import groovy.io.FileType
 import org.apache.commons.io.FileUtils
 import org.apache.maven.model.Resource
 import org.asciidoctor.maven.AsciidoctorMojo
+import org.asciidoctor.maven.extensions.ExtensionConfiguration
 import org.asciidoctor.maven.test.plexus.MockPlexusContainer
+import org.asciidoctor.maven.test.processors.RequireCheckerTreeprocessor
+import org.junit.Ignore
 import spock.lang.Specification
 
 /**
@@ -196,11 +199,14 @@ class AsciidoctorMojoTest extends Specification {
             mojo.outputDirectory = outputDir
             mojo.sourceDirectory = srcDir
             mojo.sourceDocumentName = 'sample.asciidoc'
+            def extension = new ExtensionConfiguration()
+            extension.className = RequireCheckerTreeprocessor.class.name
+            mojo.extensions.add(extension)
             mojo.execute()
         then:
             outputDir.list().toList().isEmpty() == false
             outputDir.list().toList().contains('sample.html')
-            assert "constant".equals(org.asciidoctor.internal.JRubyRuntimeContext.get().evalScriptlet('defined? ::DateTime').toString())
+            new File(outputDir, 'sample.html').text.contains("${RequireCheckerTreeprocessor.simpleName} was here")
     }
 
     def "embedding resources"() {
