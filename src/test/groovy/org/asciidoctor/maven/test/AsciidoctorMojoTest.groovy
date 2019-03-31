@@ -79,6 +79,94 @@ class AsciidoctorMojoTest extends Specification {
             text.contains('<pre class="CodeRay highlight">')
     }
 
+    def "should convert a html with a single template"() {
+        setup:
+            final def templatesPath = 'target/test-classes/templates/'
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
+            File outputDir = new File('target/asciidoctor-output')
+
+            if (!outputDir.exists())
+              outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.backend = 'html5'
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'sample.asciidoc'
+            mojo.resources = [new Resource(directory: '.', excludes: ['**/**'])]
+            mojo.outputDirectory = outputDir
+            mojo.templateDir = new File(templatesPath, 'set-1')
+
+            mojo.execute()
+        then:
+            outputDir.list().toList().isEmpty() == false
+            outputDir.list().toList().contains('sample.html')
+
+            File sampleOutput = new File('sample.html', outputDir)
+            sampleOutput.length() > 0
+            String text = sampleOutput.getText()
+            text.contains('custom-admonition-block')
+            !text.contains('custom-block-style')
+    }
+
+    def "should convert a html with a custom templates"() {
+        setup:
+            final def templatesPath = 'target/test-classes/templates/'
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
+            File outputDir = new File('target/asciidoctor-output')
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.backend = 'html5'
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'sample.asciidoc'
+            mojo.resources = [new Resource(directory: '.', excludes: ['**/**'])]
+            mojo.outputDirectory = outputDir
+            mojo.templateDirs = [new File(templatesPath, 'set-1'), new File(templatesPath, 'set-2')]
+
+            mojo.execute()
+        then:
+            outputDir.list().toList().isEmpty() == false
+            outputDir.list().toList().contains('sample.html')
+
+            File sampleOutput = new File('sample.html', outputDir)
+            sampleOutput.length() > 0
+            String text = sampleOutput.getText()
+            text.contains('custom-admonition-block')
+            text.contains('custom-block-style')
+    }
+
+    def "should convert a html merging templateDir & templateDirs"() {
+        setup:
+            final def templatesPath = 'target/test-classes/templates/'
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
+            File outputDir = new File('target/asciidoctor-output')
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.backend = 'html5'
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'sample.asciidoc'
+            mojo.resources = [new Resource(directory: '.', excludes: ['**/**'])]
+            mojo.outputDirectory = outputDir
+            mojo.templateDir = new File(templatesPath, 'set-1')
+            mojo.templateDirs = [new File(templatesPath, 'set-2')]
+
+            mojo.execute()
+        then:
+            outputDir.list().toList().isEmpty() == false
+            outputDir.list().toList().contains('sample.html')
+
+            File sampleOutput = new File('sample.html', outputDir)
+            sampleOutput.length() > 0
+            String text = sampleOutput.getText()
+            text.contains('custom-admonition-block')
+            text.contains('custom-block-style')
+    }
+
     def "docinfo file should be ignored html"() {
         setup:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)

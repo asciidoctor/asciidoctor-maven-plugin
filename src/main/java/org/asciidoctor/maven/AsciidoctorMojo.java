@@ -26,7 +26,10 @@ import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
 import org.asciidoctor.*;
-import org.asciidoctor.jruby.*;
+import org.asciidoctor.jruby.AbstractDirectoryWalker;
+import org.asciidoctor.jruby.AsciiDocDirectoryWalker;
+import org.asciidoctor.jruby.AsciidoctorJRuby;
+import org.asciidoctor.jruby.DirectoryWalker;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
@@ -111,6 +114,9 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "templateDir", required = false)
     protected File templateDir;
+
+    @Parameter(property = AsciidoctorMaven.PREFIX + "templateDirs", required = false)
+    protected List<File> templateDirs = new ArrayList<>();
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "templateEngine", required = false)
     protected String templateEngine;
@@ -530,6 +536,9 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         if (templateDir != null)
             optionsBuilder.templateDir(templateDir);
+
+        if (templateDirs != null)
+            optionsBuilder.templateDirs(templateDirs.toArray(new File[]{}));
     }
 
     protected void setAttributesOnBuilder(AttributesBuilder attributesBuilder) throws MojoExecutionException {
@@ -636,14 +645,6 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setHeaderFooter(boolean headerFooter) {
         this.headerFooter = headerFooter;
-    }
-
-    public File getTemplateDir() {
-        return templateDir;
-    }
-
-    public void setTemplateDir(File templateDir) {
-        this.templateDir = templateDir;
     }
 
     public String getTemplateEngine() {

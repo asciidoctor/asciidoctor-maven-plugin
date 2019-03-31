@@ -1,0 +1,7 @@
+.custom-admonition-block id=@id class=[(attr :name),role]
+table: tr
+  td.icon
+  td.content
+    - if title?
+      .title=title
+    =content
