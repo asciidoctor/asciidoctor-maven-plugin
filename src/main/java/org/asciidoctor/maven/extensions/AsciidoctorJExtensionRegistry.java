@@ -19,8 +19,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /**
- * Class responsible for registering extensions. This class is inspired by
- * {@link org.asciidoctor.extension.spi.ExtensionRegistry}
+ * Class responsible for registering extensions.
  * 
  * @author abelsromero
  * */
