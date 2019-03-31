@@ -185,6 +185,13 @@ doctype:: defaults to `null` (which trigger's Asciidoctor's default of `article`
 eruby:: defaults to erb, the version used in JRuby
 headerFooter:: defaults to `true`
 templateDir:: directory of Tilt-compatible templates to be used instead of the default built-in templates, disabled by default (`null`)
+templateDirs:: list of directories of Tilt-compatible templates to be used instead of the default built-in templates, empty by default
++
+[NOTE]
+====
+Order is not relevant for templateDir and templateDirs.
+Values set in both properties are merged together into a single final list.
+====
 templateEngine:: template engine to use for the custom converter templates, disabled by default (`null`)
 templateCache:: enables the built-in cache used by the template converter when reading the source of template files.
 Only relevant if the `:template_dir` option is specified, defaults to `true`
