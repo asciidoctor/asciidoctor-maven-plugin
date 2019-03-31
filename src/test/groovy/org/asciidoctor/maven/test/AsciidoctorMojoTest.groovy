@@ -7,7 +7,7 @@ import org.asciidoctor.maven.AsciidoctorMojo
 import org.asciidoctor.maven.extensions.ExtensionConfiguration
 import org.asciidoctor.maven.test.plexus.MockPlexusContainer
 import org.asciidoctor.maven.test.processors.RequireCheckerTreeprocessor
-import org.junit.Ignore
+import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
@@ -644,6 +644,7 @@ class AsciidoctorMojoTest extends Specification {
      *
      * Test checks that an exception is not thrown.
      */
+    @Ignore("until compatibility with AsciidoctorJ is confirmed")
     def 'code highlighting - pygments'() {
         setup:
             File srcDir = new File('src/test/resources/src/asciidoctor')
@@ -656,6 +657,10 @@ class AsciidoctorMojoTest extends Specification {
             mojo.sourceHighlighter = 'pygments'
             mojo.sourceDocumentName = new File('main-document.adoc')
             mojo.backend = 'html'
+            mojo.attributes = [
+                    'pygments-style': 'monokai',
+                    'pygments-linenums-mode': 'inline'
+            ]
             mojo.execute()
 
         then:

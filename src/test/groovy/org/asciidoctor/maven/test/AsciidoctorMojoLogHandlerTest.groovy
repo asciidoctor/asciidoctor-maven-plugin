@@ -139,6 +139,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
 
         and: 'all messages (WARN) are logged as info'
         def consoleOutput = newOut.toString().readLines().findAll { it.startsWith('[info] asciidoctor') }
+        consoleOutput.size() == 2
         consoleOutput[0].startsWith('[info] asciidoctor: WARN: invalid reference: ../path/some-file.adoc')
         consoleOutput[1].startsWith('[info] asciidoctor: WARN: invalid reference: section-id')
 
@@ -178,6 +179,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
 
         and: 'all messages (WARN) are logged as info'
         def consoleOutput = newOut.toString().readLines().findAll { it.startsWith('[info] asciidoctor') }
+        consoleOutput.size() == 2
         consoleOutput[0].startsWith('[info] asciidoctor: WARN: invalid reference: ../path/some-file.adoc')
         consoleOutput[1].startsWith('[info] asciidoctor: WARN: invalid reference: section-id')
 

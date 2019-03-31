@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.asciidoctor</groupId>
@@ -61,12 +62,10 @@
         <project.execution.environment>JavaSE-1.8</project.execution.environment>
         <spock.version>0.7-groovy-2.0</spock.version>
         <groovy.version>2.1.3</groovy.version>
-        <!--<asciidoctorj.version>1.6.0-SNAPSHOT</asciidoctorj.version>-->
         <asciidoctorj.version>2.0.0-RC.1</asciidoctorj.version>
-        <!--<asciidoctorj.version>1.5.7</asciidoctorj.version>-->
+        <jruby.version>9.2.6.0</jruby.version>
         <maven.coveralls.plugin.version>4.3.0</maven.coveralls.plugin.version>
         <maven.jacoco.plugin.version>0.8.2</maven.jacoco.plugin.version>
-        <jruby.version>9.2.6.0</jruby.version>
         <maven.plugin.plugin.version>3.5</maven.plugin.plugin.version>
         <maven.project.version>3.0.5</maven.project.version>
         <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
@@ -92,7 +91,7 @@
     <dependencies>
         <dependency>
             <groupId>org.jruby</groupId>
-            <artifactId>jruby-complete</artifactId>
+            <artifactId>jruby</artifactId>
             <version>${jruby.version}</version>
         </dependency>
         <dependency>
@@ -472,11 +471,12 @@
         </profile>
     </profiles>
 
-  <distributionManagement>
-    <repository>
-        <id>bintray-asciidoctor-maven-asciidoctor-maven-plugin</id>
-        <name>asciidoctor-maven-asciidoctor-maven-plugin</name>
-        <url>https://api.bintray.com/maven/asciidoctor/maven/asciidoctor-maven-plugin</url>
-     </repository>
+    <distributionManagement>
+        <repository>
+            <id>bintray-asciidoctor-maven-asciidoctor-maven-plugin</id>
+            <name>asciidoctor-maven-asciidoctor-maven-plugin</name>
+            <url>https://api.bintray.com/maven/asciidoctor/maven/asciidoctor-maven-plugin</url>
+        </repository>
     </distributionManagement>
+
 </project>
