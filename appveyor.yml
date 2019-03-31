@@ -6,6 +6,8 @@ environment:
   matrix:
     - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
     - JAVA_HOME: C:\Program Files\Java\jdk9
+    - JAVA_HOME: C:\Program Files\Java\jdk10
+    - JAVA_HOME: C:\Program Files\Java\jdk11
 install:
   - ps: |
       Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -17,8 +19,7 @@ install:
   - cmd: SET M2_HOME=C:\maven\apache-maven-%MAVEN_VERSION%
   # Prepend Java entry, remove Ruby entry (C:\Ruby193\bin;) from PATH
   - cmd: SET PATH=%M2_HOME%\bin;%JAVA_HOME%\bin;%PATH:C:\Ruby193\bin;=%;
-  # `https.protocols` is required by Java7 since June 18 because TSL 1.0 & 1.1 support was removed
-  - cmd: SET MAVEN_OPTS=-XX:MaxPermSize=1g -Xmx2g -Dhttps.protocols=TLSv1.2
+  - cmd: SET MAVEN_OPTS=-XX:MaxPermSize=1g -Xmx2g
   - cmd: SET JAVA_OPTS=-XX:MaxPermSize=1g -Xmx2g
   - cmd: mvn --version
   - cmd: java -version
