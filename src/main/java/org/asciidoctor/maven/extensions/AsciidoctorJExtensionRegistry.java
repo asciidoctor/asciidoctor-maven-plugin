@@ -1,29 +1,18 @@
 package org.asciidoctor.maven.extensions;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.extension.BlockMacroProcessor;
-import org.asciidoctor.extension.BlockProcessor;
-import org.asciidoctor.extension.DocinfoProcessor;
-import org.asciidoctor.extension.IncludeProcessor;
-import org.asciidoctor.extension.InlineMacroProcessor;
-import org.asciidoctor.extension.JavaExtensionRegistry;
-import org.asciidoctor.extension.Postprocessor;
-import org.asciidoctor.extension.Preprocessor;
-import org.asciidoctor.extension.Processor;
-import org.asciidoctor.extension.Treeprocessor;
+import org.asciidoctor.extension.*;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /**
  * Class responsible for registering extensions. This class is inspired by
- * {@link org.asciidoctor.jruby.extension.spi.ExtensionRegistry}
- * 
+ * {@link org.asciidoctor.extension.spi.ExtensionRegistry}
+ *
  * @author abelsromero
- * */
+ */
 public class AsciidoctorJExtensionRegistry implements ExtensionRegistry {
 
     private JavaExtensionRegistry javaExtensionRegistry;
@@ -34,7 +23,7 @@ public class AsciidoctorJExtensionRegistry implements ExtensionRegistry {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.asciidoctor.maven.processors.ProcessorRegistry#register(java.lang.String, java.lang.String)
      */
@@ -85,7 +74,7 @@ public class AsciidoctorJExtensionRegistry implements ExtensionRegistry {
     }
 
     private void register(Object target, String methodName, Object... args) throws MojoExecutionException {
-        for (Method method: javaExtensionRegistry.getClass().getMethods()) {
+        for (Method method : javaExtensionRegistry.getClass().getMethods()) {
 
             if (isMethodMatching(method, methodName, args)) {
                 try {

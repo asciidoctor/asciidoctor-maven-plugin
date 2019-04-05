@@ -9,7 +9,6 @@ jdk:
   - openjdk10
   - openjdk9
   - openjdk8
-  - openjdk7
 # skip installation step entirely
 install: true
 script:
