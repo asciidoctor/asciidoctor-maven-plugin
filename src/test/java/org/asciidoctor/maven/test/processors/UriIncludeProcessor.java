@@ -1,5 +1,9 @@
 package org.asciidoctor.maven.test.processors;
 
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.extension.IncludeProcessor;
+import org.asciidoctor.extension.PreprocessorReader;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,16 +12,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-import org.asciidoctor.ast.DocumentRuby;
-import org.asciidoctor.extension.IncludeProcessor;
-import org.asciidoctor.extension.PreprocessorReader;
-
 public class UriIncludeProcessor extends IncludeProcessor {
 
     public UriIncludeProcessor(Map<String, Object> config) {
         super(config);
-        System.out.println(this.getClass().getSimpleName() + "(" 
-              + this.getClass().getSuperclass().getSimpleName() + ") initialized");
+        System.out.println(this.getClass().getSimpleName() + "("
+                + this.getClass().getSuperclass().getSimpleName() + ") initialized");
     }
 
     @Override
@@ -26,10 +26,10 @@ public class UriIncludeProcessor extends IncludeProcessor {
     }
 
     @Override
-    public void process(DocumentRuby document, PreprocessorReader reader, String target,
-            Map<String, Object> attributes) {
+    public void process(Document document, PreprocessorReader reader, String target,
+                        Map<String, Object> attributes) {
 
-        System.out.println("Processing "+ this.getClass().getSimpleName());
+        System.out.println("Processing " + this.getClass().getSimpleName());
 
         StringBuilder content = readContent(target);
         reader.push_include(content.toString(), target, target, 1, attributes);
@@ -63,4 +63,4 @@ public class UriIncludeProcessor extends IncludeProcessor {
         return content;
     }
 
-  }
+}

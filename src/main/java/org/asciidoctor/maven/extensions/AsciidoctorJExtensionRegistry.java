@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 /**
  * Class responsible for registering extensions. This class is inspired by
- * {@link org.asciidoctor.extension.spi.ExtensionRegistry}
+ * {@link org.asciidoctor.jruby.extension.spi.ExtensionRegistry}
  * 
  * @author abelsromero
  * */

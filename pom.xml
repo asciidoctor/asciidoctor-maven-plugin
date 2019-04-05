@@ -62,11 +62,11 @@
         <spock.version>0.7-groovy-2.0</spock.version>
         <groovy.version>2.1.3</groovy.version>
         <!--<asciidoctorj.version>1.6.0-SNAPSHOT</asciidoctorj.version>-->
-        <asciidoctorj.version>1.5.8</asciidoctorj.version>
+        <asciidoctorj.version>1.6.2</asciidoctorj.version>
         <!--<asciidoctorj.version>1.5.7</asciidoctorj.version>-->
         <maven.coveralls.plugin.version>4.3.0</maven.coveralls.plugin.version>
         <maven.jacoco.plugin.version>0.8.2</maven.jacoco.plugin.version>
-        <jruby.version>9.1.17.0</jruby.version>
+        <jruby.version>9.2.6.0</jruby.version>
         <maven.plugin.plugin.version>3.5</maven.plugin.plugin.version>
         <maven.project.version>3.0.5</maven.project.version>
         <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
