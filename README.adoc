@@ -155,7 +155,7 @@ When converting to HTML, images must be copied to the output location so that th
         </includes>
     </resource>
     ...
-<resources>
+</resources>
 ----
 outputDirectory:: relative paths are added to the project root path. Defaults to [.path]_${project.build.directory}/generated-docs_.
 outputFile:: defaults to `null`, used to override the name of the generated output file, can be a relative or absolute path.
