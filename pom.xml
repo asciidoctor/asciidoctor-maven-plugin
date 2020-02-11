@@ -426,7 +426,7 @@
                     </snapshots>
                     <id>central-bintray</id>
                     <name>bintray</name>
-                    <url>http://dl.bintray.com/lordofthejars/maven</url>
+                    <url>https://dl.bintray.com/lordofthejars/maven</url>
                 </repository>
             </repositories>
         </profile>
