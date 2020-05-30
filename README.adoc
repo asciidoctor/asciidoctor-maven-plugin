@@ -180,7 +180,7 @@ relativeBaseDir:: only used when baseDir is not set, enables to specify that eac
 Internally, for each AsciiDoc source, sets `baseDir` to the same path as the source file.
 Defaults to `false`
 imagesDir:: defaults to `images`, which will be relative to the directory containing the source files
-backend:: defaults to `docbook`
+backend:: defaults to `html5`
 doctype:: defaults to `null` (which trigger's Asciidoctor's default of `article`)
 eruby:: defaults to erb, the version used in JRuby
 headerFooter:: defaults to `true`
