@@ -100,7 +100,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.ATTRIBUTES, required = false)
     protected String attributesChain = "";
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Options.BACKEND, defaultValue = "docbook", required = true)
+    @Parameter(property = AsciidoctorMaven.PREFIX + Options.BACKEND, defaultValue = "html5", required = true)
     protected String backend = "";
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.DOCTYPE, required = false)
