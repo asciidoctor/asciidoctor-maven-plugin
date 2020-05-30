@@ -112,7 +112,6 @@ doctype:: 默认为 `null` （它将触发 Asciidoctor 的默认值 `article`）
 eruby:: 默认为 erb，被 JRuby 使用
 // eruby:: defaults to erb, the version used in JRuby
 headerFooter:: 默认为 `true`
-templateDir:: 默认不可用，默认值为 `null`
 templateEngine:: 默认不可用
 sourceHighlighter:: 启用语法高亮，设置语法高亮器（当前仅支持 `coderay` 和 `highlight.js`）
 attributes:: 包含传递给 Asciidoctor 的属性的 `Map<String,Object>`，默认为 `null`

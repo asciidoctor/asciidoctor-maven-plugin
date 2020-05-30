@@ -112,9 +112,6 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "headerFooter", required = false)
     protected boolean headerFooter = true;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "templateDir", required = false)
-    protected File templateDir;
-
     @Parameter(property = AsciidoctorMaven.PREFIX + "templateDirs", required = false)
     protected List<File> templateDirs = new ArrayList<>();
 
@@ -533,9 +530,6 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         if (templateEngine != null)
             optionsBuilder.templateEngine(templateEngine);
-
-        if (templateDir != null)
-            optionsBuilder.templateDir(templateDir);
 
         if (templateDirs != null)
             optionsBuilder.templateDirs(templateDirs.toArray(new File[]{}));
