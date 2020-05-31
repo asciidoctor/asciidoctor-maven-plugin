@@ -121,9 +121,6 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "templateCache")
     protected boolean templateCache = true;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceHighlighter", required = false)
-    protected String sourceHighlighter;
-
     @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.TITLE, required = false)
     protected String title = "";
 
@@ -533,10 +530,6 @@ public class AsciidoctorMojo extends AbstractMojo {
     }
 
     protected void setAttributesOnBuilder(AttributesBuilder attributesBuilder) throws MojoExecutionException {
-        if (sourceHighlighter != null) {
-            attributesBuilder.sourceHighlighter(sourceHighlighter);
-        }
-
         if (embedAssets) {
             attributesBuilder.linkCss(false);
             attributesBuilder.dataUri(true);
@@ -640,14 +633,6 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setTemplateEngine(String templateEngine) {
         this.templateEngine = templateEngine;
-    }
-
-    public String getSourceHighlighter() {
-        return sourceHighlighter;
-    }
-
-    public void setSourceHighlighter(String sourceHighlighter) {
-        this.sourceHighlighter = sourceHighlighter;
     }
 
     public String getTitle() {

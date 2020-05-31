@@ -193,7 +193,6 @@ Values set in both properties are merged together into a single final list.
 templateEngine:: template engine to use for the custom converter templates, disabled by default (`null`)
 templateCache:: enables the built-in cache used by the template converter when reading the source of template files.
 Only relevant if the `:template_dir` option is specified, defaults to `true`
-sourceHighlighter:: enables and sets the source highlighter (currently `coderay` or `highlight.js` are supported)
 sourcemap:: adds file and line number information to each parsed block (`lineno` and `source_location` attributes), defaults to `false`
 catalogAssets:: tells the parser to capture images and links in the reference table available via the `references` property on the document AST object (experimental), defaults to `false`
 attributes:: a `Map<String,Object>` of Asciidoctor attributes to pass for conversion, defaults to `null`
@@ -202,6 +201,7 @@ attributes:: a `Map<String,Object>` of Asciidoctor attributes to pass for conver
 ----
 <attributes>
     <imagesdir>images</imagesdir>
+    <source-highlighter>coderay</source-highlighter>
 </attributes>
 ----
 embedAssets:: Embedd the CSS file, etc into the output, defaults to `false`
@@ -434,12 +434,9 @@ An example of this setup is below:
     <configuration>
         <sourceDirectory>src/main/asciidoc</sourceDirectory>
         <headerFooter>true</headerFooter>
-        <imagesDir>../resources/images</imagesDir> <!--1-->
     </configuration>
 </plugin>
 ----
-<1> `imagesDir` should be relative to the source directory.
-It defaults to `images` but in this example the images used in the docs are also used elsewhere in the project.
 
 Any configuration specified outside the executions section is inherited by each execution.
 This allows an easier way of defining common configuration options.

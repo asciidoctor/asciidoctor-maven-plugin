@@ -59,11 +59,11 @@ class AsciidoctorMojoTest extends Specification {
             mojo.resources = [new Resource(directory: '.', excludes: ['**/**'])]
             mojo.outputDirectory = outputDir
             mojo.headerFooter = true
-            mojo.sourceHighlighter = 'coderay'
             // IMPORTANT Maven can only assign string values or null, so we have to emulate the value precisely in the test!
             // Believe it or not, null is the equivalent of writing <toc/> in the XML configuration
             mojo.attributes['toc'] = null
             mojo.attributes['linkcss!'] = ''
+            mojo.attributes['source-highlighter'] = 'coderay'
             mojo.execute()
         then:
             outputDir.list().toList().isEmpty() == false
@@ -608,9 +608,9 @@ class AsciidoctorMojoTest extends Specification {
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.sourceHighlighter = 'coderay'
             mojo.sourceDocumentName = new File('main-document.adoc')
             mojo.backend = 'html'
+            mojo.attributes['source-highlighter'] = 'coderay'
             mojo.execute()
 
         then:
@@ -631,9 +631,9 @@ class AsciidoctorMojoTest extends Specification {
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.sourceHighlighter = 'highlight.js'
             mojo.sourceDocumentName = new File('main-document.adoc')
             mojo.backend = 'html'
+            mojo.attributes['source-highlighter'] = 'highlight.js'
             mojo.execute()
 
         then:
@@ -654,9 +654,9 @@ class AsciidoctorMojoTest extends Specification {
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.sourceHighlighter = 'prettify'
             mojo.sourceDocumentName = new File('main-document.adoc')
             mojo.backend = 'html'
+            mojo.attributes['source-highlighter'] = 'prettify'
             mojo.execute()
 
         then:
@@ -680,10 +680,10 @@ class AsciidoctorMojoTest extends Specification {
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.sourceHighlighter = 'pygments'
             mojo.sourceDocumentName = new File('main-document.adoc')
             mojo.backend = 'html'
             mojo.attributes = [
+                    'source-highlighter': 'pygments',
                     'pygments-style': 'monokai',
                     'pygments-linenums-mode': 'inline'
             ]
@@ -710,9 +710,9 @@ class AsciidoctorMojoTest extends Specification {
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.sourceHighlighter = 'nonExistent'
             mojo.sourceDocumentName = new File('main-document.adoc')
             mojo.backend = 'html'
+            mojo.attributes['source-highlighter'] = 'nonExistent'
             mojo.execute()
 
         then:
@@ -787,7 +787,6 @@ class AsciidoctorMojoTest extends Specification {
             mojo.outputDirectory = outputDir
             mojo.preserveDirectories = true
             mojo.relativeBaseDir = true
-            mojo.sourceHighlighter = 'prettify'
             mojo.attributes = ['icons':'font']
             mojo.execute()
 
@@ -830,7 +829,6 @@ class AsciidoctorMojoTest extends Specification {
             mojo.outputDirectory = outputDir
             mojo.preserveDirectories = true
             mojo.relativeBaseDir = true
-            mojo.sourceHighlighter = 'coderay'
             mojo.attributes = ['icons':'font']
             mojo.execute()
 
@@ -872,7 +870,6 @@ class AsciidoctorMojoTest extends Specification {
             mojo.backend = 'html5'
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.sourceHighlighter = 'coderay'
             mojo.execute()
 
         then:
@@ -915,7 +912,6 @@ class AsciidoctorMojoTest extends Specification {
             mojo.preserveDirectories = true
 			mojo.baseDir = srcDir
             //mojo.relativeBaseDir = true
-            mojo.sourceHighlighter = 'prettify'
             mojo.attributes = ['icons':'font']
             mojo.execute()
 
@@ -959,7 +955,6 @@ class AsciidoctorMojoTest extends Specification {
             mojo.outputDirectory = outputDir
             mojo.preserveDirectories = false
             mojo.relativeBaseDir = true
-            mojo.sourceHighlighter = 'prettify'
             mojo.attributes = ['icons':'font']
             mojo.execute()
 
@@ -1015,7 +1010,6 @@ class AsciidoctorMojoTest extends Specification {
             mojo.backend = 'html5'
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.sourceHighlighter = 'coderay'
             mojo.attributes = ['allow-uri-read':'true']
             mojo.resources = [[
                                   directory: '.',
@@ -1028,7 +1022,7 @@ class AsciidoctorMojoTest extends Specification {
             (new File(outputDir, 'github-include.html').text.contains('modelVersion'))
     }
 
-    def "command line attributes replace configurations"() {
+    def "command line attributes should replace configurations and attributes"() {
         setup:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output/command-line-options')
@@ -1041,8 +1035,8 @@ class AsciidoctorMojoTest extends Specification {
             mojo.sourceDirectory = srcDir
             mojo.sourceDocumentName = 'sample.asciidoc'
             mojo.outputDirectory = outputDir
-            mojo.sourceHighlighter = 'coderay'
             mojo.attributes['toc'] = 'left'
+            mojo.attributes['source-highlighter'] = 'coderay'
             // replace some options
             mojo.attributesChain = 'toc=right source-highlighter=highlight.js'
             mojo.execute()

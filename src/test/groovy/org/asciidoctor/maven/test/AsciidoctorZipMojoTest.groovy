@@ -70,7 +70,6 @@ class AsciidoctorZipMojoTest extends Specification {
             mojo.outputDirectory = outputDir
             mojo.preserveDirectories = true
             mojo.relativeBaseDir = true
-            mojo.sourceHighlighter = 'coderay'
             mojo.zipDestination = zip
             mojo.zip = true
             mojo.execute()
@@ -117,7 +116,6 @@ class AsciidoctorZipMojoTest extends Specification {
             mojo.backend = 'html5'
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.sourceHighlighter = 'coderay'
             mojo.zipDestination = zip
             mojo.zip = true
             mojo.execute()
@@ -148,7 +146,6 @@ class AsciidoctorZipMojoTest extends Specification {
 
         cleanup:
             FileUtils.deleteDirectory(outputDir)
-
     }
 
 }
