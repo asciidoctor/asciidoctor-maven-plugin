@@ -113,7 +113,6 @@ eruby:: 默认为 erb，被 JRuby 使用
 // eruby:: defaults to erb, the version used in JRuby
 headerFooter:: 默认为 `true`
 templateEngine:: 默认不可用
-sourceHighlighter:: 启用语法高亮，设置语法高亮器（当前仅支持 `coderay` 和 `highlight.js`）
 attributes:: 包含传递给 Asciidoctor 的属性的 `Map<String,Object>`，默认为 `null`
 embedAssets:: 内嵌的 CSS 文件，指向输出，默认为 `false`
 // embedAssets:: Embedd the CSS file, etc into the output, defaults to `false`
