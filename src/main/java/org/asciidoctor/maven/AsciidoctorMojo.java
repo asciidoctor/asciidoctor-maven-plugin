@@ -121,9 +121,6 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "templateCache")
     protected boolean templateCache = true;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "imagesDir", required = false)
-    protected String imagesDir = "images@"; // '@' Allows override by :imagesdir: document attribute
-
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceHighlighter", required = false)
     protected String sourceHighlighter;
 
@@ -545,10 +542,6 @@ public class AsciidoctorMojo extends AbstractMojo {
             attributesBuilder.dataUri(true);
         }
 
-        if (imagesDir != null) {
-            attributesBuilder.imagesDir(imagesDir);
-        }
-
         if ("skip".equals(attributeMissing) || "drop".equals(attributeMissing) || "drop-line".equals(attributeMissing)) {
             attributesBuilder.attributeMissing(attributeMissing);
         } else {
@@ -647,14 +640,6 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setTemplateEngine(String templateEngine) {
         this.templateEngine = templateEngine;
-    }
-
-    public String getImagesDir() {
-        return imagesDir;
-    }
-
-    public void setImagesDir(String imagesDir) {
-        this.imagesDir = imagesDir;
     }
 
     public String getSourceHighlighter() {

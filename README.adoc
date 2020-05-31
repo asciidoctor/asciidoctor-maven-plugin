@@ -179,7 +179,6 @@ See the following example
 relativeBaseDir:: only used when baseDir is not set, enables to specify that each AsciiDoc file must search for its resources in the same folder (for example, included files).
 Internally, for each AsciiDoc source, sets `baseDir` to the same path as the source file.
 Defaults to `false`
-imagesDir:: defaults to `images`, which will be relative to the directory containing the source files
 backend:: defaults to `html5`
 doctype:: defaults to `null` (which trigger's Asciidoctor's default of `article`)
 eruby:: defaults to erb, the version used in JRuby
@@ -197,7 +196,14 @@ Only relevant if the `:template_dir` option is specified, defaults to `true`
 sourceHighlighter:: enables and sets the source highlighter (currently `coderay` or `highlight.js` are supported)
 sourcemap:: adds file and line number information to each parsed block (`lineno` and `source_location` attributes), defaults to `false`
 catalogAssets:: tells the parser to capture images and links in the reference table available via the `references` property on the document AST object (experimental), defaults to `false`
-attributes:: a `Map<String,Object>` of attributes to pass to Asciidoctor, defaults to `null`
+attributes:: a `Map<String,Object>` of Asciidoctor attributes to pass for conversion, defaults to `null`
++
+[source,xml]
+----
+<attributes>
+    <imagesdir>images</imagesdir>
+</attributes>
+----
 embedAssets:: Embedd the CSS file, etc into the output, defaults to `false`
 gemPaths:: enables to specify the location to one or more gem installation directories (same as GEM_PATH environment var), `empty` by default
 requires:: a `List<String>` to specify additional Ruby libraries not packaged in AsciidoctorJ, `empty` by default

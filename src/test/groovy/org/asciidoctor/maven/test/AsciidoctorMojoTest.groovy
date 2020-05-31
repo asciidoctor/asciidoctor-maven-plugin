@@ -249,7 +249,6 @@ class AsciidoctorMojoTest extends Specification {
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.attributes["icons"] = "font"
             mojo.embedAssets = true
-            mojo.imagesDir = ''
             mojo.outputDirectory = outputDir
             mojo.sourceDirectory = srcDir
             mojo.sourceDocumentName = 'sample-embedded.adoc'
@@ -280,7 +279,6 @@ class AsciidoctorMojoTest extends Specification {
         AsciidoctorMojo mojo = new AsciidoctorMojo()
         mojo.attributes["icons"] = "font"
         mojo.embedAssets = true
-        mojo.imagesDir = ''
         mojo.outputDirectory = outputDir
         mojo.outputFile = outputFile
         mojo.sourceDirectory = srcDir
@@ -312,7 +310,6 @@ class AsciidoctorMojoTest extends Specification {
         AsciidoctorMojo mojo = new AsciidoctorMojo()
         mojo.attributes["icons"] = "font"
         mojo.embedAssets = true
-        mojo.imagesDir = ''
         mojo.outputDirectory = outputDir
         mojo.outputFile = outputFile
         mojo.sourceDirectory = srcDir
@@ -490,7 +487,7 @@ class AsciidoctorMojoTest extends Specification {
         !text.contains('class="toc2"')
     }
 
-    def 'test_imageDir_properly_passed'() {
+    def 'should set images directory as attribute'() {
         given:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output-imageDir')
@@ -503,12 +500,12 @@ class AsciidoctorMojoTest extends Specification {
             mojo.sourceDirectory = srcDir
             mojo.sourceDocumentName = 'imageDir.adoc'
             mojo.backend = 'html'
-            mojo.imagesDir = 'images-dir'
+            mojo.attributes = [ imagesdir:'custom-images-dir']
             mojo.execute()
         then:
             File sampleOutput = new File(outputDir, 'imageDir.html')
             String text = sampleOutput.getText()
-            text.contains('<img src="images-dir/my-cool-image.jpg" alt="my cool image">')
+            text.contains('<img src="custom-images-dir/my-cool-image.jpg" alt="my cool image">')
     }
 
     def 'includes_test'() {
@@ -571,7 +568,7 @@ class AsciidoctorMojoTest extends Specification {
         mojo.execute()
         then:
         File mainDocumentOutput = new File(outputDir, 'main.html')
-        File imageFile = new File(outputDir, 'images/halliburton_lab.jpg')
+        File imageFile = new File(outputDir, 'halliburton_lab.jpg')
         imageFile.exists();
         String text = mainDocumentOutput.getText()
         text.contains("<p>Here&#8217;s an image:</p>")
@@ -788,7 +785,6 @@ class AsciidoctorMojoTest extends Specification {
             mojo.backend = 'html5'
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.imagesDir = '.'
             mojo.preserveDirectories = true
             mojo.relativeBaseDir = true
             mojo.sourceHighlighter = 'prettify'
@@ -916,7 +912,6 @@ class AsciidoctorMojoTest extends Specification {
             mojo.backend = 'html5'
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.imagesDir = '.'
             mojo.preserveDirectories = true
 			mojo.baseDir = srcDir
             //mojo.relativeBaseDir = true
@@ -962,7 +957,6 @@ class AsciidoctorMojoTest extends Specification {
             mojo.backend = 'html'
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            mojo.imagesDir = '.'
             mojo.preserveDirectories = false
             mojo.relativeBaseDir = true
             mojo.sourceHighlighter = 'prettify'
