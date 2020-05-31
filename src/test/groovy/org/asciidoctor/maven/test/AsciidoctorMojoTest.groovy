@@ -1065,8 +1065,12 @@ class AsciidoctorMojoTest extends Specification {
             mojo.backend = 'html5'
             mojo.outputDirectory = outputDir
             mojo.execute()
+
         then:
-            newOut.toString().contains("sourceDirectory ${mojo.sourceDirectory} does not exist. Skip processing")
+            def output = newOut.toString()
+            println output
+            output.contains("sourceDirectory ${mojo.sourceDirectory} does not exist")
+            output.contains("No sourceDirectory found. Skipping processing")
             !outputDir.exists()
         cleanup:
             System.setOut(originalOut)
