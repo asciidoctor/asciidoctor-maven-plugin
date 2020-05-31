@@ -107,7 +107,7 @@ preserveDirectories:: 指明是否渲染成和源文件相同的目录结构。�
 ----
 relativeBaseDir:: 只有在 `baseDir` 没有指明的情况下才使用。启用则指明每一个 AsciiDoc 文件都必须从同一个目录下搜索它的资源文件（例如被包含的文件）。在内部，对于每一个 AsciiDoc 源文件，设置 `baseDir` 与源文件相同的路径。默认为 `false`。
 imagesDir:: 默认指向 `images`，它是相对于源码目录的相对路径。
-backend:: 默认是 `docbook`。
+backend:: 默认是 `html5`。
 doctype:: 默认为 `null` （它将触发 Asciidoctor 的默认值 `article`）
 eruby:: 默认为 erb，被 JRuby 使用
 // eruby:: defaults to erb, the version used in JRuby
