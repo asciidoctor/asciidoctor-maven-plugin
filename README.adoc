@@ -112,7 +112,9 @@ As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` 
 
 There are several configuration options that the Asciidoctor Maven plugin accepts, which parallel the options in Asciidoctor:
 
-sourceDirectory:: defaults to [.path]_$\{basedir}/src/main/asciidoc_
+sourceDirectory:: path where source files are located.
+By default checks for [.path]_$\{basedir}/src/docs/asciidoc_, [.path]_$\{basedir}/src/asciidoc_ or [.path]_$\{basedir}/src/main/asciidoc_ in that order.
+When a custom value is set, no other paths are checked.
 
 [NOTE]
 ====

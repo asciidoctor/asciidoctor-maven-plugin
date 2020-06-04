@@ -46,7 +46,10 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
+
+import static org.asciidoctor.maven.SourceDirectoryFinder.DEFAULT_SOURCE_DIR;
 
 
 /**
@@ -61,7 +64,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project.build.sourceEncoding}")
     protected String encoding;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDirectory", defaultValue = "${basedir}/src/main/asciidoc", required = true)
+    @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDirectory", defaultValue = "${basedir}/" + DEFAULT_SOURCE_DIR, required = true)
     protected File sourceDirectory;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "outputDirectory", defaultValue = "${project.build.directory}/generated-docs", required = true)
@@ -184,11 +187,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             throw new MojoExecutionException("Required parameter 'asciidoctor.sourceDirectory' not set.");
         }
 
-        if (!sourceDirectory.exists()) {
-            getLog().info("sourceDirectory " + sourceDirectory.getPath() + " does not exist. Skip processing");
-            return;
-        }
-
+        if (!initSourceDirectory()) return;
         ensureOutputExists();
 
         // Validate resources to avoid errors later on
@@ -286,6 +285,32 @@ public class AsciidoctorMojo extends AbstractMojo {
         if (synchronizations != null && !synchronizations.isEmpty()) {
             synchronize();
         }
+    }
+
+    private boolean initSourceDirectory() {
+        Optional<File> sourceDirCandidate = new SourceDirectoryFinder(sourceDirectory, project.getBasedir(),
+                new Consumer<File>() {
+                    // cannot use lambda syntax: https://issues.apache.org/jira/browse/MNG-6930
+                    @Override
+                    public void accept(File candidate) {
+                        String candidateName = candidate.toString();
+                        if (isRelativePath(candidateName)) candidateName = candidateName.substring(2);
+                        getLog().info("sourceDirectory " + candidateName + " does not exist");
+                    }
+
+                    private boolean isRelativePath(String candidateName) {
+                        return candidateName.startsWith("./") || candidateName.startsWith(".\\");
+                    }
+                })
+                .find();
+
+        if (sourceDirCandidate.isPresent()) {
+            this.sourceDirectory = sourceDirCandidate.get();
+        } else {
+            getLog().info("No sourceDirectory found. Skipping processing");
+            return false;
+        }
+        return true;
     }
 
     /**

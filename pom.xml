@@ -155,6 +155,12 @@
             <artifactId>doxia-module-xhtml</artifactId>
             <version>${doxia.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.16.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
