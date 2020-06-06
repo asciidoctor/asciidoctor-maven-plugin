@@ -20,11 +20,7 @@ import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.project.MavenProject;
-import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.SafeMode;
-import org.asciidoctor.maven.AsciidoctorHelper;
+import org.asciidoctor.*;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -34,9 +30,6 @@ import javax.inject.Provider;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is used by <a href="https://maven.apache.org/doxia/overview.html">the Doxia framework</a>
@@ -70,8 +63,7 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
             if ((source = IOUtil.toString(reader)) == null) {
                 source = "";
             }
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             getLog().error("Could not read AsciiDoc source: " + ex.getLocalizedMessage());
             return;
         }
@@ -80,13 +72,15 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
 
         Xpp3Dom siteConfig = getSiteConfig(project);
         File siteDirectory = resolveSiteDirectory(project, siteConfig);
-        OptionsBuilder options = processAsciiDocConfig(
-                project,
-                siteConfig,
-                initOptions(project, siteDirectory),
-                initAttributes(project, siteDirectory));
+        SiteConversionConfiguration conversionConfig = new SiteConversionConfigurationParser(project)
+                .processAsciiDocConfig(siteConfig, defaultOptions(siteDirectory), defaultAttributes());
+
+        for (String require : conversionConfig.getRequires()) {
+            requireLibrary(require);
+        }
+
         // QUESTION should we keep OptionsBuilder & AttributesBuilder separate for call to convertAsciiDoc?
-        sink.rawText(convertAsciiDoc(source, options));
+        sink.rawText(convertAsciiDoc(source, conversionConfig.getOptions()));
     }
 
     protected Xpp3Dom getSiteConfig(MavenProject project) {
@@ -104,94 +98,17 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
         return siteDirectory;
     }
 
-    protected OptionsBuilder initOptions(MavenProject project, File siteDirectory) {
+    protected OptionsBuilder defaultOptions(File siteDirectory) {
         return OptionsBuilder.options()
                 .backend("xhtml")
                 .safe(SafeMode.UNSAFE)
                 .baseDir(new File(siteDirectory, ROLE_HINT));
     }
 
-    protected AttributesBuilder initAttributes(MavenProject project, File siteDirectory) {
+    protected AttributesBuilder defaultAttributes() {
         return AttributesBuilder.attributes()
-            .attribute("idprefix", "@")
-            .attribute("showtitle", "@");
-    }
-
-    protected OptionsBuilder processAsciiDocConfig(MavenProject project, Xpp3Dom siteConfig, OptionsBuilder options, AttributesBuilder attributes) {
-        if (siteConfig == null) {
-            return options.attributes(attributes);
-        }
-
-        Xpp3Dom asciidocConfig = siteConfig.getChild("asciidoc");
-        if (asciidocConfig == null) {
-            return options.attributes(attributes);
-        }
-
-        if (project.getProperties() != null) {
-            for ( Map.Entry<Object, Object> entry : project.getProperties().entrySet() ) {
-                attributes.attribute(((String) entry.getKey()).replaceAll("\\.", "-"), entry.getValue());
-            }
-        }
-
-
-        for (Xpp3Dom asciidocOpt : asciidocConfig.getChildren()) {
-            String optName = asciidocOpt.getName();
-            if ("attributes".equals(optName)) {
-                for (Xpp3Dom asciidocAttr : asciidocOpt.getChildren()) {
-                    AsciidoctorHelper.addAttribute(asciidocAttr.getName(), asciidocAttr.getValue(), attributes);
-                }
-            }
-            else if ("requires".equals(optName)) {
-                Xpp3Dom[] requires = asciidocOpt.getChildren("require");
-                // supports variant:
-                // <requires>
-                //     <require>time</require>
-                // </requires>
-                if (requires.length > 0) {
-                    for (Xpp3Dom require : requires) {
-                        requireLibrary(require.getValue());
-                    }
-                }
-                else {
-                    // supports variant:
-                    // <requires>time, base64</requires>
-                    for (String require : asciidocOpt.getValue().split(",")) {
-                        requireLibrary(require);
-                    }
-                }
-            }
-            else if ("templateDir".equals(optName) || "template_dir".equals(optName)) {
-                options.templateDir(resolveProjectDir(project, asciidocOpt.getValue()));
-            }
-            else if ("templateDirs".equals(optName) || "template_dirs".equals(optName)) {
-                List<File> templateDirs = new ArrayList<File>();
-                for (Xpp3Dom dir : asciidocOpt.getChildren("dir")) {
-                    templateDirs.add(resolveProjectDir(project, dir.getValue()));
-                }
-                if (!templateDirs.isEmpty()) {
-                    options.templateDirs(templateDirs.toArray(new File[templateDirs.size()]));
-                }
-            }
-            else if ("baseDir".equals(optName)) {
-                options.baseDir(resolveProjectDir(project, asciidocOpt.getValue()));
-            }
-            else {
-                options.option(optName.replaceAll("(?<!_)([A-Z])", "_$1").toLowerCase(), asciidocOpt.getValue());
-            }
-        }
-        return options.attributes(attributes);
-    }
-
-    protected String convertAsciiDoc(String source, OptionsBuilder options) {
-        return asciidoctor.convert(source, options);
-    }
-
-    protected File resolveProjectDir(MavenProject project, String path) {
-        File filePath = new File(path);
-        if (!filePath.isAbsolute()) {
-            filePath = new File(project.getBasedir(), filePath.toString());
-        }
-        return filePath;
+                .attribute("idprefix", "@")
+                .attribute("showtitle", "@");
     }
 
     private void requireLibrary(String require) {
@@ -203,4 +120,9 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
             }
         }
     }
+
+    protected String convertAsciiDoc(String source, Options options) {
+        return asciidoctor.convert(source, options);
+    }
+
 }
