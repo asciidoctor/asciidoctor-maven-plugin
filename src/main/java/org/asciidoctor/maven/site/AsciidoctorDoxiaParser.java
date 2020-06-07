@@ -24,6 +24,7 @@ import org.asciidoctor.*;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

@@ -11,6 +11,10 @@ public class Xpp3DoomBuilder {
         rootNode = currentNode = new Xpp3Dom(name);
     }
 
+    public static Xpp3DoomBuilder logHandler() {
+        return new Xpp3DoomBuilder("logHandler");
+    }
+
     public static Xpp3DoomBuilder siteNode() {
         return new Xpp3DoomBuilder("site");
     }
