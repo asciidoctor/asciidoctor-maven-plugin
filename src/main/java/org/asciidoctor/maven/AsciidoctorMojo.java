@@ -31,14 +31,13 @@ import org.asciidoctor.jruby.AsciiDocDirectoryWalker;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.jruby.DirectoryWalker;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
-import org.asciidoctor.log.LogRecord;
-import org.asciidoctor.log.Severity;
 import org.asciidoctor.maven.extensions.AsciidoctorJExtensionRegistry;
 import org.asciidoctor.maven.extensions.ExtensionConfiguration;
 import org.asciidoctor.maven.extensions.ExtensionRegistry;
 import org.asciidoctor.maven.io.AsciidoctorFileScanner;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordHelper;
+import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
 import org.jruby.Ruby;
 import org.sonatype.plexus.build.incremental.BuildContext;
@@ -235,7 +234,8 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         // register LogHandler to capture asciidoctor messages
         final Boolean outputToConsole = logHandler.getOutputToConsole() == null ? Boolean.TRUE : logHandler.getOutputToConsole();
-        final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(outputToConsole, sourceDirectory, getLog());
+        final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(outputToConsole, sourceDirectory,
+                logRecord -> getLog().info(LogRecordHelper.format(logRecord, sourceDirectory)));
         if (!sourceFiles.isEmpty()) {
             asciidoctor.registerLogHandler(memoryLogHandler);
             // disable default console output of AsciidoctorJ
@@ -249,36 +249,12 @@ public class AsciidoctorMojo extends AbstractMojo {
 
             renderFile(asciidoctor, optionsBuilder.asMap(), source);
 
-            // process log messages according to mojo configuration
-            if (logHandler.isSeveritySet() && logHandler.isContainsTextNotBlank()) {
-                final Severity severity = logHandler.getFailIf().getSeverity();
-                final String textToSearch = logHandler.getFailIf().getContainsText();
-
-                final List<LogRecord> records = memoryLogHandler.filter(severity, textToSearch);
-                if (records.size() > 0) {
-                    for (LogRecord record : records) {
-                        getLog().error(LogRecordHelper.format(record, sourceDirectory));
-                    }
-                    throw new MojoExecutionException(String.format("Found %s issue(s) matching severity %s or higher and text '%s'", records.size(), severity, textToSearch));
-                }
-            } else if (logHandler.isSeveritySet()) {
-                final Severity severity = logHandler.getFailIf().getSeverity();
-                final List<LogRecord> records = memoryLogHandler.filter(severity);
-                if (records.size() > 0) {
-                    for (LogRecord record : records) {
-                        getLog().error(LogRecordHelper.format(record, sourceDirectory));
-                    }
-                    throw new MojoExecutionException(String.format("Found %s issue(s) of severity %s or higher during rendering", records.size(), severity));
-                }
-            } else if (logHandler.isContainsTextNotBlank()) {
-                final String textToSearch = logHandler.getFailIf().getContainsText();
-                final List<LogRecord> records = memoryLogHandler.filter(textToSearch);
-                if (records.size() > 0) {
-                    for (LogRecord record : records) {
-                        getLog().error(LogRecordHelper.format(record, sourceDirectory));
-                    }
-                    throw new MojoExecutionException(String.format("Found %s issue(s) containing '%s'", records.size(), textToSearch));
-                }
+            try {
+                // process log messages according to mojo configuration
+                new LogRecordsProcessors(logHandler, sourceDirectory, errorMessage -> getLog().error(errorMessage))
+                        .processLogRecords(memoryLogHandler);
+            } catch (Exception exception) {
+                throw new MojoExecutionException(exception.getMessage());
             }
         }
 
@@ -289,18 +265,10 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     private boolean initSourceDirectory() {
         Optional<File> sourceDirCandidate = new SourceDirectoryFinder(sourceDirectory, project.getBasedir(),
-                new Consumer<File>() {
-                    // cannot use lambda syntax: https://issues.apache.org/jira/browse/MNG-6930
-                    @Override
-                    public void accept(File candidate) {
-                        String candidateName = candidate.toString();
-                        if (isRelativePath(candidateName)) candidateName = candidateName.substring(2);
-                        getLog().info("sourceDirectory " + candidateName + " does not exist");
-                    }
-
-                    private boolean isRelativePath(String candidateName) {
-                        return candidateName.startsWith("./") || candidateName.startsWith(".\\");
-                    }
+                candidate -> {
+                    String candidateName = candidate.toString();
+                    if (isRelativePath(candidateName)) candidateName = candidateName.substring(2);
+                    getLog().info("sourceDirectory " + candidateName + " does not exist");
                 })
                 .find();
 
@@ -311,6 +279,10 @@ public class AsciidoctorMojo extends AbstractMojo {
             return false;
         }
         return true;
+    }
+
+    private boolean isRelativePath(String candidateName) {
+        return candidateName.startsWith("./") || candidateName.startsWith(".\\");
     }
 
     /**

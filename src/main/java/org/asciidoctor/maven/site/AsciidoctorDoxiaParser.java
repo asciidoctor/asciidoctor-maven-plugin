@@ -21,16 +21,20 @@ import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.*;
+import org.asciidoctor.maven.log.LogHandler;
+import org.asciidoctor.maven.log.LogRecordHelper;
+import org.asciidoctor.maven.log.LogRecordsProcessors;
+import org.asciidoctor.maven.log.MemoryLogHandler;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
-import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.logging.Logger;
 
 /**
  * This class is used by <a href="https://maven.apache.org/doxia/overview.html">the Doxia framework</a>
@@ -70,18 +74,42 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
         }
 
         MavenProject project = mavenProjectProvider.get();
-
         Xpp3Dom siteConfig = getSiteConfig(project);
         File siteDirectory = resolveSiteDirectory(project, siteConfig);
+
         SiteConversionConfiguration conversionConfig = new SiteConversionConfigurationParser(project)
                 .processAsciiDocConfig(siteConfig, defaultOptions(siteDirectory), defaultAttributes());
-
         for (String require : conversionConfig.getRequires()) {
             requireLibrary(require);
         }
 
+        final LogHandler logHandler = getLogHandlerConfig(siteConfig);
+        final MemoryLogHandler memoryLogHandler = asciidoctorLoggingSetup(logHandler, siteDirectory);
         // QUESTION should we keep OptionsBuilder & AttributesBuilder separate for call to convertAsciiDoc?
-        sink.rawText(convertAsciiDoc(source, conversionConfig.getOptions()));
+        String asciidocHtml = convertAsciiDoc(source, conversionConfig.getOptions(), logHandler);
+        try {
+            // process log messages according to mojo configuration
+            new LogRecordsProcessors(logHandler, siteDirectory, errorMessage -> getLog().error(errorMessage))
+                    .processLogRecords(memoryLogHandler);
+        } catch (Exception exception) {
+            throw new ParseException(exception.getMessage());
+        }
+
+        sink.rawText(asciidocHtml);
+    }
+
+    private MemoryLogHandler asciidoctorLoggingSetup(LogHandler logHandler, File siteDirectory) {
+
+        final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(logHandler.getOutputToConsole(), siteDirectory,
+                logRecord -> getLog().info(LogRecordHelper.format(logRecord, siteDirectory)));
+        asciidoctor.registerLogHandler(memoryLogHandler);
+        // disable default console output of AsciidoctorJ
+        Logger.getLogger("asciidoctor").setUseParentHandlers(false);
+        return memoryLogHandler;
+    }
+
+    private LogHandler getLogHandlerConfig(Xpp3Dom siteConfig) {
+        return new SiteLogHandlerDeserializer().deserialize(siteConfig == null ? null : siteConfig.getChild("asciidoc"));
     }
 
     protected Xpp3Dom getSiteConfig(MavenProject project) {
@@ -122,7 +150,7 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
         }
     }
 
-    protected String convertAsciiDoc(String source, Options options) {
+    protected String convertAsciiDoc(String source, Options options, LogHandler logHandler) {
         return asciidoctor.convert(source, options);
     }
 
