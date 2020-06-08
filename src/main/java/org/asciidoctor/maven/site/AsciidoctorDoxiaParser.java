@@ -73,9 +73,9 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
             return;
         }
 
-        MavenProject project = mavenProjectProvider.get();
-        Xpp3Dom siteConfig = getSiteConfig(project);
-        File siteDirectory = resolveSiteDirectory(project, siteConfig);
+        final MavenProject project = mavenProjectProvider.get();
+        final Xpp3Dom siteConfig = getSiteConfig(project);
+        final File siteDirectory = resolveSiteDirectory(project, siteConfig);
 
         SiteConversionConfiguration conversionConfig = new SiteConversionConfigurationParser(project)
                 .processAsciiDocConfig(siteConfig, defaultOptions(siteDirectory), defaultAttributes());
@@ -109,7 +109,8 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
     }
 
     private LogHandler getLogHandlerConfig(Xpp3Dom siteConfig) {
-        return new SiteLogHandlerDeserializer().deserialize(siteConfig == null ? null : siteConfig.getChild("asciidoc"));
+        Xpp3Dom asciidoc = siteConfig == null ? null : siteConfig.getChild("asciidoc");
+        return new SiteLogHandlerDeserializer().deserialize(asciidoc);
     }
 
     protected Xpp3Dom getSiteConfig(MavenProject project) {

@@ -71,8 +71,6 @@ public class SiteConversionConfigurationParser {
                 for (Xpp3Dom asciidocAttr : asciidocOpt.getChildren()) {
                     AsciidoctorHelper.addAttribute(asciidocAttr.getName(), asciidocAttr.getValue(), presetAttributes);
                 }
-            } else if ("templateDir".equals(optName) || "template_dir".equals(optName)) {
-                presetOptions.templateDir(resolveProjectDir(project, asciidocOpt.getValue()));
             } else if ("templateDirs".equals(optName) || "template_dirs".equals(optName)) {
                 List<File> dirs = Arrays.stream(asciidocOpt.getChildren("dir"))
                         .filter(node -> isNotBlank(node.getValue()))
@@ -86,11 +84,7 @@ public class SiteConversionConfigurationParser {
             }
         }
 
-        return new
-
-                SiteConversionConfiguration(presetOptions.attributes(presetAttributes).
-
-                get(), gemsToRequire);
+        return new SiteConversionConfiguration(presetOptions.attributes(presetAttributes).get(), gemsToRequire);
     }
 
     private File resolveProjectDir(MavenProject project, String path) {

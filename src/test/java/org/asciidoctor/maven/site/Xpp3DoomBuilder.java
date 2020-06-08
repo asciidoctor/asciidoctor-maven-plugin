@@ -11,16 +11,16 @@ public class Xpp3DoomBuilder {
         rootNode = currentNode = new Xpp3Dom(name);
     }
 
-    public static Xpp3DoomBuilder logHandler() {
-        return new Xpp3DoomBuilder("logHandler");
-    }
-
     public static Xpp3DoomBuilder siteNode() {
         return new Xpp3DoomBuilder("site");
     }
 
     public static Xpp3DoomBuilder asciidocNode() {
         return siteNode().addChild("asciidoc");
+    }
+
+    public static Xpp3DoomBuilder logHandler() {
+        return new Xpp3DoomBuilder("asciidoc").addChild("logHandler");
     }
 
     public Xpp3DoomBuilder addChild(String name) {

@@ -9,14 +9,20 @@ import java.util.Optional;
 
 public class SiteLogHandlerDeserializer {
 
-    public LogHandler deserialize(Xpp3Dom node) {
+    public static final String NODE_NAME = "logHandler";
+
+    public LogHandler deserialize(Xpp3Dom configNode) {
         final LogHandler logHandler = defaultLogHandler();
-        if (node == null || !node.getName().equals("logHandler"))
+        if (configNode == null)
             return logHandler;
 
-        logHandler.setOutputToConsole(deserializeOutputToConsole(node));
+        final Xpp3Dom logHandlerNode = configNode.getChild("logHandler");
+        if (logHandlerNode == null || !logHandlerNode.getName().equals(NODE_NAME))
+            return logHandler;
 
-        deserializeFailIf(node.getChild("failIf"))
+        logHandler.setOutputToConsole(deserializeOutputToConsole(logHandlerNode));
+
+        deserializeFailIf(logHandlerNode.getChild("failIf"))
                 .ifPresent(logHandler::setFailIf);
 
         return logHandler;

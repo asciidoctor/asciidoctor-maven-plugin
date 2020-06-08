@@ -5,27 +5,16 @@ import org.asciidoctor.log.LogRecord;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Utility class to manage AsciidoctorJ LogRecords.
  */
 public class LogRecordHelper {
 
-    // includes replacers for cursor (file & line)
-    public static final String ASCIIDOCTOR_FULL_LOG_FORMAT = "asciidoctor: %s: %s: line %s: %s";
-    public static final String ASCIIDOCTOR_SIMPLE_LOG_FORMAT = "asciidoctor: %s: %s";
-
-    /**
-     * Formats the logRecord in a similar manner to original Asciidoctor.
-     * Note: prints the absolute path of the file.
-     *
-     * @param logRecord Asciidoctor logRecord to format
-     * @return Asciidoctor-like formatted string
-     */
-    public static String format(LogRecord logRecord) {
-        final Cursor cursor = logRecord.getCursor();
-        return String.format(ASCIIDOCTOR_FULL_LOG_FORMAT, logRecord.getSeverity(), cursor.getFile(), cursor.getLineNumber(), logRecord.getMessage());
-    }
+    private static final String MESSAGE_HEADER = "asciidoctor";
 
     /**
      * Formats the logRecord in a similar manner to original Asciidoctor.
@@ -37,21 +26,35 @@ public class LogRecordHelper {
      */
     public static String format(LogRecord logRecord, File sourceDirectory) {
         final Cursor cursor = logRecord.getCursor();
-        String relativePath = "";
+        final String relativePath = calculateFileRelativePath(cursor, sourceDirectory);
+
+        final List<String> messageParts = new ArrayList<>();
+        messageParts.add(MESSAGE_HEADER);
+        messageParts.add(logRecord.getSeverity().toString());
+
+        if (relativePath != null)
+            messageParts.add(relativePath);
+
+        if (cursor != null && cursor.getLineNumber() > 0)
+            messageParts.add("line " + cursor.getLineNumber());
+
+        messageParts.add(logRecord.getMessage());
+
+        return messageParts.stream().collect(Collectors.joining(": "));
+    }
+
+    private static String calculateFileRelativePath(Cursor cursor, File sourceDirectory) {
         try {
-            if (cursor != null) {
-                relativePath = new File(cursor.getFile()).getCanonicalPath()
+            if (cursor != null && cursor.getFile() != null) {
+                return new File(cursor.getFile())
+                        .getCanonicalPath()
                         .substring(sourceDirectory.getCanonicalPath().length() + 1);
             }
         } catch (IOException e) {
             // use the absolute path as fail-safe
-            relativePath = cursor.getFile();
+            return cursor.getFile();
         }
-        return relativePath.length() > 0 ?
-                String.format(ASCIIDOCTOR_FULL_LOG_FORMAT, logRecord.getSeverity(), relativePath, cursor.getLineNumber(), logRecord.getMessage())
-                :
-                String.format(ASCIIDOCTOR_SIMPLE_LOG_FORMAT, logRecord.getSeverity(), logRecord.getMessage())
-                ;
+        return null;
     }
 
 }
