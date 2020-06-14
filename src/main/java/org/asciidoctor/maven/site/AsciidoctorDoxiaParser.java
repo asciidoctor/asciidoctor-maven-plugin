@@ -56,14 +56,12 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
      */
     public static final String ROLE_HINT = "asciidoc";
 
-    protected final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
-
     /**
      * {@inheritDoc}
      */
     @Override
     public void parse(Reader reader, Sink sink) throws ParseException {
-        String source = null;
+        String source;
         try {
             if ((source = IOUtil.toString(reader)) == null) {
                 source = "";
@@ -77,28 +75,35 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
         final Xpp3Dom siteConfig = getSiteConfig(project);
         final File siteDirectory = resolveSiteDirectory(project, siteConfig);
 
+        // Doxia handles a single instance of this class and invokes it multiple times.
+        // We need to ensure certain elements are initialized only once to avoid errors.
+        // Note, this cannot be done in the constructor because mavenProjectProvider in set after construction.
+        // And overriding init and other methods form parent classes does not work.
+        final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+
         SiteConversionConfiguration conversionConfig = new SiteConversionConfigurationParser(project)
                 .processAsciiDocConfig(siteConfig, defaultOptions(siteDirectory), defaultAttributes());
         for (String require : conversionConfig.getRequires()) {
-            requireLibrary(require);
+            requireLibrary(asciidoctor, require);
         }
 
         final LogHandler logHandler = getLogHandlerConfig(siteConfig);
-        final MemoryLogHandler memoryLogHandler = asciidoctorLoggingSetup(logHandler, siteDirectory);
+        final MemoryLogHandler memoryLogHandler = asciidoctorLoggingSetup(asciidoctor, logHandler, siteDirectory);
+
         // QUESTION should we keep OptionsBuilder & AttributesBuilder separate for call to convertAsciiDoc?
-        String asciidocHtml = convertAsciiDoc(source, conversionConfig.getOptions(), logHandler);
+        String asciidocHtml = convertAsciiDoc(asciidoctor, source, conversionConfig.getOptions());
         try {
             // process log messages according to mojo configuration
             new LogRecordsProcessors(logHandler, siteDirectory, errorMessage -> getLog().error(errorMessage))
                     .processLogRecords(memoryLogHandler);
         } catch (Exception exception) {
-            throw new ParseException(exception.getMessage());
+            throw new ParseException(exception.getMessage(), exception);
         }
 
         sink.rawText(asciidocHtml);
     }
 
-    private MemoryLogHandler asciidoctorLoggingSetup(LogHandler logHandler, File siteDirectory) {
+    private MemoryLogHandler asciidoctorLoggingSetup(Asciidoctor asciidoctor, LogHandler logHandler, File siteDirectory) {
 
         final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(logHandler.getOutputToConsole(), siteDirectory,
                 logRecord -> getLog().info(LogRecordHelper.format(logRecord, siteDirectory)));
@@ -141,7 +146,7 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
                 .attribute("showtitle", "@");
     }
 
-    private void requireLibrary(String require) {
+    private void requireLibrary(Asciidoctor asciidoctor, String require) {
         if (!(require = require.trim()).isEmpty()) {
             try {
                 asciidoctor.requireLibrary(require);
@@ -151,7 +156,7 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
         }
     }
 
-    protected String convertAsciiDoc(String source, Options options, LogHandler logHandler) {
+    protected String convertAsciiDoc(Asciidoctor asciidoctor, String source, Options options) {
         return asciidoctor.convert(source, options);
     }
 
