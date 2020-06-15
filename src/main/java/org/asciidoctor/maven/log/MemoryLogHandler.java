@@ -1,6 +1,5 @@
 package org.asciidoctor.maven.log;
 
-import org.apache.maven.plugin.logging.Log;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
@@ -8,6 +7,7 @@ import org.asciidoctor.log.Severity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 
 /**
@@ -19,19 +19,19 @@ public class MemoryLogHandler implements LogHandler {
 
     private final Boolean outputToConsole;
     private final File sourceDirectory;
-    private final Log log;
+    private final Consumer<LogRecord> recordConsumer;
 
-    public MemoryLogHandler(Boolean outputToConsole, File sourceDirectory, Log log) {
+    public MemoryLogHandler(Boolean outputToConsole, File sourceDirectory, Consumer<LogRecord> recordConsumer) {
         this.outputToConsole = outputToConsole == null ? Boolean.FALSE : outputToConsole;
         this.sourceDirectory = sourceDirectory;
-        this.log = log;
+        this.recordConsumer = recordConsumer;
     }
 
     @Override
     public void log(LogRecord logRecord) {
         records.add(logRecord);
         if (outputToConsole)
-            log.info(LogRecordHelper.format(logRecord, sourceDirectory));
+            recordConsumer.accept(logRecord);
     }
 
     public void clear() {
