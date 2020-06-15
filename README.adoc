@@ -55,6 +55,8 @@ ifeval::['{tag}' == 'master']
 ====
 You're viewing the documentation for the upcoming release.
 If you're looking for the documentation for an older release, please refer to one of the following tags: +
+{uri-repo}/tree/asciidoctor-maven-plugin-1.6.0#readme[1.6.0]
+&hybull;
 {uri-repo}/tree/asciidoctor-maven-plugin-1.5.8#readme[1.5.8]
 &hybull;
 {uri-repo}/tree/asciidoctor-maven-plugin-1.5.7.1#readme[1.5.7.1]
