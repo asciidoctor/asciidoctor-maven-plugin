@@ -122,13 +122,13 @@ When a custom value is set, no other paths are checked.
 [NOTE]
 ====
 All paths and AsciiDoc documents that start with `pass:[_]` are considered _internal_ and are skipped.
-That is, AsciiDocs are not rendered and resources are not copied to target, but you can include them normally from other AsciiDocs. +
+That is, AsciiDocs are not converted and resources are not copied from them, but you can include them normally from other AsciiDocs. +
 This is useful to split your sources in sets of master documents and included parts.
 ====
 
-sourceDocumentName:: an override to process a single source file; defaults to all files in `$\{sourceDirectory}`
-sourceDocumentExtensions:: (named `extensions` in v1.5.3 and below) a `List<String>` of non-standard file extensions to render.
-Currently ad, adoc, and asciidoc will be rendered by default
+sourceDocumentName:: an override to process a single source file; defaults to all files in [.path]`$\{sourceDirectory}`.
+sourceDocumentExtensions:: (named `extensions` in v1.5.3 and below) a `List<String>` of non-standard file extensions to convert.
+Currently, _ad_, _adoc_, and _asciidoc_ will be converted by default
 resources:: list of resource files to copy to the output directory (e.g., images, css).
 The configuration follows the same patterns as the `maven-resources-plugin`.
 If not set, all resources inside `$\{sourceDirectory}` are copied.
@@ -162,13 +162,15 @@ When converting to HTML, images must be copied to the output location so that th
     ...
 </resources>
 ----
-outputDirectory:: relative paths are added to the project root path. Defaults to [.path]_${project.build.directory}/generated-docs_.
+outputDirectory:: locations where converted sources and copied resources will be places.
+Note that relative paths are added to the project root path.
+Defaults to [.path]_${project.build.directory}/generated-docs_.
 outputFile:: defaults to `null`, used to override the name of the generated output file, can be a relative or absolute path.
 Useful for backends that create a single file, e.g. the pdf backend.
 All output will be redirected to the same file, the same way as the `-o, --out-file=OUT_FILE` option from the `asciidoctor` CLI command.
 baseDir:: (not Maven's basedir) enables to set the root path for resources (e.g. included files), defaults to `$\{sourceDirectory}`
 skip:: set this to `true` to bypass generation, defaults to `false`
-preserveDirectories:: enables to specify whether the documents should be rendered in the same folder structure as in the source directory or not, defaults to `false`.
+preserveDirectories:: enables to specify whether the documents should be converted in the same folder structure as in the source directory or not, defaults to `false`.
 When `true`, instead of generating all output in a single folder, output files are generated in the same structure.
 See the following example
 +
@@ -188,16 +190,10 @@ backend:: defaults to `html5`
 doctype:: defaults to `null` (which trigger's Asciidoctor's default of `article`)
 eruby:: defaults to erb, the version used in JRuby
 headerFooter:: defaults to `true`
-templateDirs:: list of directories of Tilt-compatible templates to be used instead of the default built-in templates, empty by default
-+
-[NOTE]
-====
-Order is not relevant for templateDir and templateDirs.
-Values set in both properties are merged together into a single final list.
-====
+templateDirs:: list of directories of compatible templates to be used instead of the default built-in templates, empty by default.
 templateEngine:: template engine to use for the custom converter templates, disabled by default (`null`)
 templateCache:: enables the built-in cache used by the template converter when reading the source of template files.
-Only relevant if the `:template_dir` option is specified, defaults to `true`
+Only relevant if the `:template_dirs` option is specified, defaults to `true`.
 sourcemap:: adds file and line number information to each parsed block (`lineno` and `source_location` attributes), defaults to `false`
 catalogAssets:: tells the parser to capture images and links in the reference table available via the `references` property on the document AST object (experimental), defaults to `false`
 attributes:: a `Map<String,Object>` of Asciidoctor attributes to pass for conversion, defaults to `null`
@@ -209,14 +205,14 @@ attributes:: a `Map<String,Object>` of Asciidoctor attributes to pass for conver
     <source-highlighter>coderay</source-highlighter>
 </attributes>
 ----
-embedAssets:: Embedd the CSS file, etc into the output, defaults to `false`
+embedAssets:: embeds the CSS file and images into the output, defaults to `false`
 gemPaths:: enables to specify the location to one or more gem installation directories (same as GEM_PATH environment var), `empty` by default
 requires:: a `List<String>` to specify additional Ruby libraries not packaged in AsciidoctorJ, `empty` by default
-extensions:: `List` of extensions to include during the conversion process (see link:https://github.com/asciidoctor/asciidoctorj/blob/master/README.adoc#extension-api[AsciidoctorJ's Extension API] for information about the available options).
+extensions:: `List` of extensions to include during the conversion process (see link:https://github.com/asciidoctor/asciidoctorj/blob/master/docs/integrator-guide.adoc#automatically-loading-extensions[AsciidoctorJ's Extension API] for information about the available options).
 For each extension, the implementation class must be specified in the `className` parameter, the `blockName` is only required when configuring a _BlockProcessor_, _BlockMacroProcessor_ or _InlineMacroProcessor_.
-Here follows a configuration example:
 +
 [source,xml]
+.extensions configuration example
 ----
 <plugin>
     ...
@@ -245,7 +241,7 @@ Here follows a configuration example:
     </dependencies>
 </plugin>
 ----
-<1> Note that processors must be included in the plugin's execution classpath, not in the project's.
+<1> Extensions must be included in the plugin's execution classpath, not in the project's.
 
 NOTE: Extensions can also be integrated through the SPI interface implementation.
 This method does not require any configuration in the [.path]_pom.xml_, see link:https://github.com/asciidoctor/asciidoctorj#extension-spi[Extension SPI] for details.
@@ -254,11 +250,11 @@ enableVerbose:: enables Asciidoctor verbose messages, defaults to `false`.
 Enable it, for example, if you want to validate https://asciidoctor.org/docs/user-manual/#validating-internal-cross-references[internal cross references] and capture the messages with the logHandler option.
 
 [[logHandler-configuration]]
-logHandler:: enables processing of Asciidoctor messages (e.g. errors on missing included files), to hide messages as well setup build fail conditions based on them.
-Contains the following configuration elements:
+logHandler:: enables processing options for Asciidoctor messages (e.g. errors on missing included files), to either hide messages or setup build fail conditions based on them.
+Options are:
 
 * `outputToConsole`: `Boolean`, defaults to `true`.
-Redirects all Asciidoctor messages to Maven's console logger as INFO during renderization.
+Redirects all Asciidoctor messages to Maven's console logger as INFO during conversion.
 * `failIf`: build fail conditions, disabled by default.
 Allows setting one or many conditions that when met, abort the Maven build with `BUILD FAILURE` status.
 +
@@ -383,7 +379,6 @@ For example, the following configuration could be modified with the command opti
 ----
 <configuration>
     <backend>html5</backend>
-    <sourceHighlighter>coderay</sourceHighlighter>
     <attributes>
         <toc>left</toc>
     </attributes>
@@ -394,7 +389,7 @@ For example, the following configuration could be modified with the command opti
 
  mvn generate-resources -Dasciidoctor.attributes="toc=right source-highlighter=highlight.js imagesdir=my_images"
 
-Note that in the second case we need to use quotes due to the spaces, and that `source-highlighter` is the asciidoctor attribute name used to update the configuration.
+Note that in the second case we need to use quotes due to the spaces.
 
 === Multiple outputs for the same file
 
@@ -410,22 +405,22 @@ An example of this setup is below:
     <artifactId>asciidoctor-maven-plugin</artifactId>
     <version>{release-version}</version>
     <executions>
-        <execution>
+        <execution> <!--.-->
             <id>output-html</id>
             <phase>generate-resources</phase>
             <goals>
                 <goal>process-asciidoc</goal>
             </goals>
             <configuration>
-                <sourceHighlighter>coderay</sourceHighlighter>
                 <backend>html</backend>
                 <attributes>
                     <toc/>
                     <linkcss>false</linkcss>
+                    <source-highlighter>coderay</source-highlighter>
                 </attributes>
             </configuration>
         </execution>
-        <execution>
+        <execution> <!--.-->
             <id>output-docbook</id>
             <phase>generate-resources</phase>
             <goals>
@@ -437,15 +432,16 @@ An example of this setup is below:
             </configuration>
         </execution>
     </executions>
-    <configuration>
+    <configuration>  <!--.-->
         <sourceDirectory>src/main/asciidoc</sourceDirectory>
         <headerFooter>true</headerFooter>
     </configuration>
 </plugin>
 ----
-
-Any configuration specified outside the executions section is inherited by each execution.
-This allows an easier way of defining common configuration options.
+<.> First execution, converts documents to HTML.
+<.> Second execution, converts documents to DocBook.
+<.> Any configuration outside the executions section is inherited by each execution.
+This allows an easier way to share common configuration options.
 
 == Maven Site Integration
 
@@ -479,8 +475,8 @@ IMPORTANT: Maven v3.2.1 or above required, and since asciidoctor-maven-plugin v1
 The Asciidoctor Doxia module follows the maven-site-plugin conventions for file location, and delegates all resource management to it.
 
 First, all of your AsciiDoc-based files should be placed in [.path]_src/site/asciidoc_ with an extension of `.adoc`.
-These files will be rendered into the [.path]_target/site_ directory.
-For example, the file [.path]_src/site/asciidoc/usage.adoc_ will be rendered into [.path]_target/site/usage.html_.
+These files will be converted into the [.path]_target/site_ directory.
+For example, the file [.path]_src/site/asciidoc/usage.adoc_ will be converted into [.path]_target/site/usage.html_.
 
 Then, all resources (images, css, etc.) should be placed in [.path]_src/site/resources_.
 These will be automatically copied into [.path]_target/site_.
@@ -574,7 +570,7 @@ templatesDirs (also template_dirs)::
 Built-in templates are supported by specifying one or more template directories.
 This feature enables you to provide custom templates for converting any node in the tree (e.g., document, section, listing, etc).
 Custom templates can be extremely helpful when trying to customize the appearance of your site.
-Note that each one should be enclosed in a `<dir>` element.
+Each path to add should be enclosed in a `<dir>` element.
 
 requires::
 Same as the plugin's `requires`. +

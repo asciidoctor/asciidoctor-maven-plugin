@@ -77,18 +77,18 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
         updaterScheduler = Executors.newScheduledThreadPool(1);
 
         // we prevent refreshing more often than all 200ms and we refresh at least once/s
-        // NOTE1: it is intended to avoid too much time space between file polling and re-rendering
+        // NOTE1: it is intended to avoid too much time space between file polling and re-convertin
         // NOTE2: if nothing to refresh it does nothing so all is fine
         updaterScheduler.scheduleAtFixedRate(new Updater(needsUpdate, this), 0, Math.min(1000, Math.max(200, interval / 2)), TimeUnit.MILLISECONDS);
     }
 
     protected void doWork() throws MojoFailureException, MojoExecutionException {
-        getLog().info("Rendered doc in " + executeAndReturnDuration() + "ms");
+        getLog().info("Converted doc in " + executeAndReturnDuration() + "ms");
         doWait();
     }
 
     protected void doWait() {
-        getLog().info("Type [exit|quit] to exit and [refresh] to force a manual re-rendering.");
+        getLog().info("Type [exit|quit] to exit and [refresh] to force a manual re-conversion.");
 
         String line;
         final Scanner scanner = new Scanner(System.in);
@@ -127,7 +127,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
         }
 
         try {
-            getLog().info("Re-rendered doc in " + executeAndReturnDuration() + "ms");
+            getLog().info("Re-converted doc in " + executeAndReturnDuration() + "ms");
         } catch (final MojoExecutionException e) {
             getLog().error(e);
         } catch (final MojoFailureException e) {

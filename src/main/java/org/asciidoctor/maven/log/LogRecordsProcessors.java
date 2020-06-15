@@ -41,7 +41,7 @@ public class LogRecordsProcessors {
                 for (LogRecord record : records) {
                     errorMessageConsumer.accept(LogRecordHelper.format(record, sourceDirectory));
                 }
-                throw new Exception(String.format("Found %s issue(s) of severity %s or higher during rendering", records.size(), severity));
+                throw new Exception(String.format("Found %s issue(s) of severity %s or higher during conversion", records.size(), severity));
             }
         } else if (logHandler.isContainsTextNotBlank()) {
             final String textToSearch = logHandler.getFailIf().getContainsText();

@@ -47,7 +47,7 @@ public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
     }
 
     @Override
-    protected void renderFile(final Asciidoctor asciidoctorInstance, final Map<String, Object> options, final File f) {
+    protected void convertFile(final Asciidoctor asciidoctorInstance, final Map<String, Object> options, final File f) {
         asciidoctorInstance.convertFile(f, options);
 
         if (autoReloadInterval > 0 && backend.toLowerCase().startsWith("html")) {
@@ -60,7 +60,7 @@ public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
                 { // read
                     FileInputStream fis = null;
                     try {
-                        fis = new FileInputStream(out); // java asciidoctor render() doesn't work ATM so read the rendered file instead of doing it in memory
+                        fis = new FileInputStream(out); // java asciidoctor render() doesn't work ATM so read the converted file instead of doing it in memory
                         content = IO.slurp(fis);
                     } catch (final Exception e) {
                         getLog().error(e);
@@ -69,7 +69,7 @@ public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
                     }
                 }
 
-                if (content != null) { // render + write
+                if (content != null) { // convert + write
                     FileOutputStream fos = null;
                     try {
                         fos = new FileOutputStream(out);
@@ -85,7 +85,7 @@ public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
             asciidoctorInstance.convertFile(f, options);
         }
 
-        logRenderedFile(f);
+        logConvertedFile(f);
     }
 
     private String addRefreshing(final String html) {

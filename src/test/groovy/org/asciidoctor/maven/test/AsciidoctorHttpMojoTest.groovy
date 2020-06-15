@@ -15,7 +15,7 @@ class AsciidoctorHttpMojoTest extends Specification {
         MockPlexusContainer.initializeMockContext(AsciidoctorHttpMojo)
     }
 
-    def "http front should let access rendered files"() {
+    def "http front should let access converted files"() {
         setup:
             def srcDir = new File('target/test-classes/src/asciidoctor-http')
             def outputDir = new File('target/asciidoctor-http-output')
