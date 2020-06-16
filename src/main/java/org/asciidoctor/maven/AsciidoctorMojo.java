@@ -45,14 +45,13 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import static org.asciidoctor.maven.SourceDirectoryFinder.DEFAULT_SOURCE_DIR;
 
 
 /**
- * Basic maven plugin goal to render AsciiDoc files using Asciidoctor, a ruby port.
+ * Basic maven plugin goal to convert AsciiDoc files using Asciidoctor, a ruby port.
  */
 @Mojo(name = "process-asciidoc", threadSafe = true)
 public class AsciidoctorMojo extends AbstractMojo {
@@ -247,7 +246,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             if (!dirs.add(destinationPath))
                 getLog().warn("Duplicated destination found: overwriting file: " + destinationPath.getAbsolutePath());
 
-            renderFile(asciidoctor, optionsBuilder.asMap(), source);
+            convertFile(asciidoctor, optionsBuilder.asMap(), source);
 
             try {
                 // process log messages according to mojo configuration
@@ -460,13 +459,13 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
     }
 
-    protected void renderFile(Asciidoctor asciidoctor, Map<String, Object> options, File f) {
+    protected void convertFile(Asciidoctor asciidoctor, Map<String, Object> options, File f) {
         asciidoctor.convertFile(f, options);
-        logRenderedFile(f);
+        logConvertedFile(f);
     }
 
-    protected void logRenderedFile(File f) {
-        getLog().info("Rendered " + f.getAbsolutePath());
+    protected void logConvertedFile(File f) {
+        getLog().info("Converted " + f.getAbsolutePath());
     }
 
     protected void synchronize(final Synchronization synchronization) {

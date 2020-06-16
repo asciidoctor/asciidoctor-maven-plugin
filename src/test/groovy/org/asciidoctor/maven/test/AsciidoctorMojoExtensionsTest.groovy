@@ -75,7 +75,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             ]
             mojo.execute()
         then:
-            // since v 1.5.4 resources are copied before rendering, so some files remain
+            // since v 1.5.4 resources are copied before conversion, so some files remain
             outputDir.list().size() > 0
             thrown(RuntimeException)
     }
@@ -119,7 +119,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             'UriIncludeProcessor'   |'IncludeProcessor'       || "UriIncludeProcessor(IncludeProcessor) initialized"          || 'Processing UriIncludeProcessor'
     }
 
-    def "successfully renders html with a preprocessor"() {
+    def "successfully converts html with a preprocessor"() {
         setup:
             File srcDir = new File(SRC_DIR)
             File outputDir = new File("${OUTPUT_DIR}/preprocessor/${System.currentTimeMillis()}")
@@ -145,7 +145,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             text.count(ChangeAttributeValuePreprocessor.AUTHOR_NAME) == 2
     }
 
-    def "successfully renders html with a blockprocessor"() {
+    def "successfully converts html with a blockprocessor"() {
         setup:
             File srcDir = new File(SRC_DIR)
             File outputDir = new File("${OUTPUT_DIR}/blockprocessor/${System.currentTimeMillis()}")
@@ -170,7 +170,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             sampleOutput.getText().contains('The time is now. Get a move on.'.toUpperCase())
     }
     
-    def "successfully renders html and adds meta tag with a DocinfoProcessor"() {
+    def "successfully converts html and adds meta tag with a DocinfoProcessor"() {
         setup:
             File srcDir = new File(SRC_DIR)
             File outputDir = new File("${OUTPUT_DIR}/docinfoProcessor/${System.currentTimeMillis()}")
@@ -195,7 +195,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             sampleOutput.text.contains("<meta name=\"author\" content=\"asciidoctor\">")
     }
 
-    def "successfully renders html and modifies output with a BlockMacroProcessor"() {
+    def "successfully converts html and modifies output with a BlockMacroProcessor"() {
         setup:
             File srcDir = new File(SRC_DIR)
             File outputDir = new File("${OUTPUT_DIR}/blockMacroProcessor/${System.currentTimeMillis()}")
@@ -220,7 +220,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             sampleOutput.text.contains("<script src=\"https://gist.github.com/123456.js\"></script>")
     }
 
-    def "successfully renders html and modifies output with a InlineMacroProcessor"() {
+    def "successfully converts html and modifies output with a InlineMacroProcessor"() {
         setup:
             File srcDir = new File(SRC_DIR)
             File outputDir = new File("${OUTPUT_DIR}/inlineMacroProcessor/${System.currentTimeMillis()}")
@@ -245,7 +245,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             sampleOutput.text.contains("<p>See <a href=\"gittutorial.html\">gittutorial</a> to get started.</p>")
     }
     
-    def "successfully renders html and modifies output with an IncludeProcessor"() {
+    def "successfully converts html and modifies output with an IncludeProcessor"() {
         setup:
             File srcDir = new File(SRC_DIR)
             File outputDir = new File("${OUTPUT_DIR}/includeProcessor/${System.currentTimeMillis()}")
@@ -303,7 +303,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
 
 
     // Adding a BlockMacroProcessor or BlockProcessor makes the conversion fail
-    def "successfully renders html with Preprocessor, DocinfoProcessor, InlineMacroProcessor and IncludeProcessor"() {
+    def "successfully converts html with Preprocessor, DocinfoProcessor, InlineMacroProcessor and IncludeProcessor"() {
         setup:
             File srcDir = new File(SRC_DIR)
             File outputDir = new File("${OUTPUT_DIR}/processors/${System.currentTimeMillis()}")
@@ -340,7 +340,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             text.contains("source 'https://rubygems.org'")
     }
     
-    def "renders html when using all types of extensions"() {
+    def "converts html when using all types of extensions"() {
         setup:
             File srcDir = new File(SRC_DIR)
             File outputDir = new File("${OUTPUT_DIR}/processors/${System.currentTimeMillis()}")

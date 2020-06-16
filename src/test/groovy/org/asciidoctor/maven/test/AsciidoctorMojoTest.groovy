@@ -22,7 +22,7 @@ class AsciidoctorMojoTest extends Specification {
         MockPlexusContainer.initializeMockContext(AsciidoctorMojo)
     }
 
-    def "renders docbook"() {
+    def "converts docbook"() {
         setup:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output')
@@ -44,7 +44,7 @@ class AsciidoctorMojoTest extends Specification {
             sampleOutput.length() > 0
     }
 
-    def "renders html"() {
+    def "converts html"() {
         setup:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output')
@@ -575,7 +575,7 @@ class AsciidoctorMojoTest extends Specification {
         text.contains('<img src="data:image/jpg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/4gzESUNDX1BST0ZJTEUAAQEAAA')
     }
 
-    def 'code highlighting should be rendered when set in the document header'() {
+    def 'code highlighting should be converted when set in the document header'() {
         setup:
         File srcDir = new File('src/test/resources/src/asciidoctor')
         File outputDir = new File('target/asciidoctor-output-sourceHighlighting/header')
@@ -772,8 +772,8 @@ class AsciidoctorMojoTest extends Specification {
      *  - relativeBaseDir = true
      *
      *  Expected:
-     *   - all documents are rendered in the same folder structure found in the sourceDirectory
-     *   - all documents are correctly rendered with the import
+     *   - all documents are converted in the same folder structure found in the sourceDirectory
+     *   - all documents are correctly converted with the import
      */
     def 'should replicate source structure-standard paths'() {
         setup:
@@ -799,8 +799,8 @@ class AsciidoctorMojoTest extends Specification {
             }
             asciidocs.size() == 6
             // Checks that all imports are found in the respective baseDir
-            for (File renderedFile in asciidocs) {
-                assert renderedFile.text.contains('Unresolved directive') == false
+            for (File convertedFile in asciidocs) {
+                assert convertedFile.text.contains('Unresolved directive') == false
             }
         cleanup:
             // Avoids false positives in other tests
@@ -814,8 +814,8 @@ class AsciidoctorMojoTest extends Specification {
      *  - relativeBaseDir = true
      *
      *  Expected:
-     *   - all documents are rendered in the same folder structure found in the sourceDirectory
-     *   - all documents are correctly rendered with the import
+     *   - all documents are converted in the same folder structure found in the sourceDirectory
+     *   - all documents are correctly converted with the import
      */
     def 'should replicate source structure-complex paths'() {
         setup:
@@ -842,8 +842,8 @@ class AsciidoctorMojoTest extends Specification {
             }
             asciidocs.size() == 6
             // Checks that all imports are found in the respective baseDir
-            for (File renderedFile in asciidocs) {
-                assert renderedFile.text.contains('Unresolved directive') == false
+            for (File convertedFile in asciidocs) {
+                assert convertedFile.text.contains('Unresolved directive') == false
             }
         cleanup:
             // Avoid possible false positives in other tests
@@ -857,8 +857,8 @@ class AsciidoctorMojoTest extends Specification {
      *  - relativeBaseDir = false
      *
      *  Expected:
-     *   - all documents are rendered in the same outputDirectory. 1 document is overwritten
-     *   - all documents but 1 (in the root) are incorrectly rendered because they cannot find the imported file
+     *   - all documents are converted in the same outputDirectory. 1 document is overwritten
+     *   - all documents but 1 (in the root) are incorrectly converted because they cannot find the imported file
      */
     def 'should not replicate source structure-complex paths'() {
         setup:
@@ -879,9 +879,9 @@ class AsciidoctorMojoTest extends Specification {
 			asciidocs.length == 5
             // folders are copied anyway
             assertEqualsStructure(srcDir.listFiles(DIRECTORY_FILTER), outputDir.listFiles(DIRECTORY_FILTER))
-			for (File renderedFile in asciidocs) {
-				if (renderedFile.getName() != 'HelloWorld.html') {
-					assert renderedFile.text.contains('Unresolved directive')
+			for (File convertedFile in asciidocs) {
+				if (convertedFile.getName() != 'HelloWorld.html') {
+					assert convertedFile.text.contains('Unresolved directive')
 				}
 			}
         cleanup:
@@ -896,8 +896,8 @@ class AsciidoctorMojoTest extends Specification {
      *  - relativeBaseDir = false
      *
      *  Expected:
-     *   - all documents are rendered in the same folder structure found in the sourceDirectory
-     *   - all documents but 1 (in the root) are incorrectly rendered because they cannot find the imported file
+     *   - all documents are converted in the same folder structure found in the sourceDirectory
+     *   - all documents but 1 (in the root) are incorrectly converted because they cannot find the imported file
      */
     def 'should replicate source structure-no baseDir rewrite'() {
         setup:
@@ -924,9 +924,9 @@ class AsciidoctorMojoTest extends Specification {
             }
             asciidocs.size() == 6
             // Looks for import errors in all files but the one in the root folder
-            for (File renderedFile in asciidocs) {
-                if (renderedFile.getName() != 'HelloWorld.html') {
-                    assert renderedFile.text.contains('Unresolved directive')
+            for (File convertedFile in asciidocs) {
+                if (convertedFile.getName() != 'HelloWorld.html') {
+                    assert convertedFile.text.contains('Unresolved directive')
                 }
             }
 
@@ -941,7 +941,7 @@ class AsciidoctorMojoTest extends Specification {
      *  - preserveDirectories = false
      *  - relativeBaseDir = true
      *
-     *  Expected: all documents are correctly rendered in the same folder
+     *  Expected: all documents are correctly converted in the same folder
      */
     def 'should not replicate source structure-baseDir rewrite'() {
         setup:
@@ -960,13 +960,13 @@ class AsciidoctorMojoTest extends Specification {
 
         then:
             assertEqualsStructure(srcDir.listFiles(DIRECTORY_FILTER), outputDir.listFiles(DIRECTORY_FILTER))
-			// all files are rendered in the outputDirectory
+			// all files are converted in the outputDirectory
             def asciidocs = outputDir.listFiles({File f -> f.getName().endsWith('html')} as FileFilter)
 			// 1 file is missing because 2 share the same name and 1 is overwritten in outputDirectory
             asciidocs.length == 5
             // Checks that all imports are found correctly because baseDir is adapted for each file
-            for (File renderedFile in asciidocs) {
-                assert renderedFile.text.contains('Unresolved directive') == false
+            for (File converted in asciidocs) {
+                assert converted.text.contains('Unresolved directive') == false
             }
 
         cleanup:
@@ -1093,7 +1093,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.backend = 'html5'
             mojo.outputDirectory = outputDir
             mojo.execute()
-        then: 'only rendered (html) files are found in the target directory'
+        then: 'only converts (html) files are found in the target directory'
             def allFiles = outputDir.listFiles({File f -> f.isFile()} as FileFilter)
             def htmlFiles = FileUtils.listFiles(outputDir, ['html'] as String[], true)
             allFiles.size() == htmlFiles.size()
@@ -1101,7 +1101,7 @@ class AsciidoctorMojoTest extends Specification {
 
     }
 
-    def "should only render a single file and not copy any resource"() {
+    def "should only convert a single file and not copy any resource"() {
         setup:
             File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/file-pattern/${System.currentTimeMillis()}")
 
@@ -1150,7 +1150,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.execute()
         then:
             def files = outputDir.listFiles({File f -> f.isFile()} as FileFilter)
-            // includes 2 rendered AsciiDoc documents and 3 resources
+            // includes 2 converted AsciiDoc documents and 3 resources
             files.size() == 5
             // from 'issue-78' directory
             // resource files obtained using the include
@@ -1165,7 +1165,7 @@ class AsciidoctorMojoTest extends Specification {
             FileUtils.listFiles(outputDir, ["jpg"] as String[], true).size() == 0
     }
 
-    def "should render GitHub README alone"() {
+    def "should convert GitHub README alone"() {
         setup:
             File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/readme/${System.currentTimeMillis()}")
 
@@ -1184,7 +1184,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.execute()
         then:
             def files = outputDir.listFiles({File f -> f.isFile()} as FileFilter)
-            // includes only 1 rendered AsciiDoc document
+            // includes only 1 converted AsciiDoc document
             files.size() == 1
             files.first().text.contains('Asciidoctor Maven Plugin')
     }
@@ -1231,7 +1231,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.execute()
         then:
             def files = outputDir.listFiles({File f -> f.isFile()} as FileFilter)
-            // includes only 1 rendered AsciiDoc document
+            // includes only 1 converted AsciiDoc document
             files.size() == 1
             files.first().text.contains('Asciidoctor Maven Plugin')
     }
@@ -1257,7 +1257,7 @@ class AsciidoctorMojoTest extends Specification {
         then:
             def files = outputDir.listFiles({File f -> f.isFile()} as FileFilter)
             FileUtils.listFiles(outputDir, ['ext'] as String[], true).isEmpty()
-            // includes only 1 rendered AsciiDoc document
+            // includes only 1 converted AsciiDoc document
             def file = new File(outputDir, 'sample.html')
             file.text.contains('Asciidoctor default stylesheet')
     }
@@ -1288,7 +1288,7 @@ class AsciidoctorMojoTest extends Specification {
                 if (it.getName() ==~ /.+html/) asciidocs << it
             }
             asciidocs.size() == 5
-            newOut.toString().count("Rendered") == 6
+            newOut.toString().count("Converte") == 6
             newOut.toString().count("Duplicated destination found") == 1
         cleanup:
             System.setOut(originalOut)
@@ -1321,7 +1321,7 @@ class AsciidoctorMojoTest extends Specification {
                 if (it.getName() ==~ /.+html/) asciidocs << it
             }
             asciidocs.size() == 1
-            newOut.toString().count("Rendered") == 6
+            newOut.toString().count("Converte") == 6
             newOut.toString().count("Duplicated destination found") == 5
         cleanup:
             System.setOut(originalOut)
@@ -1356,7 +1356,7 @@ class AsciidoctorMojoTest extends Specification {
                 if (it.getName() ==~ /.+html/) asciidocs << it
             }
             asciidocs.size() == 5
-            newOut.toString().count("Rendered") == 6
+            newOut.toString().count("Converte") == 6
             newOut.toString().count("Duplicated destination found") == 1
         cleanup:
             System.setOut(originalOut)

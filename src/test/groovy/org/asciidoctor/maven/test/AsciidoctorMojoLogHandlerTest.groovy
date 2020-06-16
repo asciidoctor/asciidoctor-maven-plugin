@@ -209,7 +209,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
 
         then: 'issues with WARN and ERROR are returned'
         def e = thrown(MojoExecutionException)
-        e.message.contains('Found 4 issue(s) of severity WARN or higher during rendering')
+        e.message.contains('Found 4 issue(s) of severity WARN or higher during conversion')
     }
 
     def "should fail when logHandler failIf = ERROR"() {
@@ -233,7 +233,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
 
         then:
         def e = thrown(MojoExecutionException)
-        e.message.contains('Found 3 issue(s) of severity ERROR or higher during rendering')
+        e.message.contains('Found 3 issue(s) of severity ERROR or higher during conversion')
     }
 
     def "should not fail if containsText does not match any message"() {

@@ -14,7 +14,7 @@ class AsciidoctorRefreshMojoTest extends Specification {
         MockPlexusContainer.initializeMockContext(AsciidoctorRefreshMojo)
     }
 
-    def "auto render when source updated"() {
+    def "auto convert when source updated"() {
         setup:
             def srcDir = new File('target/test-classes/src/asciidoctor-refresh')
             def outputDir = new File('target/asciidoctor-refresh-output')
@@ -57,7 +57,7 @@ class AsciidoctorRefreshMojoTest extends Specification {
             })
             mojoThread.start()
 
-            while (!new String(newOut.toByteArray()).contains('Rendered')) {
+            while (!new String(newOut.toByteArray()).contains('Converted')) {
                 Thread.sleep(200)
             }
 
@@ -70,7 +70,7 @@ class AsciidoctorRefreshMojoTest extends Specification {
                 Wow, this will be auto refreshed!'''.stripIndent() }
 
         then:
-            while (!new String(newOut.toByteArray()).contains('Re-rendered ')) {
+            while (!new String(newOut.toByteArray()).contains('Re-converted ')) {
                 Thread.sleep 500
             }
             assert target.text.contains('Wow, this will be auto refreshed')

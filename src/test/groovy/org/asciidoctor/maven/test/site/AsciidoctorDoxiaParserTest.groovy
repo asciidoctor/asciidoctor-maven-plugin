@@ -10,7 +10,7 @@ class AsciidoctorDoxiaParserTest extends Specification {
 
     public static final String TEST_DOCS_PATH = 'src/test/resources/src/asciidoctor'
 
-    def "should render html without any configuration"() {
+    def "should convert html without any configuration"() {
         given:
         final File srcAsciidoc = new File("$TEST_DOCS_PATH/sample.asciidoc")
         final Sink sink = createSinkMock()
@@ -31,7 +31,7 @@ class AsciidoctorDoxiaParserTest extends Specification {
         outputText.contains '<div class="title">Note</div>'
     }
 
-    def "should render html with an attribute"() {
+    def "should convert html with an attribute"() {
         given:
         final File srcAsciidoc = new File("$TEST_DOCS_PATH/sample.asciidoc")
         Reader reader = new FileReader(srcAsciidoc)
@@ -56,7 +56,7 @@ class AsciidoctorDoxiaParserTest extends Specification {
         outputText.contains '<i class="fa icon-note" title="Note"></i>'
     }
 
-    def "should render html with baseDir option"() {
+    def "should convert html with baseDir option"() {
         given:
         final File srcAsciidoc = new File("$TEST_DOCS_PATH/main-document.adoc")
         final Sink sink = createSinkMock()
@@ -78,7 +78,7 @@ class AsciidoctorDoxiaParserTest extends Specification {
         outputText.contains 'println "HelloWorld from Groovy on ${new Date()}"'
     }
 
-    def "should render html with relative baseDir option"() {
+    def "should convert html with relative baseDir option"() {
         given:
         final File srcAsciidoc = new File("$TEST_DOCS_PATH/main-document.adoc")
         final Sink sink = createSinkMock()
@@ -100,7 +100,7 @@ class AsciidoctorDoxiaParserTest extends Specification {
         outputText.contains 'println "HelloWorld from Groovy on ${new Date()}"'
     }
 
-    def "should render html with templateDir option"() {
+    def "should convert html with templateDir option"() {
         given:
         final File srcAsciidoc = new File("$TEST_DOCS_PATH/sample.asciidoc")
         final Sink sink = createSinkMock()
@@ -124,7 +124,7 @@ class AsciidoctorDoxiaParserTest extends Specification {
         outputText.contains '<p class="custom-template ">'
     }
 
-    def "should render html with attributes and baseDir option"() {
+    def "should convert html with attributes and baseDir option"() {
         given:
         final File srcAsciidoc = new File("$TEST_DOCS_PATH/main-document.adoc")
         final Sink sink = createSinkMock()
@@ -226,7 +226,7 @@ class AsciidoctorDoxiaParserTest extends Specification {
 
         then: 'issues with WARN and ERROR are returned'
         def e = thrown(org.apache.maven.doxia.parser.ParseException)
-        e.message.contains('Found 4 issue(s) of severity WARN or higher during rendering')
+        e.message.contains('Found 4 issue(s) of severity WARN or higher during conversion')
     }
 
     private javax.inject.Provider<MavenProject> createMavenProjectMock(final String configuration = null) {

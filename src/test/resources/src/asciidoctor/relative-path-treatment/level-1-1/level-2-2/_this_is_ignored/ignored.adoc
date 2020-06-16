@@ -2,7 +2,7 @@
 :icons:
 
 == Summary
-This document won't get rendered by default because it is inside a hidden folder. +
-Hidden folders begin with udnersore `_`.
+This document won't get converted by default because it is inside a hidden folder. +
+Hidden folders begin with underscore `_`.
 
 TIP: How cool is this?
