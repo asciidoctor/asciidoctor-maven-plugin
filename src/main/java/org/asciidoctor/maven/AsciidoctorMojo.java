@@ -122,9 +122,6 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "templateCache")
     protected boolean templateCache = true;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + Attributes.TITLE, required = false)
-    protected String title = "";
-
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDocumentName", required = false)
     protected String sourceDocumentName;
 
@@ -629,14 +626,6 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setTemplateEngine(String templateEngine) {
         this.templateEngine = templateEngine;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public List<String> getSourceDocumentExtensions() {

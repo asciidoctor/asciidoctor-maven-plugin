@@ -107,9 +107,9 @@ As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` 
     </executions>
 </plugin>
 ----
-<1> This is simply an unique id for the execution
-<2> The asciidoctor-maven-plugin does not run in any phase by default, so one must be specified
-<3> The (only for the moment) Asciidoctor Maven plugin goal
+<1> This is simply an unique id for the execution.
+<2> The asciidoctor-maven-plugin does not run in any phase by default, so one must be specified.
+<3> The (only for the moment) Asciidoctor Maven plugin goal.
 
 === Configuration
 
@@ -196,11 +196,15 @@ templateCache:: enables the built-in cache used by the template converter when r
 Only relevant if the `:template_dirs` option is specified, defaults to `true`.
 sourcemap:: adds file and line number information to each parsed block (`lineno` and `source_location` attributes), defaults to `false`
 catalogAssets:: tells the parser to capture images and links in the reference table available via the `references` property on the document AST object (experimental), defaults to `false`
-attributes:: a `Map<String,Object>` of Asciidoctor attributes to pass for conversion, defaults to `null`
+attributes:: a `Map<String,Object>` of Asciidoctor attributes to pass for conversion, defaults to `null`.
+Refer to the http://asciidoctor.org/docs/user-manual/#attribute-catalog[catalog of document attributes] in the Asciidoctor user manual for a complete list.
 +
 [source,xml]
+.example
 ----
 <attributes>
+    <toc>left</toc>
+    <icons>font</icons>
     <imagesdir>images</imagesdir>
     <source-highlighter>coderay</source-highlighter>
 </attributes>
@@ -258,7 +262,7 @@ Redirects all Asciidoctor messages to Maven's console logger as INFO during conv
 * `failIf`: build fail conditions, disabled by default.
 Allows setting one or many conditions that when met, abort the Maven build with `BUILD FAILURE` status.
 +
-[NOTE]
+[WARNING]
 ====
 Note that the plugin matches that all conditions are met together.
 Unless you are controlling a very specific case, setting one condition should be enough. +
@@ -285,7 +289,7 @@ For example, set `include` to fail on any issue related to included files regard
     </failIf>
 </logHandler>
 ----
-<1> Do not show messages as INFO in Maven output
+<1> Do not show messages as INFO in Maven output.
 <2> Build will fail on any message of severity `DEBUG` or higher, that includes all.
 All matching messages will appear as ERROR in Maven output.
 
@@ -294,38 +298,6 @@ All matching messages will appear as ERROR in Maven output.
 Since version 1.5.8 of AsciidoctorJ set `enableVerbose` to `true` option to validate internal cross references, this is being improved to avoid false positives
 See https://github.com/asciidoctor/asciidoctor/issues/2722[#2722] if your are interested in the details.
 ====
-
-==== Built-in attributes
-
-There are various attributes Asciidoctor recognizes.
-Below is a list of them and what they do.
-
-title:: An override for the title of the document.
-
-NOTE: This attribute, for backwards compatibility, can still be used in the top level configuration options.
-
-Many other attributes are possible.
-Refer to the http://asciidoctor.org/docs/user-manual/#attribute-catalog[catalog of document attributes] in the Asciidoctor user manual for a complete list.
-
-More will be added in the future to take advantage of other options and attributes of Asciidoctor.
-Any setting in the attributes section that conflicts with an explicitly named attribute configuration will be overidden by the explicitly named attribute configuration.
-These settings can all be changed in the `<configuration>` section of the plugin section:
-
-[source,xml]
-.Plugin configuration options
-----
-<plugin>
-    <configuration>
-        <sourceDirectory>src/docs/asciidoc</sourceDirectory>
-        <outputDirectory>target/docs/asciidoc</outputDirectory>
-        <backend>html</backend>
-        <doctype>book</doctype>
-        <attributes>
-            <stylesheet>my-theme.css</stylesheet>
-        </attributes>
-    </configuration>
-</plugin>
-----
 
 ==== Passing POM properties
 
@@ -587,7 +559,7 @@ In addition to those attributes found in this section, any maven property is als
   <my-site.version>2.3.0</my-site.version> <.>
 </properties>
 ----
-<.> Will be passed as `my-site-version` to the converter
+<.> Will be passed as `my-site-version` to the converter.
 
 logHandler::
 Sames as the plugin's `requires`. +
