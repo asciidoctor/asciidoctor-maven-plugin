@@ -528,12 +528,6 @@ public class AsciidoctorMojo extends AbstractMojo {
             attributesBuilder.dataUri(true);
         }
 
-        if ("skip".equals(attributeMissing) || "drop".equals(attributeMissing) || "drop-line".equals(attributeMissing)) {
-            attributesBuilder.attributeMissing(attributeMissing);
-        } else {
-            throw new MojoExecutionException(attributeMissing + " is not valid. Must be one of 'skip', 'drop' or 'drop-line'");
-        }
-
         if ("drop".equals(attributeUndefined) || "drop-line".equals(attributeUndefined)) {
             attributesBuilder.attributeUndefined(attributeUndefined);
         } else {

@@ -342,7 +342,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.sourceDirectory = srcDir
             mojo.sourceDocumentName = 'attribute-missing.adoc'
             mojo.backend = 'html'
-            mojo.attributeMissing = 'skip'
+            mojo.attributes = ['attribute-missing':'skip']
             mojo.execute()
         then:
             File sampleOutput = new File(outputDir, 'attribute-missing.html')
@@ -363,7 +363,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.sourceDirectory = srcDir
             mojo.sourceDocumentName = 'attribute-missing.adoc'
             mojo.backend = 'html'
-            mojo.attributeMissing = 'drop'
+            mojo.attributes = ['attribute-missing':'drop']
             mojo.execute()
         then:
             File sampleOutput = new File(outputDir, 'attribute-missing.html')
@@ -385,7 +385,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.sourceDirectory = srcDir
             mojo.sourceDocumentName = 'attribute-missing.adoc'
             mojo.backend = 'html'
-            mojo.attributeMissing = 'drop-line'
+            mojo.attributes = ['attribute-missing':'drop-line']
             mojo.execute()
         then:
             File sampleOutput = new File(outputDir, 'attribute-missing.html')
