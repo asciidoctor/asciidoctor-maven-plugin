@@ -143,12 +143,6 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "embedAssets")
     protected boolean embedAssets = false;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "attributeMissing")
-    protected String attributeMissing = "skip";
-
-    @Parameter(property = AsciidoctorMaven.PREFIX + "attributeUndefined")
-    protected String attributeUndefined = "drop-line";
-
     // List of resources to copy to the output directory (e.g., images, css). By default everything is copied
     @Parameter(property = AsciidoctorMaven.PREFIX + "sources")
     protected List<Resource> resources;
@@ -528,12 +522,6 @@ public class AsciidoctorMojo extends AbstractMojo {
             attributesBuilder.dataUri(true);
         }
 
-        if ("drop".equals(attributeUndefined) || "drop-line".equals(attributeUndefined)) {
-            attributesBuilder.attributeUndefined(attributeUndefined);
-        } else {
-            throw new MojoExecutionException(attributeUndefined + " is not valid. Must be one of 'drop' or 'drop-line'");
-        }
-
         AsciidoctorHelper.addAttributes(attributes, attributesBuilder);
 
         if (!attributesChain.isEmpty()) {
@@ -660,22 +648,6 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setEmbedAssets(boolean embedAssets) {
         this.embedAssets = embedAssets;
-    }
-
-    public String getAttributeMissing() {
-        return attributeMissing;
-    }
-
-    public void setAttributeMissing(String attributeMissing) {
-        this.attributeMissing = attributeMissing;
-    }
-
-    public String getAttributeUndefined() {
-        return attributeUndefined;
-    }
-
-    public void setAttributeUndefined(String attributeUndefined) {
-        this.attributeUndefined = attributeUndefined;
     }
 
     public File getProjectDirectory() {

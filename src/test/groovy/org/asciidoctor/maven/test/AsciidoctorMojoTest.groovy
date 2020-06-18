@@ -407,7 +407,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.sourceDirectory = srcDir
             mojo.sourceDocumentName = 'attribute-undefined.adoc'
             mojo.backend = 'html'
-            mojo.attributeUndefined = 'drop'
+            mojo.attributes = ['attribute-undefined':'drop']
             mojo.execute()
         then:
             File sampleOutput = new File(outputDir, 'attribute-undefined.html')
@@ -429,7 +429,7 @@ class AsciidoctorMojoTest extends Specification {
             mojo.sourceDirectory = srcDir
             mojo.sourceDocumentName = 'attribute-undefined.adoc'
             mojo.backend = 'html'
-            mojo.attributeMissing = 'drop-line'
+            mojo.attributes = ['attribute-undefined':'drop-line']
             mojo.execute()
         then:
             File sampleOutput = new File(outputDir, 'attribute-undefined.html')
