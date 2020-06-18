@@ -1,0 +1,162 @@
+= Asciidoctor-maven-plugin 2.x.x migration guide
+:sectnums:
+// TODO use italics for paths
+
+The `asciidoctor-maven-plugin` 2.0.0 introduces some breaking changes.
+This guide will provide the steps required to update a project currently using 1.5.x or 1.6.x version to 2.x.x.
+For each of the breaking changes, the motivation and new equivalent configuration will be offered.
+
+NOTE: New configuration details are highlighted in *bold*.
+
+== Motivations
+
+Changes are mainly motivated to make the maven integration as seamless as possible with Asciidoctor.
+With that goal in mind most of the changes fall under one of these cases.
+
+* Align with Asciidoctor conventions and default values.
+Also, when possible aligning with other build solutions options like the https://github.com/asciidoctor/asciidoctor-gradle-plugin[gradle plugin] or https://antora.org/[Antora].
+* Make clear distinction between Asciidoctor options and attributes.
+This simplifies the plugin's code and projects configuration avoiding ambiguities.
+
+== Changes
+
+=== Removal of support for Java 7, Java 8 will be the minimum required version
+
+If you are forced to use Java 7, we recommend using the version 1.5.8 with Asciidoctorj 1.6.2 for the most up to date features.
+
+=== Removal of `imagesDir` configuration and change of its default value
+
+Related discussion: https://github.com/asciidoctor/asciidoctor-maven-plugin/issues/296
+
+Until v 1.5.8 it was possible to set the `imagesdir` Asciidoctor attribute (https://asciidoctor.org/docs/user-manual/#setting-the-location-of-images) using the special `imagesDir` configuration as follows.
+
+[source,xml]
+----
+<configuration>
+    <imagesDir>my-images</imagesDir>
+</configuration>
+----
+
+Additionally, this configuration had as default value `images`, which meant that you could just put your images inside a directory called like that.
+However, this is a different behavior from default Asciidoctor (https://asciidoctor.org/docs/user-manual/#setting-the-location-of-images[#setting-the-location-of-images]) as well as other build tools like asciidoctor-gradle-plugin.
+
+*Version 2.0.0 will align with Asciidoctor removing the default value and encouraging the configuration of `imagesdir` as any other attribute.*
+If you are relying on the default value, make sure to add the attribute as in the example.
+
+[source,xml]
+.new configuration
+----
+<configuration>
+    <attributes>
+        <imagesdir>images</imagesdir> <!--.-->
+    </attributes>
+</configuration>
+----
+<1> Note the attribute is all in lowercase.
+
+=== Removal of `sourceHighlighter`
+
+To avoid ambiguity between the configuration and attributes section, and make configuration more clear.
+
+*The configuration option `sourceHighlighter` will be removed in favour of setting it as an attribute.*
+If you are using it, you will need to set it as follows:
+
+[source,xml]
+.new configuration
+----
+<configuration>
+    <attributes>
+        <source-highlighter>coderay</source-highlighter> <!--.-->
+    </attributes>
+</configuration>
+----
+<1> Note the attribute contains a hyphen.
+
+=== Removal of `attributeMissing` and `attributeUndefined`
+
+Related discussion: https://github.com/asciidoctor/asciidoctor-maven-plugin/issues/417
+
+These options serve to modify behaviours related with attributes.
+From showing console warning messages, to removing lines of text amongst others.
+
+*If you are currently using these options, you will need to add them to the attributes section.*
+
+[source,xml]
+.new configuration
+----
+<configuration>
+    <attributes>
+        <attribute-missing>warn</attribute-missing> <!--.-->
+        <attribute-undefined>drop-line</attribute-undefined>
+    </attributes>
+</configuration>
+----
+<1> Note both attributes contains a hyphen.
+
+=== Replacement of `templateDir` (now deprecated in Asciidoctor) by `templateDirs`
+
+Related discussion: https://github.com/asciidoctor/asciidoctor-maven-plugin/issues/265
+
+As stated in https://asciidoctor.org/docs/user-manual/#ruby-api-options `template_dir` option is deprecated in favour of `template_dirs`.
+Following this change the plugin configuration `<templateDir>` will be replaced by `templateDirs`.
+This will allow the use of multiple template directories.
+
+[source,xml]
+.previous configuration
+----
+<configuration>
+    <templateDir>my-templates</templateDir>
+</configuration>
+----
+
+[source,xml]
+.new configuration
+----
+<configuration>
+    <templateDirs>
+        <templateDir>my-templates</templateDir>
+    </templateDirs>
+</configuration>
+----
+
+=== Setting 'html5' as default backend
+
+Related discussion: https://github.com/asciidoctor/asciidoctor-maven-plugin/issues/188
+
+Current default backend is `docbook`, contrary to Asciidoctor which is `html5`.
+This made sense back when the plugin was create to simplify configuration and DocBook was the main scenario.
+Nowadays the main usage is HTML conversion, so it makes sense to set `html5 as default backend.
+This should reduce configuration for most users.
+
+*If you are converting to HTML, you won't need to set the `<backend>` element.
+If you are converting to Docbook, you will need to set it explicitly as follows.*
+
+[source,xml]
+.backward compatible configuration
+----
+<configuration>
+    <backend>docbook</backend>
+</configuration>
+----
+
+NOTE: For advanced conversion needs, probably check https://antora.org/.
+
+=== Changing default sources directory
+
+Related discussion: https://github.com/asciidoctor/asciidoctor-maven-plugin/issues/254.
+
+Previous versions of the plugin searches for AsciiDoc documents in `src/main/asciidoc`.
+In case the folder does not exist, the plugin skips the execution.
+
+This is being changed to a fallback mechanism where several paths are searched in specific order.
+The new default value is `src/docs/asciidoc` to reflect the difference in  nature of AsciiDoc sources from executable code.
+If the path does not exist, `src/asciidoc` and `src/main/asciidoc` are searched for in that order.
+
+*This change does not break compatibility* and has the advantage of following the same pattern as the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin], making easier to test both plugins.
+
+== Asciidoctorj changes
+
+Not part of the asciidoctor-maven-plugin, but important to consider during upgrade, the https://github.com/asciidoctor/asciidoctorj/tree/v2.0.0-RC.1#extension-api[AsciidocotorJ extension API] has suffered modifications.
+
+These are simple and can be spotted with help of the IDE once the AsciidoctorJ dependency has been updated.
+Please, review them before upgrading the maven-plugin.
