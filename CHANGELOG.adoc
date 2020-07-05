@@ -1,0 +1,18 @@
+= Asciidoctor Maven Plugin changelog
+:uri-asciidoctor: http://asciidoctor.org
+:uri-asciidoc: {uri-asciidoctor}/docs/what-is-asciidoc
+:uri-repo: https://github.com/asciidoctor/asciidoctor-maven-plugin
+:icons: font
+:star: icon:star[role=red]
+ifndef::icons[]
+:star: &#9733;
+endif::[]
+
+This document provides a high-level view of the changes introduced on Asciidoctor Maven Plugin by release.
+For a detailed view of what has changed, refer to the {uri-repo}/commits/master[commit history] on GitHub.
+
+== Unreleased
+
+Documentation::
+
+  * Add reference to v2-migration-guide in README for better findability (#445)
