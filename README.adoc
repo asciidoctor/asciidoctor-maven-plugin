@@ -78,7 +78,7 @@ endif::[]
 [WARNING]
 ====
 2.0.0 version introduced breaking changes.
-If you are upgrading from a previous version, please read the <<v2-migration-guide.adoc#,v2 migration guide>>.
+If you are upgrading from a previous version, please read the <<docs/v2-migration-guide.adoc#,v2 migration guide>>.
 ====
 
 As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` section of your POM file:
