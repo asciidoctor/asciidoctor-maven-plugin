@@ -16,3 +16,4 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 Documentation::
 
   * Add reference to v2-migration-guide in README for better findability (#445)
+  * Fix broken link to V2 migration guide (https://github.com/ge0ffrey[@ge0ffrey]) (#446)
