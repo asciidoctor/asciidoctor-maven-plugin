@@ -18,7 +18,6 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -42,6 +41,7 @@ import org.asciidoctor.maven.log.MemoryLogHandler;
 import org.jruby.Ruby;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
+import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -147,23 +147,24 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "sources")
     protected List<Resource> resources;
 
-    @Parameter(defaultValue = "${project}", readonly = true, required = true)
-    protected MavenProject project;
-
-    @Parameter(defaultValue = "${session}", readonly = true, required = true)
-    protected MavenSession session;
-
     @Parameter(property = AsciidoctorMaven.PREFIX + "verbose")
     protected boolean enableVerbose = false;
 
     @Parameter
     private LogHandler logHandler = new LogHandler();
 
-    @Component
+    @Inject
+    protected MavenProject project;
+
+    @Inject
+    protected MavenSession session;
+
+    @Inject
     protected MavenResourcesFiltering outputResourcesFiltering;
 
-    @Component
+    @Inject
     protected BuildContext buildContext;
+
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
