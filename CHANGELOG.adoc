@@ -25,3 +25,4 @@ Documentation::
 Build / Infrastructure::
 
   * Updated maven-release-plugin version (3.0.0-M1) and POM scm configuration to simplify release process
+  * Adds GitHub Actions build for Linux, Windows, MacOS and Java 8, 11 (#452, #453)

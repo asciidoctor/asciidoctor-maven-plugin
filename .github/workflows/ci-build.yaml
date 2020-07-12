@@ -30,7 +30,4 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
       - name: Build
-        run: mvn -B -V -Prun-its clean verify jacoco:report
-      - name: Publish coverage reports
-        needs: Build
-        run: mvn coveralls:report
+        run: mvn -B -V -Prun-its clean verify
