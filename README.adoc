@@ -215,6 +215,18 @@ Refer to the http://asciidoctor.org/docs/user-manual/#attribute-catalog[catalog 
     <source-highlighter>coderay</source-highlighter>
 </attributes>
 ----
+In addition to those attributes found in this section, any Maven property is also passed as attribute (replacing . by -).
++
+[source,xml]
+----
+<properties>
+  <my-site.version>2.3.0</my-site.version> <.>
+</properties>
+----
+<.> Will be passed as `my-site-version` to the converter.
++
+Note that when defining a build with multiple executions, shared attributes can be set in the global `<configuration>` section of the plugin.
+
 embedAssets:: embeds the CSS file and images into the output, defaults to `false`
 gemPaths:: enables to specify the location to one or more gem installation directories (same as GEM_PATH environment var), `empty` by default
 requires:: a `List<String>` to specify additional Ruby libraries not packaged in AsciidoctorJ, `empty` by default
@@ -304,25 +316,6 @@ All matching messages will appear as ERROR in Maven output.
 Since version 1.5.8 of AsciidoctorJ set `enableVerbose` to `true` option to validate internal cross references, this is being improved to avoid false positives
 See https://github.com/asciidoctor/asciidoctor/issues/2722[#2722] if your are interested in the details.
 ====
-
-==== Passing POM properties
-
-It is possible to pass properties defined in the POM to the Asciidoctor processor.
-This is handy for example to include in the generated document the POM artifact version number.
-
-This is done by creating a custom AsciiDoc property in the `attributes` section of the `configuration`.
-The AsciiDoc property value is defined in the usual Maven way: `${property.name}`.
-
-[source,xml]
-----
-<attributes>
-    <project-version>${project.version}</project-version>
-</attributes>
-----
-
-The custom AsciiDoc property can then be used in the document like this:
-
- The latest version of the project is {project-version}.
 
 ==== Setting boolean values
 
@@ -557,7 +550,7 @@ Specifies additional Ruby libraries not packaged in AsciidoctorJ, `empty` by def
 attributes::
 Similar to the plugin's `attributes`. +
 Allows defining a set of Asciidoctor attributes to be passed to the conversion. +
-In addition to those attributes found in this section, any maven property is also passed as attribute (replacing . by -).
+In addition to those attributes found in this section, any Maven property is also passed as attribute (replacing . by -).
 +
 [source,xml]
 ----
