@@ -12,6 +12,7 @@
 
 package org.asciidoctor.maven;
 
+import org.apache.maven.project.MavenProject;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.AttributesBuilder;
 
@@ -33,6 +34,21 @@ public class AsciidoctorHelper {
         // TODO Figure out how to reliably set other values (like boolean values, dates, times, etc)
         for (Map.Entry<String, Object> attributeEntry : attributes.entrySet()) {
             addAttribute(attributeEntry.getKey(), attributeEntry.getValue(), attributesBuilder);
+        }
+    }
+
+    /**
+     * Adds properties from the {@link MavenProject} into a {@link AttributesBuilder} taking care of Maven's XML parsing special
+     * cases like toggles, nulls, etc.
+     *
+     * @param project           Maven project
+     * @param attributesBuilder AsciidoctorJ AttributesBuilder
+     */
+    public static void addMavenProperties(MavenProject project, AttributesBuilder attributesBuilder) {
+        if (project.getProperties() != null) {
+            for (Map.Entry<Object, Object> entry : project.getProperties().entrySet()) {
+                attributesBuilder.attribute(((String) entry.getKey()).replaceAll("\\.", "-"), entry.getValue());
+            }
         }
     }
 
