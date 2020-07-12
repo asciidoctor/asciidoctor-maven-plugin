@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 == Unreleased
 
+Bug Fixes::
+
+  * Remove Maven components from plugin descriptor (#450)
+
 Documentation::
 
   * Add reference to v2-migration-guide in README for better findability (#445)
