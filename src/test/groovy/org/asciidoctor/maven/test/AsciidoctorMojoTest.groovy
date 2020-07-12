@@ -439,7 +439,7 @@ class AsciidoctorMojoTest extends Specification {
     }
 
     // Test for Issue 62
-    def 'setting_boolean_values'() {
+    def 'setting boolean attributes values'() {
         given:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
             File outputDir = new File('target/asciidoctor-output-issue-62')
@@ -460,11 +460,39 @@ class AsciidoctorMojoTest extends Specification {
             File sampleOutput = new File(outputDir, 'sample.html')
             String text = sampleOutput.getText()
             text.contains('class="toc2"')
+    }
 
+    def 'should inject attributes from maven property, plugin and execution'() {
+        given:
+            MockPlexusContainer.initializeMockContext(AsciidoctorMojo,
+                    ['project.property.attribute': 'project property configuration'])
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
+            File outputDir = new File('target/unit-tests/attributes')
+
+            if (!outputDir.exists())
+                outputDir.mkdir()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.outputDirectory = outputDir
+            mojo.sourceDirectory = srcDir
+            mojo.sourceDocumentName = 'attributes-example.adoc'
+            mojo.backend = 'html5'
+            mojo.attributes = [
+                    'plugin-configuration-attribute': 'plugin configuration',
+                    'execution-attribute': 'execution configuration'
+            ]
+            mojo.resources = [new Resource(directory: '.', excludes: ['**/**'])]
+            mojo.execute()
+        then:
+            File sampleOutput = new File(outputDir, 'attributes-example.html')
+            String text = sampleOutput.getText()
+            text.contains('This attribute is set in the project&#8217;s properties: project property configuration')
+            text.contains('This attribute is set in the plugin configuration: plugin configuration')
+            text.contains('This attribute is set in the execution configuration: execution configuration')
     }
 
     // Test for Issue 62 (unset)
-    def 'unsetting_boolean_values'() {
+    def 'unsetting boolean attributes values'() {
         given:
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
         File outputDir = new File('target/asciidoctor-output-issue-62-unset')
