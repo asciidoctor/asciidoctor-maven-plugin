@@ -29,5 +29,11 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: ${{ matrix.java }}
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-mvn-cache-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-mvn-cache-
       - name: Build
         run: mvn -B -V -Prun-its clean verify
