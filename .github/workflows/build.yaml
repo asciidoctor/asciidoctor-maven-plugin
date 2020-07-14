@@ -15,12 +15,9 @@ jobs:
       max-parallel: 2
       matrix:
         java:
-          - 8
           - 11
         os:
           - ubuntu-latest
-          - windows-latest
-          - macos-latest
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
@@ -32,5 +29,5 @@ jobs:
       - name: Build
         run: mvn -B -V -Prun-its clean verify jacoco:report
       - name: Publish coverage reports
-        if: matrix.os == 'ubuntu-latest' && matrix.java == '11' && github.base.ref == 'master'
+        if: matrix.os == 'ubuntu-latest' && matrix.java == '11'
         run: mvn coveralls:report -DrepoToken=${COVERALLS_REPO_TOKEN}
