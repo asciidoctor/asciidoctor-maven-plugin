@@ -33,6 +33,4 @@ jobs:
         run: mvn -B -V -Prun-its clean verify jacoco:report
       - name: Publish coverage reports
         if: matrix.os == 'ubuntu-latest' && matrix.java == '11' && github.base.ref == 'master'
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: mvn coveralls:report -DrepoToken=${COVERALLS_REPO_TOKEN}
