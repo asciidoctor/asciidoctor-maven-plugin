@@ -517,12 +517,13 @@ public class AsciidoctorMojo extends AbstractMojo {
             optionsBuilder.templateDirs(templateDirs.toArray(new File[]{}));
     }
 
-    protected void setAttributesOnBuilder(AttributesBuilder attributesBuilder) throws MojoExecutionException {
+    protected void setAttributesOnBuilder(AttributesBuilder attributesBuilder) {
         if (embedAssets) {
             attributesBuilder.linkCss(false);
             attributesBuilder.dataUri(true);
         }
 
+        AsciidoctorHelper.addMavenProperties(project, attributesBuilder);
         AsciidoctorHelper.addAttributes(attributes, attributesBuilder);
 
         if (!attributesChain.isEmpty()) {

@@ -23,12 +23,14 @@ class MockPlexusContainer {
         Log logger = new SystemStreamLog()
     }
 
-    private void initializeMojoContext(AsciidoctorMojo mojo) {
+    private void initializeMojoContext(AsciidoctorMojo mojo, Map<String, String> properties) {
 
         mojo.@project = [
-                getBasedir: {
+                getBasedir   : {
                     return new File('.')
-                }] as MavenProject
+                },
+                getProperties: properties as Properties
+        ] as MavenProject
 
         mojo.@buildContext = new DefaultBuildContext()
 
@@ -51,12 +53,16 @@ class MockPlexusContainer {
      * Intercept Asciidoctor mojo constructor to mock and inject required plexus objects.
      */
     static MockPlexusContainer initializeMockContext(Class<?> clazz) {
+        initializeMockContext(clazz, Collections.emptyMap())
+    }
+
+    static MockPlexusContainer initializeMockContext(Class<?> clazz,  Map<String, String> mavenProperties) {
         final MockPlexusContainer mockPlexusContainer = new MockPlexusContainer()
         def oldConstructor = clazz.constructors[0]
 
         clazz.metaClass.constructor = {
             def mojo = oldConstructor.newInstance()
-            mockPlexusContainer.initializeMojoContext(mojo)
+            mockPlexusContainer.initializeMojoContext(mojo, mavenProperties)
             return mojo
         }
         mockPlexusContainer

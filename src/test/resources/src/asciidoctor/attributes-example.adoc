@@ -1,0 +1,15 @@
+Document Title
+==============
+Doc Writer <thedoc@asciidoctor.org>
+:execution.attribute: cosa
+:idprefix: id_
+
+Preamble paragraph.
+
+NOTE: This is test, only a test.
+
+== Section A
+
+* This attribute is set in the plugin configuration: {plugin-configuration-attribute}
+* This attribute is set in the execution configuration: {execution-attribute}
+* This attribute is set in the project's properties: {project-property-attribute}

@@ -37,11 +37,7 @@ public class SiteConversionConfigurationParser {
             return new SiteConversionConfiguration(options.get(), Collections.emptyList());
         }
 
-        if (project.getProperties() != null) {
-            for (Map.Entry<Object, Object> entry : project.getProperties().entrySet()) {
-                presetAttributes.attribute(((String) entry.getKey()).replaceAll("\\.", "-"), entry.getValue());
-            }
-        }
+        AsciidoctorHelper.addMavenProperties(project, presetAttributes);
 
         final List<String> gemsToRequire = new ArrayList<>();
         for (Xpp3Dom asciidocOpt : asciidocConfig.getChildren()) {
