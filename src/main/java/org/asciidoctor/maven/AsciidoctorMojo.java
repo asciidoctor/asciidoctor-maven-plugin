@@ -134,17 +134,17 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "catalogAssets")
     protected boolean catalogAssets = false;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "synchronizations", required = false)
+    @Parameter
     protected List<Synchronization> synchronizations = new ArrayList<Synchronization>();
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "extensions")
+    @Parameter
     protected List<ExtensionConfiguration> extensions = new ArrayList<ExtensionConfiguration>();
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "embedAssets")
     protected boolean embedAssets = false;
 
     // List of resources to copy to the output directory (e.g., images, css). By default everything is copied
-    @Parameter(property = AsciidoctorMaven.PREFIX + "sources")
+    @Parameter
     protected List<Resource> resources;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "verbose")
