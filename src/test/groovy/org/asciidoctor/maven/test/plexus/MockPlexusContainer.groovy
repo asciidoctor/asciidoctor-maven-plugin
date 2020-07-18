@@ -32,17 +32,16 @@ class MockPlexusContainer {
                 getProperties: properties as Properties
         ] as MavenProject
 
-        mojo.@buildContext = new DefaultBuildContext()
-
+        def buildContext = new DefaultBuildContext()
         def logger = new FakeMavenLogger() as org.codehaus.plexus.logging.Logger
 
         DefaultMavenFileFilter mavenFileFilter = new DefaultMavenFileFilter()
-        mavenFileFilter.@buildContext = mojo.@buildContext
+        mavenFileFilter.@buildContext = buildContext
         mavenFileFilter.enableLogging(logger)
 
         DefaultMavenResourcesFiltering resourceFilter = new DefaultMavenResourcesFiltering()
         resourceFilter.@mavenFileFilter = mavenFileFilter
-        resourceFilter.@buildContext = mojo.@buildContext
+        resourceFilter.@buildContext = buildContext
         resourceFilter.initialize()
         resourceFilter.enableLogging(logger)
         mojo.encoding = "UTF-8"
