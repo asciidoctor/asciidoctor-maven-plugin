@@ -162,9 +162,6 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Inject
     protected MavenResourcesFiltering outputResourcesFiltering;
 
-    @Inject
-    protected BuildContext buildContext;
-
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
