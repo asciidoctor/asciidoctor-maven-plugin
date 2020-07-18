@@ -10,13 +10,14 @@ import org.asciidoctor.maven.test.processors.RequireCheckerTreeprocessor
 import spock.lang.Ignore
 import spock.lang.Specification
 
+import static org.asciidoctor.maven.test.AsciidoctorMojoTestHelper.newOutputTestDirectory
+
 /**
  *
  */
 class AsciidoctorMojoTest extends Specification {
 
     static final String DEFAULT_SOURCE_DIRECTORY = 'target/test-classes/src/asciidoctor'
-    static final String MULTIPLE_RESOURCES_OUTPUT = 'target/asciidoctor-output/multiple-resources'
 
     def setupSpec() {
         MockPlexusContainer.initializeMockContext(AsciidoctorMojo)
@@ -25,7 +26,7 @@ class AsciidoctorMojoTest extends Specification {
     def "converts docbook"() {
         setup:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output')
+            File outputDir = newOutputTestDirectory()
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -47,7 +48,7 @@ class AsciidoctorMojoTest extends Specification {
     def "converts html"() {
         setup:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output')
+            File outputDir = newOutputTestDirectory()
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -83,7 +84,7 @@ class AsciidoctorMojoTest extends Specification {
         setup:
             final def templatesPath = 'target/test-classes/templates/'
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output')
+            File outputDir = newOutputTestDirectory()
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -111,7 +112,7 @@ class AsciidoctorMojoTest extends Specification {
     def "docinfo file should be ignored html"() {
         setup:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output-docinfo')
+            File outputDir = new File(newOutputTestDirectory(), 'docinfo')
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -141,7 +142,7 @@ class AsciidoctorMojoTest extends Specification {
     def "should honor doctype set in document"() {
         setup:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output')
+            File outputDir = newOutputTestDirectory()
             if (!outputDir.exists())
                 outputDir.mkdir()
         when:
@@ -165,7 +166,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def "asciidoc file extension can be changed"() {
         given: 'an empty output directory'
-            def outputDir = new File('target/asciidoctor-output')
+            def outputDir = newOutputTestDirectory()
             outputDir.delete()
 
         when: 'asciidoctor mojo is called with extension foo and bar and it exists a sample1.foo and a sample2.bar'
@@ -217,7 +218,7 @@ class AsciidoctorMojoTest extends Specification {
     def "should require library"() {
         setup:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output')
+            File outputDir = newOutputTestDirectory()
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -241,7 +242,7 @@ class AsciidoctorMojoTest extends Specification {
     def "embedding resources"() {
         setup:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output')
+            File outputDir = newOutputTestDirectory()
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -270,7 +271,7 @@ class AsciidoctorMojoTest extends Specification {
     def "override output file"() {
         setup:
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-        File outputDir = new File('target/asciidoctor-output')
+        File outputDir = newOutputTestDirectory()
         File outputFile = new File( 'custom_output_file.html')
 
         if (!outputDir.exists())
@@ -301,8 +302,8 @@ class AsciidoctorMojoTest extends Specification {
     def "override output file with absolute path"() {
         setup:
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-        File outputDir = new File('target/asciidoctor-output')
-        File outputFile = new File(System.getProperty('java.io.tmpdir'), 'custom_output_file.html')
+        File outputDir = newOutputTestDirectory()
+        File outputFile = new File(newOutputTestDirectory().absolutePath, 'custom_output_file.html')
 
         if (!outputDir.exists())
             outputDir.mkdir()
@@ -315,12 +316,13 @@ class AsciidoctorMojoTest extends Specification {
         mojo.sourceDirectory = srcDir
         mojo.sourceDocumentName = 'sample-embedded.adoc'
         mojo.backend = 'html'
+        mojo.resources = [new Resource(directory: '.', excludes: ['**/**'])]
         mojo.execute()
         then:
-        outputDir.list().toList().isEmpty() == false
-        outputDir.list().toList().contains('custom_output_file.html')
+        outputDir.list().toList().isEmpty()
+        !outputDir.list().toList().contains('custom_output_file.html')
 
-        File sampleOutput = new File(outputDir, 'custom_output_file.html')
+        File sampleOutput = outputFile
         sampleOutput.length() > 0
         String text = sampleOutput.getText()
         text.contains('Asciidoctor default stylesheet')
@@ -332,7 +334,7 @@ class AsciidoctorMojoTest extends Specification {
     def "missing-attribute skip"() {
         given:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output')
+            File outputDir = newOutputTestDirectory()
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -353,7 +355,7 @@ class AsciidoctorMojoTest extends Specification {
     def "missing-attribute drop"() {
         given:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output')
+            File outputDir = newOutputTestDirectory()
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -375,7 +377,7 @@ class AsciidoctorMojoTest extends Specification {
     def "missing-attribute drop-line"() {
         given:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output')
+            File outputDir = newOutputTestDirectory()
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -397,7 +399,7 @@ class AsciidoctorMojoTest extends Specification {
     def "undefined-attribute drop"() {
         given:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output')
+            File outputDir = newOutputTestDirectory()
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -419,7 +421,7 @@ class AsciidoctorMojoTest extends Specification {
     def "undefined-attribute drop-line"() {
         given:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output')
+            File outputDir = newOutputTestDirectory()
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -442,7 +444,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'setting boolean attributes values'() {
         given:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output-issue-62')
+            File outputDir = newOutputTestDirectory('issue-62')
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -467,7 +469,7 @@ class AsciidoctorMojoTest extends Specification {
             MockPlexusContainer.initializeMockContext(AsciidoctorMojo,
                     ['project.property.attribute': 'project property configuration'])
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/unit-tests/attributes')
+            File outputDir = newOutputTestDirectory('attributes')
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -495,7 +497,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'unsetting boolean attributes values'() {
         given:
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-        File outputDir = new File('target/asciidoctor-output-issue-62-unset')
+        File outputDir = newOutputTestDirectory('issue-62-unset')
 
         if (!outputDir.exists())
             outputDir.mkdir()
@@ -518,7 +520,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'should set images directory as attribute'() {
         given:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output-imageDir')
+            File outputDir = newOutputTestDirectory('imageDir')
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -539,7 +541,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'includes_test'() {
         given:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output-include-test')
+            File outputDir = newOutputTestDirectory('include')
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -560,7 +562,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'skip'() {
         given:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output-skip-test')
+            File outputDir = newOutputTestDirectory('skip')
             if (outputDir.exists())
                 outputDir.delete()
         when:
@@ -578,7 +580,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'issue-78'() {
         given:
         File srcDir = new File('target/test-classes/src/asciidoctor/issue-78')
-        File outputDir = new File('target/asciidoctor-output-issue-78')
+        File outputDir = newOutputTestDirectory('issue-78')
 
         if (!outputDir.exists())
             outputDir.mkdir()
@@ -606,7 +608,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'code highlighting should be converted when set in the document header'() {
         setup:
         File srcDir = new File('src/test/resources/src/asciidoctor')
-        File outputDir = new File('target/asciidoctor-output-sourceHighlighting/header')
+        File outputDir = newOutputTestDirectory('sourceHighlighting-header')
         String documentName = 'sample-with-source-highlighting'
 
         when:
@@ -630,7 +632,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'code highlighting - coderay'() {
         setup:
             File srcDir = new File('src/test/resources/src/asciidoctor')
-            File outputDir = new File('target/asciidoctor-output-sourceHighlighting/coderay')
+            File outputDir = newOutputTestDirectory('sourceHighlighting-coderay')
 
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
@@ -653,7 +655,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'code highlighting - highlight.js'() {
         setup:
             File srcDir = new File('src/test/resources/src/asciidoctor')
-            File outputDir = new File('target/asciidoctor-output-sourceHighlighting/highlightjs')
+            File outputDir = newOutputTestDirectory('sourceHighlighting-highlightjs')
 
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
@@ -676,7 +678,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'code highlighting - prettify'() {
         setup:
             File srcDir = new File('src/test/resources/src/asciidoctor')
-            File outputDir = new File('target/asciidoctor-output-sourceHighlighting/prettify')
+            File outputDir = newOutputTestDirectory('sourceHighlighting-prettify')
 
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
@@ -702,7 +704,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'code highlighting - pygments'() {
         setup:
             File srcDir = new File('src/test/resources/src/asciidoctor')
-            File outputDir = new File('target/asciidoctor-output-sourceHighlighting/pygments')
+            File outputDir = newOutputTestDirectory('sourceHighlighting-pygments')
 
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
@@ -732,7 +734,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'code highlighting - nonExistent'() {
         setup:
             File srcDir = new File('src/test/resources/src/asciidoctor')
-            File outputDir = new File('target/asciidoctor-output-sourceHighlighting/nonExistent')
+            File outputDir = newOutputTestDirectory('sourceHighlighting-nonExistent')
 
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
@@ -806,7 +808,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'should replicate source structure-standard paths'() {
         setup:
             File srcDir = new File('src/test/resources/src/asciidoctor/relative-path-treatment')
-            File outputDir = new File('target/asciidoctor-output-relative')
+            File outputDir = newOutputTestDirectory('relative')
 
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
@@ -848,7 +850,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'should replicate source structure-complex paths'() {
         setup:
             File srcDir = new File('src/test/resources/src/asciidoctor/relative-path-treatment/../relative-path-treatment')
-            File outputDir = new File('target/../target/asciidoctor-output-relative')
+            File outputDir = newOutputTestDirectory('relative')
 
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
@@ -891,7 +893,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'should not replicate source structure-complex paths'() {
         setup:
             File srcDir = new File('src/test/resources/src/asciidoctor/relative-path-treatment/../relative-path-treatment')
-            File outputDir = new File('target/../target/asciidoctor-output-relative')
+            File outputDir = newOutputTestDirectory('relative')
 
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
@@ -930,7 +932,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'should replicate source structure-no baseDir rewrite'() {
         setup:
             File srcDir = new File('src/test/resources/src/asciidoctor/relative-path-treatment')
-            File outputDir = new File('target/asciidoctor-output-relative')
+            File outputDir = newOutputTestDirectory('relative')
 
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
@@ -974,7 +976,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'should not replicate source structure-baseDir rewrite'() {
         setup:
             File srcDir = new File('src/test/resources/src/asciidoctor/relative-path-treatment')
-            File outputDir = new File('target/asciidoctor-output-relative')
+            File outputDir = newOutputTestDirectory('relative')
 
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
@@ -1006,7 +1008,7 @@ class AsciidoctorMojoTest extends Specification {
     {
         given:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File( 'target/asciidoctor-output-project-version-test' )
+            File outputDir = newOutputTestDirectory('project-version')
 
             if (!outputDir.exists()) {
                 outputDir.mkdir()
@@ -1029,7 +1031,7 @@ class AsciidoctorMojoTest extends Specification {
     def 'github files can be included'() {
         setup:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File("target/test-resources/github-include/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('resources')
             String documentName = 'github-include.adoc'
 
         when:
@@ -1053,7 +1055,7 @@ class AsciidoctorMojoTest extends Specification {
     def "command line attributes should replace configurations and attributes"() {
         setup:
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-            File outputDir = new File('target/asciidoctor-output/command-line-options')
+            File outputDir = newOutputTestDirectory('commnad-line-options')
 
             if (!outputDir.exists())
                 outputDir.mkdirs()
@@ -1084,7 +1086,7 @@ class AsciidoctorMojoTest extends Specification {
             def newOut = new ByteArrayOutputStream()
             System.setOut(new PrintStream(newOut))
 
-            File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/skipped-process/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('multiple-resources-skip')
             if (!outputDir.exists())
                 outputDir.mkdir()
         when:
@@ -1106,7 +1108,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def "should only convert documents and not copy any resources when resources directory does no exist"() {
         setup:
-            File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/multi-sources/error-source-not-found/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('multiple-sources-error-source-not-found')
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -1131,7 +1133,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def "should only convert a single file and not copy any resource"() {
         setup:
-            File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/file-pattern/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('multiple-resources-file-pattern')
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -1157,7 +1159,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def "should copy all resources (2 directories with filters) into output folder"() {
         setup:
-            File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/multi-sources/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('multiple-resources-multiple-sources')
             String relativeTestsPath = "$DEFAULT_SOURCE_DIRECTORY/relative-path-treatment"
 
             if (!outputDir.exists())
@@ -1195,7 +1197,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def "should convert GitHub README alone"() {
         setup:
-            File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/readme/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('multiple-resources-readme')
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -1219,7 +1221,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def "should not include files in hidden directories (prefixes with underscore)"() {
         setup:
-            File outputDir = new File("target/asciidoctor-output/hidden/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('hidden')
             String relativeTestsPath = "$DEFAULT_SOURCE_DIRECTORY/relative-path-treatment"
 
             if (!outputDir.exists())
@@ -1241,7 +1243,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def "should not crash when enabling maven-resource filtering"() {
         setup:
-            File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/readme/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('multiple-resources-readme')
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -1266,7 +1268,7 @@ class AsciidoctorMojoTest extends Specification {
 
     def "should exclude custom source document Extensions by default"() {
         setup:
-            File outputDir = new File("$MULTIPLE_RESOURCES_OUTPUT/readme/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('multiple-resources-readme')
 
             if (!outputDir.exists())
                 outputDir.mkdir()
@@ -1301,7 +1303,7 @@ class AsciidoctorMojoTest extends Specification {
 
             // srcDir contains 6 documents, 2 of them with the same name (HellowWorld3.adoc)
             File srcDir = new File("$DEFAULT_SOURCE_DIRECTORY/relative-path-treatment/")
-            File outputDir = new File("target/asciidoctor-output/overlapping-outputFile/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('overlapping-outputFile')
             if (!outputDir.exists())
                 outputDir.mkdir()
         when:
@@ -1333,7 +1335,7 @@ class AsciidoctorMojoTest extends Specification {
             System.setErr(new PrintStream(newErr))
 
             File srcDir = new File("$DEFAULT_SOURCE_DIRECTORY/relative-path-treatment/")
-            File outputDir = new File("target/asciidoctor-output/overlapping-outputFile/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('overlapping-outputFile')
             if (!outputDir.exists())
                 outputDir.mkdir()
         when:
@@ -1366,7 +1368,7 @@ class AsciidoctorMojoTest extends Specification {
             System.setErr(new PrintStream(newErr))
 
             File srcDir = new File("$DEFAULT_SOURCE_DIRECTORY/relative-path-treatment/")
-            File outputDir = new File("target/asciidoctor-output/overlapping-outputFile/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('overlapping-outputFile')
             if (!outputDir.exists())
                 outputDir.mkdir()
         when:

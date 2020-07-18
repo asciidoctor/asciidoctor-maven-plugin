@@ -8,6 +8,8 @@ import spock.lang.Specification
 
 import java.util.concurrent.CountDownLatch
 
+import static org.asciidoctor.maven.test.AsciidoctorMojoTestHelper.newOutputTestDirectory
+
 class AsciidoctorRefreshMojoTest extends Specification {
 
     def setupSpec() {
@@ -17,9 +19,8 @@ class AsciidoctorRefreshMojoTest extends Specification {
     def "auto convert when source updated"() {
         setup:
             def srcDir = new File('target/test-classes/src/asciidoctor-refresh')
-            def outputDir = new File('target/asciidoctor-refresh-output')
-
             srcDir.mkdirs()
+            File outputDir = newOutputTestDirectory('refresh-mojo')
 
             def inputLatch = new CountDownLatch(1)
 

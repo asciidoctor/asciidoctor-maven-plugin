@@ -9,6 +9,7 @@ import spock.lang.Specification
 
 import static org.asciidoctor.log.Severity.ERROR
 import static org.asciidoctor.log.Severity.WARN
+import static org.asciidoctor.maven.test.AsciidoctorMojoTestHelper.newOutputTestDirectory
 
 class AsciidoctorMojoLogHandlerTest extends Specification {
 
@@ -22,7 +23,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         setup:
         String sourceDocument = 'errors/document-with-missing-include.adoc'
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-        File outputDir = new File("target/asciidoctor-output/${System.currentTimeMillis()}")
+        File outputDir = newOutputTestDirectory('logHandler')
 
         when:
         AsciidoctorMojo mojo = new AsciidoctorMojo()
@@ -47,7 +48,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         System.setOut(new PrintStream(newOut))
         String sourceDocument = 'errors/document-with-missing-include.adoc'
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-        File outputDir = new File("target/asciidoctor-output/${System.currentTimeMillis()}")
+        File outputDir = newOutputTestDirectory('logHandler')
 
         when:
         AsciidoctorMojo mojo = new AsciidoctorMojo()
@@ -77,7 +78,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
 
         String sourceDocument = 'errors/document-with-missing-include.adoc'
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-        File outputDir = new File("target/asciidoctor-output/${System.currentTimeMillis()}")
+        File outputDir = newOutputTestDirectory('logHandler')
         def handler = new LogHandler()
         handler.outputToConsole = true
 
@@ -117,7 +118,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
 
         String sourceDocument = 'errors/document-with-invalid-reference.adoc'
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-        File outputDir = new File("target/asciidoctor-output/${System.currentTimeMillis()}")
+        File outputDir = newOutputTestDirectory('logHandler')
         def handler = new LogHandler()
         handler.outputToConsole = true
 
@@ -156,7 +157,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
 
         String sourceDocument = 'errors/document-with-invalid-reference.adoc'
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-        File outputDir = new File("target/asciidoctor-output/${System.currentTimeMillis()}")
+        File outputDir = newOutputTestDirectory('logHandler')
         def handler = new LogHandler()
         handler.outputToConsole = true
 
@@ -192,7 +193,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         setup:
         String sourceDocument = 'errors/document-with-missing-include.adoc'
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-        File outputDir = new File("target/asciidoctor-output/${System.currentTimeMillis()}")
+        File outputDir = newOutputTestDirectory('logHandler')
         def handler = new LogHandler()
         handler.failIf = [severity: WARN]
 
@@ -216,7 +217,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         setup:
         String sourceDocument = 'errors/document-with-missing-include.adoc'
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-        File outputDir = new File("target/asciidoctor-output/${System.currentTimeMillis()}")
+        File outputDir = newOutputTestDirectory('logHandler')
         def handler = new LogHandler()
         handler.failIf = [severity: ERROR]
 
@@ -240,7 +241,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
         setup:
         String sourceDocument = 'errors/document-with-missing-include.adoc'
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-        File outputDir = new File("target/asciidoctor-output/${System.currentTimeMillis()}")
+        File outputDir = newOutputTestDirectory('logHandler')
         def handler = new LogHandler()
         handler.failIf = [containsText: 'here is some random text']
 
@@ -269,7 +270,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
 
         String sourceDocument = 'errors/document-with-missing-include.adoc'
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-        File outputDir = new File("target/asciidoctor-output/${System.currentTimeMillis()}")
+        File outputDir = newOutputTestDirectory('logHandler')
         def handler = new LogHandler()
         handler.failIf = [containsText: 'include file not found']
 
@@ -308,7 +309,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
 
         String sourceDocument = 'errors/document-with-missing-include.adoc'
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-        File outputDir = new File("target/asciidoctor-output/${System.currentTimeMillis()}")
+        File outputDir = newOutputTestDirectory('logHandler')
         def handler = new LogHandler()
         handler.failIf = [
                 severity    : WARN,
@@ -349,7 +350,7 @@ class AsciidoctorMojoLogHandlerTest extends Specification {
 
         String sourceDocument = 'errors/document-with-missing-include.adoc'
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY)
-        File outputDir = new File("target/asciidoctor-output/${System.currentTimeMillis()}")
+        File outputDir = newOutputTestDirectory('logHandler')
         def handler = new LogHandler()
         handler.outputToConsole = true
 
