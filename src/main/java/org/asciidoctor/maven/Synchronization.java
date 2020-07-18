@@ -13,14 +13,10 @@ package org.asciidoctor.maven;
 
 import java.io.File;
 
-import org.apache.maven.plugins.annotations.Parameter;
-
 public class Synchronization {
-    public static final String PREFIX = AsciidoctorMaven.PREFIX + "synchronization.";
-    @Parameter(property = PREFIX + "source")
+
     protected File source;
 
-    @Parameter(property = PREFIX + "target")
     protected File target;
 
     public Synchronization() {

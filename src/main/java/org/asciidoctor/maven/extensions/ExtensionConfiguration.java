@@ -1,28 +1,21 @@
 package org.asciidoctor.maven.extensions;
 
-import org.apache.maven.plugins.annotations.Parameter;
-import org.asciidoctor.maven.AsciidoctorMaven;
-
 /**
- * Holds a processor's configuration parameters in the pom.xml
- * 
+ * Holds an extension's configuration parameters in the pom.xml
+ *
  * @author abelsromero
  */
 public class ExtensionConfiguration {
 
-    public static final String PREFIX = AsciidoctorMaven.PREFIX + "extension.";
-    
     /**
-     * Fully qualified name of the processor
+     * Fully qualified name of the extension
      */
-    @Parameter(property = PREFIX + "className", required = true)
     private String className;
 
     /**
      * Optional. Block name in case of setting a Block, BlockMacro or
      * InlineMacro processor
      */
-    @Parameter(property = PREFIX + "blockName")
     private String blockName;
 
     public ExtensionConfiguration() {
