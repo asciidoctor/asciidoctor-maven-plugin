@@ -4,7 +4,6 @@ before_script:
   - export MAVEN_SKIP_RC=true
 jdk:
   - oraclejdk11
-  - openjdk8
 # skip installation step entirely
 install: true
 script:
