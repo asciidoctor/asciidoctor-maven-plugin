@@ -12,18 +12,6 @@
 
 package org.asciidoctor.maven;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Scanner;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
@@ -38,13 +26,20 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.asciidoctor.Asciidoctor;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Scanner;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 @Mojo(name = "auto-refresh")
 public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     public static final String PREFIX = AsciidoctorMaven.PREFIX + "refresher.";
-    @Parameter(property = PREFIX + "port", required = false)
+    @Parameter(property = PREFIX + "port")
     protected int port = 2000;
 
-    @Parameter(property = PREFIX + "interval", required = false)
+    @Parameter(property = PREFIX + "interval")
     protected int interval = 2000; // 2s
 
     private Future<Asciidoctor> asciidoctor = null;

@@ -12,11 +12,6 @@
 
 package org.asciidoctor.maven;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.Map;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -26,14 +21,19 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.maven.http.AsciidoctorHttpServer;
 import org.asciidoctor.maven.io.IO;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Map;
+
 @Mojo(name = "http")
 public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
     public static final String PREFIX = AsciidoctorMaven.PREFIX + "http.";
 
-    @Parameter(property = PREFIX + "home", required = false, defaultValue = "index")
+    @Parameter(property = PREFIX + "home", defaultValue = "index")
     protected String home;
 
-    @Parameter(property = PREFIX + "reload-interval", required = false, defaultValue = "0")
+    @Parameter(property = PREFIX + "reload-interval", defaultValue = "0")
     protected int autoReloadInterval;
 
     @Override
