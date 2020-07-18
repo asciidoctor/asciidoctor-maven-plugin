@@ -22,6 +22,7 @@ Bug Fixes::
   * Remove Maven components from plugin descriptor (#450)
   * Remove unnecessary maven's @Parameter configuration from ExtensionConfiguration, Synchronization and Resources (#461)
   * Remove unused BuildContext from AsciidoctorMojo (#462)
+  * Remove unnecessary required configuration from mojo parameters (#463)
 
 Documentation::
 
