@@ -15,6 +15,8 @@ import org.asciidoctor.maven.test.processors.YellBlockProcessor
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static org.asciidoctor.maven.test.AsciidoctorMojoTestHelper.newOutputTestDirectory
+
 /**
  * Specific tests to validate usage of AsciidoctorJ extension in AsciidoctorMojo.
  * 
@@ -30,12 +32,12 @@ class AsciidoctorMojoExtensionsTest extends Specification {
     }
 
     static final String SRC_DIR = 'target/test-classes/src/asciidoctor/'
-    static final String OUTPUT_DIR = 'target/asciidoctor-output-extensions'
+
 
     def "fails because processor is not found in classpath"() {
         setup:
             File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/preprocessor/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('preprocessor')
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'
@@ -60,7 +62,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
     def "plugin fails because processor throws an uncaught exception"() {
         setup:
             File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/preprocessor/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('preprocessor')
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'
@@ -92,7 +94,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             System.out = new PrintStream(systemOut)
     
             File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/processors/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('preprocessor')
     
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'
@@ -122,7 +124,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
     def "successfully converts html with a preprocessor"() {
         setup:
             File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/preprocessor/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('preprocessor')
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'
@@ -148,7 +150,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
     def "successfully converts html with a blockprocessor"() {
         setup:
             File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/blockprocessor/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('blockprocessor')
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'
@@ -173,7 +175,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
     def "successfully converts html and adds meta tag with a DocinfoProcessor"() {
         setup:
             File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/docinfoProcessor/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('docinfoProcessor')
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'
@@ -198,7 +200,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
     def "successfully converts html and modifies output with a BlockMacroProcessor"() {
         setup:
             File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/blockMacroProcessor/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('blockMacroProcessor')
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'
@@ -223,7 +225,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
     def "successfully converts html and modifies output with a InlineMacroProcessor"() {
         setup:
             File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/inlineMacroProcessor/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('inlineMacroProcessor')
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'
@@ -248,7 +250,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
     def "successfully converts html and modifies output with an IncludeProcessor"() {
         setup:
             File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/includeProcessor/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('includeProcessor')
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'
@@ -275,7 +277,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
             ByteArrayOutputStream systemOut = new ByteArrayOutputStream()
             System.out = new PrintStream(systemOut)
             File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/preprocessor/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('preprocessor')
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'
@@ -306,7 +308,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
     def "successfully converts html with Preprocessor, DocinfoProcessor, InlineMacroProcessor and IncludeProcessor"() {
         setup:
             File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/processors/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('preprocessor')
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'
@@ -343,7 +345,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
     def "converts html when using all types of extensions"() {
         setup:
             File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/processors/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('preprocessor')
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'
@@ -392,7 +394,7 @@ class AsciidoctorMojoExtensionsTest extends Specification {
     def "property extension"() {
         setup:
             File srcDir = new File(SRC_DIR)
-            File outputDir = new File("${OUTPUT_DIR}/preprocessor/${System.currentTimeMillis()}")
+            File outputDir = newOutputTestDirectory('preprocessor')
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.backend = 'html'

@@ -18,7 +18,7 @@ class AsciidoctorHttpMojoTest extends Specification {
     def "http front should let access converted files"() {
         setup:
             def srcDir = new File('target/test-classes/src/asciidoctor-http')
-            def outputDir = new File('target/asciidoctor-http-output')
+            def outputDir = AsciidoctorMojoTestHelper.newOutputTestDirectory('http-mojo')
 
             srcDir.mkdirs()
 
@@ -33,7 +33,7 @@ class AsciidoctorHttpMojoTest extends Specification {
             System.setOut(new PrintStream(newOut))
             System.setIn(newIn)
 
-            def httpPort = new AsciidoctorMojoTestHelper().availablePort
+            def httpPort = AsciidoctorMojoTestHelper.availablePort
 
             def content = new File(srcDir, "content.asciidoc")
             content.withWriter{ it <<
@@ -77,7 +77,7 @@ class AsciidoctorHttpMojoTest extends Specification {
     def "default page"() {
         setup:
             def srcDir = new File('target/test-classes/src/asciidoctor-http-default')
-            def outputDir = new File('target/asciidoctor-http-default-output')
+            def outputDir = AsciidoctorMojoTestHelper.newOutputTestDirectory('http-mojo')
 
             srcDir.mkdirs()
 
@@ -89,7 +89,7 @@ class AsciidoctorHttpMojoTest extends Specification {
             def newOut = new DoubleOuputStream(originalOut)
             def newIn = new PrefilledInputStream('exit\r\n'.bytes, inputLatch)
 
-            def httpPort = new AsciidoctorMojoTestHelper().availablePort
+            def httpPort = AsciidoctorMojoTestHelper.availablePort
 
             System.setOut(new PrintStream(newOut))
             System.setIn(newIn)
