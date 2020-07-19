@@ -18,6 +18,7 @@ Improvements::
   * Inject Maven properties as attributes in `process-asciidoc` mojo (#459)
   * Make `auto-refresh` (and `http` by inheritance) only convert modified and created sources (#474)
   * Make `auto-refresh` only copy modified and created resources + taking into consideration <resources> options (#478)
+  * Publish `auto-refresh` mojo (#466)
 
 Bug Fixes::
 

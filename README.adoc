@@ -99,7 +99,7 @@ As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` 
 <1> As this plugin tracks the version of Asciidoctor, you can use whichever version of Asciidoctor you prefer.
 
 [source,xml]
-.Execution setup
+.Conversion setup
 ----
 <plugin>
     ...
@@ -116,7 +116,7 @@ As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` 
 ----
 <1> This is simply an unique id for the execution.
 <2> The asciidoctor-maven-plugin does not run in any phase by default, so one must be specified.
-<3> The (only for the moment) Asciidoctor Maven plugin goal.
+<3> The Asciidoctor Maven plugin conversion goal.
 
 === Configuration
 
@@ -414,6 +414,43 @@ An example of this setup is below:
 <.> Second execution, converts documents to DocBook.
 <.> Any configuration outside the executions section is inherited by each execution.
 This allows an easier way to share common configuration options.
+
+=== Automatic conversion of documents on change (refresh)
+
+Using the `auto-refresh` goal it is possible to do the conversion of documents when one of them is modified.
+This is useful in combination with a refresh browser extension, allowing to preview document changes while editing.
+
+[source,xml]
+.Refresh setup
+----
+<plugin>
+    ...
+    <executions>
+        <execution>
+            <id>output-html</id>
+            <phase>generate-resources</phase> <!--1-->
+            <goals>
+                <goal>auto-refresh</goal> <!--2-->
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+----
+<1> The asciidoctor-maven-plugin does not run in any phase by default, so one must be specified.
+<2> The Asciidoctor Maven plugin refresh goal.
+
+This accepts the same configurations as `process-asciidoc` mojo with one difference.
+If `failIf` is set and errors are introduced after start, these will be reported but the plugin will continue running.
+If errors are found during initialization, plugin won't start.
+
+Once started, this will keep the maven process running until the commands `exit` or `quit` are inserted into the console,
+or it is manually killed.
+
+[NOTE]
+====
+As any Maven mojo, it can be invoked specifying it alongside the plugin prefix (`mvn asciidoctor:auto-refresh`).
+These however will use the `<configuration>` applied directly to the plugin, not the ones in `<executions>`.
+====
 
 == Maven Site Integration
 
