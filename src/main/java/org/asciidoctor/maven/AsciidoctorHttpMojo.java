@@ -28,6 +28,7 @@ import java.util.Map;
 
 @Mojo(name = "http")
 public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
+
     public static final String PREFIX = AsciidoctorMaven.PREFIX + "http.";
 
     @Parameter(property = PREFIX + "home", defaultValue = "index")
@@ -49,6 +50,7 @@ public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
     @Override
     protected void convertFile(final Asciidoctor asciidoctorInstance, final Map<String, Object> options, final File f) {
         asciidoctorInstance.convertFile(f, options);
+        logConvertedFile(f);
 
         if (autoReloadInterval > 0 && backend.toLowerCase().startsWith("html")) {
             final String filename = f.getName();
@@ -81,11 +83,7 @@ public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
                     }
                 }
             }
-        } else {
-            asciidoctorInstance.convertFile(f, options);
         }
-
-        logConvertedFile(f);
     }
 
     private String addRefreshing(final String html) {
