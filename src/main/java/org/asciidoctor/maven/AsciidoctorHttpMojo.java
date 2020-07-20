@@ -31,6 +31,9 @@ public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
 
     public static final String PREFIX = AsciidoctorMaven.PREFIX + "http.";
 
+    @Parameter(property = PREFIX + "port")
+    protected int port = 2000;
+
     @Parameter(property = PREFIX + "home", defaultValue = "index")
     protected String home;
 

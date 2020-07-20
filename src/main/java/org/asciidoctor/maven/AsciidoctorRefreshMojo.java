@@ -38,9 +38,6 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
 
     public static final String PREFIX = AsciidoctorMaven.PREFIX + "refresher.";
 
-    @Parameter(property = PREFIX + "port")
-    protected int port = 2000;
-
     @Parameter(property = PREFIX + "interval")
     protected int interval = 2000; // 2s
 
