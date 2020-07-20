@@ -35,7 +35,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mojo(name = "auto-refresh")
 public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
+
     public static final String PREFIX = AsciidoctorMaven.PREFIX + "refresher.";
+
     @Parameter(property = PREFIX + "port")
     protected int port = 2000;
 
@@ -72,7 +74,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
         updaterScheduler = Executors.newScheduledThreadPool(1);
 
         // we prevent refreshing more often than all 200ms and we refresh at least once/s
-        // NOTE1: it is intended to avoid too much time space between file polling and re-convertin
+        // NOTE1: it is intended to avoid too much time space between file polling and re-converting
         // NOTE2: if nothing to refresh it does nothing so all is fine
         updaterScheduler.scheduleAtFixedRate(new Updater(needsUpdate, this), 0, Math.min(1000, Math.max(200, interval / 2)), TimeUnit.MILLISECONDS);
     }
@@ -138,7 +140,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     }
 
     private void startPolling() throws MojoExecutionException {
-        monitors = new ArrayList<FileAlterationMonitor>();
+        monitors = new ArrayList<>();
 
         { // content monitor
             final FileAlterationObserver observer;
