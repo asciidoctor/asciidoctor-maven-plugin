@@ -12,7 +12,6 @@
 
 package org.asciidoctor.maven;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
@@ -39,7 +38,6 @@ import org.asciidoctor.maven.log.LogRecordHelper;
 import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
 import org.jruby.Ruby;
-import org.sonatype.plexus.build.incremental.BuildContext;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -133,9 +131,6 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "catalogAssets")
     protected boolean catalogAssets = false;
-
-    @Parameter
-    protected List<Synchronization> synchronizations = new ArrayList<>();
 
     @Parameter
     protected List<ExtensionConfiguration> extensions = new ArrayList<>();
@@ -244,10 +239,6 @@ public class AsciidoctorMojo extends AbstractMojo {
             } catch (Exception exception) {
                 throw new MojoExecutionException(exception.getMessage());
             }
-        }
-
-        if (synchronizations != null && !synchronizations.isEmpty()) {
-            synchronize();
         }
     }
 
@@ -442,12 +433,6 @@ public class AsciidoctorMojo extends AbstractMojo {
         return asciidoctorFiles;
     }
 
-    private void synchronize() {
-        for (final Synchronization synchronization : synchronizations) {
-            synchronize(synchronization);
-        }
-    }
-
     protected void convertFile(Asciidoctor asciidoctor, Map<String, Object> options, File f) {
         asciidoctor.convertFile(f, options);
         logConvertedFile(f);
@@ -455,22 +440,6 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     protected void logConvertedFile(File f) {
         getLog().info("Converted " + f.getAbsolutePath());
-    }
-
-    protected void synchronize(final Synchronization synchronization) {
-        if (synchronization.getSource().isDirectory()) {
-            try {
-                FileUtils.copyDirectory(synchronization.getSource(), synchronization.getTarget());
-            } catch (IOException e) {
-                getLog().error(String.format("Can't synchronize %s -> %s", synchronization.getSource(), synchronization.getTarget()));
-            }
-        } else {
-            try {
-                FileUtils.copyFile(synchronization.getSource(), synchronization.getTarget());
-            } catch (IOException e) {
-                getLog().error(String.format("Can't synchronize %s -> %s", synchronization.getSource(), synchronization.getTarget()));
-            }
-        }
     }
 
     protected void ensureOutputExists() {
@@ -631,14 +600,6 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setSourceDocumentName(String sourceDocumentName) {
         this.sourceDocumentName = sourceDocumentName;
-    }
-
-    public List<Synchronization> getSynchronizations() {
-        return synchronizations;
-    }
-
-    public void setSynchronizations(List<Synchronization> synchronizations) {
-        this.synchronizations = synchronizations;
     }
 
     public boolean isEmbedAssets() {

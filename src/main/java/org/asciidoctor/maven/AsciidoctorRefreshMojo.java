@@ -177,50 +177,6 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
             monitors.add(monitor);
         }
 
-        { // resources monitors
-            if (synchronizations != null) {
-                for (final Synchronization s : synchronizations) {
-                    final FileAlterationMonitor monitor = new FileAlterationMonitor(interval);
-                    final FileAlterationListener listener = new FileAlterationListenerAdaptor() {
-                        @Override
-                        public void onFileCreate(final File file) {
-                            getLog().info("File " + file.getAbsolutePath() + " created.");
-                            synchronize(s);
-                            needsUpdate.set(true);
-                        }
-
-                        @Override
-                        public void onFileChange(final File file) {
-                            getLog().info("File " + file.getAbsolutePath() + " updated.");
-                            synchronize(s);
-                            needsUpdate.set(true);
-                        }
-
-                        @Override
-                        public void onFileDelete(final File file) {
-                            getLog().info("File " + file.getAbsolutePath() + " deleted.");
-                            FileUtils.deleteQuietly(file);
-                            needsUpdate.set(true);
-                        }
-                    };
-
-                    final File source = s.getSource();
-
-                    final FileAlterationObserver observer;
-                    if (source.isDirectory()) {
-                        observer = new FileAlterationObserver(source);
-                    } else {
-                        observer = new FileAlterationObserver(source.getParentFile(), new NameFileFilter(source.getName()));
-                    }
-
-                    observer.addListener(listener);
-                    monitor.addObserver(observer);
-
-                    monitors.add(monitor);
-                }
-            }
-        }
-
         for (final FileAlterationMonitor monitor : monitors) {
             try {
                 monitor.start();
