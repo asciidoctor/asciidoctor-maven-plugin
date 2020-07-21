@@ -24,6 +24,7 @@ Bug Fixes::
   * Remove unused BuildContext from AsciidoctorMojo (#462)
   * Remove unnecessary required configuration from mojo parameters (#463)
   * Prevent sources from being converted twice in http mojo (#469)
+  * Remove synchronization property from mojo (#471)
 
 Documentation::
 
