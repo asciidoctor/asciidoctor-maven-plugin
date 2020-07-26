@@ -13,23 +13,23 @@
 package org.asciidoctor.maven;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.NameFileFilter;
-import org.apache.commons.io.filefilter.RegexFileFilter;
-import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.io.filefilter.*;
 import org.apache.commons.io.monitor.FileAlterationListener;
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.asciidoctor.Asciidoctor;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Scanner;
+import java.util.StringJoiner;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -77,7 +77,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     }
 
     protected void doWork() throws MojoFailureException, MojoExecutionException {
-        getLog().info("Converted doc in " + executeAndReturnDuration() + "ms");
+        getLog().info("Converted doc(s) in " + executeAndReturnDuration() + "ms");
         doWait();
     }
 
@@ -121,7 +121,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
         }
 
         try {
-            getLog().info("Re-converted doc in " + executeAndReturnDuration() + "ms");
+            getLog().info("Re-converted doc(s) in " + executeAndReturnDuration() + "ms");
         } catch (final MojoExecutionException e) {
             getLog().error(e);
         } catch (final MojoFailureException e) {
@@ -137,44 +137,16 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     }
 
     private void startPolling() throws MojoExecutionException {
-        monitors = new ArrayList<>();
 
         { // content monitor
-            final FileAlterationObserver observer;
-            if (sourceDocumentName != null) {
-                observer = new FileAlterationObserver(sourceDirectory, new NameFileFilter(sourceDocumentName));
-            } else if (sourceDirectory != null) {
-                observer = new FileAlterationObserver(sourceDirectory, new RegexFileFilter(ASCIIDOC_REG_EXP_EXTENSION));
-            } else {
-                monitors = null; // no need to start anything because there is no content
-                return;
-            }
-
+            final FileAlterationObserver observer = new FileAlterationObserver(sourceDirectory, buildFileFilter());
+            final FileAlterationListener listener = new AtomicFlagFileAlterationListenerAdaptor(needsUpdate, getLog());
             final FileAlterationMonitor monitor = new FileAlterationMonitor(interval);
-            final FileAlterationListener listener = new FileAlterationListenerAdaptor() {
-                @Override
-                public void onFileCreate(final File file) {
-                    getLog().info("File " + file.getAbsolutePath() + " created.");
-                    needsUpdate.set(true);
-                }
-
-                @Override
-                public void onFileChange(final File file) {
-                    getLog().info("File " + file.getAbsolutePath() + " updated.");
-                    needsUpdate.set(true);
-                }
-
-                @Override
-                public void onFileDelete(final File file) {
-                    getLog().info("File " + file.getAbsolutePath() + " deleted.");
-                    needsUpdate.set(true);
-                }
-            };
 
             observer.addListener(listener);
             monitor.addObserver(observer);
 
-            monitors.add(monitor);
+            monitors = Collections.singletonList(monitor);
         }
 
         for (final FileAlterationMonitor monitor : monitors) {
@@ -186,18 +158,29 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
         }
     }
 
+    private IOFileFilter buildFileFilter() {
+        if (sourceDocumentName != null)
+            return new NameFileFilter(sourceDocumentName);
+
+        if (!sourceDocumentExtensions.isEmpty()) {
+            final StringJoiner stringJoiner = new StringJoiner("|", "^[^_.].*\\.(", ")$");
+            for (String extension : sourceDocumentExtensions) {
+                stringJoiner.add(extension);
+            }
+            return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter(stringJoiner.toString()));
+        }
+
+        return new RegexFileFilter(ASCIIDOC_REG_EXP_EXTENSION);
+    }
+
     private void createAsciidoctor() {
         final ExecutorService es = Executors.newSingleThreadExecutor();
-        asciidoctor = es.submit(new Callable<Asciidoctor>() {
-            @Override
-            public Asciidoctor call() throws Exception {
-                return Asciidoctor.Factory.create();
-            }
-        });
+        asciidoctor = es.submit(() -> Asciidoctor.Factory.create());
         es.shutdown();
     }
 
     private static class Updater implements Runnable {
+
         private final AtomicBoolean run;
         private final AsciidoctorRefreshMojo mojo;
 
@@ -212,6 +195,35 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
                 run.set(false);
                 mojo.doExecute();
             }
+        }
+    }
+
+    private static class AtomicFlagFileAlterationListenerAdaptor extends FileAlterationListenerAdaptor {
+
+        private final AtomicBoolean needsUpdate;
+        private final Log log;
+
+        private AtomicFlagFileAlterationListenerAdaptor(AtomicBoolean needsUpdate, Log log) {
+            this.needsUpdate = needsUpdate;
+            this.log = log;
+        }
+
+        @Override
+        public void onFileCreate(final File file) {
+            log.info("File " + file.getAbsolutePath() + " created.");
+            needsUpdate.set(true);
+        }
+
+        @Override
+        public void onFileChange(final File file) {
+            log.info("File " + file.getAbsolutePath() + " updated.");
+            needsUpdate.set(true);
+        }
+
+        @Override
+        public void onFileDelete(final File file) {
+            log.info("File " + file.getAbsolutePath() + " deleted.");
+            needsUpdate.set(true);
         }
     }
 }
