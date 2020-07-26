@@ -1,5 +1,6 @@
 package org.asciidoctor.maven;
 
+import org.asciidoctor.maven.process.SourceDirectoryFinder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -10,7 +11,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-import static org.asciidoctor.maven.SourceDirectoryFinder.ORDERED_CANDIDATE_PATHS;
+import static org.asciidoctor.maven.process.SourceDirectoryFinder.ORDERED_CANDIDATE_PATHS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SourceDirectoryFinderTest {

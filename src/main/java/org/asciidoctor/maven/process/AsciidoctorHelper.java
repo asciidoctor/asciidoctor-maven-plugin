@@ -10,7 +10,7 @@
  * limitations under the License.
  */
 
-package org.asciidoctor.maven;
+package org.asciidoctor.maven.process;
 
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.Attributes;

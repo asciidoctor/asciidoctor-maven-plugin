@@ -786,7 +786,7 @@ class AsciidoctorMojoTest extends Specification {
 
             File[] htmls =  actualFile.listFiles({File f -> f.getName() ==~ /.+html/} as FileFilter)
             if (htmls) {
-                File[] asciidocs =  expectedFile.listFiles({File f -> f.getName() ==~ ASCIIDOC_REG_EXP_EXTENSION} as FileFilter)
+                File[] asciidocs =  expectedFile.listFiles({File f -> f.getName() ==~ ASCIIDOC_REG_EXP_EXTENSION && !f.getName().startsWith('_')} as FileFilter)
                 assert htmls.length == asciidocs.length
             }
             File[] actualChildren =  actualFile.listFiles(DIRECTORY_FILTER)

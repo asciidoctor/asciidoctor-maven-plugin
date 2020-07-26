@@ -1,4 +1,4 @@
-package org.asciidoctor.maven;
+package org.asciidoctor.maven.process;
 
 import java.io.File;
 import java.util.Optional;

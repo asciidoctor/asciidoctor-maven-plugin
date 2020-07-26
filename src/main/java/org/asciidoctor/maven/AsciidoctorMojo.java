@@ -24,7 +24,6 @@ import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
 import org.asciidoctor.*;
-import org.asciidoctor.jruby.AbstractDirectoryWalker;
 import org.asciidoctor.jruby.AsciiDocDirectoryWalker;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.jruby.DirectoryWalker;
@@ -37,6 +36,9 @@ import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordHelper;
 import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
+import org.asciidoctor.maven.process.AsciidoctorHelper;
+import org.asciidoctor.maven.process.CustomExtensionDirectoryWalker;
+import org.asciidoctor.maven.process.SourceDirectoryFinder;
 import org.jruby.Ruby;
 
 import javax.inject.Inject;
@@ -45,7 +47,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 
-import static org.asciidoctor.maven.SourceDirectoryFinder.DEFAULT_SOURCE_DIR;
+import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE_DIR;
 
 
 /**
@@ -55,7 +57,7 @@ import static org.asciidoctor.maven.SourceDirectoryFinder.DEFAULT_SOURCE_DIR;
 public class AsciidoctorMojo extends AbstractMojo {
     // copied from org.asciidoctor.AsciiDocDirectoryWalker.ASCIIDOC_REG_EXP_EXTENSION
     // should probably be configured in AsciidoctorMojo through @Parameter 'extension'
-    protected static final String ASCIIDOC_REG_EXP_EXTENSION = ".*\\.a((sc(iidoc)?)|d(oc)?)$";
+    protected static final String ASCIIDOC_REG_EXP_EXTENSION = "^[^_.].*\\.a((sc(iidoc)?)|d(oc)?)$";
 
     @Parameter(defaultValue = "${project.build.sourceEncoding}")
     protected String encoding;
@@ -210,10 +212,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         copyResources();
 
         // Prepare sources
-        final List<File> sourceFiles = sourceDocumentName == null ?
-                scanSourceFiles() : Arrays.asList(new File(sourceDirectory, sourceDocumentName));
-
-        final Set<File> dirs = new HashSet<File>();
+        final List<File> sourceFiles = calculateSourceFiles();
 
         // register LogHandler to capture asciidoctor messages
         final Boolean outputToConsole = logHandler.getOutputToConsole() == null ? Boolean.TRUE : logHandler.getOutputToConsole();
@@ -225,9 +224,10 @@ public class AsciidoctorMojo extends AbstractMojo {
             Logger.getLogger("asciidoctor").setUseParentHandlers(false);
         }
 
+        final Set<File> uniqueDirs = new HashSet<>();
         for (final File source : sourceFiles) {
             final File destinationPath = setDestinationPaths(optionsBuilder, source);
-            if (!dirs.add(destinationPath))
+            if (!uniqueDirs.add(destinationPath))
                 getLog().warn("Duplicated destination found: overwriting file: " + destinationPath.getAbsolutePath());
 
             convertFile(asciidoctor, optionsBuilder.asMap(), source);
@@ -406,31 +406,16 @@ public class AsciidoctorMojo extends AbstractMojo {
         return asciidoctor;
     }
 
-    private List<File> scanSourceFiles() {
-        final List<File> asciidoctorFiles;
-        if (sourceDocumentExtensions == null || sourceDocumentExtensions.isEmpty()) {
-            final DirectoryWalker directoryWalker = new AsciiDocDirectoryWalker(sourceDirectory.getAbsolutePath());
-            asciidoctorFiles = directoryWalker.scan();
-        } else {
-            final DirectoryWalker directoryWalker = new CustomExtensionDirectoryWalker(sourceDirectory.getAbsolutePath(), sourceDocumentExtensions);
-            asciidoctorFiles = directoryWalker.scan();
-        }
-        String absoluteSourceDirectory = sourceDirectory.getAbsolutePath();
-        for (Iterator<File> iter = asciidoctorFiles.iterator(); iter.hasNext(); ) {
-            File f = iter.next();
-            do {
-                // stop when we hit the source directory root
-                if (absoluteSourceDirectory.equals(f.getAbsolutePath())) {
-                    break;
-                }
-                // skip if the filename or directory begins with _
-                if (f.getName().startsWith("_")) {
-                    iter.remove();
-                    break;
-                }
-            } while ((f = f.getParentFile()) != null);
-        }
-        return asciidoctorFiles;
+    protected List<File> calculateSourceFiles() {
+        if (sourceDocumentName != null)
+            return Arrays.asList(new File(sourceDirectory, sourceDocumentName));
+
+        // Both DirectoryWalkers filter out internal sources and path (_ prefix)
+        final DirectoryWalker directoryWalker = sourceDocumentExtensions.isEmpty()
+                ? new AsciiDocDirectoryWalker(sourceDirectory.getAbsolutePath())
+                : new CustomExtensionDirectoryWalker(sourceDirectory.getAbsolutePath(), sourceDocumentExtensions);
+
+        return directoryWalker.scan();
     }
 
     protected void convertFile(Asciidoctor asciidoctor, Map<String, Object> options, File f) {
@@ -664,26 +649,6 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setResources(List<Resource> resources) {
         this.resources = resources;
-    }
-
-    private static class CustomExtensionDirectoryWalker extends AbstractDirectoryWalker {
-        private final List<String> fileExtensions;
-
-        public CustomExtensionDirectoryWalker(final String absolutePath, final List<String> fileExtensions) {
-            super(absolutePath);
-            this.fileExtensions = fileExtensions;
-        }
-
-        @Override
-        protected boolean isAcceptedFile(final File filename) {
-            final String name = filename.getName();
-            for (final String extension : fileExtensions) {
-                if (name.endsWith(extension)) {
-                    return true;
-                }
-            }
-            return false;
-        }
     }
 
 }

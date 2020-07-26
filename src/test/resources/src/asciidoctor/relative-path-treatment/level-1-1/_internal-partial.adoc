@@ -1,0 +1,8 @@
+:toc: left
+:icons:
+
+== Summary
+This document won't get converted by default because it considered "internal". +
+That is, is prefixed with underscore `_`.
+
+TIP: How cool is this?
