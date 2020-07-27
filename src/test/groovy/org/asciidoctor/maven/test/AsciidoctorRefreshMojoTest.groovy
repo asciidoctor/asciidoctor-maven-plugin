@@ -1,5 +1,6 @@
 package org.asciidoctor.maven.test
 
+
 import org.asciidoctor.maven.AsciidoctorRefreshMojo
 import org.asciidoctor.maven.test.io.DoubleOuputStream
 import org.asciidoctor.maven.test.io.PrefilledInputStream
@@ -18,7 +19,7 @@ class AsciidoctorRefreshMojoTest extends Specification {
 
     def "auto convert when source updated"() {
         setup:
-            def srcDir = new File('target/test-classes/src/asciidoctor-refresh')
+            File srcDir = new File('target/test-classes/src/asciidoctor-refresh')
             srcDir.mkdirs()
             File outputDir = newOutputTestDirectory('refresh-mojo')
 
@@ -38,10 +39,12 @@ class AsciidoctorRefreshMojoTest extends Specification {
             if (content.exists())
                 content.delete()
 
-            content.withWriter{ it <<
-                '''= Document Title
-
-                This is test, only a test.'''.stripIndent() }
+            content.withWriter {
+                it <<
+                        '''= Document Title
+    
+                    This is test, only a test.'''.stripIndent()
+            }
 
             def target = new File(outputDir, content.name.replace('.asciidoc', '.html'))
 
@@ -49,37 +52,35 @@ class AsciidoctorRefreshMojoTest extends Specification {
             mojo.backend = 'html'
             mojo.sourceDirectory = srcDir
             mojo.outputDirectory = outputDir
-            def mojoThread = new Thread(new Runnable() {
-                @Override
-                void run() {
-                    mojo.execute()
-                    println 'end'
-                }
+            def mojoThread = new Thread({
+                mojo.execute()
+                println 'end'
             })
             mojoThread.start()
 
-            while (!new String(newOut.toByteArray()).contains('Converted')) {
-                Thread.sleep(200)
+            while (!new String(newOut.toByteArray()).contains('Converted document(s) in')) {
+                Thread.sleep(300)
             }
-
             assert target.text.contains('This is test, only a test')
 
         when:
-            content.withWriter{ it <<
-                '''= Document Title
-
-                Wow, this will be auto refreshed!'''.stripIndent() }
+            content.withWriter {
+                it <<
+                        '''= Document Title
+    
+                    Wow, this will be auto refreshed!'''.stripIndent()
+            }
 
         then:
-            while (!new String(newOut.toByteArray()).contains('Re-converted ')) {
-                Thread.sleep 500
+            while (!new String(newOut.toByteArray()).contains("Converted document in")) {
+                Thread.sleep(300)
             }
+
             assert target.text.contains('Wow, this will be auto refreshed')
 
         cleanup:
             System.setOut(originalOut)
             inputLatch.countDown()
             System.setIn(originalIn)
-
     }
 }

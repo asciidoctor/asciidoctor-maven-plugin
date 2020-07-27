@@ -497,7 +497,7 @@ public class AsciidoctorMojo extends AbstractMojo {
 
 
     /**
-     * Creates an AttributesBuilder instance with the options defined in the configuration.
+     * Creates an AttributesBuilder instance with the attributes defined in the configuration.
      *
      * @param configuration AsciidoctorMojo containing conversion configuration.
      * @return initialized attributesBuilder.
