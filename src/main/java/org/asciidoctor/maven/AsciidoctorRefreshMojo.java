@@ -113,7 +113,8 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     }
 
     protected synchronized void doExecute() {
-        ensureOutputExists();
+        if (!ensureOutputExists())
+            getLog().error("Can't create " + outputDirectory.getPath());
 
         // delete only content files, resources are synchronized so normally up to date
         for (final File f : FileUtils.listFiles(outputDirectory, new RegexFileFilter(ASCIIDOC_REG_EXP_EXTENSION), TrueFileFilter.INSTANCE)) {
@@ -195,6 +196,38 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
                 run.set(false);
                 mojo.doExecute();
             }
+        }
+    }
+
+    private static class AsciidoctorConverterFileAlterationListenerAdaptor extends FileAlterationListenerAdaptor {
+
+        private final AsciidoctorMojo mojo;
+        private final AtomicBoolean needsUpdate;
+        private final Log log;
+
+        private AsciidoctorConverterFileAlterationListenerAdaptor(AsciidoctorMojo config, AtomicBoolean needsUpdate, Log log) {
+            this.mojo = config;
+            this.needsUpdate = needsUpdate;
+            this.log = log;
+        }
+
+        @Override
+        public void onFileCreate(final File file) {
+            log.info("File " + file.getAbsolutePath() + " created.");
+//            mojo.convert(s);
+            needsUpdate.set(true);
+        }
+
+        @Override
+        public void onFileChange(final File file) {
+            log.info("File " + file.getAbsolutePath() + " updated.");
+            needsUpdate.set(true);
+        }
+
+        @Override
+        public void onFileDelete(final File file) {
+            log.info("File " + file.getAbsolutePath() + " deleted.");
+            needsUpdate.set(true);
         }
     }
 

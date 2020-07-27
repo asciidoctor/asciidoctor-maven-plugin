@@ -794,7 +794,6 @@ class AsciidoctorMojoTest extends Specification {
         }
     }
 
-
     /**
      * Tests the behaviour when:
      *  - simple paths are used
@@ -1087,20 +1086,40 @@ class AsciidoctorMojoTest extends Specification {
             System.setOut(new PrintStream(newOut))
 
             File outputDir = newOutputTestDirectory('multiple-resources-skip')
-            if (!outputDir.exists())
-                outputDir.mkdir()
         when:
             AsciidoctorMojo mojo = new AsciidoctorMojo()
             mojo.sourceDirectory = new File(UUID.randomUUID().toString())
             mojo.backend = 'html5'
             mojo.outputDirectory = outputDir
             mojo.execute()
-
         then:
             def output = newOut.toString()
             println output
             output.contains("sourceDirectory ${mojo.sourceDirectory} does not exist")
             output.contains("No sourceDirectory found. Skipping processing")
+            !outputDir.exists()
+        cleanup:
+            System.setOut(originalOut)
+    }
+
+    def "should skip processing when there are no sources"() {
+        setup:
+            def originalOut = System.out
+            def newOut = new ByteArrayOutputStream()
+            System.setOut(new PrintStream(newOut))
+
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY, 'templates')
+            File outputDir = newOutputTestDirectory()
+        when:
+            AsciidoctorMojo mojo = new AsciidoctorMojo()
+            mojo.sourceDirectory = srcDir
+            mojo.backend = 'html5'
+            mojo.outputDirectory = outputDir
+            mojo.execute()
+        then:
+            def output = newOut.toString()
+            println output
+            output.contains("No sources found. Skipping processing")
             !outputDir.exists()
         cleanup:
             System.setOut(originalOut)
