@@ -16,6 +16,7 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 Improvements::
 
   * Inject Maven properties as attributes in `process-asciidoc` mojo (#459)
+  * Make `auto-refresh` (and `http` by inheritance) only convert modified and created sources (#474)
 
 Bug Fixes::
 

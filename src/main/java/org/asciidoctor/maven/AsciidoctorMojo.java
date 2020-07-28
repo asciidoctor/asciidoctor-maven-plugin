@@ -162,17 +162,52 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+        processAllSources();
+    }
+
+    /**
+     * Converts all found AsciiDoc sources according to mojo rules.
+     *
+     * @throws MojoExecutionException If requirements are not met
+     */
+    public void processAllSources() throws MojoExecutionException {
+        processSources(null);
+    }
+
+    /**
+     * Converts a collection of AsciiDoc sources.
+     *
+     * @param sourceFiles Collection of source files to convert.
+     * @throws MojoExecutionException If requirements are not met
+     */
+    public void processSources(List<File> sourceFiles) throws MojoExecutionException {
         if (skip) {
             getLog().info("AsciiDoc processing is skipped.");
             return;
         }
 
         if (sourceDirectory == null) {
-            throw new MojoExecutionException("Required parameter 'asciidoctor.sourceDirectory' not set.");
+            throw new MojoExecutionException("Required parameter 'asciidoctor.alternateSourceDir' not set.");
         }
 
-        if (!initSourceDirectory()) return;
-        ensureOutputExists();
+        Optional<File> sourceDirectoryCandidate = findSourceDirectory(sourceDirectory, project.getBasedir());
+        if (!sourceDirectoryCandidate.isPresent()) {
+            getLog().info("No sourceDirectory found. Skipping processing");
+            return;
+        }
+
+        if (sourceFiles == null) {
+            sourceFiles = calculateSourceFiles(sourceDirectoryCandidate.get());
+        }
+        if (sourceFiles.isEmpty()) {
+            getLog().info("No sources found. Skipping processing");
+            return;
+        }
+
+        if (!ensureOutputExists()) {
+            getLog().error("Can't create " + outputDirectory.getPath());
+            return;
+        }
 
         // Validate resources to avoid errors later on
         if (resources != null) {
@@ -187,16 +222,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         if (enableVerbose) {
             asciidoctor.requireLibrary("enable_verbose.rb");
         }
-
         asciidoctor.requireLibraries(requires);
-
-        final OptionsBuilder optionsBuilder = OptionsBuilder.options();
-        setOptionsOnBuilder(optionsBuilder);
-
-        final AttributesBuilder attributesBuilder = AttributesBuilder.attributes();
-        setAttributesOnBuilder(attributesBuilder);
-
-        optionsBuilder.attributes(attributesBuilder);
 
         ExtensionRegistry extensionRegistry = new AsciidoctorJExtensionRegistry(asciidoctor);
         for (ExtensionConfiguration extension : extensions) {
@@ -207,34 +233,33 @@ public class AsciidoctorMojo extends AbstractMojo {
             }
         }
 
-        // Copy output resources
-        prepareResources();
-        copyResources();
+        AttributesBuilder attributesBuilder = createAttributesBuilder(this, project);
+        OptionsBuilder optionsBuilder = createOptionsBuilder(this, attributesBuilder);
 
-        // Prepare sources
-        final List<File> sourceFiles = calculateSourceFiles();
+        // Copy output resources
+        final File sourceDir = sourceDirectoryCandidate.get();
+        prepareResources(sourceDir);
+        copyResources();
 
         // register LogHandler to capture asciidoctor messages
         final Boolean outputToConsole = logHandler.getOutputToConsole() == null ? Boolean.TRUE : logHandler.getOutputToConsole();
-        final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(outputToConsole, sourceDirectory,
-                logRecord -> getLog().info(LogRecordHelper.format(logRecord, sourceDirectory)));
-        if (!sourceFiles.isEmpty()) {
-            asciidoctor.registerLogHandler(memoryLogHandler);
-            // disable default console output of AsciidoctorJ
-            Logger.getLogger("asciidoctor").setUseParentHandlers(false);
-        }
+        final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(outputToConsole, sourceDir,
+                logRecord -> getLog().info(LogRecordHelper.format(logRecord, sourceDir)));
+        asciidoctor.registerLogHandler(memoryLogHandler);
+        // disable default console output of AsciidoctorJ
+        Logger.getLogger("asciidoctor").setUseParentHandlers(false);
 
-        final Set<File> uniqueDirs = new HashSet<>();
+        final Set<File> uniquePaths = new HashSet<>();
         for (final File source : sourceFiles) {
-            final File destinationPath = setDestinationPaths(optionsBuilder, source);
-            if (!uniqueDirs.add(destinationPath))
+            final File destinationPath = setDestinationPaths(source, optionsBuilder, sourceDir);
+            if (!uniquePaths.add(destinationPath))
                 getLog().warn("Duplicated destination found: overwriting file: " + destinationPath.getAbsolutePath());
 
             convertFile(asciidoctor, optionsBuilder.asMap(), source);
 
             try {
                 // process log messages according to mojo configuration
-                new LogRecordsProcessors(logHandler, sourceDirectory, errorMessage -> getLog().error(errorMessage))
+                new LogRecordsProcessors(logHandler, sourceDir, errorMessage -> getLog().error(errorMessage))
                         .processLogRecords(memoryLogHandler);
             } catch (Exception exception) {
                 throw new MojoExecutionException(exception.getMessage());
@@ -242,8 +267,8 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
     }
 
-    private boolean initSourceDirectory() {
-        Optional<File> sourceDirCandidate = new SourceDirectoryFinder(sourceDirectory, project.getBasedir(),
+    private Optional<File> findSourceDirectory(File initialSourceDirectory, File baseDir) {
+        Optional<File> sourceDirCandidate = new SourceDirectoryFinder(initialSourceDirectory, baseDir,
                 candidate -> {
                     String candidateName = candidate.toString();
                     if (isRelativePath(candidateName)) candidateName = candidateName.substring(2);
@@ -251,13 +276,7 @@ public class AsciidoctorMojo extends AbstractMojo {
                 })
                 .find();
 
-        if (sourceDirCandidate.isPresent()) {
-            this.sourceDirectory = sourceDirCandidate.get();
-        } else {
-            getLog().info("No sourceDirectory found. Skipping processing");
-            return false;
-        }
-        return true;
+        return sourceDirCandidate;
     }
 
     private boolean isRelativePath(String candidateName) {
@@ -269,13 +288,13 @@ public class AsciidoctorMojo extends AbstractMojo {
      * underscore).
      * By default everything in the sources directories is copied.
      */
-    private void prepareResources() {
+    private void prepareResources(File sourceDirectory) {
         if (resources == null || resources.isEmpty()) {
-            resources = new ArrayList<Resource>();
+            resources = new ArrayList<>();
             // we don't want to copy files considered sources
             Resource resource = new Resource();
             resource.setDirectory(sourceDirectory.getAbsolutePath());
-            resource.setExcludes(new ArrayList<String>());
+            resource.setExcludes(new ArrayList<>());
             // exclude sourceDocumentName if defined
             if (sourceDocumentName != null && sourceDocumentName.isEmpty()) {
                 resource.getExcludes().add(sourceDocumentName);
@@ -287,9 +306,9 @@ public class AsciidoctorMojo extends AbstractMojo {
         // All resources must exclude AsciiDoc documents and folders beginning with underscore
         for (Resource resource : resources) {
             if (resource.getExcludes() == null || resource.getExcludes().isEmpty()) {
-                resource.setExcludes(new ArrayList<String>());
+                resource.setExcludes(new ArrayList<>());
             }
-            List<String> excludes = new ArrayList<String>();
+            List<String> excludes = new ArrayList<>();
             for (String value : AsciidoctorFileScanner.IGNORED_FOLDERS_AND_FILES) {
                 excludes.add(value);
             }
@@ -313,7 +332,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             // Right now it's not used at all, but could be used to apply resource filters/replacements
             MavenResourcesExecution resourcesExecution =
                     new MavenResourcesExecution(resources, outputDirectory, project, encoding,
-                            Collections.<String>emptyList(), Collections.<String>emptyList(), session);
+                            Collections.emptyList(), Collections.emptyList(), session);
             resourcesExecution.setIncludeEmptyDirs(true);
             resourcesExecution.setAddDefaultExcludes(true);
             outputResourcesFiltering.filterResources(resourcesExecution);
@@ -325,11 +344,12 @@ public class AsciidoctorMojo extends AbstractMojo {
     /**
      * Updates optionsBuilder object's baseDir and destination(s) accordingly to the options.
      *
-     * @param optionsBuilder AsciidoctorJ options to be updated.
-     * @param sourceFile     AsciiDoc source file to process.
+     * @param sourceFile      AsciiDoc source file to process.
+     * @param optionsBuilder  Asciidoctor options to be updated.
+     * @param sourceDirectory Source directory configured (`sourceFile` may include relative path).
      * @return the final destination file path.
      */
-    private File setDestinationPaths(OptionsBuilder optionsBuilder, final File sourceFile) throws MojoExecutionException {
+    private File setDestinationPaths(final File sourceFile, final OptionsBuilder optionsBuilder, final File sourceDirectory) throws MojoExecutionException {
         try {
             if (baseDir != null) {
                 optionsBuilder.baseDir(baseDir);
@@ -349,7 +369,7 @@ public class AsciidoctorMojo extends AbstractMojo {
                 optionsBuilder.toDir(outputDirectory).destinationDir(outputDirectory);
             }
             if (outputFile != null) {
-                //allow overriding the output file name
+                // allow overriding the output file name
                 optionsBuilder.toFile(outputFile);
             }
             // return destination file path
@@ -406,14 +426,15 @@ public class AsciidoctorMojo extends AbstractMojo {
         return asciidoctor;
     }
 
-    protected List<File> calculateSourceFiles() {
+    protected List<File> calculateSourceFiles(File sourceDirectory) {
         if (sourceDocumentName != null)
             return Arrays.asList(new File(sourceDirectory, sourceDocumentName));
 
         // Both DirectoryWalkers filter out internal sources and path (_ prefix)
+        final String sourceDirectoryAbsolutePath = sourceDirectory.getAbsolutePath();
         final DirectoryWalker directoryWalker = sourceDocumentExtensions.isEmpty()
-                ? new AsciiDocDirectoryWalker(sourceDirectory.getAbsolutePath())
-                : new CustomExtensionDirectoryWalker(sourceDirectory.getAbsolutePath(), sourceDocumentExtensions);
+                ? new AsciiDocDirectoryWalker(sourceDirectoryAbsolutePath)
+                : new CustomExtensionDirectoryWalker(sourceDirectoryAbsolutePath, sourceDocumentExtensions);
 
         return directoryWalker.scan();
     }
@@ -427,61 +448,78 @@ public class AsciidoctorMojo extends AbstractMojo {
         getLog().info("Converted " + f.getAbsolutePath());
     }
 
-    protected void ensureOutputExists() {
+    protected boolean ensureOutputExists() {
         if (!outputDirectory.exists()) {
-            if (!outputDirectory.mkdirs()) {
-                getLog().error("Can't create " + outputDirectory.getPath());
-            }
+            return outputDirectory.mkdirs();
         }
+        return true;
     }
 
     /**
-     * Updates and OptionsBuilder instance with the options defined in the configuration.
+     * Creates an OptionsBuilder instance with the options defined in the configuration.
      *
-     * @param optionsBuilder AsciidoctorJ options to be updated.
+     * @param configuration     AsciidoctorMojo containing conversion configuration.
+     * @param attributesBuilder
+     * @return initialized optionsBuilder.
      */
-    protected void setOptionsOnBuilder(OptionsBuilder optionsBuilder) {
-        optionsBuilder
-                .backend(backend)
+    protected OptionsBuilder createOptionsBuilder(AsciidoctorMojo configuration, AttributesBuilder attributesBuilder) {
+
+        final OptionsBuilder optionsBuilder = OptionsBuilder.options()
+                .backend(configuration.getBackend())
                 .safe(SafeMode.UNSAFE)
-                .headerFooter(headerFooter)
-                .eruby(eruby)
+                .headerFooter(configuration.isHeaderFooter())
+                .eruby(configuration.getEruby())
                 .mkDirs(true);
 
-        // Following options are only set when the value is different than the default
-        if (sourcemap)
-            optionsBuilder.option("sourcemap", true);
+        if (configuration.isSourcemap())
+            optionsBuilder.option(Options.SOURCEMAP, true);
 
-        if (catalogAssets)
-            optionsBuilder.option("catalog_assets", true);
+        if (configuration.isCatalogAssets())
+            optionsBuilder.option(Options.CATALOG_ASSETS, true);
 
-        if (!templateCache)
-            optionsBuilder.option("template_cache", false);
+        if (!configuration.isTemplateCache())
+            optionsBuilder.option(Options.TEMPLATE_CACHE, false);
 
-        if (doctype != null)
+        if (configuration.getDoctype() != null)
             optionsBuilder.docType(doctype);
 
-        if (templateEngine != null)
+        if (configuration.getTemplateEngine() != null)
             optionsBuilder.templateEngine(templateEngine);
 
-        if (templateDirs != null)
+        if (!configuration.getTemplateDirs().isEmpty())
             optionsBuilder.templateDirs(templateDirs.toArray(new File[]{}));
+
+        if (!attributesBuilder.asMap().isEmpty())
+            optionsBuilder.attributes(attributesBuilder);
+
+        return optionsBuilder;
     }
 
-    protected void setAttributesOnBuilder(AttributesBuilder attributesBuilder) {
-        if (embedAssets) {
+
+    /**
+     * Creates an AttributesBuilder instance with the attributes defined in the configuration.
+     *
+     * @param configuration AsciidoctorMojo containing conversion configuration.
+     * @return initialized attributesBuilder.
+     */
+    protected AttributesBuilder createAttributesBuilder(AsciidoctorMojo configuration, MavenProject maven) {
+
+        final AttributesBuilder attributesBuilder = AttributesBuilder.attributes();
+
+        if (configuration.isEmbedAssets()) {
             attributesBuilder.linkCss(false);
             attributesBuilder.dataUri(true);
         }
 
-        AsciidoctorHelper.addMavenProperties(project, attributesBuilder);
-        AsciidoctorHelper.addAttributes(attributes, attributesBuilder);
+        AsciidoctorHelper.addMavenProperties(maven, attributesBuilder);
+        AsciidoctorHelper.addAttributes(configuration.getAttributes(), attributesBuilder);
 
-        if (!attributesChain.isEmpty()) {
+        if (!configuration.getAttributesChain().isEmpty()) {
             getLog().info("Attributes: " + attributesChain);
             attributesBuilder.arguments(attributesChain);
         }
 
+        return attributesBuilder;
     }
 
     public File getSourceDirectory() {
@@ -651,4 +689,35 @@ public class AsciidoctorMojo extends AbstractMojo {
         this.resources = resources;
     }
 
+    public boolean isEnableVerbose() {
+        return enableVerbose;
+    }
+
+    public List<String> getRequires() {
+        return requires;
+    }
+
+    public void setEnableVerbose(boolean enableVerbose) {
+        this.enableVerbose = enableVerbose;
+    }
+
+    public boolean isSourcemap() {
+        return sourcemap;
+    }
+
+    public boolean isCatalogAssets() {
+        return catalogAssets;
+    }
+
+    public boolean isTemplateCache() {
+        return templateCache;
+    }
+
+    public List<File> getTemplateDirs() {
+        return templateDirs;
+    }
+
+    public String getAttributesChain() {
+        return attributesChain;
+    }
 }
