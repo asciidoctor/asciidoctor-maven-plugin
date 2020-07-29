@@ -251,7 +251,7 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         final Set<File> uniquePaths = new HashSet<>();
         for (final File source : sourceFiles) {
-            final File destinationPath = setDestinationPaths(source, optionsBuilder, sourceDir);
+            final File destinationPath = setDestinationPaths(source, optionsBuilder, sourceDir, this);
             if (!uniquePaths.add(destinationPath))
                 getLog().warn("Duplicated destination found: overwriting file: " + destinationPath.getAbsolutePath());
 
@@ -342,42 +342,44 @@ public class AsciidoctorMojo extends AbstractMojo {
     }
 
     /**
-     * Updates optionsBuilder object's baseDir and destination(s) accordingly to the options.
+     * Updates optionsBuilder's baseDir and toDir accordingly to the conversion configuration.
      *
      * @param sourceFile      AsciiDoc source file to process.
      * @param optionsBuilder  Asciidoctor options to be updated.
      * @param sourceDirectory Source directory configured (`sourceFile` may include relative path).
+     * @param configuration   AsciidoctorMojo containing conversion configuration.
      * @return the final destination file path.
      */
-    private File setDestinationPaths(final File sourceFile, final OptionsBuilder optionsBuilder, final File sourceDirectory) throws MojoExecutionException {
+    public File setDestinationPaths(final File sourceFile, final OptionsBuilder optionsBuilder, final File sourceDirectory,
+                                    final AsciidoctorMojo configuration) throws MojoExecutionException {
         try {
-            if (baseDir != null) {
-                optionsBuilder.baseDir(baseDir);
+            if (configuration.getBaseDir() != null) {
+                optionsBuilder.baseDir(configuration.getBaseDir());
             } else {
                 // when preserveDirectories == false, parent and sourceDirectory are the same
-                if (relativeBaseDir) {
+                if (configuration.isRelativeBaseDir()) {
                     optionsBuilder.baseDir(sourceFile.getParentFile());
                 } else {
                     optionsBuilder.baseDir(sourceDirectory);
                 }
             }
-            if (preserveDirectories) {
+            final File outputDir = configuration.getOutputDirectory();
+            if (configuration.isPreserveDirectories()) {
                 final String candidatePath = sourceFile.getParentFile().getCanonicalPath().substring(sourceDirectory.getCanonicalPath().length());
-                final File relativePath = new File(outputDirectory.getCanonicalPath() + candidatePath);
+                final File relativePath = new File(outputDir.getCanonicalPath() + candidatePath);
                 optionsBuilder.toDir(relativePath).destinationDir(relativePath);
             } else {
-                optionsBuilder.toDir(outputDirectory).destinationDir(outputDirectory);
+                optionsBuilder.toDir(outputDir).destinationDir(outputDir);
             }
+            final File outputFile = configuration.getOutputFile();
+            final String destinationDir = (String) optionsBuilder.asMap().get(Options.DESTINATION_DIR);
             if (outputFile != null) {
                 // allow overriding the output file name
                 optionsBuilder.toFile(outputFile);
+                return outputFile.isAbsolute() ? outputFile : new File(destinationDir, outputFile.getPath());
+            } else {
+                return new File(destinationDir, sourceFile.getName());
             }
-            // return destination file path
-            if (outputFile != null) {
-                return outputFile.isAbsolute() ?
-                        outputFile : new File((String) optionsBuilder.asMap().get(Options.DESTINATION_DIR), outputFile.getPath());
-            } else
-                return new File((String) optionsBuilder.asMap().get(Options.DESTINATION_DIR), sourceFile.getName());
         } catch (IOException e) {
             throw new MojoExecutionException("Unable to locate output directory", e);
         }
@@ -459,7 +461,7 @@ public class AsciidoctorMojo extends AbstractMojo {
      * Creates an OptionsBuilder instance with the options defined in the configuration.
      *
      * @param configuration     AsciidoctorMojo containing conversion configuration.
-     * @param attributesBuilder
+     * @param attributesBuilder If not null, Asciidoctor attributes to add to the OptionsBuilder created.
      * @return initialized optionsBuilder.
      */
     protected OptionsBuilder createOptionsBuilder(AsciidoctorMojo configuration, AttributesBuilder attributesBuilder) {
@@ -500,9 +502,10 @@ public class AsciidoctorMojo extends AbstractMojo {
      * Creates an AttributesBuilder instance with the attributes defined in the configuration.
      *
      * @param configuration AsciidoctorMojo containing conversion configuration.
+     * @param mavenProject  Current MavenProject instance.
      * @return initialized attributesBuilder.
      */
-    protected AttributesBuilder createAttributesBuilder(AsciidoctorMojo configuration, MavenProject maven) {
+    protected AttributesBuilder createAttributesBuilder(AsciidoctorMojo configuration, MavenProject mavenProject) {
 
         final AttributesBuilder attributesBuilder = AttributesBuilder.attributes();
 
@@ -511,7 +514,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             attributesBuilder.dataUri(true);
         }
 
-        AsciidoctorHelper.addMavenProperties(maven, attributesBuilder);
+        AsciidoctorHelper.addMavenProperties(mavenProject, attributesBuilder);
         AsciidoctorHelper.addAttributes(configuration.getAttributes(), attributesBuilder);
 
         if (!configuration.getAttributesChain().isEmpty()) {
@@ -719,5 +722,13 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public String getAttributesChain() {
         return attributesChain;
+    }
+
+    public boolean isRelativeBaseDir() {
+        return relativeBaseDir;
+    }
+
+    public boolean isPreserveDirectories() {
+        return preserveDirectories;
     }
 }
