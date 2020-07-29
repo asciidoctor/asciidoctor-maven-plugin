@@ -38,6 +38,7 @@ import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
 import org.asciidoctor.maven.process.AsciidoctorHelper;
 import org.asciidoctor.maven.process.CustomExtensionDirectoryWalker;
+import org.asciidoctor.maven.process.ResourcesProcessor;
 import org.asciidoctor.maven.process.SourceDirectoryFinder;
 import org.jruby.Ruby;
 
@@ -160,28 +161,35 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Inject
     protected MavenResourcesFiltering outputResourcesFiltering;
 
+    protected final ResourcesProcessor defaultResourcesProcessor =
+            (sourcesRootDirectory, outputRootDirectory, encoding, configuration) -> {
+                final List<Resource> finalResources = prepareResources(sourcesRootDirectory, configuration);
+                copyResources(finalResources, encoding, outputRootDirectory, outputResourcesFiltering, project, session);
+            };
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        processAllSources();
+        processAllSources(defaultResourcesProcessor);
     }
 
     /**
      * Converts all found AsciiDoc sources according to mojo rules.
      *
+     * @param resourcesProcessor Behavior to apply for resources.
      * @throws MojoExecutionException If requirements are not met
      */
-    public void processAllSources() throws MojoExecutionException {
-        processSources(null);
+    public void processAllSources(ResourcesProcessor resourcesProcessor) throws MojoExecutionException {
+        processSources(null, resourcesProcessor);
     }
 
     /**
      * Converts a collection of AsciiDoc sources.
      *
-     * @param sourceFiles Collection of source files to convert.
+     * @param sourceFiles        Collection of source files to convert.
+     * @param resourcesProcessor Behavior to apply for resources.
      * @throws MojoExecutionException If requirements are not met
      */
-    public void processSources(List<File> sourceFiles) throws MojoExecutionException {
+    public void processSources(List<File> sourceFiles, ResourcesProcessor resourcesProcessor) throws MojoExecutionException {
         if (skip) {
             getLog().info("AsciiDoc processing is skipped.");
             return;
@@ -239,8 +247,7 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         // Copy output resources
         final File sourceDir = sourceDirectoryCandidate.get();
-        final List<Resource> finalResources = prepareResources(sourceDir, this);
-        copyResources(finalResources, encoding, outputDirectory, outputResourcesFiltering, project, session);
+        resourcesProcessor.process(sourceDir, outputDirectory, encoding, this);
 
         // register LogHandler to capture asciidoctor messages
         final Boolean outputToConsole = logHandler.getOutputToConsole() == null ? Boolean.TRUE : logHandler.getOutputToConsole();
@@ -268,7 +275,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
     }
 
-    private Optional<File> findSourceDirectory(File initialSourceDirectory, File baseDir) {
+    protected Optional<File> findSourceDirectory(File initialSourceDirectory, File baseDir) {
         Optional<File> sourceDirCandidate = new SourceDirectoryFinder(initialSourceDirectory, baseDir,
                 candidate -> {
                     String candidateName = candidate.toString();

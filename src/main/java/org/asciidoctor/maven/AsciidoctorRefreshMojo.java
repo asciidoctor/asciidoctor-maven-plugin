@@ -25,6 +25,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.asciidoctor.maven.process.ResourcesProcessor;
 
 import java.io.File;
 import java.util.Collection;
@@ -37,6 +38,10 @@ import java.util.concurrent.TimeUnit;
 public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
 
     public static final String PREFIX = AsciidoctorMaven.PREFIX + "refresher.";
+
+    private static final ResourcesProcessor EMPTY_RESOURCE_PROCESSOR =
+            (sourcesRootDirectory, outputRootDirectory, encoding, configuration) -> {
+            };
 
     @Parameter(property = PREFIX + "interval")
     protected int interval = 2000; // 2s
@@ -54,7 +59,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     protected void doWork() throws MojoFailureException, MojoExecutionException {
         long timeInMillis = timed(() -> {
             try {
-                processAllSources();
+                processAllSources(defaultResourcesProcessor);
             } catch (MojoExecutionException e) {
                 getLog().error(e);
             }
@@ -161,7 +166,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
             log.info(String.format("Source file %s %s", file.getAbsolutePath(), actionName));
             long timeInMillis = timed(() -> {
                 try {
-                    mojo.processSources(Collections.singletonList(file));
+                    mojo.processSources(Collections.singletonList(file), EMPTY_RESOURCE_PROCESSOR);
                 } catch (MojoExecutionException e) {
                     log.error(e);
                 }
