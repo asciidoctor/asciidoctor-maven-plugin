@@ -1,9 +1,10 @@
 package org.asciidoctor.maven.test
 
+
 import org.asciidoctor.maven.AsciidoctorHttpMojo
-import org.asciidoctor.maven.AsciidoctorMojo
-import org.asciidoctor.maven.test.io.DoubleOuputStream
-import org.asciidoctor.maven.test.io.PrefilledInputStream
+import org.asciidoctor.maven.io.TestFilesHelper
+import org.asciidoctor.maven.io.DoubleOutputStream
+import org.asciidoctor.maven.io.PrefilledInputStream
 import org.asciidoctor.maven.test.plexus.MockPlexusContainer
 import spock.lang.Specification
 
@@ -18,7 +19,7 @@ class AsciidoctorHttpMojoTest extends Specification {
     def "http front should let access converted files"() {
         setup:
             def srcDir = new File('target/test-classes/src/asciidoctor-http')
-            def outputDir = AsciidoctorMojoTestHelper.newOutputTestDirectory('http-mojo')
+            def outputDir = TestFilesHelper.newOutputTestDirectory('http-mojo')
 
             srcDir.mkdirs()
 
@@ -27,13 +28,13 @@ class AsciidoctorHttpMojoTest extends Specification {
             def originalOut = System.out
             def originalIn = System.in
 
-            def newOut = new DoubleOuputStream(originalOut)
+            def newOut = new DoubleOutputStream(originalOut)
             def newIn = new PrefilledInputStream('exit\r\n'.bytes, inputLatch)
 
             System.setOut(new PrintStream(newOut))
             System.setIn(newIn)
 
-            def httpPort = AsciidoctorMojoTestHelper.availablePort
+            def httpPort = availablePort
 
             def content = new File(srcDir, "content.asciidoc")
             content.withWriter{ it <<
@@ -77,7 +78,7 @@ class AsciidoctorHttpMojoTest extends Specification {
     def "default page"() {
         setup:
             def srcDir = new File('target/test-classes/src/asciidoctor-http-default')
-            def outputDir = AsciidoctorMojoTestHelper.newOutputTestDirectory('http-mojo')
+            def outputDir = TestFilesHelper.newOutputTestDirectory('http-mojo')
 
             srcDir.mkdirs()
 
@@ -86,10 +87,10 @@ class AsciidoctorHttpMojoTest extends Specification {
             def originalOut = System.out
             def originalIn = System.in
 
-            def newOut = new DoubleOuputStream(originalOut)
+            def newOut = new DoubleOutputStream(originalOut)
             def newIn = new PrefilledInputStream('exit\r\n'.bytes, inputLatch)
 
-            def httpPort = AsciidoctorMojoTestHelper.availablePort
+            def httpPort = availablePort
 
             System.setOut(new PrintStream(newOut))
             System.setIn(newIn)
@@ -130,5 +131,12 @@ class AsciidoctorHttpMojoTest extends Specification {
             System.setOut(originalOut)
             inputLatch.countDown()
             System.setIn(originalIn)
+    }
+
+    private int getAvailablePort() {
+        ServerSocket socket = new ServerSocket(0)
+        int port = socket.getLocalPort()
+        socket.close()
+        return port
     }
 }

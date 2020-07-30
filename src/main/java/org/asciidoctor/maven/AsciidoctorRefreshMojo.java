@@ -12,10 +12,7 @@
 
 package org.asciidoctor.maven;
 
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.filefilter.NameFileFilter;
-import org.apache.commons.io.filefilter.RegexFileFilter;
+import org.apache.commons.io.filefilter.*;
 import org.apache.commons.io.monitor.FileAlterationListener;
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
@@ -134,10 +131,14 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
             for (String extension : sourceDocumentExtensions) {
                 stringJoiner.add(extension);
             }
-            return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter(stringJoiner.toString()));
+            return directoryRecursiveFileFilter(new RegexFileFilter(stringJoiner.toString()));
         }
 
-        return new RegexFileFilter(ASCIIDOC_REG_EXP_EXTENSION);
+        return directoryRecursiveFileFilter(new RegexFileFilter(ASCIIDOC_REG_EXP_EXTENSION));
+    }
+
+    private IOFileFilter directoryRecursiveFileFilter(AbstractFileFilter fileFilter) {
+        return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), fileFilter);
     }
 
     private class AsciidoctorConverterFileAlterationListenerAdaptor extends FileAlterationListenerAdaptor {

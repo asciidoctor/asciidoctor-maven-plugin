@@ -15,7 +15,7 @@ import org.asciidoctor.maven.test.processors.YellBlockProcessor
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static org.asciidoctor.maven.test.AsciidoctorMojoTestHelper.newOutputTestDirectory
+import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory
 
 /**
  * Specific tests to validate usage of AsciidoctorJ extension in AsciidoctorMojo.
