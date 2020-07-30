@@ -9,7 +9,7 @@ import spock.lang.Specification
 
 import static org.asciidoctor.log.Severity.ERROR
 import static org.asciidoctor.log.Severity.WARN
-import static org.asciidoctor.maven.test.AsciidoctorMojoTestHelper.newOutputTestDirectory
+import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory
 
 class AsciidoctorMojoLogHandlerTest extends Specification {
 

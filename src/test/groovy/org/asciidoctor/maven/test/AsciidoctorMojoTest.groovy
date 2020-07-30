@@ -10,7 +10,7 @@ import org.asciidoctor.maven.test.processors.RequireCheckerTreeprocessor
 import spock.lang.Ignore
 import spock.lang.Specification
 
-import static org.asciidoctor.maven.test.AsciidoctorMojoTestHelper.newOutputTestDirectory
+import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory
 
 /**
  *
