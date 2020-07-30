@@ -12,33 +12,31 @@
 
 package org.asciidoctor.maven;
 
-import org.apache.commons.io.filefilter.*;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.NameFileFilter;
+import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.monitor.FileAlterationListener;
-import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.asciidoctor.maven.process.ResourcesProcessor;
+import org.asciidoctor.maven.refresh.AsciidoctorConverterFileAlterationListenerAdaptor;
+import org.asciidoctor.maven.refresh.ResourceCopyFileAlterationListenerAdaptor;
+import org.asciidoctor.maven.refresh.TimeCounter;
 
-import java.io.File;
+import java.io.FileFilter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Scanner;
 import java.util.StringJoiner;
-import java.util.concurrent.TimeUnit;
 
 @Mojo(name = "auto-refresh")
 public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
 
     public static final String PREFIX = AsciidoctorMaven.PREFIX + "refresher.";
-
-    private static final ResourcesProcessor EMPTY_RESOURCE_PROCESSOR =
-            (sourcesRootDirectory, outputRootDirectory, encoding, configuration) -> {
-            };
 
     @Parameter(property = PREFIX + "interval")
     protected int interval = 2000; // 2s
@@ -54,7 +52,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     }
 
     protected void doWork() throws MojoFailureException, MojoExecutionException {
-        long timeInMillis = timed(() -> {
+        long timeInMillis = TimeCounter.timed(() -> {
             try {
                 processAllSources(defaultResourcesProcessor);
             } catch (MojoExecutionException e) {
@@ -102,16 +100,25 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
 
     private void startPolling() throws MojoExecutionException {
 
+        final FileAlterationMonitor fileAlterationMonitor = new FileAlterationMonitor(interval);
+
         { // content monitor
-            final FileAlterationObserver observer = new FileAlterationObserver(sourceDirectory, buildFileFilter());
+            final FileAlterationObserver observer = new FileAlterationObserver(sourceDirectory, buildSourcesFileFilter());
             final FileAlterationListener listener = new AsciidoctorConverterFileAlterationListenerAdaptor(this, () -> showWaitMessage(), getLog());
-            final FileAlterationMonitor monitor = new FileAlterationMonitor(interval);
 
             observer.addListener(listener);
-            monitor.addObserver(observer);
-
-            monitors = Collections.singletonList(monitor);
+            fileAlterationMonitor.addObserver(observer);
         }
+
+        { // resources monitor
+            final FileAlterationObserver observer = new FileAlterationObserver(sourceDirectory, buildResourcesFileFilter());
+            final FileAlterationListener listener = new ResourceCopyFileAlterationListenerAdaptor(this, () -> showWaitMessage(), getLog());
+
+            observer.addListener(listener);
+            fileAlterationMonitor.addObserver(observer);
+        }
+
+        monitors = Collections.singletonList(fileAlterationMonitor);
 
         for (final FileAlterationMonitor monitor : monitors) {
             try {
@@ -122,7 +129,11 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
         }
     }
 
-    private IOFileFilter buildFileFilter() {
+    private FileFilter buildResourcesFileFilter() {
+        return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter("^[^_.].*\\.(jpg|png)$"));
+    }
+
+    private IOFileFilter buildSourcesFileFilter() {
         if (sourceDocumentName != null)
             return new NameFileFilter(sourceDocumentName);
 
@@ -131,56 +142,10 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
             for (String extension : sourceDocumentExtensions) {
                 stringJoiner.add(extension);
             }
-            return directoryRecursiveFileFilter(new RegexFileFilter(stringJoiner.toString()));
+            return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter(stringJoiner.toString()));
         }
 
-        return directoryRecursiveFileFilter(new RegexFileFilter(ASCIIDOC_REG_EXP_EXTENSION));
+        return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter(ASCIIDOC_REG_EXP_EXTENSION));
     }
 
-    private IOFileFilter directoryRecursiveFileFilter(AbstractFileFilter fileFilter) {
-        return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), fileFilter);
-    }
-
-    private class AsciidoctorConverterFileAlterationListenerAdaptor extends FileAlterationListenerAdaptor {
-
-        private final AsciidoctorMojo mojo;
-        private final Runnable postAction;
-        private final Log log;
-
-        private AsciidoctorConverterFileAlterationListenerAdaptor(AsciidoctorMojo config, Runnable postAction, Log log) {
-            this.mojo = config;
-            this.postAction = postAction;
-            this.log = log;
-        }
-
-        @Override
-        public void onFileCreate(final File file) {
-            processFile(file, "created");
-        }
-
-        @Override
-        public void onFileChange(final File file) {
-            processFile(file, "updated");
-        }
-
-        private synchronized void processFile(File file, String actionName) {
-            log.info(String.format("Source file %s %s", file.getAbsolutePath(), actionName));
-            long timeInMillis = timed(() -> {
-                try {
-                    mojo.processSources(Collections.singletonList(file), EMPTY_RESOURCE_PROCESSOR);
-                } catch (MojoExecutionException e) {
-                    log.error(e);
-                }
-            });
-            getLog().info("Converted document in " + timeInMillis + "ms");
-            postAction.run();
-        }
-    }
-
-    public long timed(Runnable runnable) {
-        final long start = System.nanoTime();
-        runnable.run();
-        final long end = System.nanoTime();
-        return TimeUnit.NANOSECONDS.toMillis(end - start);
-    }
 }

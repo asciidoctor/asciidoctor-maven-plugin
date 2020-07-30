@@ -275,7 +275,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
     }
 
-    protected Optional<File> findSourceDirectory(File initialSourceDirectory, File baseDir) {
+    public Optional<File> findSourceDirectory(File initialSourceDirectory, File baseDir) {
         Optional<File> sourceDirCandidate = new SourceDirectoryFinder(initialSourceDirectory, baseDir,
                 candidate -> {
                     String candidateName = candidate.toString();
