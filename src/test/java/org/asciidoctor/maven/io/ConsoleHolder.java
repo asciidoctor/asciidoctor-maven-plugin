@@ -41,17 +41,20 @@ public class ConsoleHolder {
         return holder;
     }
 
-    @SneakyThrows
     public void awaitProcessingAllSources() {
         awaitForMessage("Converted document(s) in");
     }
 
-    @SneakyThrows
     public void awaitProcessingSource() {
         awaitForMessage("Converted document in");
     }
 
-    private void awaitForMessage(String message) throws InterruptedException {
+    public void awaitProcessingResource() {
+        awaitForMessage("Copied resource in");
+    }
+
+    @SneakyThrows
+    private void awaitForMessage(String message) {
         int pollTime = 300;
         int ticks = (10 * 1000 / pollTime);
         while (true) {
@@ -69,4 +72,5 @@ public class ConsoleHolder {
         inputLatch.countDown();
         System.setIn(originalIn);
     }
+
 }
