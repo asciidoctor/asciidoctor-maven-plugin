@@ -48,6 +48,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         startPolling();
         doWork();
+        doWait();
         stopMonitors();
     }
 
@@ -60,7 +61,6 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
             }
         });
         getLog().info("Converted document(s) in " + timeInMillis + "ms");
-        doWait();
     }
 
     protected void doWait() throws MojoExecutionException, MojoFailureException {
@@ -71,7 +71,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
         while ((line = scanner.nextLine()) != null) {
             line = line.trim();
             if ("exit".equalsIgnoreCase(line) || "quit".equalsIgnoreCase(line)) {
-                break;
+                return;
             }
 
             if ("refresh".equalsIgnoreCase(line)) {

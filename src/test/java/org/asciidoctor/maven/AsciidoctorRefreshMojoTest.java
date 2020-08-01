@@ -18,6 +18,7 @@ import org.sonatype.plexus.build.incremental.DefaultBuildContext;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -55,11 +56,115 @@ public class AsciidoctorRefreshMojoTest {
         return mojo;
     }
 
+
+    @Test
+    public void should_stop_with_exit_command() {
+        // given
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
+
+        final File srcDir = newOutputTestDirectory("refresh-mojo");
+        final File outputDir = newOutputTestDirectory("refresh-mojo");
+
+        Thread mojoThread = runMojoAsynchronously(srcDir, outputDir);
+
+        // when
+        consoleHolder.input("exit");
+
+        // then
+        consoleHolder.awaitProcessingAllSources();
+        consoleHolder.release();
+        awaitTermination(mojoThread);
+    }
+
+    @Test
+    public void should_stop_with_quit_command() {
+        // given
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
+
+        final File srcDir = newOutputTestDirectory("refresh-mojo");
+        final File outputDir = newOutputTestDirectory("refresh-mojo");
+
+        Thread mojoThread = runMojoAsynchronously(srcDir, outputDir);
+
+        // when
+        consoleHolder.input("quit");
+
+        // then
+        consoleHolder.awaitProcessingAllSources();
+        consoleHolder.release();
+        awaitTermination(mojoThread);
+    }
+
+    @Test
+    public void should_show_tip_when_command_is_not_valid() {
+        // given
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
+
+        final File srcDir = newOutputTestDirectory("refresh-mojo");
+        final File outputDir = newOutputTestDirectory("refresh-mojo");
+
+        Thread mojoThread = runMojoAsynchronously(srcDir, outputDir);
+        consoleHolder.awaitProcessingAllSources();
+        // when
+        consoleHolder.input("not_a_command");
+        // then
+        consoleHolder.awaitForMessage("'not_a_command' not understood, available commands are [quit, exit, refresh]");
+        // then
+        consoleHolder.input("exit");
+        consoleHolder.release();
+        awaitTermination(mojoThread);
+    }
+
+    @Test
+    public void should_only_auto_convert_file_with_custom_sourceDocumentName_when_source_is_updated() throws IOException {
+        // given
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
+
+        final File srcDir = newOutputTestDirectory("refresh-mojo");
+        final File outputDir = newOutputTestDirectory("refresh-mojo");
+
+        final String fileExtension = "adoc";
+        final File sourceFile = new File(srcDir, "my-sourceFile-" + UUID.randomUUID() + "." + fileExtension);
+        final File ignoredFile = new File(srcDir, "extra-sourceFile." + fileExtension);
+
+        // when
+        FileUtils.write(sourceFile, "= Document Title\n\nThis is test, only a test.", UTF_8);
+        Thread mojoThread = runMojoAsynchronously(mojo -> {
+            mojo.backend = "html5";
+            mojo.sourceDirectory = srcDir;
+            mojo.outputDirectory = outputDir;
+            mojo.sourceDocumentName = sourceFile.getName();
+        });
+
+        // then
+        final File target = new File(outputDir, sourceFile.getName().replace(fileExtension, "html"));
+        consoleHolder.awaitProcessingAllSources();
+        assertThat(FileUtils.readFileToString(target, UTF_8))
+                .contains("This is test, only a test");
+        final File ignoredTarget = new File(outputDir, ignoredFile.getName().replace(fileExtension, "html"));
+        assertThat(ignoredTarget)
+                .doesNotExist();
+
+        // and when
+        FileUtils.write(sourceFile, "= Document Title\n\nWow, this will be auto refreshed !", UTF_8);
+
+        // then
+        consoleHolder.awaitProcessingSource();
+        assertThat(FileUtils.readFileToString(target, UTF_8))
+                .contains("Wow, this will be auto refreshed");
+        assertThat(ignoredTarget)
+                .doesNotExist();
+
+        // cleanup
+        consoleHolder.input("exit");
+        consoleHolder.release();
+        awaitTermination(mojoThread);
+    }
+
     @Test
     public void should_auto_convert_file_with_custom_file_extension_when_source_is_updated() throws IOException {
-
         // given
-        final ConsoleHolder consoleHolder = ConsoleHolder.hold();
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
         final File srcDir = newOutputTestDirectory("refresh-mojo");
         final File outputDir = newOutputTestDirectory("refresh-mojo");
@@ -69,7 +174,7 @@ public class AsciidoctorRefreshMojoTest {
 
         // when
         FileUtils.write(sourceFile, "= Document Title\n\nThis is test, only a test.", UTF_8);
-        runMojoAsynchronously(mojo -> {
+        Thread mojoThread = runMojoAsynchronously(mojo -> {
             mojo.backend = "html5";
             mojo.sourceDirectory = srcDir;
             mojo.outputDirectory = outputDir;
@@ -91,14 +196,15 @@ public class AsciidoctorRefreshMojoTest {
                 .contains("Wow, this will be auto refreshed");
 
         // cleanup
+        consoleHolder.input("exit");
         consoleHolder.release();
+        awaitTermination(mojoThread);
     }
 
     @Test
     public void should_auto_convert_file_in_root_when_source_is_updated() throws IOException {
-
         // given
-        final ConsoleHolder consoleHolder = ConsoleHolder.hold();
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
         final File srcDir = newOutputTestDirectory("refresh-mojo");
         final File outputDir = newOutputTestDirectory("refresh-mojo");
@@ -107,7 +213,7 @@ public class AsciidoctorRefreshMojoTest {
 
         // when
         FileUtils.write(sourceFile, "= Document Title\n\nThis is test, only a test.", UTF_8);
-        runMojoAsynchronously(srcDir, outputDir);
+        Thread mojoThread = runMojoAsynchronously(srcDir, outputDir);
 
         // then
         final File target = new File(outputDir, sourceFile.getName().replace(".asciidoc", ".html"));
@@ -124,14 +230,15 @@ public class AsciidoctorRefreshMojoTest {
                 .contains("Wow, this will be auto refreshed");
 
         // cleanup
+        consoleHolder.input("exit");
         consoleHolder.release();
+        awaitTermination(mojoThread);
     }
 
     @Test
     public void should_auto_convert_file_in_subDir_when_source_is_updated() throws IOException {
-
         // given
-        final ConsoleHolder consoleHolder = ConsoleHolder.hold();
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
         final File srcDir = newOutputTestDirectory("refresh-mojo");
         final File outputDir = newOutputTestDirectory("refresh-mojo");
@@ -140,7 +247,7 @@ public class AsciidoctorRefreshMojoTest {
 
         // when
         FileUtils.write(sourceFile, "= Document Title\n\nThis is test, only a test.", UTF_8);
-        runMojoAsynchronously(srcDir, outputDir);
+        Thread mojoThread = runMojoAsynchronously(srcDir, outputDir);
 
         // then
         File target = new File(outputDir, sourceFile.getName().replace(".asciidoc", ".html"));
@@ -157,14 +264,15 @@ public class AsciidoctorRefreshMojoTest {
                 .contains("Wow, this will be auto refreshed");
 
         // cleanup
+        consoleHolder.input("exit");
         consoleHolder.release();
+        awaitTermination(mojoThread);
     }
 
     @Test
     public void should_auto_convert_file_when_new_source_is_created() throws IOException {
-
         // given
-        final ConsoleHolder consoleHolder = ConsoleHolder.hold();
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
         final File srcDir = newOutputTestDirectory("refresh-mojo");
         final File outputDir = newOutputTestDirectory("refresh-mojo");
@@ -173,7 +281,7 @@ public class AsciidoctorRefreshMojoTest {
 
         // when
         FileUtils.write(sourceFile, "= Document Title\n\nThis is test, only a test.", UTF_8);
-        runMojoAsynchronously(srcDir, outputDir);
+        Thread mojoThread = runMojoAsynchronously(srcDir, outputDir);
 
         // then
         File target = new File(outputDir, sourceFile.getName().replace(".asciidoc", ".html"));
@@ -194,14 +302,15 @@ public class AsciidoctorRefreshMojoTest {
                 .contains("This is test, only a test");
 
         // cleanup
+        consoleHolder.input("exit");
         consoleHolder.release();
+        awaitTermination(mojoThread);
     }
 
     @Test
     public void should_copy_resources_when_updated_but_not_on_start_when_there_are_no_sources() throws IOException {
-
         // given
-        final ConsoleHolder consoleHolder = ConsoleHolder.hold();
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
         final File srcDir = newOutputTestDirectory("refresh-mojo");
         final File outputDir = newOutputTestDirectory("refresh-mojo");
@@ -210,7 +319,7 @@ public class AsciidoctorRefreshMojoTest {
 
         // when
         FileUtils.write(resourceFile, "Supposedly image content", UTF_8);
-        runMojoAsynchronously(srcDir, outputDir);
+        Thread mojoThread = runMojoAsynchronously(srcDir, outputDir);
 
         // then
         final File target = new File(outputDir, resourceFile.getName());
@@ -227,14 +336,15 @@ public class AsciidoctorRefreshMojoTest {
                 .isEqualTo("Supposedly image content UPDATED!");
 
         // cleanup
+        consoleHolder.input("exit");
         consoleHolder.release();
+        awaitTermination(mojoThread);
     }
 
     @Test
     public void should_copy_resource_in_root_when_resource_is_updated() throws IOException {
-
         // given
-        final ConsoleHolder consoleHolder = ConsoleHolder.hold();
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
         final File srcDir = newOutputTestDirectory("refresh-mojo");
         final File outputDir = newOutputTestDirectory("refresh-mojo");
@@ -245,7 +355,7 @@ public class AsciidoctorRefreshMojoTest {
 
         // when
         FileUtils.write(resourceFile, "Supposedly image content", UTF_8);
-        runMojoAsynchronously(srcDir, outputDir);
+        Thread mojoThread = runMojoAsynchronously(srcDir, outputDir);
 
         // then
         final File target = new File(outputDir, resourceFile.getName());
@@ -262,14 +372,15 @@ public class AsciidoctorRefreshMojoTest {
                 .isEqualTo("Supposedly image content UPDATED!");
 
         // cleanup
+        consoleHolder.input("exit");
         consoleHolder.release();
+        awaitTermination(mojoThread);
     }
 
     @Test
     public void should_copy_resource_in_subDir_when_resource_is_updated() throws IOException {
-
         // given
-        final ConsoleHolder consoleHolder = ConsoleHolder.hold();
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
         final File srcDir = newOutputTestDirectory("refresh-mojo");
         final File outputDir = newOutputTestDirectory("refresh-mojo");
@@ -281,7 +392,7 @@ public class AsciidoctorRefreshMojoTest {
 
         // when
         FileUtils.write(resourceFile, "Supposedly image content", UTF_8);
-        runMojoAsynchronously(srcDir, outputDir);
+        Thread mojoThread = runMojoAsynchronously(srcDir, outputDir);
 
         // then
         final File target = new File(subDirectory, resourceFile.getName());
@@ -298,14 +409,15 @@ public class AsciidoctorRefreshMojoTest {
                 .isEqualTo("Supposedly image content UPDATED!");
 
         // cleanup
+        consoleHolder.input("exit");
         consoleHolder.release();
+        awaitTermination(mojoThread);
     }
 
     @Test
     public void should_copy_resource_when_new_resource_is_created() throws IOException {
-
         // given
-        final ConsoleHolder consoleHolder = ConsoleHolder.hold();
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
         final File srcDir = newOutputTestDirectory("refresh-mojo");
         final File outputDir = newOutputTestDirectory("refresh-mojo");
@@ -317,7 +429,7 @@ public class AsciidoctorRefreshMojoTest {
 
         // when
         FileUtils.write(resourceFile, "Supposedly image content", UTF_8);
-        runMojoAsynchronously(srcDir, outputDir);
+        Thread mojoThread = runMojoAsynchronously(srcDir, outputDir);
 
         // then
         final File target = new File(subDirectory, resourceFile.getName());
@@ -337,10 +449,41 @@ public class AsciidoctorRefreshMojoTest {
                 .exists();
 
         // cleanup
+        consoleHolder.input("exit");
         consoleHolder.release();
+        awaitTermination(mojoThread);
     }
 
-    private void runMojoAsynchronously(Consumer<AsciidoctorRefreshMojo> mojoConfigurator) {
+    @Test
+    public void should_run_full_convert_with_refresh_command() throws IOException {
+        // given
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
+
+        final File srcDir = newOutputTestDirectory("refresh-mojo");
+        final File outputDir = newOutputTestDirectory("refresh-mojo");
+
+        final File sourceFile = new File(srcDir, "sourceFile.asciidoc");
+
+        // when
+        FileUtils.write(sourceFile, "= Document Title\n\nThis is test, only a test.", UTF_8);
+        Thread mojoThread = runMojoAsynchronously(srcDir, outputDir);
+
+        // then
+        consoleHolder.awaitProcessingAllSources();
+
+        // and when
+        consoleHolder.input("refresh");
+
+        // then
+        consoleHolder.awaitProcessingAllSources();
+
+        // cleanup
+        consoleHolder.input("exit");
+        consoleHolder.release();
+        awaitTermination(mojoThread);
+    }
+
+    private Thread runMojoAsynchronously(Consumer<AsciidoctorRefreshMojo> mojoConfigurator) {
         final AsciidoctorRefreshMojo mojo = newFakeRefreshMojo();
         mojoConfigurator.accept(mojo);
         Thread mojoThread = new Thread(() -> {
@@ -348,17 +491,30 @@ public class AsciidoctorRefreshMojoTest {
                 mojo.execute();
             } catch (MojoExecutionException | MojoFailureException e) {
             }
-            System.out.println("end");
         });
         mojoThread.start();
+        return mojoThread;
     }
 
-    private void runMojoAsynchronously(File srcDir, File outputDir) {
-        runMojoAsynchronously(mojo -> {
+    private Thread runMojoAsynchronously(File srcDir, File outputDir) {
+        return runMojoAsynchronously(mojo -> {
             mojo.backend = "html5";
             mojo.sourceDirectory = srcDir;
             mojo.outputDirectory = outputDir;
         });
+    }
+
+    @SneakyThrows
+    private void awaitTermination(Thread thread) {
+        int pollTime = 250;
+        int ticks = (10 * 1000 / pollTime);
+        while (thread.isAlive()) {
+            ticks--;
+            if (ticks == 0)
+                throw new InterruptedException("Max wait time reached");
+            else
+                Thread.sleep(pollTime);
+        }
     }
 
 }

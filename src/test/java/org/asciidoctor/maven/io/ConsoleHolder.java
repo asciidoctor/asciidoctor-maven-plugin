@@ -5,7 +5,6 @@ import lombok.SneakyThrows;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.concurrent.CountDownLatch;
 
 
 /**
@@ -14,8 +13,6 @@ import java.util.concurrent.CountDownLatch;
  * @author abelsromero
  */
 public class ConsoleHolder {
-
-    private final CountDownLatch inputLatch = new CountDownLatch(1);
 
     private PrintStream originalOut;
     private InputStream originalIn;
@@ -26,15 +23,14 @@ public class ConsoleHolder {
     private ConsoleHolder() {
     }
 
-    public static ConsoleHolder hold() {
+    public static ConsoleHolder start() {
         final ConsoleHolder holder = new ConsoleHolder();
 
         holder.originalOut = System.out;
         holder.originalIn = System.in;
 
         holder.newOut = new DoubleOutputStream(holder.originalOut);
-        holder.newIn = new PrefilledInputStream("exit\r\n".getBytes(), holder.inputLatch);
-
+        holder.newIn = new StringsCollectionsInputStream();
         System.setOut(new PrintStream(holder.newOut));
         System.setIn(holder.newIn);
 
@@ -53,12 +49,18 @@ public class ConsoleHolder {
         awaitForMessage("Copied resource in");
     }
 
+    int cursor = 0;
+
     @SneakyThrows
-    private void awaitForMessage(String message) {
+    public void awaitForMessage(String message) {
         int pollTime = 300;
         int ticks = (10 * 1000 / pollTime);
         while (true) {
-            if (!!new String(newOut.toByteArray()).contains(message)) break;
+            int pos = new String(newOut.toByteArray()).indexOf(message, cursor);
+            if (pos > 0) {
+                cursor = pos + message.length();
+                break;
+            }
             ticks--;
             if (ticks == 0)
                 throw new InterruptedException("Max wait time reached");
@@ -67,9 +69,13 @@ public class ConsoleHolder {
         }
     }
 
+    @SneakyThrows
+    public void input(String command) {
+        ((StringsCollectionsInputStream) newIn).publishLine(command);
+    }
+
     public void release() {
         System.setOut(originalOut);
-        inputLatch.countDown();
         System.setIn(originalIn);
     }
 

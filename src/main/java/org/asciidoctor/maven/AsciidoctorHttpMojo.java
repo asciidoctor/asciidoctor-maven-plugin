@@ -46,6 +46,7 @@ public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
         server.start();
 
         super.doWork();
+        super.doWait();
 
         server.stop();
     }
