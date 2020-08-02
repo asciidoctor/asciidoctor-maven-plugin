@@ -19,6 +19,7 @@ import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.monitor.FileAlterationListener;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -130,7 +131,12 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     }
 
     private FileFilter buildResourcesFileFilter() {
-        return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter("^[^_.].*\\.(jpg|png)$"));
+        final StringJoiner filePattern = new StringJoiner("|")
+                .add(ASCIIDOC_FILE_EXTENSIONS_REG_EXP);
+        if (!sourceDocumentExtensions.isEmpty())
+            filePattern.add(StringUtils.join(sourceDocumentExtensions, "|"));
+
+        return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter("^[^_.].*\\.(?!(" + filePattern.toString() + ")).*$"));
     }
 
     private IOFileFilter buildSourcesFileFilter() {
@@ -145,7 +151,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
             return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter(stringJoiner.toString()));
         }
 
-        return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter(ASCIIDOC_REG_EXP_EXTENSION));
+        return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter(ASCIIDOC_NON_INTERNAL_REG_EXP));
     }
 
 }

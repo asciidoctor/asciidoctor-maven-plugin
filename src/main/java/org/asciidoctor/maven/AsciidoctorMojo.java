@@ -59,7 +59,8 @@ import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE
 public class AsciidoctorMojo extends AbstractMojo {
     // copied from org.asciidoctor.AsciiDocDirectoryWalker.ASCIIDOC_REG_EXP_EXTENSION
     // should probably be configured in AsciidoctorMojo through @Parameter 'extension'
-    protected static final String ASCIIDOC_REG_EXP_EXTENSION = "^[^_.].*\\.a((sc(iidoc)?)|d(oc)?)$";
+    protected static final String ASCIIDOC_FILE_EXTENSIONS_REG_EXP = "a((sc(iidoc)?)|d(oc)?)";
+    protected static final String ASCIIDOC_NON_INTERNAL_REG_EXP = "^[^_.].*\\." + ASCIIDOC_FILE_EXTENSIONS_REG_EXP + "$";
 
     @Parameter(defaultValue = "${project.build.sourceEncoding}")
     protected String encoding;
