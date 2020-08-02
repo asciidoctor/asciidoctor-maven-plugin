@@ -475,6 +475,64 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
+    public void should_ignore_resource_file_when_matches_custom_source_sourceDocumentName() throws IOException {
+        // given
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
+
+        final File srcDir = newOutputTestDirectory("refresh-mojo");
+        final File outputDir = newOutputTestDirectory("refresh-mojo");
+
+        final File sourceFile = new File(srcDir, "sourceFile.adoc");
+        final File resourceFile1 = new File(srcDir, "fakeImage.jpg");
+        final File resourceFile2 = new File(srcDir, "fakeImage.gif");
+
+        // when:
+        FileUtils.write(sourceFile, "= Document Title\n\nThis is test, only a test.", UTF_8);
+        FileUtils.write(resourceFile1, "= Not an image\n\nThis is reality a Adoc source with jpg extension", UTF_8);
+        FileUtils.write(resourceFile2, "Supposedly image content", UTF_8);
+
+        Thread mojoThread = runMojoAsynchronously(mojo -> {
+            mojo.backend = "html5";
+            mojo.sourceDirectory = srcDir;
+            mojo.outputDirectory = outputDir;
+            mojo.sourceDocumentName = "fakeImage.jpg";
+        });
+
+        // then: default source extensions and custom extensions are not copied as resources
+        consoleHolder.awaitProcessingAllSources();
+        final File targetSource = new File(outputDir, sourceFile.getName().replace("adoc", "html"));
+        assertThat(targetSource)
+                .doesNotExist();
+        final File targetResource1 = new File(outputDir, resourceFile1.getName().replace("jpg", "html"));
+        assertThat(FileUtils.readFileToString(targetResource1, UTF_8))
+                .contains("This is reality a Adoc source with jpg extension");
+        assertThat(new File(outputDir, resourceFile1.getName()))
+                .doesNotExist();
+        final File targetResource2 = new File(outputDir, resourceFile2.getName());
+        assertThat(targetResource2)
+                .exists();
+
+        // and when
+        FileUtils.write(resourceFile1, "= Not an image\n\nWow, this will be auto refreshed !", UTF_8);
+
+        // then: custom file extensions is processed as source
+        consoleHolder.awaitProcessingSource();
+        assertThat(FileUtils.readFileToString(targetResource1, UTF_8))
+                .contains("Wow, this will be auto refreshed");
+        assertThat(new File(outputDir, resourceFile1.getName()))
+                .doesNotExist();
+        assertThat(targetResource2)
+                .exists();
+        assertThat(targetSource)
+                .doesNotExist();
+
+        // cleanup
+        consoleHolder.input("exit");
+        consoleHolder.release();
+        awaitTermination(mojoThread);
+    }
+
+    @Test
     public void should_copy_resource_when_new_resource_is_created() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();

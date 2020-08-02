@@ -34,6 +34,8 @@ import java.util.Collections;
 import java.util.Scanner;
 import java.util.StringJoiner;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Mojo(name = "auto-refresh")
 public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
 
@@ -131,16 +133,24 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     }
 
     private FileFilter buildResourcesFileFilter() {
+
         final StringJoiner filePattern = new StringJoiner("|")
                 .add(ASCIIDOC_FILE_EXTENSIONS_REG_EXP);
         if (!sourceDocumentExtensions.isEmpty())
             filePattern.add(StringUtils.join(sourceDocumentExtensions, "|"));
 
-        return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter("^[^_.].*\\.(?!(" + filePattern.toString() + ")).*$"));
+        final String includedResourcesPattern = new StringBuilder()
+                .append("^")
+                .append(isBlank(sourceDocumentName) ? "" : "(?!(" + sourceDocumentName + "))")
+                .append("[^_.].*\\.(?!(")
+                .append(filePattern.toString())
+                .append(")).*$")
+                .toString();
+        return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter(includedResourcesPattern));
     }
 
     private IOFileFilter buildSourcesFileFilter() {
-        if (sourceDocumentName != null)
+        if (!isBlank(sourceDocumentName))
             return new NameFileFilter(sourceDocumentName);
 
         if (!sourceDocumentExtensions.isEmpty()) {
