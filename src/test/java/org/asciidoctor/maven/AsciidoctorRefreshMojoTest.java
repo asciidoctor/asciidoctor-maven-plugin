@@ -2,6 +2,7 @@ package org.asciidoctor.maven;
 
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
+import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.SystemStreamLog;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
@@ -28,6 +30,8 @@ import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
 import static org.mockito.Mockito.when;
 
 public class AsciidoctorRefreshMojoTest {
+
+    private static final String TEST_DIR = "refresh-mojo";
 
     @SneakyThrows
     public AsciidoctorRefreshMojo newFakeRefreshMojo() {
@@ -62,8 +66,8 @@ public class AsciidoctorRefreshMojoTest {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
-        final File srcDir = newOutputTestDirectory("refresh-mojo");
-        final File outputDir = newOutputTestDirectory("refresh-mojo");
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
 
         Thread mojoThread = runMojoAsynchronously(srcDir, outputDir);
 
@@ -81,8 +85,8 @@ public class AsciidoctorRefreshMojoTest {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
-        final File srcDir = newOutputTestDirectory("refresh-mojo");
-        final File outputDir = newOutputTestDirectory("refresh-mojo");
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
 
         Thread mojoThread = runMojoAsynchronously(srcDir, outputDir);
 
@@ -100,8 +104,8 @@ public class AsciidoctorRefreshMojoTest {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
-        final File srcDir = newOutputTestDirectory("refresh-mojo");
-        final File outputDir = newOutputTestDirectory("refresh-mojo");
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
 
         Thread mojoThread = runMojoAsynchronously(srcDir, outputDir);
         consoleHolder.awaitProcessingAllSources();
@@ -120,8 +124,8 @@ public class AsciidoctorRefreshMojoTest {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
-        final File srcDir = newOutputTestDirectory("refresh-mojo");
-        final File outputDir = newOutputTestDirectory("refresh-mojo");
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
 
         final String fileExtension = "adoc";
         final File sourceFile = new File(srcDir, "my-sourceFile-" + UUID.randomUUID() + "." + fileExtension);
@@ -166,8 +170,8 @@ public class AsciidoctorRefreshMojoTest {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
-        final File srcDir = newOutputTestDirectory("refresh-mojo");
-        final File outputDir = newOutputTestDirectory("refresh-mojo");
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
 
         final String customFileExtension = "myadoc";
         final File sourceFile = new File(srcDir, "sourceFile." + customFileExtension);
@@ -206,8 +210,8 @@ public class AsciidoctorRefreshMojoTest {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
-        final File srcDir = newOutputTestDirectory("refresh-mojo");
-        final File outputDir = newOutputTestDirectory("refresh-mojo");
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
 
         final File sourceFile = new File(srcDir, "sourceFile.asciidoc");
 
@@ -240,8 +244,8 @@ public class AsciidoctorRefreshMojoTest {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
-        final File srcDir = newOutputTestDirectory("refresh-mojo");
-        final File outputDir = newOutputTestDirectory("refresh-mojo");
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
 
         final File sourceFile = new File(new File(srcDir, "sub-dir1/sub_dir2"), "sourceFile.asciidoc");
 
@@ -274,8 +278,8 @@ public class AsciidoctorRefreshMojoTest {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
-        final File srcDir = newOutputTestDirectory("refresh-mojo");
-        final File outputDir = newOutputTestDirectory("refresh-mojo");
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
 
         final File sourceFile = new File(new File(srcDir, "sub-dir1/sub_dir2"), "sourceFile.asciidoc");
 
@@ -312,8 +316,8 @@ public class AsciidoctorRefreshMojoTest {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
-        final File srcDir = newOutputTestDirectory("refresh-mojo");
-        final File outputDir = newOutputTestDirectory("refresh-mojo");
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
 
         final File resourceFile = new File(srcDir, "fakeImage.jpg");
 
@@ -346,8 +350,8 @@ public class AsciidoctorRefreshMojoTest {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
-        final File srcDir = newOutputTestDirectory("refresh-mojo");
-        final File outputDir = newOutputTestDirectory("refresh-mojo");
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
 
         FileUtils.write(new File(srcDir, "sourceFile.asciidoc"),
                 "= Document Title\n\nThis is test, only a test.", UTF_8);
@@ -383,8 +387,8 @@ public class AsciidoctorRefreshMojoTest {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
-        final File srcDir = newOutputTestDirectory("refresh-mojo");
-        final File outputDir = newOutputTestDirectory("refresh-mojo");
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
 
         FileUtils.write(new File(srcDir, "sourceFile.asciidoc"),
                 "= Document Title\n\nThis is test, only a test.", UTF_8);
@@ -417,12 +421,115 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
+    public void should_copy_resource_to_targetPath_in_resource_when_resources_configuration_is_set() throws IOException {
+        // given
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
+
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
+
+        FileUtils.write(new File(srcDir, "sourceFile.asciidoc"),
+                "= Document Title\n\nThis is test, only a test.", UTF_8);
+        final String subDirPath = "sub-dir1/sub_dir2";
+        final File subDirectory = new File(srcDir, subDirPath);
+        final String resourceFileExtension = "jpg";
+        final File resourceFile = new File(subDirectory, "fakeImage." + resourceFileExtension);
+
+        // when
+        FileUtils.write(resourceFile, "Supposedly image content", UTF_8);
+        String customOutput = "custom-output";
+        Thread mojoThread = runMojoAsynchronously(mojo -> {
+            mojo.backend = "html5";
+            mojo.sourceDirectory = srcDir;
+            mojo.outputDirectory = outputDir;
+            mojo.resources = Arrays.asList(((Supplier<Resource>) () -> {
+                Resource resource = new Resource();
+                resource.setDirectory(subDirectory.getAbsolutePath());
+                resource.setIncludes(Arrays.asList("**/*.jpg", "**/*.gif"));
+                resource.setTargetPath(String.join(File.separator, subDirPath, customOutput));
+                return resource;
+            }).get());
+        });
+
+        // then
+        final File target = new File(outputDir, String.join(File.separator, subDirPath, customOutput, resourceFile.getName()));
+        consoleHolder.awaitProcessingAllSources();
+        assertThat(FileUtils.readFileToString(target, UTF_8))
+                .isEqualTo("Supposedly image content");
+
+        // and when
+        FileUtils.write(resourceFile, "Supposedly image content UPDATED!", UTF_8);
+
+        // then
+        consoleHolder.awaitProcessingResource();
+        assertThat(FileUtils.readFileToString(target, UTF_8))
+                .isEqualTo("Supposedly image content UPDATED!");
+        assertThat(new File(outputDir, resourceFile.getName()))
+                .doesNotExist();
+
+        // cleanup
+        consoleHolder.input("exit");
+        consoleHolder.release();
+        awaitTermination(mojoThread);
+    }
+
+    @Test
+    public void should_copy_resource_to_outputDirectory_in_resource_when_resources_configuration_does_not_set_targePath() throws IOException {
+        // given
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
+
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
+
+        FileUtils.write(new File(srcDir, "sourceFile.asciidoc"),
+                "= Document Title\n\nThis is test, only a test.", UTF_8);
+        final String subDirPath = "sub-dir1/sub_dir2";
+        final File subDirectory = new File(srcDir, subDirPath);
+        final String resourceFileExtension = "jpg";
+        final File resourceFile = new File(subDirectory, "fakeImage." + resourceFileExtension);
+
+        // when
+        FileUtils.write(resourceFile, "Supposedly image content", UTF_8);
+        String customOutput = "custom-output";
+        Thread mojoThread = runMojoAsynchronously(mojo -> {
+            mojo.backend = "html5";
+            mojo.sourceDirectory = srcDir;
+            mojo.outputDirectory = outputDir;
+            mojo.resources = Arrays.asList(((Supplier<Resource>) () -> {
+                Resource resource = new Resource();
+                resource.setDirectory(subDirectory.getAbsolutePath());
+                resource.setIncludes(Arrays.asList("**/*.jpg", "**/*.gif"));
+                return resource;
+            }).get());
+        });
+
+        // then
+        final File target = new File(outputDir, resourceFile.getName());
+        consoleHolder.awaitProcessingAllSources();
+        assertThat(FileUtils.readFileToString(target, UTF_8))
+                .isEqualTo("Supposedly image content");
+
+        // and when
+        FileUtils.write(resourceFile, "Supposedly image content UPDATED!", UTF_8);
+
+        // then
+        consoleHolder.awaitProcessingResource();
+        assertThat(FileUtils.readFileToString(target, UTF_8))
+                .isEqualTo("Supposedly image content UPDATED!");
+
+        // cleanup
+        consoleHolder.input("exit");
+        consoleHolder.release();
+        awaitTermination(mojoThread);
+    }
+
+    @Test
     public void should_ignore_resource_file_when_matches_custom_source_file_extensions() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
-        final File srcDir = newOutputTestDirectory("refresh-mojo");
-        final File outputDir = newOutputTestDirectory("refresh-mojo");
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
 
         final File sourceFile = new File(srcDir, "sourceFile.adoc");
         final File resourceFile1 = new File(srcDir, "fakeImage.jpg");
@@ -479,8 +586,8 @@ public class AsciidoctorRefreshMojoTest {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
-        final File srcDir = newOutputTestDirectory("refresh-mojo");
-        final File outputDir = newOutputTestDirectory("refresh-mojo");
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
 
         final File sourceFile = new File(srcDir, "sourceFile.adoc");
         final File resourceFile1 = new File(srcDir, "fakeImage.jpg");
@@ -537,8 +644,8 @@ public class AsciidoctorRefreshMojoTest {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
-        final File srcDir = newOutputTestDirectory("refresh-mojo");
-        final File outputDir = newOutputTestDirectory("refresh-mojo");
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
 
         FileUtils.write(new File(srcDir, "sourceFile.asciidoc"),
                 "= Document Title\n\nThis is test, only a test.", UTF_8);
@@ -577,8 +684,8 @@ public class AsciidoctorRefreshMojoTest {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
-        final File srcDir = newOutputTestDirectory("refresh-mojo");
-        final File outputDir = newOutputTestDirectory("refresh-mojo");
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
 
         final File sourceFile = new File(srcDir, "sourceFile.asciidoc");
 

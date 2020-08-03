@@ -19,7 +19,6 @@ import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.monitor.FileAlterationListener;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -28,11 +27,9 @@ import org.asciidoctor.maven.refresh.AsciidoctorConverterFileAlterationListenerA
 import org.asciidoctor.maven.refresh.ResourceCopyFileAlterationListenerAdaptor;
 import org.asciidoctor.maven.refresh.TimeCounter;
 
+import java.io.File;
 import java.io.FileFilter;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Scanner;
-import java.util.StringJoiner;
+import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -103,6 +100,14 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
 
     private void startPolling() throws MojoExecutionException {
 
+        // TODO avoid duplication with AsciidoctorMojo
+        final Optional<File> sourceDirectoryCandidate = findSourceDirectory(sourceDirectory, project.getBasedir());
+        if (!sourceDirectoryCandidate.isPresent()) {
+            getLog().info("No sourceDirectory found. Skipping processing");
+            return;
+        }
+        final File sourceDirectory = sourceDirectoryCandidate.get();
+
         final FileAlterationMonitor fileAlterationMonitor = new FileAlterationMonitor(interval);
 
         { // content monitor
@@ -137,7 +142,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
         final StringJoiner filePattern = new StringJoiner("|")
                 .add(ASCIIDOC_FILE_EXTENSIONS_REG_EXP);
         if (!sourceDocumentExtensions.isEmpty())
-            filePattern.add(StringUtils.join(sourceDocumentExtensions, "|"));
+            filePattern.add(String.join("|", sourceDocumentExtensions));
 
         final String includedResourcesPattern = new StringBuilder()
                 .append("^")
