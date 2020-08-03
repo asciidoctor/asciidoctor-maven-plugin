@@ -1,10 +1,10 @@
 package org.asciidoctor.maven.test
 
-
+import lombok.SneakyThrows
 import org.asciidoctor.maven.AsciidoctorHttpMojo
-import org.asciidoctor.maven.io.TestFilesHelper
 import org.asciidoctor.maven.io.DoubleOutputStream
 import org.asciidoctor.maven.io.PrefilledInputStream
+import org.asciidoctor.maven.io.TestFilesHelper
 import org.asciidoctor.maven.test.plexus.MockPlexusContainer
 import spock.lang.Specification
 
@@ -73,6 +73,7 @@ class AsciidoctorHttpMojoTest extends Specification {
             System.setOut(originalOut)
             inputLatch.countDown()
             System.setIn(originalIn)
+            awaitTermination(mojoThread)
     }
 
     def "default page"() {
@@ -88,7 +89,7 @@ class AsciidoctorHttpMojoTest extends Specification {
             def originalIn = System.in
 
             def newOut = new DoubleOutputStream(originalOut)
-            def newIn = new PrefilledInputStream('exit\r\n'.bytes, inputLatch)
+            def newIn = new PrefilledInputStream('exit\r\nexit\r\nexit\r\n'.bytes, inputLatch)
 
             def httpPort = availablePort
 
@@ -131,6 +132,7 @@ class AsciidoctorHttpMojoTest extends Specification {
             System.setOut(originalOut)
             inputLatch.countDown()
             System.setIn(originalIn)
+            awaitTermination(mojoThread)
     }
 
     private int getAvailablePort() {
@@ -138,5 +140,18 @@ class AsciidoctorHttpMojoTest extends Specification {
         int port = socket.getLocalPort()
         socket.close()
         return port
+    }
+
+    @SneakyThrows
+    private void awaitTermination(Thread thread) {
+        int pollTime = 250;
+        int ticks = (10 * 1000 / pollTime);
+        while (thread.isAlive()) {
+            ticks--;
+            if (ticks == 0)
+                throw new InterruptedException("Max wait time reached");
+            else
+                Thread.sleep(pollTime);
+        }
     }
 }

@@ -197,7 +197,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
 
         if (sourceDirectory == null) {
-            throw new MojoExecutionException("Required parameter 'asciidoctor.alternateSourceDir' not set.");
+            throw new MojoExecutionException("Required parameter 'asciidoctor.sourceDirectory' not set.");
         }
 
         Optional<File> sourceDirectoryCandidate = findSourceDirectory(sourceDirectory, project.getBasedir());
