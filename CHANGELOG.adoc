@@ -39,3 +39,4 @@ Build / Infrastructure::
   * Adds GitHub Actions build for Linux, Windows, MacOS and Java 8, 11 (#452, #453)
   * Simplify TravisCI and AppVeyor to run Java 8 and 11 only (#460)
   * Upgrade Maven from v3.5.0 to 3.6.3 in AppVeyor (#460)
+  * Updated jacoco-maven-plugin version from v0.8.2 to 0.8.5 (#479)
