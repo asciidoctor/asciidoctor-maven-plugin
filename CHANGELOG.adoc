@@ -18,7 +18,6 @@ Improvements::
   * Inject Maven properties as attributes in `process-asciidoc` mojo (#459)
   * Make `auto-refresh` (and `http` by inheritance) only convert modified and created sources (#474)
   * Make `auto-refresh` only copy modified and created resources + taking into consideration <resources> options (#478)
-  * Publish `auto-refresh` mojo (#466)
 
 Bug Fixes::
 
@@ -34,6 +33,7 @@ Documentation::
   * Add reference to v2-migration-guide in README for better findability (#445)
   * Fix broken link to V2 migration guide (https://github.com/ge0ffrey[@ge0ffrey]) (#446)
   * Add GitHub's PR and issue templates (#465)
+  * Add `auto-refresh` mojo documentation (#466)
 
 Build / Infrastructure::
 
