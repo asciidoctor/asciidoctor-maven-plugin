@@ -59,7 +59,8 @@ import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE
 public class AsciidoctorMojo extends AbstractMojo {
     // copied from org.asciidoctor.AsciiDocDirectoryWalker.ASCIIDOC_REG_EXP_EXTENSION
     // should probably be configured in AsciidoctorMojo through @Parameter 'extension'
-    protected static final String ASCIIDOC_REG_EXP_EXTENSION = "^[^_.].*\\.a((sc(iidoc)?)|d(oc)?)$";
+    protected static final String ASCIIDOC_FILE_EXTENSIONS_REG_EXP = "a((sc(iidoc)?)|d(oc)?)";
+    protected static final String ASCIIDOC_NON_INTERNAL_REG_EXP = "^[^_.].*\\." + ASCIIDOC_FILE_EXTENSIONS_REG_EXP + "$";
 
     @Parameter(defaultValue = "${project.build.sourceEncoding}")
     protected String encoding;
@@ -196,7 +197,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
 
         if (sourceDirectory == null) {
-            throw new MojoExecutionException("Required parameter 'asciidoctor.alternateSourceDir' not set.");
+            throw new MojoExecutionException("Required parameter 'asciidoctor.sourceDirectory' not set.");
         }
 
         Optional<File> sourceDirectoryCandidate = findSourceDirectory(sourceDirectory, project.getBasedir());
@@ -275,7 +276,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
     }
 
-    protected Optional<File> findSourceDirectory(File initialSourceDirectory, File baseDir) {
+    public Optional<File> findSourceDirectory(File initialSourceDirectory, File baseDir) {
         Optional<File> sourceDirCandidate = new SourceDirectoryFinder(initialSourceDirectory, baseDir,
                 candidate -> {
                     String candidateName = candidate.toString();

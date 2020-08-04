@@ -40,13 +40,13 @@ public class AsciidoctorHttpMojo extends AsciidoctorRefreshMojo {
     @Parameter(property = PREFIX + "reload-interval", defaultValue = "0")
     protected int autoReloadInterval;
 
+
     @Override
-    protected void doWork() throws MojoFailureException, MojoExecutionException {
+    public void execute() throws MojoExecutionException, MojoFailureException {
         final AsciidoctorHttpServer server = new AsciidoctorHttpServer(getLog(), port, outputDirectory, home);
         server.start();
-
-        super.doWork();
-
+        doWork();
+        doWait();
         server.stop();
     }
 
