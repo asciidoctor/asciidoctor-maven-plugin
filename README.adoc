@@ -99,7 +99,7 @@ As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` 
 <1> As this plugin tracks the version of Asciidoctor, you can use whichever version of Asciidoctor you prefer.
 
 [source,xml]
-.Execution setup
+.Conversion setup
 ----
 <plugin>
     ...
@@ -116,7 +116,7 @@ As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` 
 ----
 <1> This is simply an unique id for the execution.
 <2> The asciidoctor-maven-plugin does not run in any phase by default, so one must be specified.
-<3> The (only for the moment) Asciidoctor Maven plugin goal.
+<3> The Asciidoctor Maven plugin conversion goal.
 
 === Configuration
 
@@ -414,6 +414,94 @@ An example of this setup is below:
 <.> Second execution, converts documents to DocBook.
 <.> Any configuration outside the executions section is inherited by each execution.
 This allows an easier way to share common configuration options.
+
+=== Automatic conversion of documents on change (refresh)
+
+Using the `auto-refresh` goal it is possible to convert documents when one of them is modified, or a new one is added.
+No need for a full rebuild or typing any command.
+This is specially useful in combination with a refresh browser extension, allowing you to preview document changes while editing.
+
+[source,xml]
+.Refresh configuration extract
+----
+<plugin>
+    ...
+    <executions>
+        <execution>
+            <id>output-html</id>
+            <phase>generate-resources</phase> <!--1-->
+            <goals>
+                <goal>auto-refresh</goal> <!--2-->
+            </goals>
+            <configuration> <!--3-->
+                <backend>html</backend>
+                <attributes>
+                    <toc/>
+                    <linkcss>false</linkcss>
+                    <source-highlighter>coderay</source-highlighter>
+                </attributes>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+----
+<1> The asciidoctor-maven-plugin does not run in any phase by default, so one must be specified.
+<2> The Asciidoctor Maven plugin refresh goal.
+<3> Asciidoctor options.
+
+Once started, this will keep the maven process running until you enter `exit` or `quit` command in the console.
+Or it is manually killed with _ctrl+c_.
+
+[NOTE]
+====
+It is possible to run `auto-refresh` on your current project without changes provided the configuration is at top plugin level.
+Running `mvn asciidoctor:auto-refresh` will start, but will ignore `<configuration>` blocks inside `<executions>`.
+
+[source,xml,subs=attributes+]
+.Shared `process-asciidoc`, `auto-refresh` configuration example
+----
+<plugin>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctor-maven-plugin</artifactId>
+    <version>{release-version}</version>
+    <configuration> <!--1-->
+        <preserveDirectories>true</preserveDirectories>
+        <attributes>
+            <source-highlighter>coderay</source-highlighter>
+            <imagesdir>./images</imagesdir>
+            <toc>left</toc>
+            <icons>font</icons>
+        </attributes>
+    </configuration>
+    <executions>
+        <execution>
+            <id>asciidoc-to-html</id>
+            <phase>generate-resources</phase>
+            <goals>
+                <goal>process-asciidoc</goal>
+            </goals>
+        </execution>
+        <configuration> <!--2-->
+            <docinfo1>true</docinfo1>
+        </configuration>
+    </executions>
+</plugin>
+----
+<1> Processed configuration.
+<2> Ignored configuration.
+====
+
+==== Configuration
+
+The mojo accepts the same configurations as `process-asciidoc` mojo and adds an additional option:
+
+interval:: time in milliseconds between checks of the filesystem.
+Defaults to `2000`
+
+==== Error handling
+
+If `failIf` is set and errors are introduced after start, these will be reported but the plugin will continue running.
+If errors are found during initialization, plugin won't start.
 
 == Maven Site Integration
 
