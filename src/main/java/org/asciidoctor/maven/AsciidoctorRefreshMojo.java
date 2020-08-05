@@ -25,6 +25,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.asciidoctor.maven.refresh.AsciidoctorConverterFileAlterationListenerAdaptor;
 import org.asciidoctor.maven.refresh.ResourceCopyFileAlterationListenerAdaptor;
+import org.asciidoctor.maven.refresh.ResourcesPatternBuilder;
 import org.asciidoctor.maven.refresh.TimeCounter;
 
 import java.io.File;
@@ -32,6 +33,7 @@ import java.io.FileFilter;
 import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.asciidoctor.maven.io.AsciidoctorFileScanner.ASCIIDOC_NON_INTERNAL_REG_EXP;
 
 @Mojo(name = "auto-refresh")
 public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
@@ -138,20 +140,8 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     }
 
     private FileFilter buildResourcesFileFilter() {
-
-        final StringJoiner filePattern = new StringJoiner("|")
-                .add(ASCIIDOC_FILE_EXTENSIONS_REG_EXP);
-        if (!sourceDocumentExtensions.isEmpty())
-            filePattern.add(String.join("|", sourceDocumentExtensions));
-
-        final String includedResourcesPattern = new StringBuilder()
-                .append("^")
-                .append(isBlank(sourceDocumentName) ? "" : "(?!(" + sourceDocumentName + "))")
-                .append("[^_.].*\\.(?!(")
-                .append(filePattern.toString())
-                .append(")).*$")
-                .toString();
-        return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter(includedResourcesPattern));
+        final String resourcesRegexPattern = new ResourcesPatternBuilder(sourceDocumentName, sourceDocumentExtensions).build();
+        return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter(resourcesRegexPattern));
     }
 
     private IOFileFilter buildSourcesFileFilter() {

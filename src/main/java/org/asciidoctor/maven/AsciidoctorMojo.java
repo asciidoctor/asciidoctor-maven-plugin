@@ -57,10 +57,6 @@ import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE
  */
 @Mojo(name = "process-asciidoc", threadSafe = true)
 public class AsciidoctorMojo extends AbstractMojo {
-    // copied from org.asciidoctor.AsciiDocDirectoryWalker.ASCIIDOC_REG_EXP_EXTENSION
-    // should probably be configured in AsciidoctorMojo through @Parameter 'extension'
-    protected static final String ASCIIDOC_FILE_EXTENSIONS_REG_EXP = "a((sc(iidoc)?)|d(oc)?)";
-    protected static final String ASCIIDOC_NON_INTERNAL_REG_EXP = "^[^_.].*\\." + ASCIIDOC_FILE_EXTENSIONS_REG_EXP + "$";
 
     @Parameter(defaultValue = "${project.build.sourceEncoding}")
     protected String encoding;
@@ -319,10 +315,13 @@ public class AsciidoctorMojo extends AbstractMojo {
         // All resources must exclude AsciiDoc documents and folders beginning with underscore
         for (Resource resource : resources) {
             List<String> excludes = new ArrayList<>();
-            for (String value : AsciidoctorFileScanner.IGNORED_FOLDERS_AND_FILES) {
+            for (String value : AsciidoctorFileScanner.INTERNAL_FOLDERS_AND_FILES_PATTERNS) {
                 excludes.add(value);
             }
-            for (String value : AsciidoctorFileScanner.DEFAULT_FILE_EXTENSIONS) {
+            for (String value : AsciidoctorFileScanner.IGNORED_FILE_NAMES) {
+                excludes.add("**/" + value);
+            }
+            for (String value : AsciidoctorFileScanner.DEFAULT_ASCIIDOC_EXTENSIONS) {
                 excludes.add(value);
             }
             for (String docExtension : configuration.getSourceDocumentExtensions()) {
