@@ -368,6 +368,7 @@ public class AsciidoctorMojo extends AbstractMojo {
      * @param sourceDirectory Source directory configured (`sourceFile` may include relative path).
      * @param configuration   AsciidoctorMojo containing conversion configuration.
      * @return the final destination file path.
+     * @throws MojoExecutionException If output is not valid
      */
     public File setDestinationPaths(final File sourceFile, final OptionsBuilder optionsBuilder, final File sourceDirectory,
                                     final AsciidoctorMojo configuration) throws MojoExecutionException {
