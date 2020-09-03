@@ -8,6 +8,7 @@ import org.asciidoctor.maven.io.TestFilesHelper
 import org.asciidoctor.maven.test.plexus.MockPlexusContainer
 import spock.lang.Specification
 
+import java.nio.file.Files
 import java.util.concurrent.CountDownLatch
 
 class AsciidoctorHttpMojoTest extends Specification {
@@ -140,8 +141,6 @@ class AsciidoctorHttpMojoTest extends Specification {
             def emptySrcDir = new File('some_path')
             def outputDir = TestFilesHelper.newOutputTestDirectory('http-mojo')
 
-            emptySrcDir.mkdirs()
-
             def inputLatch = new CountDownLatch(1)
 
             def originalOut = System.out
@@ -192,8 +191,6 @@ class AsciidoctorHttpMojoTest extends Specification {
         setup:
             def emptySrcDir = new File('some_path')
             def outputDir = TestFilesHelper.newOutputTestDirectory('http-mojo')
-
-            emptySrcDir.mkdirs()
 
             def inputLatch = new CountDownLatch(1)
 
@@ -247,8 +244,6 @@ class AsciidoctorHttpMojoTest extends Specification {
             def emptySrcDir = new File('some_path')
             def outputDir = TestFilesHelper.newOutputTestDirectory('http-mojo')
             TestFilesHelper.createFileWithContent(outputDir,'index.html')
-
-            emptySrcDir.mkdirs()
 
             def inputLatch = new CountDownLatch(1)
 

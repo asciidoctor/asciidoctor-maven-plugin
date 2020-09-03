@@ -19,6 +19,7 @@ Improvements::
   * Make `auto-refresh` (and `http` by inheritance) only convert modified and created sources (#474)
   * Make `auto-refresh` only copy modified and created resources + taking into consideration <resources> options (#478)
   * Make `auto-refresh` ignore docInfo files to avoid copying them into output (#480)
+  * Add official support for `http` mojo with life preview and refresh of html output (#483)
 
 Bug Fixes::
 
