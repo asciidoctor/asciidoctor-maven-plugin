@@ -787,3 +787,10 @@ If you are not sure what version of the Asciidoctor converter is being used.
 You can obtain it using the version attribute like in the example blow.
 
  Asciidoctor version: {asciidoctor-version}
+
+== Copyright and License
+
+Copyright (C) 2013-2020 Jason Porter, Dan Allen, Abel Salgado Romero and the individual contributors.
+Use of this software is granted under the terms of the Apache License, Version 2.0.
+
+See the {uri-license}[LICENSE] for the full license text.
