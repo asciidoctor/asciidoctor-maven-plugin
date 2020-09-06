@@ -35,6 +35,7 @@ Documentation::
   * Fix broken link to V2 migration guide (https://github.com/ge0ffrey[@ge0ffrey]) (#446)
   * Add GitHub's PR and issue templates (#465)
   * Add `auto-refresh` mojo documentation (#466)
+  * Add copyright notice to README and remove unnecessary license header from sources (#482)
 
 Build / Infrastructure::
 
