@@ -759,16 +759,16 @@ Unit tests are written with http://spockframework.org/[Spock].
 This will be downloaded by Maven and can be run from IntelliJ without any additional setup.
 Tests are run simply by:
 
- mvn clean test
+ ./mvnw clean test
 
 Or any of the other goals which run tests.
 
 Integration tests under `src/it` are run using link:https://maven.apache.org/plugins/maven-invoker-plugin/[maven-invoker-plugin] and the `runt-its` profile.
 To only run them without excluding unit tests, use:
 
- mvn clean verify -DskipTests -Prun-its
+ ./mvnw clean verify -DskipTests -Prun-its
 
-To run all tests at once just use `mvn clean verify -DskipTests -Prun-its`.
+To run all tests at once just use `./mvnw clean verify -DskipTests -Prun-its`.
 
 == Tips & Tricks
 
