@@ -415,7 +415,8 @@ An example of this setup is below:
 <.> Any configuration outside the executions section is inherited by each execution.
 This allows an easier way to share common configuration options.
 
-=== Automatic conversion of documents on change (refresh)
+[[auto-refresh-goal]]
+=== Automatic conversion of documents on change (`auto-refresh`)
 
 Using the `auto-refresh` goal it is possible to convert documents when one of them is modified, or a new one is added.
 No need for a full rebuild or typing any command.
@@ -452,6 +453,7 @@ This is specially useful in combination with a refresh browser extension, allowi
 Once started, this will keep the maven process running until you enter `exit` or `quit` command in the console.
 Or it is manually killed with _ctrl+c_.
 
+[[auto-refresh-goal-config-note]]
 [NOTE]
 ====
 It is possible to run `auto-refresh` on your current project without changes provided the configuration is at top plugin level.
@@ -502,6 +504,70 @@ Defaults to `2000`
 
 If `failIf` is set and errors are introduced after start, these will be reported but the plugin will continue running.
 If errors are found during initialization, plugin won't start.
+
+[[http-goal]]
+=== HTML life preview (`http`)
+
+The `http` goal allows starting an embedded http server to access content from the generated output directory, while the plugin updates it.
+
+Modified sources will be updated similarly to how <<auto-refresh-goal,auto-refresh>> works.
+And at the same time, HTML contents will be automatically refreshed on the web browser without need for manual steps.
+Just open the file through the provided url that will appear in the console and write.
+
+Note than the file extension is not necessary for html files.
+Bu default, the document _manual.html_ placed in the root path will be accessible as _pass:c[http://localhost:2000/manual]_.
+
+[NOTE]
+====
+While the `http` goal can be used to serve any kind of content (e.g. PDF).
+The possibilities have not been explored and are not officially supported, but feedback is welcome if you want to share your experience and ideas.
+====
+
+[source,xml]
+.Http configuration extract
+----
+<plugin>
+    ...
+    <executions>
+        <execution>
+            <id>output-html</id>
+            <phase>generate-resources</phase> <!--1-->
+            <goals>
+                <goal>http</goal> <!--2-->
+            </goals>
+            <configuration> <!--3-->
+                <port>8080</port>
+                <attributes>
+                    <toc/>
+                    <linkcss>false</linkcss>
+                    <source-highlighter>coderay</source-highlighter>
+                </attributes>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+----
+<1> The asciidoctor-maven-plugin does not run in any phase by default, so one must be specified.
+<2> The Asciidoctor Maven plugin http goal.
+<3> Asciidoctor options.
+Here we change the port to 8080.
+
+This feature shares the following features (and limitations) with <<auto-refresh-goal,auto-refresh>> goal.
+
+* Once started, this will keep the maven process running until explicitly stopped (`exit`, `quit` commands or _ctrl+c_).
+* Deleted or moved files will remain the output directory until clean.
+* To take full advantage of configuration options, it must be explicitly configured in _pom.xml_ (see <<auto-refresh-goal-config-note,note>>).
+* `failIf` configurations will make the goal fail to start, but won't stop the server once started.
+
+==== Configuration
+
+The mojo accepts the same configurations as `process-asciidoc`, `refresh` mojos and adds:
+
+port:: server port.
+Defaults to `2000`.
+
+home:: default resource to open when no url is indicated, that is when browsing to http://localhost:2000 by default.
+Defaults to `index`.
 
 == Maven Site Integration
 

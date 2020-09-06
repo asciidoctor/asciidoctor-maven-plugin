@@ -76,7 +76,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
         getLog().info("Type [exit|quit] to exit and [refresh] to force a manual re-conversion.");
     }
 
-    private void stopMonitors() throws MojoExecutionException {
+    protected void stopMonitors() throws MojoExecutionException {
         if (monitors != null) {
             for (final FileAlterationMonitor monitor : monitors) {
                 try {
@@ -88,7 +88,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
         }
     }
 
-    private void startPolling() throws MojoExecutionException {
+    protected void startPolling() throws MojoExecutionException {
 
         // TODO avoid duplication with AsciidoctorMojo
         final Optional<File> sourceDirectoryCandidate = findSourceDirectory(sourceDirectory, project.getBasedir());

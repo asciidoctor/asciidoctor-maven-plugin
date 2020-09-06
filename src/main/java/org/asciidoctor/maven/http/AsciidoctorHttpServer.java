@@ -41,7 +41,7 @@ public class AsciidoctorHttpServer {
         this.defaultPage = defaultPage;
     }
 
-    public void start() {
+    public AsciidoctorHttpServer start() {
         final AtomicInteger threadId = new AtomicInteger(1);
         workerGroup = new NioEventLoopGroup(THREAD_NUMBER, new ThreadFactory() {
             @Override
@@ -89,6 +89,7 @@ public class AsciidoctorHttpServer {
         } catch (final InterruptedException e) {
             logger.error(e.getMessage(), e);
         }
+        return this;
     }
 
    public void stop() {
