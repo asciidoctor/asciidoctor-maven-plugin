@@ -36,4 +36,4 @@ jobs:
           key: ${{ runner.os }}-mvn-cache-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-mvn-cache-
       - name: Build
-        run: mvn -B -V -Prun-its clean verify
+        run: ./mvnw -B -V -Prun-its clean verify
