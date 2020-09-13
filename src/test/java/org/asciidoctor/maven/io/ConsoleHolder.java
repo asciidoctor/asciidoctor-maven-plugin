@@ -54,7 +54,7 @@ public class ConsoleHolder {
     @SneakyThrows
     public void awaitForMessage(String message) {
         int pollTime = 300;
-        int ticks = (10 * 1000 / pollTime);
+        int ticks = (10 * 1500 / pollTime);
         while (true) {
             int pos = new String(newOut.toByteArray()).indexOf(message, cursor);
             if (pos > 0) {
