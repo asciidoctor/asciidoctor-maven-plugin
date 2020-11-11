@@ -1,0 +1,21 @@
+As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` section of your POM file:
+
+[source,xml,subs=attributes+]
+.Plugin declaration in pom.xml
+----
+<plugins>
+    <plugin>
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-plugin</artifactId>
+        <version>{release-version}</version>
+        <dependency> <!--1-->
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctorj</artifactId>
+            <version>${asciidoctorj.version}</version>
+        </dependency>
+        ...
+    </plugin>
+</plugins>
+----
+<1> The plugin will use the latest Asciidoctorj version available at release.
+To change it, set the desired version as a plugin dependency.

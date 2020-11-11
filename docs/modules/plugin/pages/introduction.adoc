@@ -1,0 +1,58 @@
+= Asciidoctor Maven Plugin
+
+The Asciidoctor Maven Plugin is used to convert AsciiDoc documents using https://asciidoctor.org[Asciidoctor].
+The plugin offers a comprehensive way to configure a conversion process using {uri-asciidoctorj}[Asciidoctorj] in a declarative way.
+
+== Goals overview
+
+The plugin has 3 goals.
+None of these are bound to any specific phase.
+
+* xref:goals/process-asciidoc.adoc[asciidoctor:process-asciidoc]:
+main goal of the plugin, it is used to convert documents during a normal Maven build.
+
+* xref:goals/auto-refresh.adoc[asciidoctor:auto-refresh]:
+used to support writing documents.
+This goal will run until stopped and will convert documents online when they are modified.
+
+* xref:goals/http.adoc[asciidoctor:http]:
+used to support writing HTML documents.
+On top of converting documents online when they are modified, it will push them to a local HTTP server.
+
+== Usage
+
+Specific instructions can be found in the specific _usage_ page of each goal.
+
+Here is a simple example of an HTML conversion.
+
+[source,xml,subs="attributes+"]
+----
+<plugin>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctor-maven-plugin</artifactId>
+    <version>{release-version}</version>
+    <executions>
+        <execution>
+            <id>convert-to-html</id>
+            <phase>generate-resources</phase> <!--.-->
+            <goals>
+                <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+                <outputDirectory>${project.build.directory}/html</outputDirectory> <!--.-->
+                <attributes> <!--.-->
+                    <source-highlighter>coderay</source-highlighter>
+                    <imagesdir>./images</imagesdir>
+                    <toc>left</toc>
+                    <icons>font</icons>
+                </attributes>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+----
+<.> Asciidoctor maven plugin's phase and goal must be set explicitly in an execution block.
+<.> Asciidoctor options can be set in the `<configuration>` section.
+Note the backend is `html5` by default.
+<.> Asciidoctor attributes can be set inside the `<attributes>` section.
+These are unrestricted key value pairs, with a special case for xref:goals/process-asciidoc.adoc#setting-boolean-values[boolean values].

@@ -1,0 +1,3 @@
+* Project documentation
+** xref:contributing.adoc[Contributing]
+** xref:copyright-and-licence.adoc[Copyright and License]

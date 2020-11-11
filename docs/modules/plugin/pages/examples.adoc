@@ -1,0 +1,3 @@
+= Examples
+
+You can find examples ready to copy-paste in the {uri-examples}[Asciidoctor Maven examples] project.

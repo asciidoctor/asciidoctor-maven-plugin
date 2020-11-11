@@ -16,19 +16,20 @@ With that goal in mind most of the changes fall under one of these cases.
 * Align with Asciidoctor conventions and default values.
 Also, when possible aligning with other build solutions options like the https://github.com/asciidoctor/asciidoctor-gradle-plugin[gradle plugin] or https://antora.org/[Antora].
 * Make clear distinction between Asciidoctor options and attributes.
-This simplifies the plugin's code and projects configuration avoiding ambiguities.
+This simplifies the plugin's code and projects' configuration avoiding ambiguities.
 
 == Changes
 
-=== Removal of support for Java 7, Java 8 will be the minimum required version
+=== Removal of support for Java 7
 
+From v2.x.x Java 8 will be the minimum required version.
 If you are forced to use Java 7, we recommend using the version 1.5.8 with Asciidoctorj 1.6.2 for the most up to date features.
 
 === Removal of `imagesDir` configuration and change of its default value
 
 Related discussion: https://github.com/asciidoctor/asciidoctor-maven-plugin/issues/296
 
-Until v 1.5.8 it was possible to set the `imagesdir` Asciidoctor attribute (https://asciidoctor.org/docs/user-manual/#setting-the-location-of-images) using the special `imagesDir` configuration as follows.
+Until v1.5.8 it was possible to set the `imagesdir` Asciidoctor attribute (https://asciidoctor.org/docs/user-manual/#setting-the-location-of-images) using the special `imagesDir` configuration as follows.
 
 [source,xml]
 ----
@@ -58,7 +59,7 @@ If you are relying on the default value, make sure to add the attribute as in th
 
 To avoid ambiguity between the configuration and attributes section, and make configuration more clear.
 
-*The configuration option `sourceHighlighter` will be removed in favour of setting it as an attribute.*
+*The configuration option `sourceHighlighter` has been removed in favour of setting it as an attribute.*
 If you are using it, you will need to set it as follows:
 
 [source,xml]
@@ -124,8 +125,8 @@ This will allow the use of multiple template directories.
 Related discussion: https://github.com/asciidoctor/asciidoctor-maven-plugin/issues/188
 
 Current default backend is `docbook`, contrary to Asciidoctor which is `html5`.
-This made sense back when the plugin was create to simplify configuration and DocBook was the main scenario.
-Nowadays the main usage is HTML conversion, so it makes sense to set `html5 as default backend.
+This made sense back when the plugin was created because DocBook was the main scenario.
+Nowadays the main usage is HTML conversion, so it makes sense to set `html5` as default backend.
 This should reduce configuration for most users.
 
 *If you are converting to HTML, you won't need to set the `<backend>` element.
@@ -145,7 +146,7 @@ NOTE: For advanced conversion needs, probably check https://antora.org/.
 
 Related discussion: https://github.com/asciidoctor/asciidoctor-maven-plugin/issues/254.
 
-Previous versions of the plugin searches for AsciiDoc documents in `src/main/asciidoc`.
+Previous versions of the plugin search for AsciiDoc documents in `src/main/asciidoc`.
 In case the folder does not exist, the plugin skips the execution.
 
 This is being changed to a fallback mechanism where several paths are searched in specific order.
@@ -159,4 +160,4 @@ If the path does not exist, `src/asciidoc` and `src/main/asciidoc` are searched 
 Not part of the asciidoctor-maven-plugin, but important to consider during upgrade, the https://github.com/asciidoctor/asciidoctorj/tree/v2.0.0-RC.1#extension-api[AsciidocotorJ extension API] has suffered modifications.
 
 These are simple and can be spotted with help of the IDE once the AsciidoctorJ dependency has been updated.
-Please, review them before upgrading the maven-plugin.
+Please, review them alongside the maven-plugin.

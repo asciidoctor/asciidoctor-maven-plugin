@@ -1,0 +1,2 @@
+interval:: time in milliseconds between checks of the filesystem.
+Defaults to `2000`

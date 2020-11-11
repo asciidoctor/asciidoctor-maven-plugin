@@ -1,0 +1,93 @@
+[[auto-refresh-goal]]
+= auto-refresh: Automatically converting on change
+
+Converts documents on change, that is, when one of them is modified, or a new one is added.
+
+This plugin goal is aimed to help writing by removing the need for full rebuild to validate changes.
+When the output is HTML, you can combine it with a refresh browser extension or use the xref:goals/http.adoc[http goal] to preview document changes while editing.
+
+== Setup
+
+include::partial$basic-maven-setup.adoc[]
+
+[source,xml]
+.Goal setup
+----
+<plugin>
+    ...
+    <executions>
+        <execution>
+            <id>output-html</id>              <!--1-->
+            <phase>generate-resources</phase> <!--2-->
+            <goals>
+                <goal>auto-refresh</goal>     <!--3-->
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+----
+<1> This is simply a unique id for the execution.
+<2> The asciidoctor-maven-plugin does not run in any phase by default, so one must be specified.
+<3> The Asciidoctor Maven plugin auto-refresh goal.
+
+Once started, this will keep the maven process running until you type the `exit` or `quit` command in the console.
+Or it is manually killed with _ctrl+c_.
+
+// TODO add animated gif showing this
+
+[[auto-refresh-goal-config-note]]
+[NOTE]
+====
+Due to some maven limitations, it is possible to run `auto-refresh` on your current project without changes provided the configuration is at top plugin level.
+Running `mvn asciidoctor:auto-refresh` will start, but will ignore `<configuration>` blocks inside `<executions>`.
+
+[source,xml,subs=attributes+]
+.Shared `process-asciidoc`, `auto-refresh` configuration example
+----
+<plugin>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctor-maven-plugin</artifactId>
+    <version>{release-version}</version>
+    <configuration> <!--1-->
+        <preserveDirectories>true</preserveDirectories>
+        <attributes>
+            <source-highlighter>coderay</source-highlighter>
+            <imagesdir>./images</imagesdir>
+            <toc>left</toc>
+            <icons>font</icons>
+        </attributes>
+    </configuration>
+    <executions>
+        <execution>
+            <id>asciidoc-to-html</id>
+            <phase>generate-resources</phase>
+            <goals>
+                <goal>process-asciidoc</goal>
+            </goals>
+        </execution>
+        <configuration> <!--2-->
+            <docinfo1>true</docinfo1>
+        </configuration>
+    </executions>
+</plugin>
+----
+<1> Processed configuration.
+<2> Ignored configuration.
+====
+
+== Configuration
+
+This goal inherits the same parameters as xref:goals/process-asciidoc.adoc[process-asciidoc] and adds an additional parameter:
+
+include::partial$auto-refresh-mojo-parameters.adoc[]
+
+=== Inherited options
+
+include::partial$process-asciidoc-mojo-parameters.adoc[]
+
+== Error handling
+
+// TODO unify this with the explanation at the end of http goal setup section
+
+If `failIf` is set and errors are present after start, these will be reported but the plugin will continue running.
+If errors are found during initialization, plugin won't start.

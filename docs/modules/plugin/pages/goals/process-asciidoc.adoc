@@ -1,0 +1,37 @@
+[[process-asciidoc-goal]]
+= process-asciidoc: Converting documents
+
+Converts Asciidoc documents using {uri-asciidoctorj}[Asciidoctorj].
+Additionally, the goal takes care of placing additional resources (eg. images) in the output path.
+
+include::partial$breaking-changes-warning.adoc[]
+
+== Setup
+
+include::partial$basic-maven-setup.adoc[]
+
+[source,xml]
+.Goal setup
+----
+<plugin>
+    ...
+    <executions>
+        <execution>
+            <id>output-html</id>              <!--1-->
+            <phase>generate-resources</phase> <!--2-->
+            <goals>
+                <goal>process-asciidoc</goal> <!--3-->
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+----
+<1> This is simply a unique id for the execution.
+<2> The asciidoctor-maven-plugin does not run in any phase by default, so one must be specified.
+<3> The Asciidoctor Maven plugin conversion goal.
+
+== Configuration
+
+There are several configuration parameters that the Asciidoctor Maven plugin accepts, which parallel the options in Asciidoctor:
+
+include::partial$process-asciidoc-mojo-parameters.adoc[]

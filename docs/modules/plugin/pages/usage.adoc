@@ -1,0 +1,77 @@
+= Usage
+
+== How to convert AsciiDoc documents
+
+// TODO simple example
+
+Attributes whose value cannot be resolved are ignored by default and they don't show as error or warning.
+If you need to, this behaviour can be modified using the https://asciidoctor.org/docs/user-manual/#missing-attribute[missing-attribute] attribute.
+
+Combining it with logHandler option it is possible to report an error and abort a build in case of missing attributes.
+
+[source, xml]
+----
+<configuration>
+    <attributes>
+        <attribute-missing>warn</attribute-missing>
+    </attributes>
+    <logHandler>
+        <failIf>
+            <severity>WARN</severity>
+        </failIf>
+    </logHandler>
+</configuration>
+----
+
+
+== Multiple outputs for the same file
+
+Maven has the ability to execute a Mojo multiple times.
+Instead of reinventing the wheel inside the Mojo, we'll push this off to Maven to handle the multiple executions.
+An example of this setup is below:
+
+[source,xml,subs=attributes+]
+.Multiple configuration extract
+----
+<plugin>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctor-maven-plugin</artifactId>
+    <version>{release-version}</version>
+    <executions>
+        <execution> <!--.-->
+            <id>output-html</id>
+            <phase>generate-resources</phase>
+            <goals>
+                <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+                <backend>html</backend>
+                <attributes>
+                    <toc/>
+                    <linkcss>false</linkcss>
+                    <source-highlighter>coderay</source-highlighter>
+                </attributes>
+            </configuration>
+        </execution>
+        <execution> <!--.-->
+            <id>output-docbook</id>
+            <phase>generate-resources</phase>
+            <goals>
+                <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+                <backend>docbook</backend>
+                <doctype>book</doctype>
+            </configuration>
+        </execution>
+    </executions>
+    <configuration>  <!--.-->
+        <sourceDirectory>src/main/asciidoc</sourceDirectory>
+        <headerFooter>true</headerFooter>
+    </configuration>
+</plugin>
+----
+<.> First execution, converts documents to HTML.
+<.> Second execution, converts documents to DocBook.
+<.> Any configuration outside the executions section is inherited by each execution.
+This allows an easier way to share common configuration options.

@@ -1,0 +1,28 @@
+==== Command line configuration
+
+Configuration options can be set (but not replaced) using system properties directly in the command line as follows:
+
+ mvn generate-resources -Dasciidoctor.sourceDirectory=src/docs -Dasciidoctor.outputDirectory=target/docs
+
+All options follow the naming convention _`asciidoctor.` + option_name_.
+
+In order to provide a higher degree of flexibility `attributes` configuration follows a different behavior.
+Attributes defined through the command line are added to the ones already found in the XML configuration.
+The result of it is that attributes and other configuration options can be updated if they are added to the command line as attributes.
+For example, the following configuration could be modified with the command options as seen below.
+
+[source,xml]
+----
+<configuration>
+    <backend>html5</backend>
+    <attributes>
+        <toc>left</toc>
+    </attributes>
+</configuration>
+----
+
+ mvn generate-resources -Dasciidoctor.attributes=toc=right
+
+ mvn generate-resources -Dasciidoctor.attributes="toc=right source-highlighter=highlight.js imagesdir=my_images"
+
+Note that in the second case we need to use quotes due to the spaces.

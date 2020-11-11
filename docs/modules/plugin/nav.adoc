@@ -1,0 +1,11 @@
+* Maven Plugin
+** xref:introduction.adoc[Introduction]
+** Goals
+*** xref:goals/process-asciidoc.adoc[process-asciidoc]
+*** xref:goals/auto-refresh.adoc[auto-refresh]
+*** xref:goals/http.adoc[http]
+** xref:usage.adoc[Usage]
+** xref:examples.adoc[Examples]
+** Help & Guides
+*** xref:tips-and-tricks.adoc[Tips and tricks]
+*** xref:v2-migration-guide.adoc[v2 migration guide]

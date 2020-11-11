@@ -1,0 +1,10 @@
+Boolean attributes only require to be enabled or _set_.
+These, can be set with a empty tag or a boolean value.
+To _unset_ an attribute, use value `false`.
+
+[source,xml]
+----
+<embedded/>
+<sectnums>true</sectnums>
+<linkcss>false</linkcss>
+----
