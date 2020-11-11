@@ -1,0 +1,83 @@
+= Usage
+
+== How to convert AsciiDoc documents
+
+These are the minimal steps to convert your AsciiDoc documents to HTML with the asciidoctor-maven-plugin.
+
+. Place your Asciidoc sources in [.path]_/src/docs/asciidoc_.
+
+. Add the minimal configuration to your [.path]_pom.xml_.
++
+[source,xml]
+----
+<plugin>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctor-maven-plugin</artifactId>
+    <version>${asciidoctor.maven.plugin.version}</version>
+    <executions>
+        <execution>
+            <id>asciidoc-to-html</id>
+            <phase>generate-resources</phase>
+            <goals>
+                <goal>process-asciidoc</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+----
+
+. Run the plugin's associated phase.
+
+ $ mvn generate-resources
+
+== Multiple outputs for the same file
+
+Maven has the ability to execute a Mojo multiple times.
+Instead of reinventing the wheel inside the Mojo, we'll push this off to Maven to handle the multiple executions.
+An example of this setup is below:
+
+[source,xml,subs=attributes+]
+.Multiple configuration extract
+----
+<plugin>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctor-maven-plugin</artifactId>
+    <version>{release-version}</version>
+    <executions>
+        <execution> <!--.-->
+            <id>output-html</id>
+            <phase>generate-resources</phase>
+            <goals>
+                <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+                <backend>html</backend>
+                <attributes>
+                    <toc/>
+                    <linkcss>false</linkcss>
+                    <source-highlighter>coderay</source-highlighter>
+                </attributes>
+            </configuration>
+        </execution>
+        <execution> <!--.-->
+            <id>output-docbook</id>
+            <phase>generate-resources</phase>
+            <goals>
+                <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+                <backend>docbook</backend>
+                <doctype>book</doctype>
+            </configuration>
+        </execution>
+    </executions>
+    <configuration>  <!--.-->
+        <sourceDirectory>src/main/asciidoc</sourceDirectory>
+        <headerFooter>true</headerFooter>
+    </configuration>
+</plugin>
+----
+<.> First execution, converts documents to HTML.
+<.> Second execution, converts documents to DocBook.
+<.> Any configuration outside the executions section is inherited by each execution.
+This allows an easier way to share common configuration options.

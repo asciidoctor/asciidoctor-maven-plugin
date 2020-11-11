@@ -13,6 +13,9 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/master[
 
 == Unreleased
 
+Documentation::
+
+  * Migrate docs (README) to Antora site and publish them in gh-pages (#498)
 
 == v2.1.0 (2020-09-15)
 

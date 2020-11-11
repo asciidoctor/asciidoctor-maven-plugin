@@ -1,0 +1,17 @@
+name: maven-plugin
+title: Maven Tools
+version: '2.1'
+asciidoc:
+  attributes:
+    release-version: 2.1.0
+    maven-site-plugin-version: 3.9.0
+    project-repo: asciidoctor/asciidoctor-maven-plugin
+    uri-asciidoc: http://asciidoc.org
+    uri-asciidoctor: http://asciidoctor.org
+    uri-asciidoctorj: https://github.com/asciidoctor/asciidoctorj
+    uri-examples: https://github.com/asciidoctor/asciidoctor-maven-examples
+    uri-maven: http://maven.apache.org
+nav:
+- modules/plugin/nav.adoc
+- modules/site-integration/nav.adoc
+- modules/project/nav.adoc

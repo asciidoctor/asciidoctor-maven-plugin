@@ -1,0 +1,2 @@
+* Maven Site Integration
+** xref:site-integration.adoc[]
