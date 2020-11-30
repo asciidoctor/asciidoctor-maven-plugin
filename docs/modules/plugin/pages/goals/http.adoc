@@ -1,0 +1,64 @@
+[#http-goal]
+= http: HTML life preview
+:navtitle: http
+
+Converts Asciidoc documents and starts an embedded http server to access content from the generated output directory.
+
+Modified sources will be updated on change similarly to how the xref:goals/auto-refresh.adoc[auto-refresh goal] works.
+While at the same time, HTML contents will be automatically refreshed on the web browser without need for manual steps.
+Just open the file through the provided url that will appear in the console and write.
+
+IMPORTANT: While the `http` goal can be used to serve any kind of content (e.g. PDF).
+The possibilities have not been explored and are not officially supported, but feedback is welcome if you want to share your experience and ideas.
+
+== Setup
+
+The file extension is not necessary for html files in the url.
+For example, the document _manual.html_ placed in the root path will be accessible as simply _pass:c[http://localhost:2000/manual]_.
+
+include::partial$basic-maven-setup.adoc[]
+
+[source,xml]
+.Goal setup
+----
+<plugin>
+    ...
+    <executions>
+        <execution>
+            <id>output-html</id>              <!--1-->
+            <phase>generate-resources</phase> <!--2-->
+            <goals>
+                <goal>http</goal>             <!--3-->
+            </goals>
+            <configuration>                   <!--4-->
+                <port>8080</port>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+----
+<1> This is simply a unique id for the execution.
+<2> The asciidoctor-maven-plugin does not run in any phase by default, so one must be specified.
+<3> The Asciidoctor Maven plugin conversion goal.
+<4> Maven plugin additional parameters.
+Here we change the port to 8080.
+
+This goal shares the following features (and limitations) with xref:goals/auto-refresh.adoc[auto-refresh].
+
+* Once started, the maven process will keep running until explicitly stopped (`exit`, `quit` commands or _ctrl+c_).
+* Deleted or moved files will remain the in output directory until a clean is run.
+* To take full advantage of all configuration options, the goal must be explicitly configured in the _pom.xml_ (see xref:goals/auto-refresh.adoc#auto-refresh-goal-config-note[setup note]).
+* When a `failIf` condition occurs the goal will fail to complete and the server won't start.
+But once started successfully these won't stop the server.
+
+== Configuration
+
+This goal inherits the same parameters as xref:goals/process-asciidoc.adoc[process-asciidoc] and xref:goals/auto-refresh.adoc[auto-refresh] goals and adds:
+
+include::partial$http-mojo-parameters.adoc[]
+
+=== Inherited options
+
+include::partial$process-asciidoc-mojo-parameters.adoc[]
+
+include::partial$auto-refresh-mojo-parameters.adoc[]

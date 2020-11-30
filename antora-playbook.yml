@@ -1,0 +1,21 @@
+site:
+  title: 'maven-plugin docs'
+content:
+  sources:
+    - url: .
+      branches: [ master ]
+      start_path: docs
+asciidoc:
+  attributes:
+    page-pagination: ''
+    idprefix: ''
+    idseparator: '-'
+ui:
+  bundle:
+    url: https://github.com/abelsromero/asciidoctor-maven-plugin-antora-ui/raw/master/bundle/ui-bundle.zip
+    snapshot: true
+  supplemental_files:
+    - path: ui.yml
+      contents: |
+        static_files: [ .nojekyll ]
+    - path: .nojekyll

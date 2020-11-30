@@ -1,0 +1,196 @@
+sourceDirectory:: path where source files are located.
+By default checks for [.path]_$\{basedir}/src/docs/asciidoc_, [.path]_$\{basedir}/src/asciidoc_ or [.path]_$\{basedir}/src/main/asciidoc_ in that order.
+When a custom value is set, no other paths are checked.
++
+[NOTE]
+====
+All paths and AsciiDoc documents that start with `pass:[_]` are considered _internal_ and are skipped.
+That is, AsciiDocs are not converted and resources are not copied from them, but you can include them normally from other AsciiDocs. +
+This is useful to split your sources in sets of master documents and included parts.
+====
+
+sourceDocumentName:: an override to process a single source file; defaults to all files in [.path]`$\{sourceDirectory}`.
+sourceDocumentExtensions:: (named `extensions` in v1.5.3 and below) a `List<String>` of non-standard file extensions to convert.
+Currently, _ad_, _adoc_, and _asciidoc_ will be converted by default
+resources:: list of resource files to copy to the output directory (e.g., images, css).
+The configuration follows the same patterns as the `maven-resources-plugin`.
+If not set, all resources inside `$\{sourceDirectory}` are copied.
++
+[NOTE]
+====
+Converters that embed resources such as images into the output document need to be able to locate those resources at conversion time.
+For example, when generating a PDF (or HTML with the `data-uri` attribute set), all images need to be aggregated under a common root (i.e., image catalog).
+The `imagesdir` attribute should be overridden to point to that folder.
+When converting to HTML, images must be copied to the output location so that the browser can resolve those images when the user views the page.
+====
++
+[source,xml]
+----
+<resources>
+    <resource>
+        <!-- (Mandatory) Directory to copy from. Paths are relative to maven's ${baseDir} -->
+        <directory>DIRECTORY</directory>
+        <!-- (Optional) Directory to copy to. By default uses the option `outputDirectory` -->
+        <targetPath>OUTPUT_DIR</targetPath>
+        <!-- (Optional) NOTE: SVN, GIT and other version control files are excluded by default, there's no need to add them -->
+        <excludes>
+            <exclude>**/.txt</exclude>
+        </excludes>
+        <!-- (Optional) If not set, includes all files but default exceptions mentioned -->
+        <includes>
+            <include>**/*.jpg</include>
+            <include>**/*.gif</include>
+        </includes>
+    </resource>
+    ...
+</resources>
+----
+outputDirectory:: locations where converted sources and copied resources will be places.
+Note that relative paths are added to the project root path.
+Defaults to [.path]_${project.build.directory}/generated-docs_.
+outputFile:: defaults to `null`, used to override the name of the generated output file, can be a relative or absolute path.
+Useful for backends that create a single file, e.g. the pdf backend.
+All output will be redirected to the same file, the same way as the `-o, --out-file=OUT_FILE` option from the `asciidoctor` CLI command.
+baseDir:: (not Maven's basedir) enables to set the root path for resources (e.g. included files), defaults to `$\{sourceDirectory}`
+skip:: set this to `true` to bypass generation, defaults to `false`
+preserveDirectories:: enables to specify whether the documents should be converted in the same folder structure as in the source directory or not, defaults to `false`.
+When `true`, instead of generating all output in a single folder, output files are generated in the same structure.
+See the following example
++
+....
+    ├── docs                          ├── docs
+    │   ├── examples.adoc             │   ├── examples.html
+    │   └── examples            =>    │   └── examples
+    │       ├── html.adoc             │       ├── html.html
+    │       └── docbook.adoc          │       └── docbook.html
+    └── index.adoc                    └── index.html
+....
+relativeBaseDir:: only used when baseDir is not set, enables to specify that each AsciiDoc file must search for its resources in the same folder (for example, included files).
+Internally, for each AsciiDoc source, sets `baseDir` to the same path as the source file.
+Defaults to `false`
+backend:: defaults to `html5`
+doctype:: defaults to `null` (which trigger's Asciidoctor's default of `article`)
+eruby:: defaults to erb, the version used in JRuby
+headerFooter:: defaults to `true`
+templateDirs:: list of directories of compatible templates to be used instead of the default built-in templates, empty by default.
+templateEngine:: template engine to use for the custom converter templates, disabled by default (`null`)
+templateCache:: enables the built-in cache used by the template converter when reading the source of template files.
+Only relevant if the `:template_dirs` option is specified, defaults to `true`.
+sourcemap:: adds file and line number information to each parsed block (`lineno` and `source_location` attributes), defaults to `false`
+catalogAssets:: tells the parser to capture images and links in the reference table available via the `references` property on the document AST object (experimental), defaults to `false`
+attributes:: a `Map<String,Object>` of Asciidoctor attributes to pass for conversion, defaults to `null`.
+Refer to the http://asciidoctor.org/docs/user-manual/#attribute-catalog[catalog of document attributes] in the Asciidoctor user manual for a complete list.
++
+[source,xml]
+.example
+----
+<attributes>
+    <toc>left</toc>
+    <icons>font</icons>
+    <imagesdir>images</imagesdir>
+    <source-highlighter>coderay</source-highlighter>
+</attributes>
+----
+In addition to those attributes found in this section, any Maven property is also passed as attribute (replacing . by -).
++
+[source,xml]
+----
+<properties>
+  <my-site.version>2.3.0</my-site.version> <.>
+</properties>
+----
+<.> Will be passed as `my-site-version` to the converter.
++
+Note that when defining a build with multiple executions, shared attributes can be set in the global `<configuration>` section of the plugin.
++
+[NOTE]
+====
+include::partial$setting-boolean-attributes.adoc[]
+====
+
+embedAssets:: embeds the CSS file and images into the output, defaults to `false`
+gemPaths:: enables to specify the location to one or more gem installation directories (same as GEM_PATH environment var), `empty` by default
+requires:: a `List<String>` to specify additional Ruby libraries not packaged in AsciidoctorJ, `empty` by default
+extensions:: `List` of extensions to include during the conversion process (see link:https://github.com/asciidoctor/asciidoctorj/blob/master/docs/integrator-guide.adoc#automatically-loading-extensions[AsciidoctorJ's Extension API] for information about the available options).
+For each extension, the implementation class must be specified in the `className` parameter, the `blockName` is only required when configuring a _BlockProcessor_, _BlockMacroProcessor_ or _InlineMacroProcessor_.
++
+[source,xml]
+.extensions configuration example
+----
+<plugin>
+    ...
+    <executions>
+        <execution>
+            <configuration>
+                ...
+                <extensions>
+                    <extension>
+                        <className>org.asciidoctor.maven.SomePreprocessor</className>
+                    </extension>
+                    <extension>
+                        <className>org.asciidoctor.maven.SomeBlockProcessor</className>
+                        <blockName>yell</blockName>
+                    </extension>
+                </extensions>
+            </configuration>
+        </execution>
+    </executions>
+    <dependencies>
+        <dependency> <!--1-->
+            <groupId>org.asciidoctor.maven</groupId>
+            <artifactId>my-asciidoctor-extensions</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
+</plugin>
+----
+<1> Extensions must be included in the plugin's execution classpath, not in the project's.
++
+NOTE: Extensions can also be integrated through the SPI interface implementation.
+This method does not require any configuration in the [.path]_pom.xml_, see link:https://github.com/asciidoctor/asciidoctorj/blob/master/docs/integrator-guide.adoc#automatically-loading-extensions[Automatically loading extensions] for details.
+
+enableVerbose:: enables Asciidoctor verbose messages, defaults to `false`.
+Enable it, for example, if you want to validate https://asciidoctor.org/docs/user-manual/#validating-internal-cross-references[internal cross references] and capture the messages with the logHandler option.
+
+[#logHandler-configuration]
+logHandler:: enables processing options for Asciidoctor messages (e.g. errors on missing included files), to either hide messages or setup build fail conditions based on them.
+Options are:
+
+* `outputToConsole`: `Boolean`, defaults to `true`.
+Redirects all Asciidoctor messages to Maven's console logger as INFO during conversion.
+* `failIf`: build fail conditions, disabled by default.
+Allows setting one or many conditions that when met, abort the Maven build with `BUILD FAILURE` status.
++
+[WARNING]
+====
+Note that the plugin matches that all conditions are met together.
+Unless you are controlling a very specific case, setting one condition should be enough. +
+Also, messages matching fail conditions will be sent to Maven's logger as ERROR.
+So, when enabling `outputToConsole`, some messages will appear duplicated as both INFO and ERROR.
+====
++
+Currently, two conditions can be defined:
+
+** `severity`: severity of the Asciidoctor message, in order: `INFO`,`WARN`,`ERROR`,`FATAL`,`UNKNOWN`.
+Build will fail if a message is found of severity equal or higher.
+
+** `containsText`: text to search inside messages.
+Build will fail if the text is found. +
+For example, set `include` to fail on any issue related to included files regardless the severity level.
++
+[source,xml]
+.example: fail on any message
+----
+<logHandler>
+    <outputToConsole>false</outputToConsole> <!--1-->
+    <failIf>
+        <severity>DEBUG</severity> <!--2-->
+    </failIf>
+</logHandler>
+----
+<1> Do not show messages as INFO in Maven output.
+<2> Build will fail on any message of severity `DEBUG` or higher, that includes all.
+All matching messages will appear as ERROR in Maven output.
++
+NOTE: Since version 1.5.8 of AsciidoctorJ set `enableVerbose` to `true` option to validate internal cross references, this is being improved to avoid false positives-
+See https://github.com/asciidoctor/asciidoctor/issues/2722[#2722] if your are interested in the details.
