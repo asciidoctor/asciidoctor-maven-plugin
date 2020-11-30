@@ -2,7 +2,7 @@ name: Build & publish docs
 on:
   push:
     branches:
-      - poc/antora-docs
+      - master
 
 env:
   SITE_DIR: 'site'
