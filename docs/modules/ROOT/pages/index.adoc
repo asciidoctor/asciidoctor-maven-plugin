@@ -8,4 +8,4 @@ The conversion can happen in 2 flavors:
 
 . As a xref:plugin:introduction.adoc[Maven plugin]: AsciiDoc files are converted at full Asciidoctor power independently from Maven site,
 
-. As a xref:plugin:introduction.adoc[Maven site module]: AsciiDoc files are integrated with https://maven.apache.org/doxia/[Maven Doxia] tools, however, with a few limitations.
+. As a xref:site-integration:index.adoc[Maven site module]: AsciiDoc files are integrated with https://maven.apache.org/doxia/[Maven Doxia] tools, however, with a few limitations.
