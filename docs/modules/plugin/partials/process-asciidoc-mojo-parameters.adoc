@@ -103,7 +103,7 @@ In addition to those attributes found in this section, any Maven property is als
 +
 Note that when defining a build with multiple executions, shared attributes can be set in the global `<configuration>` section of the plugin.
 +
-[NOTE]
+[NOTE#setting-boolean-values]
 ====
 include::partial$setting-boolean-attributes.adoc[]
 ====
