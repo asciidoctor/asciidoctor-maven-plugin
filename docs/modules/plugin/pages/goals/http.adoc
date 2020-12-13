@@ -1,5 +1,5 @@
 [#http-goal]
-= http: HTML life preview
+= http: HTML live preview
 :navtitle: http
 
 Converts Asciidoc documents and starts an embedded http server to access content from the generated output directory.
