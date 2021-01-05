@@ -91,7 +91,8 @@ Refer to the http://asciidoctor.org/docs/user-manual/#attribute-catalog[catalog 
     <source-highlighter>coderay</source-highlighter>
 </attributes>
 ----
-In addition to those attributes found in this section, any Maven property is also passed as attribute (replacing . by -).
+In addition to attributes set in this section, Maven properties are also passed as attribute (replacing . by - in the name).
+These include those defined in the `<properties>` section of the project, parent projects and the user's `settings.xml`.
 +
 [source,xml]
 ----
