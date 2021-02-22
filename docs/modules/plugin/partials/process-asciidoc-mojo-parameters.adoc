@@ -78,7 +78,7 @@ templateCache:: enables the built-in cache used by the template converter when r
 Only relevant if the `:template_dirs` option is specified, defaults to `true`.
 sourcemap:: adds file and line number information to each parsed block (`lineno` and `source_location` attributes), defaults to `false`
 catalogAssets:: tells the parser to capture images and links in the reference table available via the `references` property on the document AST object (experimental), defaults to `false`
-attributes:: a `Map<String,Object>` of Asciidoctor attributes to pass for conversion, defaults to `null`.
+[[configuration-attributes]]attributes:: a `Map<String,Object>` of Asciidoctor attributes to pass for conversion, defaults to `null`.
 Refer to the http://asciidoctor.org/docs/user-manual/#attribute-catalog[catalog of document attributes] in the Asciidoctor user manual for a complete list.
 +
 [source,xml]
