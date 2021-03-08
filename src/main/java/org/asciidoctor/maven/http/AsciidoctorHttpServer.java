@@ -1,12 +1,6 @@
 package org.asciidoctor.maven.http;
 
-import java.io.File;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -18,10 +12,14 @@ import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.util.concurrent.Future;
-
 import org.apache.maven.plugin.logging.Log;
 
+import java.io.File;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class AsciidoctorHttpServer {
+
     private static final String HOST = "localhost";
     private static final int THREAD_NUMBER = 3;
     private static final String THREAD_PREFIX = "asciidoctor-thread-";
@@ -43,66 +41,60 @@ public class AsciidoctorHttpServer {
 
     public AsciidoctorHttpServer start() {
         final AtomicInteger threadId = new AtomicInteger(1);
-        workerGroup = new NioEventLoopGroup(THREAD_NUMBER, new ThreadFactory() {
-            @Override
-            public Thread newThread(final Runnable r) {
-                final Thread t = new Thread(r, THREAD_PREFIX + threadId.getAndIncrement());
-                if (t.getPriority() != Thread.NORM_PRIORITY) {
-                    t.setPriority(Thread.NORM_PRIORITY);
-                }
-                if (t.isDaemon()) {
-                    t.setDaemon(false);
-                }
-                return t;
+        workerGroup = new NioEventLoopGroup(THREAD_NUMBER, runnable -> {
+            final Thread t = new Thread(runnable, THREAD_PREFIX + threadId.getAndIncrement());
+            if (t.getPriority() != Thread.NORM_PRIORITY) {
+                t.setPriority(Thread.NORM_PRIORITY);
             }
+            if (t.isDaemon()) {
+                t.setDaemon(false);
+            }
+            return t;
         });
 
         try {
             bootstrap = new ServerBootstrap();
             bootstrap
-                .option(ChannelOption.SO_REUSEADDR, true)
-                .option(ChannelOption.SO_SNDBUF, 1024)
-                .option(ChannelOption.TCP_NODELAY, true)
-                .group(workerGroup)
-                .channel(NioServerSocketChannel.class)
-                .childHandler(new ChannelInitializer<SocketChannel>() {
-                    @Override
-                    protected void initChannel(final SocketChannel ch) throws Exception {
-                        ch.pipeline()
-                            .addLast("decoder", new HttpRequestDecoder())
-                            .addLast("aggregator", new HttpObjectAggregator(Integer.MAX_VALUE))
-                            .addLast("encoder", new HttpResponseEncoder())
-                            .addLast("chunked-writer", new ChunkedWriteHandler())
-                            .addLast("asciidoctor", new AsciidoctorHandler(workDir, defaultPage));
-                    }
-                })
-                .bind(port).addListener(new ChannelFutureListener() {
-                @Override
-                public void operationComplete(final ChannelFuture future) throws Exception {
-                    if (!future.isSuccess()) {
-                        logger.error("Can't start HTTP server");
-                    } else {
-                        logger.info(String.format("Server started on http://%s:%s", HOST, port));
-                    }
-                }
-            }).sync();
+                    .option(ChannelOption.SO_REUSEADDR, true)
+                    .option(ChannelOption.SO_SNDBUF, 1024)
+                    .option(ChannelOption.TCP_NODELAY, true)
+                    .group(workerGroup)
+                    .channel(NioServerSocketChannel.class)
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        protected void initChannel(final SocketChannel ch) {
+                            ch.pipeline()
+                                    .addLast("decoder", new HttpRequestDecoder())
+                                    .addLast("aggregator", new HttpObjectAggregator(Integer.MAX_VALUE))
+                                    .addLast("encoder", new HttpResponseEncoder())
+                                    .addLast("chunked-writer", new ChunkedWriteHandler())
+                                    .addLast("asciidoctor", new AsciidoctorHandler(workDir, defaultPage));
+                        }
+                    })
+                    .bind(port)
+                    .addListener((ChannelFutureListener) future -> {
+                        if (!future.isSuccess()) {
+                            logger.error("Can't start HTTP server");
+                        } else {
+                            logger.info(String.format("Server started on http://%s:%s", HOST, port));
+                        }
+                    }).sync();
         } catch (final InterruptedException e) {
             logger.error(e.getMessage(), e);
         }
         return this;
     }
 
-   public void stop() {
-      Future<?> shutdownGracefully = workerGroup.shutdownGracefully();
-      logger.info("Server stopping...");
-      try {
-         shutdownGracefully.get();
-         logger.info("Server stopped");
-      } catch (InterruptedException e) {
-         logger.error(e);
-      } catch (ExecutionException e) {
-         logger.error(e);
-      }
-   }
-
+    public void stop() {
+        Future<?> shutdownGracefully = workerGroup.shutdownGracefully();
+        logger.info("Server stopping...");
+        try {
+            shutdownGracefully.get();
+            logger.info("Server stopped");
+        } catch (InterruptedException e) {
+            logger.error(e);
+        } catch (ExecutionException e) {
+            logger.error(e);
+        }
+    }
 }

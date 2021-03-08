@@ -36,30 +36,30 @@ public class AsciidoctorHandler extends SimpleChannelInboundHandler<FullHttpRequ
     @Override
     public void channelRead0(final ChannelHandlerContext ctx, final FullHttpRequest msg) throws Exception {
 
-        if (msg.getMethod() != HttpMethod.GET && msg.getMethod() != HttpMethod.HEAD) {
+        if (msg.method() != HttpMethod.GET && msg.method() != HttpMethod.HEAD) {
             send(ctx, new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.METHOD_NOT_ALLOWED));
             return;
         }
 
-        final File file = deduceFile(msg.getUri());
+        final File file = deduceFile(msg.uri());
 
         if (!file.exists()) {
             final ByteBuf body = Unpooled.copiedBuffer("<body><html>File not found: " + file.getPath() + "<body></html>", CharsetUtil.UTF_8);
             final DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND, body);
-            response.headers().set(HttpHeaders.Names.CONTENT_TYPE, HTML_MEDIA_TYPE);
+            response.headers().set(HttpHeaderNames.CONTENT_TYPE, HTML_MEDIA_TYPE);
             send(ctx, response);
             return;
         }
 
         // HEAD means we already loaded the page, so we know is HTML
-        if (msg.getMethod() == HttpMethod.HEAD) {
+        if (msg.method() == HttpMethod.HEAD) {
             final DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.RESET_CONTENT);
 
             final HttpHeaders headers = response.headers();
             // Test if retuning any size works
-            headers.set(HttpHeaders.Names.CONTENT_LENGTH, file.length());
-            headers.set(HttpHeaders.Names.EXPIRES, 0);
-            headers.set(HttpHeaders.Names.CONTENT_TYPE, HTML_MEDIA_TYPE);
+            headers.set(HttpHeaderNames.CONTENT_LENGTH, file.length());
+            headers.set(HttpHeaderNames.EXPIRES, 0);
+            headers.set(HttpHeaderNames.CONTENT_TYPE, HTML_MEDIA_TYPE);
             send(ctx, response);
             return;
         }
