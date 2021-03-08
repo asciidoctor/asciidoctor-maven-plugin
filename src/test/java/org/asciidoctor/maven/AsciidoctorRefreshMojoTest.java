@@ -9,6 +9,7 @@ import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.filtering.DefaultMavenFileFilter;
 import org.apache.maven.shared.filtering.DefaultMavenResourcesFiltering;
+import org.asciidoctor.maven.TestUtils.ResourceBuilder;
 import org.asciidoctor.maven.io.ConsoleHolder;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.junit.Test;
@@ -26,6 +27,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.asciidoctor.maven.TestUtils.newFakeRefreshMojo;
 import static org.asciidoctor.maven.io.TestFilesHelper.createFileWithContent;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,33 +37,6 @@ import static org.mockito.Mockito.when;
 public class AsciidoctorRefreshMojoTest {
 
     private static final String TEST_DIR = "refresh-mojo";
-
-    @SneakyThrows
-    public AsciidoctorRefreshMojo newFakeRefreshMojo() {
-        final MavenProject mavenProject = Mockito.mock(MavenProject.class);
-        when(mavenProject.getBasedir()).thenReturn(new File("."));
-
-        final BuildContext buildContext = new DefaultBuildContext();
-
-        final DefaultMavenFileFilter mavenFileFilter = new DefaultMavenFileFilter();
-        final ConsoleLogger plexusLogger = new ConsoleLogger();
-        mavenFileFilter.enableLogging(plexusLogger);
-        setVariableValueInObject(mavenFileFilter, "buildContext", buildContext);
-
-        final DefaultMavenResourcesFiltering resourceFilter = new DefaultMavenResourcesFiltering();
-        setVariableValueInObject(resourceFilter, "mavenFileFilter", mavenFileFilter);
-        setVariableValueInObject(resourceFilter, "buildContext", buildContext);
-        resourceFilter.initialize();
-        resourceFilter.enableLogging(plexusLogger);
-
-        final AsciidoctorRefreshMojo mojo = new AsciidoctorRefreshMojo();
-        setVariableValueInObject(mojo, "log", new SystemStreamLog());
-        mojo.encoding = "UTF-8";
-        mojo.project = mavenProject;
-        mojo.outputResourcesFiltering = resourceFilter;
-
-        return mojo;
-    }
 
 
     @Test
@@ -462,13 +437,11 @@ public class AsciidoctorRefreshMojoTest {
             mojo.backend = "html5";
             mojo.sourceDirectory = srcDir;
             mojo.outputDirectory = outputDir;
-            mojo.resources = Arrays.asList(((Supplier<Resource>) () -> {
-                Resource resource = new Resource();
-                resource.setDirectory(subDirectory.getAbsolutePath());
-                resource.setIncludes(Arrays.asList("**/*.jpg", "**/*.gif"));
-                resource.setTargetPath(String.join(File.separator, subDirPath, customOutput));
-                return resource;
-            }).get());
+            mojo.resources = Arrays.asList(new ResourceBuilder()
+                    .directory(subDirectory.getAbsolutePath())
+                    .includes("**/*.jpg", "**/*.gif")
+                    .targetPath(String.join(File.separator, subDirPath, customOutput))
+                    .build());
         });
 
         // then
