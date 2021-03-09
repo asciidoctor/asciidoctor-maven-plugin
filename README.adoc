@@ -38,6 +38,7 @@ image:http://img.shields.io/travis/asciidoctor/asciidoctor-maven-plugin/master.s
 image:{uri-repo}/workflows/Build/badge.svg[Build Status,link={uri-repo}/actions]
 image:http://img.shields.io/coveralls/{project-repo}/master.svg["Coverage Status", link="https://coveralls.io/r/{project-repo}?branch=master"]
 image:https://maven-badges.herokuapp.com/maven-central/org.asciidoctor/asciidoctor-maven-plugin/badge.svg["Maven Central",link="https://maven-badges.herokuapp.com/maven-central/org.asciidoctor/asciidoctor-maven-plugin"]
+image:https://img.shields.io/badge/zulip-join_chat-brightgreen.svg[project chat,link=https://asciidoctor.zulipchat.com/]
 endif::[]
 
 The Asciidoctor Maven Plugin is the official way to convert your {uri-asciidoc}[AsciiDoc] documentation using {uri-asciidoctor}[Asciidoctor] from an {uri-maven}[Apache Maven] build.
