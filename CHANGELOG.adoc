@@ -23,6 +23,7 @@ Maintenance::
 
   * Upgrade `netty-codec-http` to 4.1.29.Final and refactor `AsciidoctorHttpServer` (#511)
   * Rewrite `AsciidoctorMojoTest` to Java to make it more approachable (#512)
+  * Rewrite `AsciidoctorMojoLogHandlerTest` to Java to make it more approachable (#514)
 
 == v2.1.0 (2020-09-15)
 

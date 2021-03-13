@@ -7,6 +7,7 @@ import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.filtering.DefaultMavenFileFilter;
 import org.apache.maven.shared.filtering.DefaultMavenResourcesFiltering;
+import org.asciidoctor.maven.log.LogHandler;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.mockito.Mockito;
 import org.sonatype.plexus.build.incremental.BuildContext;
@@ -26,22 +27,26 @@ public class TestUtils {
 
     @SneakyThrows
     public static AsciidoctorRefreshMojo newFakeRefreshMojo() {
-        return mockAsciidoctorMojo(AsciidoctorRefreshMojo.class, null);
+        return mockAsciidoctorMojo(AsciidoctorRefreshMojo.class, null, null);
     }
 
     @SneakyThrows
     public static AsciidoctorMojo mockAsciidoctorMojo() {
-        return mockAsciidoctorMojo(AsciidoctorMojo.class, null);
+        return mockAsciidoctorMojo(AsciidoctorMojo.class, null, null);
     }
 
     @SneakyThrows
     public static AsciidoctorMojo mockAsciidoctorMojo(Map<String, String> mavenProperties) {
-        return mockAsciidoctorMojo(AsciidoctorMojo.class, mavenProperties);
+        return mockAsciidoctorMojo(AsciidoctorMojo.class, mavenProperties, null);
     }
 
+    @SneakyThrows
+    public static AsciidoctorMojo mockAsciidoctorMojo(LogHandler logHandler) {
+        return mockAsciidoctorMojo(AsciidoctorMojo.class, null, logHandler);
+    }
 
     @SneakyThrows
-    private static <T> T mockAsciidoctorMojo(Class<T> clazz, Map<String, String> mavenProperties) {
+    private static <T> T mockAsciidoctorMojo(Class<T> clazz, Map<String, String> mavenProperties, LogHandler logHandler) {
         final MavenProject mavenProject = Mockito.mock(MavenProject.class);
         when(mavenProject.getBasedir()).thenReturn(new File("."));
         if (mavenProperties != null) {
@@ -68,6 +73,8 @@ public class TestUtils {
         mojo.encoding = "UTF-8";
         mojo.project = mavenProject;
         mojo.outputResourcesFiltering = resourceFilter;
+        if (logHandler != null)
+            setVariableValueInObject(mojo, "logHandler", logHandler);
 
         return (T) mojo;
     }

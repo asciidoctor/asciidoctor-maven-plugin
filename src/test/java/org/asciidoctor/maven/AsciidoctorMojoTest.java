@@ -1,6 +1,5 @@
 package org.asciidoctor.maven;
 
-import groovy.io.FileType;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.model.Resource;
@@ -11,7 +10,6 @@ import org.asciidoctor.maven.io.AsciidoctorFileScanner;
 import org.asciidoctor.maven.io.ConsoleHolder;
 import org.asciidoctor.maven.test.processors.RequireCheckerTreeprocessor;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.*;
@@ -21,8 +19,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
