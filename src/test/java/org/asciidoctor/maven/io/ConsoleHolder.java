@@ -79,4 +79,7 @@ public class ConsoleHolder {
         System.setIn(originalIn);
     }
 
+    public String getOutput() {
+        return new String(newOut.toByteArray());
+    }
 }

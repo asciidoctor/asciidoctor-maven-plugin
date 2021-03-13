@@ -8,14 +8,19 @@ import java.util.UUID;
 
 public class TestFilesHelper {
 
-    public static final String TEST_OUTPUT_BASE_PATH = "target/asciidoctor-test-output/";
+    public static final String TEST_OUTPUT_BASE_PATH = "target/test-outputs/";
 
     public static File newOutputTestDirectory() {
-        return new File(TEST_OUTPUT_BASE_PATH + UUID.randomUUID());
+        return createDirectory(TEST_OUTPUT_BASE_PATH + UUID.randomUUID());
     }
 
     public static File newOutputTestDirectory(String subDir) {
-        return new File(TEST_OUTPUT_BASE_PATH + subDir + "/" + UUID.randomUUID());
+        return createDirectory(TEST_OUTPUT_BASE_PATH + subDir + "/" + UUID.randomUUID());
+    }
+
+    private static File createDirectory(String path) {
+        final File file = new File(path);
+        return file;
     }
 
     public static File createFileWithContent(File srcDir, String filename) {
@@ -29,5 +34,4 @@ public class TestFilesHelper {
         Files.write(file.toPath(), content.getBytes());
         return file;
     }
-
 }
