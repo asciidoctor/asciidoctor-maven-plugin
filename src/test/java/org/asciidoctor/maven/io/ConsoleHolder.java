@@ -15,9 +15,11 @@ import java.io.PrintStream;
 public class ConsoleHolder {
 
     private PrintStream originalOut;
+    private PrintStream originalErr;
     private InputStream originalIn;
 
     private ByteArrayOutputStream newOut;
+    private ByteArrayOutputStream newErr;
     private InputStream newIn;
 
     private ConsoleHolder() {
@@ -27,11 +29,15 @@ public class ConsoleHolder {
         final ConsoleHolder holder = new ConsoleHolder();
 
         holder.originalOut = System.out;
+        holder.originalErr = System.err;
         holder.originalIn = System.in;
 
         holder.newOut = new DoubleOutputStream(holder.originalOut);
+        holder.newErr = new DoubleOutputStream(holder.originalErr);
         holder.newIn = new StringsCollectionsInputStream();
+
         System.setOut(new PrintStream(holder.newOut));
+        System.setErr(new PrintStream(holder.newErr));
         System.setIn(holder.newIn);
 
         return holder;
@@ -81,5 +87,9 @@ public class ConsoleHolder {
 
     public String getOutput() {
         return new String(newOut.toByteArray());
+    }
+
+    public String getError() {
+        return new String(newErr.toByteArray());
     }
 }
