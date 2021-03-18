@@ -34,6 +34,11 @@ public class AsciidoctorAsserter {
         return this;
     }
 
+    public AsciidoctorAsserter containsPattern(String regex) {
+        contentAssert.containsPattern(regex);
+        return this;
+    }
+
     public AsciidoctorAsserter containsOnlyOnce(String text) {
         contentAssert.containsOnlyOnce(text);
         return this;
