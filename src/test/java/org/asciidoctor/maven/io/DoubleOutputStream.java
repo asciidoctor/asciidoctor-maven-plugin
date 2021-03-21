@@ -5,7 +5,7 @@ import lombok.SneakyThrows;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
-class DoubleOutputStream extends ByteArrayOutputStream {
+public class DoubleOutputStream extends ByteArrayOutputStream {
 
     final OutputStream other;
 
