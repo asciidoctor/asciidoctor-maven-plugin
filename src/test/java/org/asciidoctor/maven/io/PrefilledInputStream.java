@@ -5,11 +5,11 @@ import lombok.SneakyThrows;
 import java.io.ByteArrayInputStream;
 import java.util.concurrent.CountDownLatch;
 
-class PrefilledInputStream extends ByteArrayInputStream {
+public class PrefilledInputStream extends ByteArrayInputStream {
 
     final CountDownLatch latch;
 
-    PrefilledInputStream(final byte[] buf, final CountDownLatch latch) {
+    public PrefilledInputStream(final byte[] buf, final CountDownLatch latch) {
         super(buf);
         this.latch = latch;
     }
