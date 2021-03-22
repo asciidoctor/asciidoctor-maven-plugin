@@ -41,6 +41,11 @@ public class TestUtils {
     }
 
     @SneakyThrows
+    public static AsciidoctorZipMojo mockAsciidoctorZipMojo() {
+        return mockAsciidoctorMojo(AsciidoctorZipMojo.class, null, null);
+    }
+
+    @SneakyThrows
     public static AsciidoctorMojo mockAsciidoctorMojo(Map<String, String> mavenProperties) {
         return mockAsciidoctorMojo(AsciidoctorMojo.class, mavenProperties, null);
     }

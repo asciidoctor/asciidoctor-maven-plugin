@@ -26,6 +26,7 @@ Maintenance::
   * Rewrite `AsciidoctorMojoLogHandlerTest` to Java to make it more approachable (#514)
   * Rewrite `AsciidoctorMojoExtensionsTest` to Java to make it more approachable (#515)
   * Rewrite `AsciidoctorHttpMojoTest` to Java to make it more approachable (#516)
+  * Rewrite `AsciidoctorZipMojoTest` to Java to make it more approachable (#518)
 
 == v2.1.0 (2020-09-15)
 
