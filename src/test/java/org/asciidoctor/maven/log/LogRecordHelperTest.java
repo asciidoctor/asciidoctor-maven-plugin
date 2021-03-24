@@ -3,7 +3,7 @@ package org.asciidoctor.maven.log;
 import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.io.File;

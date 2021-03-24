@@ -4,7 +4,7 @@ import org.asciidoctor.log.Severity;
 import org.asciidoctor.maven.log.FailIf;
 import org.asciidoctor.maven.log.LogHandler;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;

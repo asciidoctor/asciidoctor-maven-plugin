@@ -12,7 +12,7 @@ import org.apache.maven.shared.filtering.DefaultMavenResourcesFiltering;
 import org.asciidoctor.maven.TestUtils.ResourceBuilder;
 import org.asciidoctor.maven.io.ConsoleHolder;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.sonatype.plexus.build.incremental.BuildContext;
 import org.sonatype.plexus.build.incremental.DefaultBuildContext;
