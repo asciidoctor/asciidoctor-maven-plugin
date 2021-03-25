@@ -7,8 +7,8 @@ import org.asciidoctor.maven.extensions.ExtensionConfiguration;
 import org.asciidoctor.maven.io.ConsoleHolder;
 import org.asciidoctor.maven.test.processors.*;
 import org.assertj.core.api.Assertions;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.Arrays;
@@ -374,7 +374,7 @@ public class AsciidoctorMojoExtensionsTest {
      *  To execute, copy _org.asciidoctor.extension.spi.ExtensionRegistry to
      *  /src/test/resources/META-INF/services/ and execute
      */
-    @Ignore
+    @Disabled
     @Test
     public void property_extension() throws MojoFailureException, MojoExecutionException {
         // given

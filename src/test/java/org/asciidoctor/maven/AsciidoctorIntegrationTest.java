@@ -3,8 +3,8 @@ package org.asciidoctor.maven;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.assertj.core.api.Assertions;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -188,7 +188,7 @@ public class AsciidoctorIntegrationTest {
                 .contains("prettify");
     }
 
-    @Ignore("Not supported in Asciidoctorj (gem not embedded)")
+    @Disabled("Not supported in Asciidoctorj (gem not embedded)")
     @Test
     public void should_apply_code_highlighting_with_pygments() throws MojoFailureException, MojoExecutionException {
         // given

@@ -3,7 +3,7 @@ package org.asciidoctor.maven.refresh;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.logging.Log;
 import org.asciidoctor.maven.AsciidoctorRefreshMojo;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.io.File;

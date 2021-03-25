@@ -5,8 +5,9 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.asciidoctor.maven.io.ConsoleHolder;
 import org.asciidoctor.maven.log.FailIf;
 import org.asciidoctor.maven.log.LogHandler;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
 
 import java.io.File;
 import java.util.Arrays;
@@ -129,7 +130,7 @@ public class AsciidoctorMojoLogHandlerTest {
         consoleHolder.release();
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void should_not_fail_and_log_errors_as_INFO_when_outputToConsole_is_set_and_doc_contains_messages_without_cursor_and_verbose_is_enabled() throws MojoFailureException, MojoExecutionException {
         // setup
@@ -169,7 +170,7 @@ public class AsciidoctorMojoLogHandlerTest {
 
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void should_not_fail_and_log_verbose_errors_when_gempath_is_set() throws MojoFailureException, MojoExecutionException {
         // setup
