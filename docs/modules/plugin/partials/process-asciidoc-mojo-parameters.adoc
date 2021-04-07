@@ -112,7 +112,7 @@ include::partial$setting-boolean-attributes.adoc[]
 embedAssets:: embeds the CSS file and images into the output, defaults to `false`
 gemPaths:: enables to specify the location to one or more gem installation directories (same as GEM_PATH environment var), `empty` by default
 requires:: a `List<String>` to specify additional Ruby libraries not packaged in AsciidoctorJ, `empty` by default
-extensions:: `List` of extensions to include during the conversion process (see link:https://github.com/asciidoctor/asciidoctorj/blob/master/docs/integrator-guide.adoc#automatically-loading-extensions[AsciidoctorJ's Extension API] for information about the available options).
+extensions:: `List` of extensions to include during the conversion process (see link:https://docs.asciidoctor.org/asciidoctorj/latest/extensions/extensions-introduction/[AsciidoctorJ's Extension API] for information about the available options).
 For each extension, the implementation class must be specified in the `className` parameter, the `blockName` is only required when configuring a _BlockProcessor_, _BlockMacroProcessor_ or _InlineMacroProcessor_.
 +
 [source,xml]
@@ -148,7 +148,7 @@ For each extension, the implementation class must be specified in the `className
 <1> Extensions must be included in the plugin's execution classpath, not in the project's.
 +
 NOTE: Extensions can also be integrated through the SPI interface implementation.
-This method does not require any configuration in the [.path]_pom.xml_, see link:https://github.com/asciidoctor/asciidoctorj/blob/master/docs/integrator-guide.adoc#automatically-loading-extensions[Automatically loading extensions] for details.
+This method does not require any configuration in the [.path]_pom.xml_, see link:https://docs.asciidoctor.org/asciidoctorj/latest/extensions/register-extensions-automatically/[Automatically loading extensions] for details.
 
 enableVerbose:: enables Asciidoctor verbose messages, defaults to `false`.
 Enable it, for example, if you want to validate https://asciidoctor.org/docs/user-manual/#validating-internal-cross-references[internal cross references] and capture the messages with the logHandler option.
