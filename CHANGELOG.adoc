@@ -18,6 +18,7 @@ Documentation::
   * Migrate docs (README) to Antora site and publish them in gh-pages (#498)
   * Remove ambiguity in usage of maven properties docs (#507)
   * Add ID to 'attributes' description, to be able to generate direct url from other docs (#509)
+  * Fix broken links to extension api documentation (#523).
 
 Maintenance::
 
