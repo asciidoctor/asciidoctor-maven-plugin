@@ -9,7 +9,7 @@ ifndef::icons[]
 endif::[]
 
 This document provides a high-level view of the changes introduced on Asciidoctor Maven Plugin by release.
-For a detailed view of what has changed, refer to the {uri-repo}/commits/master[commit history] on GitHub.
+For a detailed view of what has changed, refer to the {uri-repo}/commits/main[commit history] on GitHub.
 
 == Unreleased
 
@@ -18,7 +18,7 @@ Documentation::
   * Migrate docs (README) to Antora site and publish them in gh-pages (#498)
   * Remove ambiguity in usage of maven properties docs (#507)
   * Add ID to 'attributes' description, to be able to generate direct url from other docs (#509)
-  * Fix broken links to extension api documentation (#523).
+  * Fix broken links to extension api documentation (https://github.com/djarnis73[@djarnis73]) (#523)
 
 Maintenance::
 
@@ -30,6 +30,7 @@ Maintenance::
   * Rewrite `AsciidoctorZipMojoTest` to Java to make it more approachable (#518)
   * Rewrite `AsciidoctorDoxiaParserTest` to Java + remove Groovy & Spock configurations (#519)
   * Upgrade tests to JUni5 (#521)
+  * Rename main branch (#524)
 
 == v2.1.0 (2020-09-15)
 

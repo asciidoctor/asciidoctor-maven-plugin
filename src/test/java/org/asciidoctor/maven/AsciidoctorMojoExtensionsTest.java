@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Specific tests to validate usage of AsciidoctorJ extension in AsciidoctorMojo.
  *
  * Most of the examples have been directly adapted from the ones found in AsciidoctorJ
- * documentation (https://github.com/asciidoctor/asciidoctorj/blob/master/README.adoc)
+ * documentation.
  *
  * @author abelsromero
  */
