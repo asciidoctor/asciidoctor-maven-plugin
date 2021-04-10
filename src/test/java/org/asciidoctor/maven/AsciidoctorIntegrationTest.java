@@ -164,7 +164,7 @@ public class AsciidoctorIntegrationTest {
         // then
         assertThat(outputDir, "main-document.html")
                 .contains("<pre class=\"highlightjs highlight\">")
-                .contains("<script>hljs.initHighlighting()</script>");
+                .contains("if (!hljs.initHighlighting.called) {");
     }
 
     @Test
