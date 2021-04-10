@@ -17,12 +17,12 @@ ifndef::env-github[:icons: font]
 :uri-asciidoctor: http://asciidoctor.org
 :uri-examples: https://github.com/asciidoctor/asciidoctor-maven-examples
 :uri-maven: http://maven.apache.org
-:uri-license: {uri-repo}/blob/master/LICENSE.txt
+:uri-license: {uri-repo}/blob/main/LICENSE.txt
 :uri-docs: https://asciidoctor.github.io/asciidoctor-maven-plugin/maven-tools/{docs-version}
 // GitHub customization
 ifdef::env-github[]
 :badges:
-:tag: master
+:tag: main
 :!toc-title:
 :tip-caption: :bulb:
 :note-caption: :paperclip:
@@ -33,10 +33,10 @@ endif::[]
 
 // Badges
 ifdef::badges[]
-image:https://ci.appveyor.com/api/projects/status/chebmu91f08dlmsc/branch/master?svg=true["Build Status (AppVeyor)", link="https://ci.appveyor.com/project/asciidoctor/asciidoctor-maven-plugin"]
-image:http://img.shields.io/travis/asciidoctor/asciidoctor-maven-plugin/master.svg["Build Status (Travis CI)", link="https://travis-ci.org/asciidoctor/asciidoctor-maven-plugin"]
+image:https://ci.appveyor.com/api/projects/status/chebmu91f08dlmsc/branch/main?svg=true["Build Status (AppVeyor)", link="https://ci.appveyor.com/project/asciidoctor/asciidoctor-maven-plugin"]
+image:http://img.shields.io/travis/asciidoctor/asciidoctor-maven-plugin/main.svg["Build Status (Travis CI)", link="https://travis-ci.org/asciidoctor/asciidoctor-maven-plugin"]
 image:{uri-repo}/workflows/Build/badge.svg[Build Status,link={uri-repo}/actions]
-image:http://img.shields.io/coveralls/{project-repo}/master.svg["Coverage Status", link="https://coveralls.io/r/{project-repo}?branch=master"]
+image:http://img.shields.io/coveralls/{project-repo}/main.svg["Coverage Status", link="https://coveralls.io/r/{project-repo}?branch=main"]
 image:https://maven-badges.herokuapp.com/maven-central/org.asciidoctor/asciidoctor-maven-plugin/badge.svg["Maven Central",link="https://maven-badges.herokuapp.com/maven-central/org.asciidoctor/asciidoctor-maven-plugin"]
 image:https://img.shields.io/badge/zulip-join_chat-brightgreen.svg[project chat,link=https://asciidoctor.zulipchat.com/]
 endif::[]
@@ -57,7 +57,7 @@ ifndef::env-site[]
 * link:README_zh-CN.adoc[汉语]
 endif::[]
 
-ifeval::['{tag}' == 'master']
+ifeval::['{tag}' == 'main']
 [NOTE]
 ====
 You're viewing the documentation for the upcoming release.

@@ -3,7 +3,7 @@ site:
 content:
   sources:
     - url: .
-      branches: [ master ]
+      branches: [ main ]
       start_path: docs
 asciidoc:
   attributes:
@@ -12,7 +12,7 @@ asciidoc:
     idseparator: '-'
 ui:
   bundle:
-    url: https://github.com/abelsromero/asciidoctor-maven-plugin-antora-ui/raw/master/bundle/ui-bundle.zip
+    url: https://github.com/abelsromero/asciidoctor-maven-plugin-antora-ui/raw/main/bundle/ui-bundle.zip
     snapshot: true
   supplemental_files:
     - path: ui.yml
