@@ -19,6 +19,7 @@ Documentation::
   * Remove ambiguity in usage of maven properties docs (#507)
   * Add ID to 'attributes' description, to be able to generate direct url from other docs (#509)
   * Fix broken links to extension api documentation (https://github.com/djarnis73[@djarnis73]) (#523)
+  * Remove local antora site generator stuff (https://github.com/uniqueck[@uniqueck]) (#529)
 
 Build / Infrastructure::
   * Upgrade tests to JUni5 (#521)
