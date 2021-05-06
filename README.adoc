@@ -18,7 +18,7 @@ ifndef::env-github[:icons: font]
 :uri-examples: https://github.com/asciidoctor/asciidoctor-maven-examples
 :uri-maven: http://maven.apache.org
 :uri-license: {uri-repo}/blob/main/LICENSE.txt
-:uri-docs: https://asciidoctor.github.io/asciidoctor-maven-plugin/maven-tools/{docs-version}
+:uri-docs: https://docs.asciidoctor.org/maven-tools//{docs-version}
 // GitHub customization
 ifdef::env-github[]
 :badges:
