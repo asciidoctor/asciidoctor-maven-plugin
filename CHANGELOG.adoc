@@ -27,6 +27,7 @@ Build / Infrastructure::
   * Set maven wrapper to use maven v3.8.1 (#525)
   * Upgrade Asciidoctorj to v2.4.3 and jRuby to v9.2.14.0 (#526)
   * Upgrade Asciidoctorj to v2.5.0 and jRuby to v9.2.17.0 (#531)
+  * Upgrade Asciidoctorj to v2.5.1 (#534)
 
 Maintenance::
 
