@@ -1,21 +1,22 @@
 package org.asciidoctor.maven.process;
 
-import org.junit.jupiter.api.Test;
-
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CustomExtensionDirectoryWalkerTest {
+public class SourceDocumentFinderTest {
 
     private static final String DEFAULT_SOURCE_DIRECTORY = "src/test/resources/src/asciidoctor";
 
     @Test
-    public void should_init_CustomExtensionDirectoryWalker() {
+    public void should_init_SourceDocumentFinder() {
         // when
-        CustomExtensionDirectoryWalker walker = new CustomExtensionDirectoryWalker("", Collections.emptyList());
+        SourceDocumentFinder walker = new SourceDocumentFinder();
         // then
         assertThat(walker).isNotNull();
     }
@@ -27,8 +28,7 @@ public class CustomExtensionDirectoryWalkerTest {
         final List<String> fileExtensions = Collections.singletonList("adoc");
 
         // when
-        List<File> files = new CustomExtensionDirectoryWalker(rootDirectory, fileExtensions)
-                .scan();
+        List<File> files = new SourceDocumentFinder().find(Paths.get(rootDirectory), fileExtensions);
 
         // then
         assertThat(files)
@@ -43,8 +43,7 @@ public class CustomExtensionDirectoryWalkerTest {
         final List<String> fileExtensions = Collections.singletonList("adoc");
 
         // when
-        List<File> files = new CustomExtensionDirectoryWalker(rootDirectory, fileExtensions)
-                .scan();
+        List<File> files = new SourceDocumentFinder().find(Paths.get(rootDirectory), fileExtensions);
 
         // then
         assertThat(files)
