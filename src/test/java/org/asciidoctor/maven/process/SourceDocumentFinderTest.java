@@ -22,6 +22,49 @@ public class SourceDocumentFinderTest {
     }
 
     @Test
+    public void should_match_standard_file_extensions() {
+        // given
+        final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/file-extensions";
+
+        // when
+        List<File> files = new SourceDocumentFinder().find(Paths.get(rootDirectory));
+
+        // then
+        assertThat(files)
+            .isNotEmpty()
+            .map(File::getName)
+            .allMatch(name -> name.endsWith("ad") || name.endsWith("adoc") || name.endsWith("asc") ||
+                name.endsWith("asciidoc"));
+    }
+
+    @Test
+    public void should_match_custom_file_extensions() {
+        // given
+        final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/file-extensions";
+
+        // when
+        List<File> files = new SourceDocumentFinder().find(Paths.get(rootDirectory), Collections.singletonList("my-adoc"));
+
+        // then
+        assertThat(files)
+            .isNotEmpty()
+            .allMatch(file -> file.getName().endsWith("my-adoc"));
+    }
+
+    @Test
+    public void should_not_match_custom_empty_file_extensions() {
+        // given
+        final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/file-extensions";
+
+        // when
+        List<File> files = new SourceDocumentFinder().find(Paths.get(rootDirectory), Collections.emptyList());
+
+        // then
+        assertThat(files)
+            .isEmpty();
+    }
+
+    @Test
     public void should_exclude_internal_sources() {
         // given
         final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/relative-path-treatment";

@@ -47,10 +47,8 @@ public class SourceDocumentFinder {
      * @return the list of all matching source documents.
      */
     public List<File> find(Path sourceDirectory, List<String> sourceDocumentExtensions) {
-        String extensionPattern = sourceDocumentExtensions.stream()
-String extensionPattern = sourceDocumentExtensions.stream()
-                .collect(Collectors.joining("|", CUSTOM_FILE_EXTENSIONS_PATTERN_PREFIX, CUSTOM_FILE_EXTENSIONS_PATTERN_SUFFIX));
-            .concat(CUSTOM_FILE_EXTENSIONS_PATTERN_SUFFIX);
+        String extensionPattern = sourceDocumentExtensions.stream().collect(Collectors
+            .joining("|", CUSTOM_FILE_EXTENSIONS_PATTERN_PREFIX, CUSTOM_FILE_EXTENSIONS_PATTERN_SUFFIX));
         return find(sourceDirectory, Pattern.compile(extensionPattern));
     }
 
