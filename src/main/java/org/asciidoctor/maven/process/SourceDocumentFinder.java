@@ -48,7 +48,8 @@ public class SourceDocumentFinder {
      */
     public List<File> find(Path sourceDirectory, List<String> sourceDocumentExtensions) {
         String extensionPattern = sourceDocumentExtensions.stream()
-            .reduce(CUSTOM_FILE_EXTENSIONS_PATTERN_PREFIX, (result, s) -> result.concat("|").concat(s))
+String extensionPattern = sourceDocumentExtensions.stream()
+                .collect(Collectors.joining("|", CUSTOM_FILE_EXTENSIONS_PATTERN_PREFIX, CUSTOM_FILE_EXTENSIONS_PATTERN_SUFFIX));
             .concat(CUSTOM_FILE_EXTENSIONS_PATTERN_SUFFIX);
         return find(sourceDirectory, Pattern.compile(extensionPattern));
     }
