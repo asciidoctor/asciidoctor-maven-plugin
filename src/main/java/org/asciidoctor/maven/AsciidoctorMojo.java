@@ -12,9 +12,7 @@ import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
 import org.asciidoctor.*;
-import org.asciidoctor.jruby.AsciiDocDirectoryWalker;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
-import org.asciidoctor.jruby.DirectoryWalker;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
 import org.asciidoctor.maven.extensions.AsciidoctorJExtensionRegistry;
 import org.asciidoctor.maven.extensions.ExtensionConfiguration;
@@ -25,14 +23,15 @@ import org.asciidoctor.maven.log.LogRecordHelper;
 import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
 import org.asciidoctor.maven.process.AsciidoctorHelper;
-import org.asciidoctor.maven.process.CustomExtensionDirectoryWalker;
 import org.asciidoctor.maven.process.ResourcesProcessor;
 import org.asciidoctor.maven.process.SourceDirectoryFinder;
+import org.asciidoctor.maven.process.SourceDocumentFinder;
 import org.jruby.Ruby;
 
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -440,13 +439,12 @@ public class AsciidoctorMojo extends AbstractMojo {
         if (sourceDocumentName != null)
             return Arrays.asList(new File(sourceDirectory, sourceDocumentName));
 
-        // Both DirectoryWalkers filter out internal sources and path (_ prefix)
-        final String sourceDirectoryAbsolutePath = sourceDirectory.getAbsolutePath();
-        final DirectoryWalker directoryWalker = sourceDocumentExtensions.isEmpty()
-                ? new AsciiDocDirectoryWalker(sourceDirectoryAbsolutePath)
-                : new CustomExtensionDirectoryWalker(sourceDirectoryAbsolutePath, sourceDocumentExtensions);
+        Path sourceDirectoryPath = sourceDirectory.toPath();
+        SourceDocumentFinder finder = new SourceDocumentFinder();
 
-        return directoryWalker.scan();
+        return sourceDocumentExtensions.isEmpty() ?
+            finder.find(sourceDirectoryPath) :
+            finder.find(sourceDirectoryPath, sourceDocumentExtensions);
     }
 
     protected void convertFile(Asciidoctor asciidoctor, Map<String, Object> options, File f) {
