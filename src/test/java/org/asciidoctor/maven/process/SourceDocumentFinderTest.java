@@ -2,6 +2,7 @@ package org.asciidoctor.maven.process;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class SourceDocumentFinderTest {
     }
 
     @Test
-    public void should_match_custom_file_extensions() {
+    public void should_match_custom_file_extension() {
         // given
         final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/file-extensions";
 
@@ -52,12 +53,43 @@ public class SourceDocumentFinderTest {
     }
 
     @Test
+    public void should_match_custom_file_extensions() {
+        // given
+        final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/file-extensions";
+        List<String> customFileExtensions = new ArrayList<>();
+        customFileExtensions.add("my-adoc");
+        customFileExtensions.add("adoc");
+
+        // when
+        List<File> files = new SourceDocumentFinder().find(Paths.get(rootDirectory), customFileExtensions);
+
+        // then
+        assertThat(files)
+            .isNotEmpty()
+            .map(File::getName)
+            .allMatch(name -> name.endsWith("my-adoc") || name.endsWith("adoc"));
+    }
+
+    @Test
     public void should_not_match_custom_empty_file_extensions() {
         // given
         final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/file-extensions";
 
         // when
         List<File> files = new SourceDocumentFinder().find(Paths.get(rootDirectory), Collections.emptyList());
+
+        // then
+        assertThat(files)
+            .isEmpty();
+    }
+
+    @Test
+    public void should_return_empty_list_if_wrong_source_directory() {
+        // given
+        final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/file-extensions/non-existing";
+
+        // when
+        List<File> files = new SourceDocumentFinder().find(Paths.get(rootDirectory));
 
         // then
         assertThat(files)
