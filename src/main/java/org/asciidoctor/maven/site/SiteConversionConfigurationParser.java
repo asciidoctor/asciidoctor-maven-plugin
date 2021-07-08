@@ -1,6 +1,5 @@
 package org.asciidoctor.maven.site;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.OptionsBuilder;
@@ -8,11 +7,12 @@ import org.asciidoctor.maven.process.AsciidoctorHelper;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class SiteConversionConfigurationParser {
 
@@ -51,7 +51,7 @@ public class SiteConversionConfigurationParser {
                             // <requires>time, base64</requires>
                             Stream.of(requireNode.getValue().split(","))
                                     .map(String::trim)
-                                    .filter(StringUtils::isNotBlank)
+                                    .filter(this::isNotBlank)
                                     .forEach(value -> gemsToRequire.add(value));
                         } else {
                             // <requires>
@@ -81,6 +81,12 @@ public class SiteConversionConfigurationParser {
         }
 
         return new SiteConversionConfiguration(presetOptions.attributes(presetAttributes).get(), gemsToRequire);
+    }
+
+    public boolean isNotBlank(String value) {
+        return value != null
+                && !value.isEmpty()
+                && value.chars().anyMatch(c -> !Character.isWhitespace(c));
     }
 
     private File resolveProjectDir(MavenProject project, String path) {

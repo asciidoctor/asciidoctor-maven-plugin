@@ -71,7 +71,6 @@
         <plexus.utils.version>3.0.23</plexus.utils.version>
         <plexus.component.metadata.version>1.7</plexus.component.metadata.version>
         <netty.version>4.1.59.Final</netty.version>
-        <commons.io.version>2.5</commons.io.version>
         <doxia.version>1.8</doxia.version>
     </properties>
 
@@ -130,11 +129,6 @@
             <version>${asciidoctorj.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.8.1</version>
-        </dependency>
-        <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-codec-http</artifactId>
             <version>${netty.version}</version>
@@ -143,11 +137,6 @@
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-core</artifactId>
             <version>${doxia.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons.io.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.doxia</groupId>
