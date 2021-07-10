@@ -10,6 +10,11 @@
     <description>Asciidoctor Maven Plugin and Doxia Parser (for Maven Site integration)</description>
     <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
 
+    <organization>
+        <name>Asciidoctor</name>
+        <url>https://asciidoctor.org/</url>
+    </organization>
+    
     <developers>
         <developer>
             <id>lightguard</id>
