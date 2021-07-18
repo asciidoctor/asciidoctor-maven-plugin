@@ -13,6 +13,9 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+
+== v2.2.0 (2021-07-18)
+
 Improvements::
 
   * Allow running a refresh build on included sources (for `auto-refresh` & `http` mojos) (#542)
@@ -34,6 +37,7 @@ Build / Infrastructure::
   * Upgrade Asciidoctorj to v2.5.1 (#534)
   * Added 'Asciidoctor' organization to pom (#539)
   * Remove AppVeyor CI build (#540)
+  * Update `distributionManagement` to deploy directly without Bintray (#544)
 
 Maintenance::
 
