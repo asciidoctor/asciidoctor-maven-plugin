@@ -5,17 +5,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugin.logging.SystemStreamLog;
-import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.filtering.DefaultMavenFileFilter;
-import org.apache.maven.shared.filtering.DefaultMavenResourcesFiltering;
 import org.asciidoctor.maven.TestUtils.ResourceBuilder;
 import org.asciidoctor.maven.io.ConsoleHolder;
-import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.sonatype.plexus.build.incremental.BuildContext;
-import org.sonatype.plexus.build.incremental.DefaultBuildContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,12 +19,11 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Collections.singletonList;
 import static org.asciidoctor.maven.TestUtils.newFakeRefreshMojo;
 import static org.asciidoctor.maven.io.TestFilesHelper.createFileWithContent;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
-import static org.mockito.Mockito.when;
 
 public class AsciidoctorRefreshMojoTest {
 
@@ -328,6 +319,65 @@ public class AsciidoctorRefreshMojoTest {
         assertThat(FileUtils.readFileToString(target, UTF_8))
                 .isEqualTo("Supposedly image content UPDATED!");
         assertFilesNotPresentInOutput(docInfoFiles, outputDir);
+
+        // cleanup
+        consoleHolder.input("exit");
+        consoleHolder.release();
+        awaitTermination(mojoThread);
+    }
+
+    @Test
+    public void should_convert_additional_sources_when_set_in_refreshOn() throws IOException {
+        // given
+        final ConsoleHolder consoleHolder = ConsoleHolder.start();
+
+        final File srcDir = newOutputTestDirectory(TEST_DIR);
+        final File outputDir = newOutputTestDirectory(TEST_DIR);
+
+        // when
+        final File sourceFile = new File(srcDir, "sourceFile.adoc");
+        String sourceContent = new StringBuilder()
+                .append("= Document Title\n\n")
+                .append("This is test, only a test.\n\n")
+                .append("== Included\n\n")
+                .append("include::included.txt[]")
+                .toString();
+        FileUtils.write(sourceFile, sourceContent, UTF_8);
+
+        final File includedFile = new File(srcDir, "included.txt");
+        String includedContent = new StringBuilder()
+                .append("Original included content")
+                .toString();
+        FileUtils.write(includedFile, includedContent, UTF_8);
+
+        // when
+        Thread mojoThread = runMojoAsynchronously(mojo -> {
+            mojo.headerFooter = false;
+            mojo.backend = "html5";
+            mojo.sourceDirectory = srcDir;
+            mojo.outputDirectory = outputDir;
+            mojo.refreshOn = ".*\\.txt";
+            // THIS DOES NOT AFFECT
+            mojo.resources = ResourceBuilder.excludeAll();
+        });
+
+        // then: source is converted and included is copies (treated as resource)
+        final File target = new File(outputDir, "sourceFile.html");
+        consoleHolder.awaitProcessingAllSources();
+        assertThat(FileUtils.readFileToString(target, UTF_8))
+                .contains("Original included content");
+        assertThat(includedContent)
+                .isNotEmpty();
+
+        // and when
+        FileUtils.write(includedFile, "Included content UPDATED!", UTF_8);
+
+        // then
+        consoleHolder.awaitProcessingResource();
+        assertThat(FileUtils.readFileToString(target, UTF_8))
+                .contains("Included content UPDATED!");
+        assertThat(includedContent)
+                .isNotEmpty();
 
         // cleanup
         consoleHolder.input("exit");
@@ -730,7 +780,7 @@ public class AsciidoctorRefreshMojoTest {
     @SneakyThrows
     private void awaitTermination(Thread thread) {
         int pollTime = 250;
-        int ticks = (10 * 1000 / pollTime);
+        int ticks = (30 * 1000 / pollTime);
         while (thread.isAlive()) {
             ticks--;
             if (ticks == 0)
