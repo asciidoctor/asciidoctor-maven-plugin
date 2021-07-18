@@ -24,10 +24,10 @@ public class SourceDocumentFinder {
     private static final String STANDARD_FILE_EXTENSIONS_PATTERN = "^[^_.].*\\.a((sc(iidoc)?)|d(oc)?)$";
 
     /** Prefix for matching custom file extensions. */
-    private static final String CUSTOM_FILE_EXTENSIONS_PATTERN_PREFIX = "^[^_.].*\\.(";
+    public static final String CUSTOM_FILE_EXTENSIONS_PATTERN_PREFIX = "^[^_.].*\\.(";
 
     /** Suffix for matching custom file extensions. */
-    private static final String CUSTOM_FILE_EXTENSIONS_PATTERN_SUFFIX = ")$";
+    public static final String CUSTOM_FILE_EXTENSIONS_PATTERN_SUFFIX = ")$";
 
     /**
      * Finds all source documents inside the source directory with standard file extensions.

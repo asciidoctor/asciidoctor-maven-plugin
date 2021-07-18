@@ -11,10 +11,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.asciidoctor.maven.refresh.AsciidoctorConverterFileAlterationListenerAdaptor;
-import org.asciidoctor.maven.refresh.ResourceCopyFileAlterationListenerAdaptor;
-import org.asciidoctor.maven.refresh.ResourcesPatternBuilder;
-import org.asciidoctor.maven.refresh.TimeCounter;
+import org.asciidoctor.maven.refresh.*;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -22,6 +19,8 @@ import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.asciidoctor.maven.io.AsciidoctorFileScanner.ASCIIDOC_NON_INTERNAL_REG_EXP;
+import static org.asciidoctor.maven.process.SourceDocumentFinder.CUSTOM_FILE_EXTENSIONS_PATTERN_PREFIX;
+import static org.asciidoctor.maven.process.SourceDocumentFinder.CUSTOM_FILE_EXTENSIONS_PATTERN_SUFFIX;
 
 @Mojo(name = "auto-refresh")
 public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
@@ -30,6 +29,9 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
 
     @Parameter(property = PREFIX + "interval")
     protected int interval = 2000; // 2s
+
+    @Parameter(property = PREFIX + "refreshOn")
+    protected String refreshOn;
 
     private Collection<FileAlterationMonitor> monitors = null;
 
@@ -100,12 +102,22 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
 
         final FileAlterationMonitor fileAlterationMonitor = new FileAlterationMonitor(interval);
 
-        { // content monitor
+        { // sources monitor
             final FileAlterationObserver observer = new FileAlterationObserver(sourceDirectory, buildSourcesFileFilter());
             final FileAlterationListener listener = new AsciidoctorConverterFileAlterationListenerAdaptor(this, () -> showWaitMessage(), getLog());
 
             observer.addListener(listener);
             fileAlterationMonitor.addObserver(observer);
+        }
+
+        { // included-sources monitor
+            if (!isBlank(refreshOn)) {
+                final FileAlterationObserver observer = new FileAlterationObserver(sourceDirectory, new RegexFileFilter(refreshOn));
+                final FileAlterationListener listener = new AdditionalSourceFileAlterationListenerAdaptor(this, () -> showWaitMessage(), getLog());
+
+                observer.addListener(listener);
+                fileAlterationMonitor.addObserver(observer);
+            }
         }
 
         { // resources monitor
@@ -137,7 +149,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
             return new NameFileFilter(sourceDocumentName);
 
         if (!sourceDocumentExtensions.isEmpty()) {
-            final StringJoiner stringJoiner = new StringJoiner("|", "^[^_.].*\\.(", ")$");
+            final StringJoiner stringJoiner = new StringJoiner("|", CUSTOM_FILE_EXTENSIONS_PATTERN_PREFIX, CUSTOM_FILE_EXTENSIONS_PATTERN_SUFFIX);
             for (String extension : sourceDocumentExtensions) {
                 stringJoiner.add(extension);
             }

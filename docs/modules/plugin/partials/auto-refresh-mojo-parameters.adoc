@@ -1,2 +1,6 @@
 interval:: time in milliseconds between checks of the filesystem.
 Defaults to `2000`
+
+refreshOn:: regular expression describing additional sources that force a full refresh.
+Useful when working with included/partial sources that aren't converted individually.
+Defaults to `empty`
