@@ -36,4 +36,4 @@ jobs:
           key: ${{ runner.os }}-mvn-cache-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-mvn-cache-
       - name: Build
-        run: ./mvnw -B -V -Prun-its clean verify -Dtest="AsciidoctorRefreshMojoTest#should_convert_additional_sources_when_set_in_refreshOn"
+        run: ./mvnw -B -V -Prun-its clean verify
