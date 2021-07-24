@@ -47,27 +47,27 @@ public class SourceDocumentFinder {
      * @return the list of all matching source documents.
      */
     public List<File> find(Path sourceDirectory, List<String> sourceDocumentExtensions) {
-        String extensionPattern = sourceDocumentExtensions.stream().collect(Collectors
-            .joining("|", CUSTOM_FILE_EXTENSIONS_PATTERN_PREFIX, CUSTOM_FILE_EXTENSIONS_PATTERN_SUFFIX));
+        String extensionPattern = sourceDocumentExtensions.stream()
+                .collect(Collectors.joining("|", CUSTOM_FILE_EXTENSIONS_PATTERN_PREFIX, CUSTOM_FILE_EXTENSIONS_PATTERN_SUFFIX));
         return find(sourceDirectory, Pattern.compile(extensionPattern));
     }
 
     private List<File> find(Path sourceDirectory, Pattern sourceDocumentPattern) {
         try (Stream<Path> sourceDocumentCandidates = Files.walk(sourceDirectory)) {
-            return sourceDocumentCandidates.filter(Files::isRegularFile)
-                // Filter all documents that don't match the file extension pattern.
-                .filter(p -> sourceDocumentPattern.matcher(p.getFileName().toString()).matches())
-                // Filter all documents that are part of ignored directories.
-                .filter(p -> {
-                    for (Path part : p) {
-                        if (part.toString().startsWith("_")) {
-                            return false;
+            return sourceDocumentCandidates
+                    .filter(Files::isRegularFile)
+                    .filter(path -> sourceDocumentPattern.matcher(path.getFileName().toString()).matches())
+                    .filter(path -> {
+                        for (Path part : sourceDirectory.relativize(path)) {
+                            if (part.toString().startsWith("_")) {
+                                return false;
+                            }
                         }
-                    }
-                    return true;
-                }).map(Path::toFile).collect(Collectors.toList());
+                        return true;
+                    })
+                    .map(Path::toFile)
+                    .collect(Collectors.toList());
         } catch (IOException e) {
-            // Can't access the source directory.
             return Collections.emptyList();
         }
     }

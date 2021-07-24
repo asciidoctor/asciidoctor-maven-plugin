@@ -190,7 +190,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         }
 
         if (sourceFiles == null) {
-            sourceFiles = calculateSourceFiles(sourceDirectoryCandidate.get());
+            sourceFiles = findSourceFiles(sourceDirectoryCandidate.get());
         }
         if (sourceFiles.isEmpty()) {
             getLog().info("No sources found. Skipping processing");
@@ -435,7 +435,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         return asciidoctor;
     }
 
-    protected List<File> calculateSourceFiles(File sourceDirectory) {
+    protected List<File> findSourceFiles(File sourceDirectory) {
         if (sourceDocumentName != null)
             return Arrays.asList(new File(sourceDirectory, sourceDocumentName));
 
@@ -443,8 +443,8 @@ public class AsciidoctorMojo extends AbstractMojo {
         SourceDocumentFinder finder = new SourceDocumentFinder();
 
         return sourceDocumentExtensions.isEmpty() ?
-            finder.find(sourceDirectoryPath) :
-            finder.find(sourceDirectoryPath, sourceDocumentExtensions);
+                finder.find(sourceDirectoryPath) :
+                finder.find(sourceDirectoryPath, sourceDocumentExtensions);
     }
 
     protected void convertFile(Asciidoctor asciidoctor, Map<String, Object> options, File f) {

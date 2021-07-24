@@ -13,6 +13,9 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+Bug Fixes::
+
+  * Fix excluding sources when enclosing parent path starts with _ (#544)
 
 == v2.2.0 (2021-07-18)
 
