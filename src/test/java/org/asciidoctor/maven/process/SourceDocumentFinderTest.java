@@ -1,12 +1,12 @@
 package org.asciidoctor.maven.process;
 
+import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,10 +32,9 @@ public class SourceDocumentFinderTest {
 
         // then
         assertThat(files)
-            .isNotEmpty()
-            .map(File::getName)
-            .allMatch(name -> name.endsWith("ad") || name.endsWith("adoc") || name.endsWith("asc") ||
-                name.endsWith("asciidoc"));
+                .hasSize(4)
+                .map(File::getName)
+                .allMatch(name -> name.endsWith("ad") || name.endsWith("adoc") || name.endsWith("asc") || name.endsWith("asciidoc"));
     }
 
     @Test
@@ -48,26 +47,24 @@ public class SourceDocumentFinderTest {
 
         // then
         assertThat(files)
-            .isNotEmpty()
-            .allMatch(file -> file.getName().endsWith("my-adoc"));
+                .hasSize(1)
+                .allMatch(file -> file.getName().endsWith("my-adoc"));
     }
 
     @Test
     public void should_match_custom_file_extensions() {
         // given
         final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/file-extensions";
-        List<String> customFileExtensions = new ArrayList<>();
-        customFileExtensions.add("my-adoc");
-        customFileExtensions.add("adoc");
+        List<String> customFileExtensions = Arrays.asList("my-adoc", "adoc");
 
         // when
         List<File> files = new SourceDocumentFinder().find(Paths.get(rootDirectory), customFileExtensions);
 
         // then
         assertThat(files)
-            .isNotEmpty()
-            .map(File::getName)
-            .allMatch(name -> name.endsWith("my-adoc") || name.endsWith("adoc"));
+                .hasSize(2)
+                .map(File::getName)
+                .allMatch(name -> name.endsWith("my-adoc") || name.endsWith("adoc"));
     }
 
     @Test
@@ -80,7 +77,7 @@ public class SourceDocumentFinderTest {
 
         // then
         assertThat(files)
-            .isEmpty();
+                .isEmpty();
     }
 
     @Test
@@ -93,11 +90,11 @@ public class SourceDocumentFinderTest {
 
         // then
         assertThat(files)
-            .isEmpty();
+                .isEmpty();
     }
 
     @Test
-    public void should_exclude_internal_sources() {
+    public void should_exclude_hidden_sources() {
         // given
         final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/relative-path-treatment";
         final List<String> fileExtensions = Collections.singletonList("adoc");
@@ -107,12 +104,28 @@ public class SourceDocumentFinderTest {
 
         // then
         assertThat(files)
-                .isNotEmpty()
+                .hasSize(6)
                 .allMatch(file -> !file.getName().startsWith("_"));
     }
 
     @Test
-    public void should_exclude_internal_directories() {
+    public void should_not_treat_enclosing_parent_paths_as_hidden() {
+        // given
+        final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/source-finder/_enclosing/src/";
+        final List<String> fileExtensions = Collections.singletonList("adoc");
+
+        // when
+        List<File> files = new SourceDocumentFinder().find(Paths.get(rootDirectory), fileExtensions);
+
+        // then
+        assertThat(files)
+                .hasSize(1);
+        assertThat(files.get(0))
+                .hasName("simple.adoc");
+    }
+
+    @Test
+    public void should_exclude_hidden_directories() {
         // given
         final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/relative-path-treatment";
         final List<String> fileExtensions = Collections.singletonList("adoc");
@@ -122,7 +135,7 @@ public class SourceDocumentFinderTest {
 
         // then
         assertThat(files)
-                .isNotEmpty()
+                .hasSize(6)
                 .allMatch(file -> !isContainedInInternalDirectory(file));
     }
 
