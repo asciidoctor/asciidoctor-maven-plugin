@@ -2,7 +2,7 @@
 = process-asciidoc: Converting documents
 :navtitle: process-asciidoc
 
-Converts Asciidoc documents using {uri-asciidoctorj}[Asciidoctorj].
+Converts Asciidoc documents using {uri-asciidoctorj}[AsciidoctorJ].
 Additionally, the goal takes care of placing additional resources (eg. images) in the output path.
 
 include::partial$breaking-changes-warning.adoc[]
