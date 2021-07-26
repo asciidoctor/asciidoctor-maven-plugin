@@ -105,7 +105,7 @@ public class SourceDocumentFinderTest {
         // then
         assertThat(files)
                 .hasSize(6)
-                .allMatch(file -> !file.getName().startsWith("_"));
+                .allMatch(file -> !file.getName().startsWith("_") || !file.getName().startsWith("."));
     }
 
     @Test
@@ -144,7 +144,7 @@ public class SourceDocumentFinderTest {
         int cursor = 0;
         do {
             cursor = path.indexOf(File.separator, cursor + 1);
-            if (path.charAt(cursor + 1) == '_')
+            if (path.charAt(cursor + 1) == '_' || path.charAt(cursor + 1) == '.')
                 return true;
         } while (cursor != -1);
         return false;

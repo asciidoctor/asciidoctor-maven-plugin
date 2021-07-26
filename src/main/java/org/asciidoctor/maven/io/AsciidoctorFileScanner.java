@@ -24,6 +24,7 @@ public class AsciidoctorFileScanner {
     public static String[] INTERNAL_FOLDERS_AND_FILES_PATTERNS = {
             "**/_*.*",
             "**/_*",
+            "**/.*",
             "**/_*/**/*.*",
     };
 
@@ -40,7 +41,8 @@ public class AsciidoctorFileScanner {
             "docinfo-footer.xml",
             "*-docinfo.xml",
             "*-docinfo-header.xml",
-            "*-docinfo-footer.xml"};
+            "*-docinfo-footer.xml"
+    };
 
 
     private final BuildContext buildContext;

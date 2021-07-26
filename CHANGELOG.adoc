@@ -17,7 +17,8 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 Bug Fixes::
 
-  * Fix excluding sources when enclosing parent path starts with _ (#544)
+  * Fix excluding sources when enclosing parent path starts with _ (#546)
+  * Treat dot files and folders same as internal #5505)
 
 == v2.2.0 (2021-07-18)
 
