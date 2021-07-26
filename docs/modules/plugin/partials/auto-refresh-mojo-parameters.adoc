@@ -1,6 +1,8 @@
+[#configuration-interval]
 interval:: time in milliseconds between checks of the filesystem.
 Defaults to `2000`
 
+[#configuration-refreshOn]
 refreshOn:: regular expression describing additional sources that force a full refresh.
 Useful when working with included/partial sources that aren't converted individually.
 Defaults to `empty`

@@ -149,7 +149,7 @@ These include those defined in the `<properties>` section of the project, parent
 logHandler::
 Enables processing of Asciidoctor messages.
 For example to hide them, enable finer detail or fail the build on certain scenarios (e.g. missing included files).
-To see all options refer to the main plugin xref:plugin:goals/http.adoc#logHandler-configuration[logHandler configuration].
+To see all options refer to the main plugin xref:plugin:goals/http.adoc#configuration-logHandler[logHandler configuration].
 +
 IMPORTANT: Due to limitations in how Maven site integration works, it is not possible to provide the filename in the error message.
 We are aware this is not ideal and are tracking any development on the Maven side towards this goal (https://issues.apache.org/jira/browse/DOXIA-555[DOXIA-555]).

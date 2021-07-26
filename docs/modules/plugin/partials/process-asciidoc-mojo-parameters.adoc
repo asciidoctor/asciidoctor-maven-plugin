@@ -1,3 +1,4 @@
+[#configuration-sourceDirectory]
 sourceDirectory:: path where source files are located.
 By default checks for [.path]_$\{basedir}/src/docs/asciidoc_, [.path]_$\{basedir}/src/asciidoc_ or [.path]_$\{basedir}/src/main/asciidoc_ in that order.
 When a custom value is set, no other paths are checked.
@@ -9,9 +10,14 @@ That is, AsciiDocs are not converted and resources are not copied from them, but
 This is useful to split your sources in sets of main documents and included parts.
 ====
 
+[#configuration-sourceDocumentName]
 sourceDocumentName:: an override to process a single source file; defaults to all files in [.path]`$\{sourceDirectory}`.
+
+[#configuration-sourceDocumentExtensions]
 sourceDocumentExtensions:: (named `extensions` in v1.5.3 and below) a `List<String>` of non-standard file extensions to convert.
 Currently, _ad_, _adoc_, and _asciidoc_ will be converted by default
+
+[#configuration-resources]
 resources:: list of resource files to copy to the output directory (e.g., images, css).
 The configuration follows the same patterns as the `maven-resources-plugin`.
 If not set, all resources inside `$\{sourceDirectory}` are copied.
@@ -45,14 +51,24 @@ When converting to HTML, images must be copied to the output location so that th
     ...
 </resources>
 ----
+
+[#configuration-outputDirectory]
 outputDirectory:: locations where converted sources and copied resources will be places.
 Note that relative paths are added to the project root path.
 Defaults to [.path]_${project.build.directory}/generated-docs_.
+
+[#configuration-outputFile]
 outputFile:: defaults to `null`, used to override the name of the generated output file, can be a relative or absolute path.
 Useful for backends that create a single file, e.g. the pdf backend.
 All output will be redirected to the same file, the same way as the `-o, --out-file=OUT_FILE` option from the `asciidoctor` CLI command.
+
+[#configuration-baseDir]
 baseDir:: (not Maven's basedir) enables to set the root path for resources (e.g. included files), defaults to `$\{sourceDirectory}`
+
+[#configuration-skip]
 skip:: set this to `true` to bypass generation, defaults to `false`
+
+[#configuration-preserveDirectories]
 preserveDirectories:: enables to specify whether the documents should be converted in the same folder structure as in the source directory or not, defaults to `false`.
 When `true`, instead of generating all output in a single folder, output files are generated in the same structure.
 See the following example
@@ -65,20 +81,42 @@ See the following example
     │       └── docbook.adoc          │       └── docbook.html
     └── index.adoc                    └── index.html
 ....
+
+[#configuration-relativeBaseDir]
 relativeBaseDir:: only used when baseDir is not set, enables to specify that each AsciiDoc file must search for its resources in the same folder (for example, included files).
 Internally, for each AsciiDoc source, sets `baseDir` to the same path as the source file.
 Defaults to `false`
+
+[#configuration-backend]
 backend:: defaults to `html5`
+
+[#configuration-doctype]
 doctype:: defaults to `null` (which trigger's Asciidoctor's default of `article`)
+
+[#configuration-eruby]
 eruby:: defaults to erb, the version used in JRuby
+
+[#configuration-headerFooter]
 headerFooter:: defaults to `true`
+
+[#configuration-templateDirs]
 templateDirs:: list of directories of compatible templates to be used instead of the default built-in templates, empty by default.
+
+[#configuration-templateEngine]
 templateEngine:: template engine to use for the custom converter templates, disabled by default (`null`)
+
+[#configuration-templateCache]
 templateCache:: enables the built-in cache used by the template converter when reading the source of template files.
 Only relevant if the `:template_dirs` option is specified, defaults to `true`.
+
+[#configuration-sourcemap]
 sourcemap:: adds file and line number information to each parsed block (`lineno` and `source_location` attributes), defaults to `false`
+
+[#configuration-catalogAssets]
 catalogAssets:: tells the parser to capture images and links in the reference table available via the `references` property on the document AST object (experimental), defaults to `false`
-[[configuration-attributes]]attributes:: a `Map<String,Object>` of Asciidoctor attributes to pass for conversion, defaults to `null`.
+
+[#configuration-attributes]
+attributes:: a `Map<String,Object>` of Asciidoctor attributes to pass for conversion, defaults to `null`.
 Refer to the http://asciidoctor.org/docs/user-manual/#attribute-catalog[catalog of document attributes] in the Asciidoctor user manual for a complete list.
 +
 [source,xml]
@@ -109,9 +147,16 @@ Note that when defining a build with multiple executions, shared attributes can 
 include::partial$setting-boolean-attributes.adoc[]
 ====
 
+[#configuration-embedAssets]
 embedAssets:: embeds the CSS file and images into the output, defaults to `false`
+
+[#configuration-gemPaths]
 gemPaths:: enables to specify the location to one or more gem installation directories (same as GEM_PATH environment var), `empty` by default
+
+[#configuration-requires]
 requires:: a `List<String>` to specify additional Ruby libraries not packaged in AsciidoctorJ, `empty` by default
+
+[#configuration-extensions]
 extensions:: `List` of extensions to include during the conversion process (see link:https://docs.asciidoctor.org/asciidoctorj/latest/extensions/extensions-introduction/[AsciidoctorJ's Extension API] for information about the available options).
 For each extension, the implementation class must be specified in the `className` parameter, the `blockName` is only required when configuring a _BlockProcessor_, _BlockMacroProcessor_ or _InlineMacroProcessor_.
 +
@@ -150,10 +195,11 @@ For each extension, the implementation class must be specified in the `className
 NOTE: Extensions can also be integrated through the SPI interface implementation.
 This method does not require any configuration in the [.path]_pom.xml_, see link:https://docs.asciidoctor.org/asciidoctorj/latest/extensions/register-extensions-automatically/[Automatically loading extensions] for details.
 
+[#configuration-enableVerbose]
 enableVerbose:: enables Asciidoctor verbose messages, defaults to `false`.
 Enable it, for example, if you want to validate https://asciidoctor.org/docs/user-manual/#validating-internal-cross-references[internal cross references] and capture the messages with the logHandler option.
 
-[#logHandler-configuration]
+[#configuration-logHandler]
 logHandler:: enables processing options for Asciidoctor messages (e.g. errors on missing included files), to either hide messages or setup build fail conditions based on them.
 Options are:
 

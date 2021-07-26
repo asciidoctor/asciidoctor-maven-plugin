@@ -1,5 +1,7 @@
+[#configuration-port]
 port:: server port.
 Defaults to `2000`.
 
+[#configuration-home]
 home:: default resource to open when no url is indicated, that is when browsing to http://localhost:2000.
 Defaults to `index`.
