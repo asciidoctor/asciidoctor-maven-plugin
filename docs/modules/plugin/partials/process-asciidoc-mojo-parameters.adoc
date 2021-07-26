@@ -135,10 +135,10 @@ These include those defined in the `<properties>` section of the project, parent
 [source,xml]
 ----
 <properties>
-  <my-site.version>2.3.0</my-site.version> <.>
+  <my-site.version>2.3.0</my-site.version> <!--1-->
 </properties>
 ----
-<.> Will be passed as `my-site-version` to the converter.
+<1> Will be passed as `my-site-version` to the converter.
 +
 Note that when defining a build with multiple executions, shared attributes can be set in the global `<configuration>` section of the plugin.
 +
