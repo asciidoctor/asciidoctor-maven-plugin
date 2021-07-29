@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+Documentation::
+
+  * Add ID's for all parameters of process-asciidoc, auto-refresh and http mojo, to be able to generate direct urls (https://github.com/uniqueck[@uniqueck]) (#533)
+
 == v2.2.1 (2021-07-24)
 
 Bug Fixes::
