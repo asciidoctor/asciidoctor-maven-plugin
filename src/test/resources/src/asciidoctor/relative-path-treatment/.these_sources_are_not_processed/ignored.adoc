@@ -1,0 +1,8 @@
+:toc: left
+:icons:
+
+== Summary
+This document won't get converted by default because it is inside a hidden folder. +
+Hidden folders begin with underscore `.`.
+
+TIP: How cool is this?

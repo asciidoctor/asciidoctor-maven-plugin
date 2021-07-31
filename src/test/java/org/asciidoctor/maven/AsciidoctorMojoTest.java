@@ -667,9 +667,11 @@ public class AsciidoctorMojoTest {
      */
     private void assertEqualsStructure(File[] expected, File[] actual) {
 
-
         List<File> sanitizedExpected = Arrays.stream(expected)
-                .filter(file -> !file.getName().startsWith("_"))
+                .filter(file -> {
+                    char firstChar = file.getName().charAt(0);
+                    return firstChar != '_' && firstChar != '.';
+                })
                 .collect(Collectors.toList());
 
         List<String> expectedNames = sanitizedExpected.stream().map(File::getName).collect(Collectors.toList());
@@ -691,7 +693,7 @@ public class AsciidoctorMojoTest {
             if (htmls.length > 0) {
                 File[] asciidocs = expectedFile.listFiles(f -> {
                     String asciidocFilePattern = ".*\\." + AsciidoctorFileScanner.ASCIIDOC_FILE_EXTENSIONS_REG_EXP + "$";
-                    return f.getName().matches(asciidocFilePattern) && !f.getName().startsWith("_");
+                    return f.getName().matches(asciidocFilePattern) && !f.getName().startsWith("_") && !f.getName().startsWith(".");
                 });
                 Assertions.assertThat(htmls).hasSize(asciidocs.length);
             }

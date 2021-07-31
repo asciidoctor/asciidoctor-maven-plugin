@@ -21,7 +21,8 @@ Documentation::
 
 Bug Fixes::
 
-  * Fix excluding sources when enclosing parent path starts with _ (#544)
+  * Fix excluding sources when enclosing parent path starts with _ (#546)
+  * Treat dot files and folders same as internal #5505)
 
 == v2.2.0 (2021-07-18)
 

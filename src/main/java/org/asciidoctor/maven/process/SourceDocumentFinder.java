@@ -59,7 +59,8 @@ public class SourceDocumentFinder {
                     .filter(path -> sourceDocumentPattern.matcher(path.getFileName().toString()).matches())
                     .filter(path -> {
                         for (Path part : sourceDirectory.relativize(path)) {
-                            if (part.toString().startsWith("_")) {
+                            char firstCharacter = part.toString().charAt(0);
+                            if (firstCharacter == '_' || firstCharacter == '.') {
                                 return false;
                             }
                         }
