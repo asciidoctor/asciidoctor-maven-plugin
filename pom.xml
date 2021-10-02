@@ -68,7 +68,7 @@
         <asciidoctorj.version>2.5.2</asciidoctorj.version>
         <jruby.version>9.2.17.0</jruby.version>
         <maven.coveralls.plugin.version>4.3.0</maven.coveralls.plugin.version>
-        <maven.jacoco.plugin.version>0.8.6</maven.jacoco.plugin.version>
+        <maven.jacoco.plugin.version>0.8.7</maven.jacoco.plugin.version>
         <maven.plugin.plugin.version>3.5</maven.plugin.plugin.version>
         <maven.project.version>3.0.5</maven.project.version>
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
@@ -167,7 +167,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.18</version>
+            <version>1.18.20</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
