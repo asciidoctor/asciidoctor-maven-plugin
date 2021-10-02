@@ -17,6 +17,10 @@ Documentation::
 
   * Add ID's for all parameters of process-asciidoc, auto-refresh and http mojo, to be able to generate direct urls (https://github.com/uniqueck[@uniqueck]) (#533)
 
+Bug Fixes::
+
+  * Exclude dot files and folders from conversion (#555)
+
 == v2.2.1 (2021-07-24)
 
 Bug Fixes::
