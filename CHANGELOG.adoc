@@ -21,6 +21,10 @@ Bug Fixes::
 
   * Exclude dot files and folders from conversion (#555)
 
+Build / Infrastructure::
+
+  * Upgrade Asciidoctorj to v2.5.2 (#555)
+
 == v2.2.1 (2021-07-24)
 
 Bug Fixes::
@@ -43,7 +47,7 @@ Documentation::
   * Remove local antora site generator stuff (https://github.com/uniqueck[@uniqueck]) (#529)
 
 Build / Infrastructure::
-  * Upgrade tests to JUni5 (#521)
+  * Upgrade tests to JUnit5 (#521)
   * Rename main branch (#524)
   * Set maven wrapper to use maven v3.8.1 (#525)
   * Upgrade Asciidoctorj to v2.4.3 and jRuby to v9.2.14.0 (#526)
