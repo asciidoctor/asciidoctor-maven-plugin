@@ -27,29 +27,35 @@ Here is a simple example of an HTML conversion.
 
 [source,xml,subs="attributes+"]
 ----
-<plugin>
-    <groupId>org.asciidoctor</groupId>
-    <artifactId>asciidoctor-maven-plugin</artifactId>
-    <version>{release-version}</version>
-    <executions>
-        <execution>
-            <id>convert-to-html</id>
-            <phase>generate-resources</phase> <!--.-->
-            <goals>
-                <goal>process-asciidoc</goal>
-            </goals>
-            <configuration>
-                <outputDirectory>${project.build.directory}/html</outputDirectory> <!--.-->
-                <attributes> <!--.-->
-                    <source-highlighter>coderay</source-highlighter>
-                    <imagesdir>./images</imagesdir>
-                    <toc>left</toc>
-                    <icons>font</icons>
-                </attributes>
-            </configuration>
-        </execution>
-    </executions>
-</plugin>
+<project>
+    ...
+    <build>
+        ...
+        <plugin>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctor-maven-plugin</artifactId>
+            <version>{release-version}</version>
+            <executions>
+                <execution>
+                    <id>convert-to-html</id>
+                    <phase>generate-resources</phase> <!--.-->
+                    <goals>
+                        <goal>process-asciidoc</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${project.build.directory}/html</outputDirectory> <!--.-->
+                        <attributes> <!--.-->
+                            <source-highlighter>coderay</source-highlighter>
+                            <imagesdir>./images</imagesdir>
+                            <toc>left</toc>
+                            <icons>font</icons>
+                        </attributes>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+  ...
+</project>
 ----
 <.> Asciidoctor maven plugin's phase and goal must be set explicitly in an execution block.
 <.> Asciidoctor options can be set in the `<configuration>` section.
