@@ -25,6 +25,7 @@ Build / Infrastructure::
 
   * Upgrade Asciidoctorj to v2.5.2 (#555)
   * Support Java 17 (#557)
+  * Bump netty-codec-http to v4.1.71.Final (#561)
 
 == v2.2.1 (2021-07-24)
 
