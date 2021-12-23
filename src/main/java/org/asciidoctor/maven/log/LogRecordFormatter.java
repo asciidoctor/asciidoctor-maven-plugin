@@ -4,15 +4,11 @@ import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.log.LogRecord;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Utility class to manage AsciidoctorJ LogRecords.
- */
-public class LogRecordHelper {
+public class LogRecordFormatter {
 
     private static final String MESSAGE_HEADER = "asciidoctor";
 
@@ -26,14 +22,17 @@ public class LogRecordHelper {
      */
     public static String format(LogRecord logRecord, File sourceDirectory) {
         final Cursor cursor = logRecord.getCursor();
-        final String relativePath = calculateFileRelativePath(cursor, sourceDirectory);
+
+        String sourcePath = calculateFileRelativePath(cursor, sourceDirectory);
+        if (sourcePath == null && cursor != null)
+            sourcePath = cursor.getFile();
 
         final List<String> messageParts = new ArrayList<>();
         messageParts.add(MESSAGE_HEADER);
         messageParts.add(logRecord.getSeverity().toString());
 
-        if (relativePath != null)
-            messageParts.add(relativePath);
+        if (sourcePath != null)
+            messageParts.add(sourcePath);
 
         if (cursor != null && cursor.getLineNumber() > 0)
             messageParts.add("line " + cursor.getLineNumber());
@@ -43,18 +42,32 @@ public class LogRecordHelper {
         return messageParts.stream().collect(Collectors.joining(": "));
     }
 
+    /**
+     * Attempts to obtain the source path in relative format for ease and security.
+     *
+     * @return relative path or null if it was not possible
+     */
     private static String calculateFileRelativePath(Cursor cursor, File sourceDirectory) {
         try {
-            if (cursor != null && cursor.getFile() != null) {
-                return new File(cursor.getFile())
-                        .getCanonicalPath()
-                        .substring(sourceDirectory.getCanonicalPath().length() + 1);
+            if (isValidFile(cursor)) {
+                final String sourceFile = new File(cursor.getFile()).getCanonicalPath();
+                final String sourceDir = sourceDirectory.getCanonicalPath();
+
+                if (sourceFile.startsWith(sourceDir)) {
+                    return sourceFile.substring(sourceDirectory.getCanonicalPath().length() + 1);
+                }
             }
-        } catch (IOException e) {
-            // use the absolute path as fail-safe
-            return cursor.getFile();
+        } catch (Exception e) {
+            return null;
         }
         return null;
     }
 
+    private static boolean isValidFile(Cursor cursor) {
+        return cursor != null && cursor.getFile() != null && !isHttpSource(cursor.getFile());
+    }
+
+    private static boolean isHttpSource(String filePath) {
+        return filePath.startsWith("http://") || filePath.startsWith("https://");
+    }
 }

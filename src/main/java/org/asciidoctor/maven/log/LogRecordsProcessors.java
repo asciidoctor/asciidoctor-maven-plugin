@@ -30,7 +30,7 @@ public class LogRecordsProcessors {
             final List<LogRecord> records = memoryLogHandler.filter(severity, textToSearch);
             if (records.size() > 0) {
                 for (LogRecord record : records) {
-                    errorMessageConsumer.accept(LogRecordHelper.format(record, sourceDirectory));
+                    errorMessageConsumer.accept(LogRecordFormatter.format(record, sourceDirectory));
                 }
                 throw new Exception(String.format("Found %s issue(s) matching severity %s or higher and text '%s'", records.size(), severity, textToSearch));
             }
@@ -39,7 +39,7 @@ public class LogRecordsProcessors {
             final List<LogRecord> records = memoryLogHandler.filter(severity);
             if (records.size() > 0) {
                 for (LogRecord record : records) {
-                    errorMessageConsumer.accept(LogRecordHelper.format(record, sourceDirectory));
+                    errorMessageConsumer.accept(LogRecordFormatter.format(record, sourceDirectory));
                 }
                 throw new Exception(String.format("Found %s issue(s) of severity %s or higher during conversion", records.size(), severity));
             }
@@ -48,7 +48,7 @@ public class LogRecordsProcessors {
             final List<LogRecord> records = memoryLogHandler.filter(textToSearch);
             if (records.size() > 0) {
                 for (LogRecord record : records) {
-                    errorMessageConsumer.accept(LogRecordHelper.format(record, sourceDirectory));
+                    errorMessageConsumer.accept(LogRecordFormatter.format(record, sourceDirectory));
                 }
                 throw new Exception(String.format("Found %s issue(s) containing '%s'", records.size(), textToSearch));
             }

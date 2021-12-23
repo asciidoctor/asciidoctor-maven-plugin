@@ -7,7 +7,7 @@ import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.*;
 import org.asciidoctor.maven.log.LogHandler;
-import org.asciidoctor.maven.log.LogRecordHelper;
+import org.asciidoctor.maven.log.LogRecordFormatter;
 import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
 import org.codehaus.plexus.component.annotations.Component;
@@ -91,7 +91,7 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
     private MemoryLogHandler asciidoctorLoggingSetup(Asciidoctor asciidoctor, LogHandler logHandler, File siteDirectory) {
 
         final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(logHandler.getOutputToConsole(), siteDirectory,
-                logRecord -> getLog().info(LogRecordHelper.format(logRecord, siteDirectory)));
+                logRecord -> getLog().info(LogRecordFormatter.format(logRecord, siteDirectory)));
         asciidoctor.registerLogHandler(memoryLogHandler);
         // disable default console output of AsciidoctorJ
         Logger.getLogger("asciidoctor").setUseParentHandlers(false);

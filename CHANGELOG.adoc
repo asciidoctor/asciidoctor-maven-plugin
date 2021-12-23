@@ -20,6 +20,7 @@ Documentation::
 Bug Fixes::
 
   * Exclude dot files and folders from conversion (#555)
+  * Fix `StringIndexOutOfBoundsException` parsing log records when cursor file is above source directory (#563)
 
 Build / Infrastructure::
 
