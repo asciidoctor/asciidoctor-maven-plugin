@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LogRecordHelperTest {
+public class LogRecordFormatterTest {
 
     @Test
     public void should_apply_full_format_logRecord_with_all_data() {
@@ -20,7 +20,7 @@ public class LogRecordHelperTest {
         final LogRecord logRecord = new LogRecord(Severity.INFO, cursor, "a message");
         final File sourceDir = getParentFile();
         // when
-        String formattedLogRecord = LogRecordHelper.format(logRecord, sourceDir);
+        String formattedLogRecord = LogRecordFormatter.format(logRecord, sourceDir);
         // then
         assertThat(normalizePath(formattedLogRecord)).isEqualTo("asciidoctor: INFO: asciidoctor-maven-plugin/file.adoc: line 3: a message");
     }
@@ -30,7 +30,7 @@ public class LogRecordHelperTest {
         // given
         final LogRecord logRecord = new LogRecord(Severity.INFO, null, "a message");
         // when
-        String formattedLogRecord = LogRecordHelper.format(logRecord, null);
+        String formattedLogRecord = LogRecordFormatter.format(logRecord, null);
         // then
         assertThat(normalizePath(formattedLogRecord)).isEqualTo("asciidoctor: INFO: a message");
     }
@@ -41,7 +41,7 @@ public class LogRecordHelperTest {
         final Cursor cursor = new TestCursor(null, 0, null, null);
         final LogRecord logRecord = new LogRecord(Severity.INFO, cursor, "a message");
         // when
-        String formattedLogRecord = LogRecordHelper.format(logRecord, null);
+        String formattedLogRecord = LogRecordFormatter.format(logRecord, null);
         // then
         assertThat(normalizePath(formattedLogRecord)).isEqualTo("asciidoctor: INFO: a message");
     }
@@ -53,25 +53,57 @@ public class LogRecordHelperTest {
         final LogRecord logRecord = new LogRecord(Severity.INFO, cursor, "a message");
         final File sourceDir = Mockito.mock(File.class);
         Mockito.when(sourceDir.getCanonicalPath()).thenThrow(new IOException());
-
         // when
-        String formattedLogRecord = LogRecordHelper.format(logRecord, sourceDir);
+        String formattedLogRecord = LogRecordFormatter.format(logRecord, sourceDir);
         // then
         assertThat(normalizePath(formattedLogRecord)).matches("asciidoctor: INFO: .*/asciidoctor-maven-plugin/file.adoc: line 3: a message");
     }
 
     @Test
-    public void should_format_logRecords_with_empty_lineNumber_absolute_path_when_sourceDir_is_not_valid2() throws IOException {
+    public void should_format_logRecords_with_empty_lineNumber_absolute_path_when_sourceDir_is_not_valid() throws IOException {
         // given
         final Cursor cursor = new TestCursor(new File("file.adoc").getAbsolutePath(), 0, "path", "dir");
         final LogRecord logRecord = new LogRecord(Severity.INFO, cursor, "a message");
         final File sourceDir = Mockito.mock(File.class);
         Mockito.when(sourceDir.getCanonicalPath()).thenThrow(new IOException());
-
         // when
-        String formattedLogRecord = LogRecordHelper.format(logRecord, sourceDir);
+        String formattedLogRecord = LogRecordFormatter.format(logRecord, sourceDir);
         // then
         assertThat(normalizePath(formattedLogRecord)).matches("asciidoctor: INFO: .*/asciidoctor-maven-plugin/file.adoc: a message");
+    }
+
+    @Test
+    public void should_format_logRecords_when_source_is_not_under_sourceDir() {
+        // given
+        final Cursor cursor = new TestCursor(new File("..", "../file.adoc").toString(), 2, "path", "dir");
+        final LogRecord logRecord = new LogRecord(Severity.INFO, cursor, "a message");
+        final File sourceDir = getParentFile();
+        // when
+        String formattedLogRecord = LogRecordFormatter.format(logRecord, sourceDir);
+        // then
+        assertThat(normalizePath(formattedLogRecord)).matches("asciidoctor: INFO: ../../file.adoc: line 2: a message");
+    }
+
+    @Test
+    public void should_format_full_logRecord_when_cursor_is_http_source() {
+        // given
+        final TestCursor cursor = new TestCursor("http://something/source.adoc", 3, "path", "dir");
+        final LogRecord logRecord = new LogRecord(Severity.INFO, cursor, "a message");
+        // when
+        String formattedLogRecord = LogRecordFormatter.format(logRecord, null);
+        // then
+        assertThat(normalizePath(formattedLogRecord)).isEqualTo("asciidoctor: INFO: http://something/source.adoc: line 3: a message");
+    }
+
+    @Test
+    public void should_format_full_logRecord_when_cursor_is_https_source() {
+        // given
+        final TestCursor cursor = new TestCursor("https://something/source.adoc", 3, "path", "dir");
+        final LogRecord logRecord = new LogRecord(Severity.INFO, cursor, "a message");
+        // when
+        String formattedLogRecord = LogRecordFormatter.format(logRecord, null);
+        // then
+        assertThat(normalizePath(formattedLogRecord)).isEqualTo("asciidoctor: INFO: https://something/source.adoc: line 3: a message");
     }
 
     private File getParentFile() {
@@ -116,5 +148,4 @@ public class LogRecordHelperTest {
             return file;
         }
     }
-
 }

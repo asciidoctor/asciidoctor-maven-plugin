@@ -19,7 +19,7 @@ import org.asciidoctor.maven.extensions.ExtensionConfiguration;
 import org.asciidoctor.maven.extensions.ExtensionRegistry;
 import org.asciidoctor.maven.io.AsciidoctorFileScanner;
 import org.asciidoctor.maven.log.LogHandler;
-import org.asciidoctor.maven.log.LogRecordHelper;
+import org.asciidoctor.maven.log.LogRecordFormatter;
 import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
 import org.asciidoctor.maven.process.AsciidoctorHelper;
@@ -236,7 +236,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         // register LogHandler to capture asciidoctor messages
         final Boolean outputToConsole = logHandler.getOutputToConsole() == null ? Boolean.TRUE : logHandler.getOutputToConsole();
         final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(outputToConsole, sourceDir,
-                logRecord -> getLog().info(LogRecordHelper.format(logRecord, sourceDir)));
+                logRecord -> getLog().info(LogRecordFormatter.format(logRecord, sourceDir)));
         asciidoctor.registerLogHandler(memoryLogHandler);
         // disable default console output of AsciidoctorJ
         Logger.getLogger("asciidoctor").setUseParentHandlers(false);
