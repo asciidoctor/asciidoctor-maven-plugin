@@ -1,6 +1,6 @@
 package org.asciidoctor.maven.site;
 
-import org.apache.maven.doxia.module.xhtml.XhtmlParser;
+import org.apache.maven.doxia.parser.AbstractTextParser;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
@@ -31,7 +31,7 @@ import java.util.logging.Logger;
  * @author mojavelinux
  */
 @Component(role = Parser.class, hint = AsciidoctorDoxiaParser.ROLE_HINT)
-public class AsciidoctorDoxiaParser extends XhtmlParser {
+public class AsciidoctorDoxiaParser extends AbstractTextParser {
 
     @Inject
     protected Provider<MavenProject> mavenProjectProvider;
@@ -45,7 +45,7 @@ public class AsciidoctorDoxiaParser extends XhtmlParser {
      * {@inheritDoc}
      */
     @Override
-    public void parse(Reader reader, Sink sink) throws ParseException {
+    public void parse(Reader reader, Sink sink, String reference) throws ParseException {
         String source;
         try {
             if ((source = IOUtil.toString(reader)) == null) {
