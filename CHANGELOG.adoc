@@ -22,6 +22,7 @@ Bug Fixes::
 
   * Exclude dot files and folders from conversion (#555)
   * Fix `StringIndexOutOfBoundsException` parsing log records when cursor file is above source directory (#563)
+  * Fix compatibility with maven-site-plugin v3.10.0 (previous versions no longer supported) (https://github.com/michael-o[@michael-o]) (#566)
 
 Build / Infrastructure::
 
