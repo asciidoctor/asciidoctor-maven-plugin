@@ -1,0 +1,19 @@
+= Compatibility Matrix
+
+Here is the list of supported versions alongside the required {uri-maven-site-plugin}[Maven Site Plugin] version.
+Release candidate releases are not accounted.
+
+== Versions
+
+|===
+|Asciidoctor Maven Plugin | Maven Site Plugin | Supported
+
+|v2.1.x ~ v2.2.1
+|v3.4 ~ v3.9.1
+|Yes
+
+|v1.5.6 ~ v1.6.0
+|v3.4 ~ v3.9.1
+|No
+
+|===

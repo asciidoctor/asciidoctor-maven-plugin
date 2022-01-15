@@ -1,11 +1,8 @@
-= Maven Site Integration
-:navtitle: Setup & Configuration
+= Setup & Configuration
 
 == Setup
 
 To author your Maven-generated site in AsciiDoc, you must first add a dependency on the Asciidoctor plugin to your maven-site-plugin declaration (which more precisely adds a Doxia Parser Module).
-
-IMPORTANT: Maven v3.2.1 or above required, and since asciidoctor-maven-plugin v1.5.6 only maven-site-plugin v3.4 or above is supported.
 
 [source,xml,subs=attributes+]
 .Maven site integration
@@ -15,7 +12,7 @@ IMPORTANT: Maven v3.2.1 or above required, and since asciidoctor-maven-plugin v1
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-site-plugin</artifactId>
-            <version>3.9.1</version>
+            <version>{maven-site-plugin-version}</version>
             <dependencies>
                 <dependency> <!-- Add Asciidoctor Doxia Parser Module -->
                     <groupId>org.asciidoctor</groupId>

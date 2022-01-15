@@ -3,9 +3,15 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - README.adoc
+      - docs/**
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - README.adoc
+      - docs/**
 
 jobs:
   build:

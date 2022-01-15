@@ -1,2 +1,4 @@
 * Maven Site Integration
-** xref:index.adoc[]
+** xref:introduction.adoc[]
+** xref:setup-and-configuration.adoc[]
+** xref:compatibility-matrix.adoc[]

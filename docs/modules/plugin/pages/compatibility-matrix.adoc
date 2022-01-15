@@ -1,0 +1,23 @@
+= Compatibility Matrix
+
+Here is the list of supported versions alongside the required {uri-asciidoctorj}[Asciidoctorj] version.
+Release candidate releases are not accounted. 
+
+== Versions
+
+|===
+|Asciidoctor Maven Plugin | AsciidoctorJ | Supported
+
+|v2.x.x
+|v2.x.x
+|Yes
+
+|v1.6.0
+|v1.5.x, v1.6.x
+|No
+
+|v1.5.x
+|v1.5.x
+|No
+
+|===
