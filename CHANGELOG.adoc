@@ -17,6 +17,7 @@ Documentation::
 
   * Add ID's for all parameters of process-asciidoc, auto-refresh and http mojo, to be able to generate direct urls (https://github.com/uniqueck[@uniqueck]) (#533)
   * Clarify where to put the plugin section in `pom.xml` (#558)
+  * Add compatibility matrix (#569)
 
 Bug Fixes::
 
