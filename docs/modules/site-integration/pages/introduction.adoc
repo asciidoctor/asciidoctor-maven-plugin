@@ -3,4 +3,4 @@
 
 The Asciidoctor Maven Site integration provides a {maven-doxia-url}[Maven Doxia] module to author your content with the {Maven Site Plugin}[maven-site-plugin].
 
-Read the xref:setup-and-configuration.adoc#_setup[setup] section to know about how start using it.
+Read the xref:setup-and-configuration.adoc#setup[setup] section to know about how start using it.
