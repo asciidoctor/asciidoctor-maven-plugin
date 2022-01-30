@@ -27,6 +27,7 @@ Bug Fixes::
 
 Build / Infrastructure::
 
+  * Migrate Maven Wrapper to Apache's offical one (#573)
   * Upgrade Asciidoctorj to v2.5.3 and jRuby to v9.2.20.1 (#572)
   * Upgrade Asciidoctorj to v2.5.2 (#555)
   * Support Java 17 (#557)
