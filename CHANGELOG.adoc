@@ -11,19 +11,19 @@ endif::[]
 This document provides a high-level view of the changes introduced on Asciidoctor Maven Plugin by release.
 For a detailed view of what has changed, refer to the {uri-repo}/commits/main[commit history] on GitHub.
 
-== Unreleased
-
-Documentation::
-
-  * Add ID's for all parameters of process-asciidoc, auto-refresh and http mojo, to be able to generate direct urls (https://github.com/uniqueck[@uniqueck]) (#533)
-  * Clarify where to put the plugin section in `pom.xml` (#558)
-  * Add compatibility matrix (#569)
+== v2.2.2 (2022-01-30)
 
 Bug Fixes::
 
   * Exclude dot files and folders from conversion (#550)
   * Fix `StringIndexOutOfBoundsException` parsing log records when cursor file is above source directory (#563)
   * Fix compatibility with maven-site-plugin v3.10.0 (previous versions no longer supported) (https://github.com/michael-o[@michael-o]) (#566)
+
+Documentation::
+
+* Add ID's for all parameters of process-asciidoc, auto-refresh and http mojo, to be able to generate direct urls (https://github.com/uniqueck[@uniqueck]) (#533)
+* Clarify where to put the plugin section in `pom.xml` (#558)
+* Add compatibility matrix (#569)
 
 Build / Infrastructure::
 
