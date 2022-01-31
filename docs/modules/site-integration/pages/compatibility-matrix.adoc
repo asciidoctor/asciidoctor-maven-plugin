@@ -8,7 +8,11 @@ Release candidate releases are not accounted.
 |===
 |Asciidoctor Maven Plugin | Maven Site Plugin | Supported
 
-|v2.1.x ~ v2.2.1
+|v2.2.2
+|v3.10.x
+|Yes
+
+|v2.0.x ~ v2.2.1
 |v3.4 ~ v3.9.1
 |Yes
 
