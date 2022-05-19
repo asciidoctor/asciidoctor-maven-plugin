@@ -11,6 +11,12 @@ endif::[]
 This document provides a high-level view of the changes introduced on Asciidoctor Maven Plugin by release.
 For a detailed view of what has changed, refer to the {uri-repo}/commits/main[commit history] on GitHub.
 
+== Unreleased
+
+Build / Infrastructure::
+  
+  * Bump Doxia to v1.11.1 and maven-site-plugin in IT to 3.12.0 (#579)
+
 == v2.2.2 (2022-01-30)
 
 Bug Fixes::
@@ -21,9 +27,9 @@ Bug Fixes::
 
 Documentation::
 
-* Add ID's for all parameters of process-asciidoc, auto-refresh and http mojo, to be able to generate direct urls (https://github.com/uniqueck[@uniqueck]) (#533)
-* Clarify where to put the plugin section in `pom.xml` (#558)
-* Add compatibility matrix (#569)
+  * Add ID's for all parameters of process-asciidoc, auto-refresh and http mojo, to be able to generate direct urls (https://github.com/uniqueck[@uniqueck]) (#533)
+  * Clarify where to put the plugin section in `pom.xml` (#558)
+  * Add compatibility matrix (#569)
 
 Build / Infrastructure::
 
