@@ -1,8 +1,8 @@
 <project name="Maven Site Plugin IT">
     <body>
+        <menu ref="reports"/>
         <menu name="AsciiDoc Pages">
             <item name="File with TOC" href="/file-with-toc.html"/>
         </menu>
-      ${reports}
     </body>
 </project>

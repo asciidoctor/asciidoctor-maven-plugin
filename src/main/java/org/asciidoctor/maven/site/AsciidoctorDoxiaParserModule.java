@@ -30,6 +30,6 @@ public class AsciidoctorDoxiaParserModule extends AbstractParserModule {
      * Build a new instance of {@link AsciidoctorDoxiaParserModule}.
      */
     public AsciidoctorDoxiaParserModule() {
-        super(SOURCE_DIRECTORY, FILE_EXTENSION, AsciidoctorDoxiaParser.ROLE_HINT);
+        super(SOURCE_DIRECTORY, AsciidoctorDoxiaParser.ROLE_HINT, FILE_EXTENSION);
     }
 }
