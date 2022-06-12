@@ -22,14 +22,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.3.0</version>
             </plugin>
             <!-- tag::plugin-decl[] -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <!-- v2.2.2 of the plugin require Maven Site Plugin 3.1x.0 alongside Doxia 1.11.1 -->
-                <version>3.12.0</version>
+                <version>4.0.0-M1</version>
                 <configuration>
                     <asciidoc>
                         <baseDir>${project.basedir}/src/site/asciidoc</baseDir>
