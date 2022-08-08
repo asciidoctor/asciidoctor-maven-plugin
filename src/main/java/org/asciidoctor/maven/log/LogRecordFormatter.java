@@ -53,7 +53,7 @@ public class LogRecordFormatter {
                 final String sourceFile = new File(cursor.getFile()).getCanonicalPath();
                 final String sourceDir = sourceDirectory.getCanonicalPath();
 
-                if (sourceFile.startsWith(sourceDir)) {
+                if (new File(cursor.getFile()).getCanonicalFile().toPath().startsWith(sourceDir)) {
                     return sourceFile.substring(sourceDirectory.getCanonicalPath().length() + 1);
                 }
             }

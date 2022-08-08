@@ -120,8 +120,7 @@ public class ResourceCopyFileAlterationListenerAdaptor extends AbstractFileAlter
 
     private boolean isSubDirectory(File parent, File file) {
         try {
-            return file.getParentFile().getCanonicalPath()
-                    .startsWith(parent.getCanonicalPath());
+            return file.getParentFile().getCanonicalFile().toPath().startsWith(parent.getCanonicalFile().toPath());
         } catch (IOException e) {
             return false;
         }
