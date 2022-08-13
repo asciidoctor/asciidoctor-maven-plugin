@@ -76,7 +76,7 @@
         <plexus.utils.version>3.0.23</plexus.utils.version>
         <plexus.component.metadata.version>1.7</plexus.component.metadata.version>
         <netty.version>4.1.77.Final</netty.version>
-        <doxia.version>2.0.0-M2</doxia.version>
+        <doxia.version>2.0.0-M3</doxia.version>
     </properties>
 
     <dependencyManagement>
