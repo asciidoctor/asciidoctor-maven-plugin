@@ -65,7 +65,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.java.version>1.8</project.java.version>
         <project.execution.environment>JavaSE-1.8</project.execution.environment>
-        <asciidoctorj.version>2.5.4</asciidoctorj.version>
+        <asciidoctorj.version>2.5.5</asciidoctorj.version>
         <jruby.version>9.3.4.0</jruby.version>
         <maven.coveralls.plugin.version>4.3.0</maven.coveralls.plugin.version>
         <maven.jacoco.plugin.version>0.8.7</maven.jacoco.plugin.version>
