@@ -5,4 +5,10 @@
             <item name="File with TOC" href="/file-with-toc.html"/>
         </menu>
     </body>
+    <!-- Skins are mandatory since maven-site-plugin v4.0.0-M2 -->
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.11.1</version>
+    </skin>
 </project>
