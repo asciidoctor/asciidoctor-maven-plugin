@@ -4,7 +4,7 @@
 
 These are the minimal steps to convert your AsciiDoc documents to HTML with the asciidoctor-maven-plugin.
 
-. Place your Asciidoc sources in [.path]_src/docs/asciidoc_.
+. Place your AsciiDoc sources in [.path]_src/docs/asciidoc_.
 
 . Add the minimal configuration to your [.path]_pom.xml_.
 +
