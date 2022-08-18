@@ -2,7 +2,7 @@
 = http: HTML live preview
 :navtitle: http
 
-Converts Asciidoc documents and starts an embedded http server to access content from the generated output directory.
+Converts AsciiDoc documents and starts an embedded http server to access content from the generated output directory.
 
 Modified sources will be updated on change similarly to how the xref:goals/auto-refresh.adoc[auto-refresh goal] works.
 While at the same time, HTML contents will be automatically refreshed on the web browser without need for manual steps.

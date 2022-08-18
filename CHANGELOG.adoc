@@ -20,6 +20,10 @@ Build / Infrastructure::
   * Upgrade Asciidoctorj to v2.5.4 and jRuby to v9.3.4.0 (#584)
   * Upgrade Asciidoctorj to v2.5.5 (#591)
 
+Documentation::
+
+  * Fix absolute path in usage example and AsciiDoc references in docs (https://github.com/MarkusTiede[@MarkusTiede])(#592)
+
 == v2.2.2 (2022-01-30)
 
 Bug Fixes::
