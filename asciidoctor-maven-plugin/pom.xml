@@ -1,65 +1,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-tools</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
     <groupId>org.asciidoctor</groupId>
     <artifactId>asciidoctor-maven-plugin</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>Asciidoctor Maven Plugin and Doxia Parser</name>
     <description>Asciidoctor Maven Plugin and Doxia Parser (for Maven Site integration)</description>
     <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
 
-    <organization>
-        <name>Asciidoctor</name>
-        <url>https://asciidoctor.org/</url>
-    </organization>
-    
-    <developers>
-        <developer>
-            <id>lightguard</id>
-            <name>Jason Porter</name>
-            <email>lightguard.jp@gmail.com</email>
-            <url>https://www.lightguard-jp.info</url>
-            <roles>
-                <role>Project Lead</role>
-            </roles>
-            <timezone>UTC-7</timezone>
-        </developer>
-        <developer>
-            <id>mojavelinux</id>
-            <name>Dan Allen</name>
-            <email>dan.j.allen@gmail.com</email>
-            <roles>
-                <role>Contributor</role>
-            </roles>
-            <timezone>-7</timezone>
-        </developer>
-    </developers>
-
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
     <prerequisites>
         <maven>3.0.5</maven>
     </prerequisites>
-
-    <scm>
-        <url>scm:git:git@github.com:asciidoctor/asciidoctor-maven-plugin.git</url>
-        <connection>scm:git:git@github.com:asciidoctor/asciidoctor-maven-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:asciidoctor/asciidoctor-maven-plugin.git</developerConnection>
-        <tag>asciidoctor-maven-plugin-2.2.2</tag>
-    </scm>
-
-    <issueManagement>
-        <url>https://github.com/asciidoctor/asciidoctor-maven-plugin/issues</url>
-        <system>GitHub Issues</system>
-    </issueManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -78,18 +37,6 @@
         <netty.version>4.1.77.Final</netty.version>
         <doxia.version>1.11.1</doxia.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>5.8.2</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <dependency>
