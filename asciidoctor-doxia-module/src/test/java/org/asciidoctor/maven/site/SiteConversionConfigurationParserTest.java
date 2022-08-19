@@ -431,7 +431,6 @@ public class SiteConversionConfigurationParserTest {
         return project;
     }
 
-
     private Map<String, Object> map(Map.Entry<String, Object>... entries) {
         final Map<String, Object> map = new HashMap<>();
         for (Map.Entry<String, Object> entry : entries) {

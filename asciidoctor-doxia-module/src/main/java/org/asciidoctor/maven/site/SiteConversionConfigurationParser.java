@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 
 public class SiteConversionConfigurationParser {
 
@@ -54,15 +55,15 @@ public class SiteConversionConfigurationParser {
                         if (requireNode.getValue().contains(",")) {
                             // <requires>time, base64</requires>
                             Stream.of(requireNode.getValue().split(","))
-                                    .map(String::trim)
                                     .filter(StringUtils::isNotBlank)
+                                    .map(String::trim)
                                     .forEach(value -> gemsToRequire.add(value));
                         } else {
                             // <requires>
                             //     <require>time</require>
                             // </requires>
                             String value = requireNode.getValue();
-                            if (value.trim().length() > 0)
+                            if (!isBlank(value))
                                 gemsToRequire.add(value.trim());
                         }
                     }

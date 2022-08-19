@@ -12,6 +12,8 @@ import java.util.function.Consumer;
 
 /**
  * AsciidoctorJ LogHandler that stores records in memory.
+ *
+ * @author abelsromero
  */
 public class MemoryLogHandler implements LogHandler {
 

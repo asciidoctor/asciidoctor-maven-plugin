@@ -3,6 +3,11 @@ package org.asciidoctor.maven.log;
 
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 
+/**
+ * POJO for Maven XML mapping.
+ *
+ * @author abelsromero
+ */
 public class LogHandler {
 
     private Boolean outputToConsole;

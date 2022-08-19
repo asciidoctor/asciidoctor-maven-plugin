@@ -18,13 +18,11 @@
     <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
 
     <properties>
-        <maven.coveralls.plugin.version>4.3.0</maven.coveralls.plugin.version>
-        <maven.jacoco.plugin.version>0.8.7</maven.jacoco.plugin.version>
         <maven.plugin.plugin.version>3.5</maven.plugin.plugin.version>
         <maven.filtering.version>3.2.0</maven.filtering.version>
         <plexus.utils.version>3.0.23</plexus.utils.version>
-        <plexus.component.metadata.version>1.7</plexus.component.metadata.version>
         <netty.version>4.1.77.Final</netty.version>
+        <maven.coveralls.plugin.version>4.3.0</maven.coveralls.plugin.version>
     </properties>
 
     <dependencies>
@@ -84,18 +82,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.plexus</groupId>
-                <artifactId>plexus-component-metadata</artifactId>
-                <version>${plexus.component.metadata.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate-metadata</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.eluder.coveralls</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>
                 <version>${maven.coveralls.plugin.version}</version>
@@ -133,19 +119,6 @@
                     <configuration>
                         <lifecycleMappingMetadata>
                             <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.codehaus.plexus</groupId>
-                                        <artifactId>plexus-component-metadata</artifactId>
-                                        <versionRange>[${plexus.component.metadata.version},)</versionRange>
-                                        <goals>
-                                            <goal>generate-metadata</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <execute/>
-                                    </action>
-                                </pluginExecution>
                                 <pluginExecution>
                                     <pluginExecutionFilter>
                                         <groupId>org.apache.maven.plugins</groupId>

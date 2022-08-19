@@ -2,6 +2,11 @@ package org.asciidoctor.maven.log;
 
 import org.asciidoctor.log.Severity;
 
+/**
+ * POJO for Maven XML mapping.
+ *
+ * @author abelsromero
+ */
 public class FailIf {
 
     private Severity severity;
