@@ -1,4 +1,4 @@
-package org.asciidoctor.maven.process;
+package org.asciidoctor.maven.convert;
 
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.Attributes;
@@ -42,7 +42,7 @@ public class AsciidoctorHelper {
 
     /**
      * Adds an attribute into a {@link AttributesBuilder} taking care of Maven's XML parsing special cases like
-     * toggles toggles, nulls, etc.
+     * toggles, nulls, etc.
      *
      * @param attribute         Asciidoctor attribute name
      * @param value             Asciidoctor attribute value

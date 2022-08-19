@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 public class AsciidoctorDoxiaParserTest {
 
-    private static final String TEST_DOCS_PATH = "src/test/resources/src/asciidoctor";
+    private static final String TEST_DOCS_PATH = "src/test/resources/";
 
     @Test
     public void should_convert_html_without_any_configuration() throws FileNotFoundException, ParseException {
@@ -213,7 +213,7 @@ public class AsciidoctorDoxiaParserTest {
     }
 
     @Test
-    public void should_fail_when_logHandler_failIf_is_WARNING() throws FileNotFoundException, ParseException {
+    public void should_fail_when_logHandler_failIf_is_WARNING() {
         // given
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "errors/document-with-missing-include.adoc");
         final Sink sink = createSinkMock();
@@ -232,7 +232,6 @@ public class AsciidoctorDoxiaParserTest {
 
         // when
         Throwable throwable = catchThrowable(() -> parser.parse(new FileReader(srcAsciidoc), sink));
-
 
         // then: 'issues with WARN and ERROR are returned'
         assertThat(throwable)

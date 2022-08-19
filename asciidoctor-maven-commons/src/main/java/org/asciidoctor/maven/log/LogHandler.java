@@ -1,6 +1,7 @@
 package org.asciidoctor.maven.log;
 
-import org.apache.commons.lang3.StringUtils;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class LogHandler {
 
@@ -28,7 +29,7 @@ public class LogHandler {
     }
 
     public boolean isContainsTextNotBlank() {
-        return failIf != null && StringUtils.isNotBlank(failIf.getContainsText());
+        return failIf != null && isNotBlank(failIf.getContainsText());
     }
 
 }

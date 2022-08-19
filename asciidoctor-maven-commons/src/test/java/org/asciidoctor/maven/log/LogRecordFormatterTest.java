@@ -9,9 +9,12 @@ import org.mockito.Mockito;
 import java.io.File;
 import java.io.IOException;
 
+import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LogRecordFormatterTest {
+
+    private static final String PROJECT_NAME = "asciidoctor-maven-commons";
 
     @Test
     public void should_apply_full_format_logRecord_with_all_data() {
@@ -22,7 +25,7 @@ public class LogRecordFormatterTest {
         // when
         String formattedLogRecord = LogRecordFormatter.format(logRecord, sourceDir);
         // then
-        assertThat(normalizePath(formattedLogRecord)).isEqualTo("asciidoctor: INFO: asciidoctor-maven-plugin/file.adoc: line 3: a message");
+        assertThat(normalizePath(formattedLogRecord)).isEqualTo(format("asciidoctor: INFO: %s/file.adoc: line 3: a message", PROJECT_NAME));
     }
 
     @Test
@@ -56,7 +59,7 @@ public class LogRecordFormatterTest {
         // when
         String formattedLogRecord = LogRecordFormatter.format(logRecord, sourceDir);
         // then
-        assertThat(normalizePath(formattedLogRecord)).matches("asciidoctor: INFO: .*/asciidoctor-maven-plugin/file.adoc: line 3: a message");
+        assertThat(normalizePath(formattedLogRecord)).matches(format("asciidoctor: INFO: .*/%s/file.adoc: line 3: a message", PROJECT_NAME));
     }
 
     @Test
@@ -69,7 +72,7 @@ public class LogRecordFormatterTest {
         // when
         String formattedLogRecord = LogRecordFormatter.format(logRecord, sourceDir);
         // then
-        assertThat(normalizePath(formattedLogRecord)).matches("asciidoctor: INFO: .*/asciidoctor-maven-plugin/file.adoc: a message");
+        assertThat(normalizePath(formattedLogRecord)).matches(format("asciidoctor: INFO: .*/%s/file.adoc: a message", PROJECT_NAME));
     }
 
     @Test

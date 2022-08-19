@@ -10,21 +10,23 @@
     </parent>
 
     <groupId>org.asciidoctor</groupId>
-    <artifactId>asciidoctor-maven-plugin</artifactId>
+    <artifactId>asciidoctor-doxia-module</artifactId>
     <packaging>maven-plugin</packaging>
 
-    <name>Asciidoctor Maven Plugin</name>
-    <description>Asciidoctor Maven Plugin</description>
+    <name>Asciidoctor Doxia Parser</name>
+    <description>Asciidoctor Doxia Parser (for Maven Site integration)</description>
     <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
 
     <properties>
         <maven.coveralls.plugin.version>4.3.0</maven.coveralls.plugin.version>
         <maven.jacoco.plugin.version>0.8.7</maven.jacoco.plugin.version>
         <maven.plugin.plugin.version>3.5</maven.plugin.plugin.version>
+        <maven.project.version>3.0.5</maven.project.version>
         <maven.filtering.version>3.2.0</maven.filtering.version>
         <plexus.utils.version>3.0.23</plexus.utils.version>
         <plexus.component.metadata.version>1.7</plexus.component.metadata.version>
         <netty.version>4.1.77.Final</netty.version>
+        <doxia.version>1.11.1</doxia.version>
     </properties>
 
     <dependencies>
@@ -78,6 +80,11 @@
             <groupId>io.netty</groupId>
             <artifactId>netty-codec-http</artifactId>
             <version>${netty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.doxia</groupId>
+            <artifactId>doxia-core</artifactId>
+            <version>${doxia.version}</version>
         </dependency>
     </dependencies>
 

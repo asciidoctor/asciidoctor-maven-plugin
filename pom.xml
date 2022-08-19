@@ -68,6 +68,7 @@
         <project.execution.environment>JavaSE-1.8</project.execution.environment>
         <asciidoctorj.version>2.5.5</asciidoctorj.version>
         <jruby.version>9.3.4.0</jruby.version>
+        <maven.project.version>3.0.5</maven.project.version>
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
     </properties>
 
@@ -75,6 +76,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
@@ -93,6 +95,12 @@
             <artifactId>lombok</artifactId>
             <version>1.18.24</version>
             <scope>test</scope>
+        </dependency>
+        <!-- Maven Runtime dependency -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8.1</version>
         </dependency>
     </dependencies>
 
@@ -329,6 +337,8 @@
 
     <modules>
         <module>asciidoctor-maven-plugin</module>
+        <module>asciidoctor-doxia-module</module>
+        <module>asciidoctor-maven-commons</module>
     </modules>
 
 </project>
