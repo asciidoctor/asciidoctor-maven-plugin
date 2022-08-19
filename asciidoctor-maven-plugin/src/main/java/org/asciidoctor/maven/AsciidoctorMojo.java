@@ -14,6 +14,7 @@ import org.apache.maven.shared.filtering.MavenResourcesFiltering;
 import org.asciidoctor.*;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
+import org.asciidoctor.maven.commons.AsciidoctorHelper;
 import org.asciidoctor.maven.extensions.AsciidoctorJExtensionRegistry;
 import org.asciidoctor.maven.extensions.ExtensionConfiguration;
 import org.asciidoctor.maven.extensions.ExtensionRegistry;
@@ -22,7 +23,6 @@ import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordFormatter;
 import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
-import org.asciidoctor.maven.convert.AsciidoctorHelper;
 import org.asciidoctor.maven.process.ResourcesProcessor;
 import org.asciidoctor.maven.process.SourceDirectoryFinder;
 import org.asciidoctor.maven.process.SourceDocumentFinder;
@@ -35,7 +35,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.logging.Logger;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE_DIR;
 
 

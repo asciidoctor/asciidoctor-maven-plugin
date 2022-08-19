@@ -1,10 +1,11 @@
 package org.asciidoctor.maven.site;
 
+import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.maven.convert.AsciidoctorHelper;
+import org.asciidoctor.maven.commons.AsciidoctorHelper;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 import java.io.File;

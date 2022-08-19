@@ -1,7 +1,6 @@
 package org.asciidoctor.maven.refresh;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.logging.Log;
 import org.asciidoctor.maven.AsciidoctorRefreshMojo;
@@ -12,6 +11,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 
 public class ResourceCopyFileAlterationListenerAdaptor extends AbstractFileAlterationListenerAdaptor {
 
@@ -47,7 +48,7 @@ public class ResourceCopyFileAlterationListenerAdaptor extends AbstractFileAlter
                         scanner.setExcludes(matchingResource.getExcludes().toArray(new String[]{}));
                         scanner.scan();
                         if (containsFile(scanner.getIncludedFiles(), basedir, file)) {
-                            final File destDir = StringUtils.isBlank(matchingResource.getTargetPath())
+                            final File destDir = isBlank(matchingResource.getTargetPath())
                                     ? outputDirectory
                                     : new File(outputDirectory, matchingResource.getTargetPath());
                             FileUtils.forceMkdir(destDir);

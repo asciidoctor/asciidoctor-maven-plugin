@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.*;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.asciidoctor.maven.io.AsciidoctorFileScanner.ASCIIDOC_NON_INTERNAL_REG_EXP;
 import static org.asciidoctor.maven.process.SourceDocumentFinder.CUSTOM_FILE_EXTENSIONS_PATTERN_PREFIX;
 import static org.asciidoctor.maven.process.SourceDocumentFinder.CUSTOM_FILE_EXTENSIONS_PATTERN_SUFFIX;

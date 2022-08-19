@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.asciidoctor.maven.io.AsciidoctorFileScanner.ASCIIDOC_FILE_EXTENSIONS_REG_EXP;
 
 /**

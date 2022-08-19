@@ -1,4 +1,4 @@
-package org.asciidoctor.maven.convert;
+package org.asciidoctor.maven.commons;
 
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.Attributes;

@@ -96,12 +96,6 @@
             <version>1.18.24</version>
             <scope>test</scope>
         </dependency>
-        <!-- Maven Runtime dependency -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.8.1</version>
-        </dependency>
     </dependencies>
 
     <dependencyManagement>
