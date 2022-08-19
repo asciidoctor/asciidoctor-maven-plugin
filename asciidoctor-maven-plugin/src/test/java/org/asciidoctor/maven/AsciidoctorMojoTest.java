@@ -710,7 +710,7 @@ public class AsciidoctorMojoTest {
         // when
         AsciidoctorMojo mojo = mockAsciidoctorMojo();
         mojo.backend = "html5";
-        mojo.sourceDirectory = new File(".");
+        mojo.sourceDirectory = new File("..");
         mojo.sourceDocumentName = "README.adoc";
         Resource resource = new ResourceBuilder()
                 .directory(".")
@@ -760,7 +760,7 @@ public class AsciidoctorMojoTest {
         AsciidoctorMojo mojo = mockAsciidoctorMojo();
         mojo.backend = "html5";
         mojo.sourceDocumentName = "README.adoc";
-        mojo.sourceDirectory = new File(".");
+        mojo.sourceDirectory = new File("..");
         mojo.resources = excludeAll();
         mojo.outputDirectory = outputDir;
         mojo.execute();
