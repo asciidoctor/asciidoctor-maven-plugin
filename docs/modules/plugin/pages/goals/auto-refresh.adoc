@@ -5,7 +5,7 @@
 Converts documents on change, that is, when one of them is modified, or a new one is added.
 
 This plugin goal is aimed to help writing by removing the need for full rebuild to validate changes.
-When the output is HTML, you can combine it with a refresh browser extension or use the xref:goals/http.adoc[http goal] to preview document changes while editing.
+When the output is HTML, you can combine it with a refresh browser extension or use the xref:goals/http.adoc[`http` goal] to preview document changes while editing.
 
 == Setup
 
@@ -32,7 +32,7 @@ include::partial$basic-maven-setup.adoc[]
 <3> The Asciidoctor Maven plugin auto-refresh goal.
 
 Once started, this will keep the maven process running until you type the `exit` or `quit` command in the console.
-Or it is manually killed with _ctrl+c_.
+Or it is manually killed with kbd:[Ctrl+C].
 
 // TODO add animated gif showing this
 

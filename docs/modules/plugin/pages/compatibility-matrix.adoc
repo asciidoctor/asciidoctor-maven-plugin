@@ -1,6 +1,6 @@
 = Compatibility Matrix
 
-Here is the list of supported versions alongside the required {uri-asciidoctorj}[Asciidoctorj] version.
+Here is the list of supported versions alongside the required {uri-asciidoctorj}[AsciidoctorJ] version.
 Release candidate releases are not accounted. 
 
 == Versions

@@ -17,5 +17,5 @@ As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` 
     </plugin>
 </plugins>
 ----
-<1> The plugin will use the latest Asciidoctorj version available at release.
+<1> The plugin will use the latest AsciidoctorJ version available at release.
 To change it, set the desired version as a plugin dependency.
