@@ -21,7 +21,7 @@ The requirements are very small:
 
 Everything else will be brought in by Maven.
 This is a typical Maven Java project, nothing special.
-You should be able to use IntelliJ, Eclipse, or Netbeans without any issue for hacking on the project.
+You should be able to use IntelliJ, Eclipse, or NetBeans without any issue for hacking on the project.
 
 == Testing
 

@@ -24,7 +24,7 @@ This simplifies the plugin's code and projects' configuration avoiding ambiguiti
 === Removal of support for Java 7
 
 From v2.x.x Java 8 will be the minimum required version.
-If you are forced to use Java 7, we recommend using the version 1.5.8 with Asciidoctorj 1.6.2 for the most up to date features.
+If you are forced to use Java 7, we recommend using the version 1.5.8 with AsciidoctorJ 1.6.2 for the most up to date features.
 
 === Removal of `imagesDir` configuration and change of its default value
 
@@ -60,7 +60,7 @@ If you are relying on the default value, make sure to add the attribute as in th
 
 To avoid ambiguity between the configuration and attributes section, and make configuration more clear.
 
-*The configuration option `sourceHighlighter` has been removed in favour of setting it as an attribute.*
+*The configuration option `sourceHighlighter` has been removed in favor of setting it as an attribute.*
 If you are using it, you will need to set it as follows:
 
 [source,xml]
@@ -78,7 +78,7 @@ If you are using it, you will need to set it as follows:
 
 Related discussion: https://github.com/asciidoctor/asciidoctor-maven-plugin/issues/417
 
-These options serve to modify behaviours related with attributes.
+These options serve to modify behaviors related with attributes.
 From showing console warning messages, to removing lines of text amongst others.
 
 *If you are currently using these options, you will need to add them to the attributes section.*
@@ -99,7 +99,7 @@ From showing console warning messages, to removing lines of text amongst others.
 
 Related discussion: https://github.com/asciidoctor/asciidoctor-maven-plugin/issues/265
 
-As stated in https://asciidoctor.org/docs/user-manual/#ruby-api-options `template_dir` option is deprecated in favour of `template_dirs`.
+As stated in https://asciidoctor.org/docs/user-manual/#ruby-api-options `template_dir` option is deprecated in favor of `template_dirs`.
 Following this change the plugin configuration `<templateDir>` will be replaced by `templateDirs`.
 This will allow the use of multiple template directories.
 
@@ -131,7 +131,7 @@ Nowadays the main usage is HTML conversion, so it makes sense to set `html5` as 
 This should reduce configuration for most users.
 
 *If you are converting to HTML, you won't need to set the `<backend>` element.
-If you are converting to Docbook, you will need to set it explicitly as follows.*
+If you are converting to DocBook, you will need to set it explicitly as follows.*
 
 [source,xml]
 .backward compatible configuration
@@ -156,7 +156,7 @@ If the path does not exist, `src/asciidoc` and `src/main/asciidoc` are searched 
 
 *This change does not break compatibility* and has the advantage of following the same pattern as the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin], making easier to test both plugins.
 
-== Asciidoctorj changes
+== AsciidoctorJ changes
 
 Not part of the asciidoctor-maven-plugin, but important to consider during upgrade, the https://github.com/asciidoctor/asciidoctorj/tree/v2.0.0-RC.1#extension-api[AsciidocotorJ extension API] has suffered modifications.
 

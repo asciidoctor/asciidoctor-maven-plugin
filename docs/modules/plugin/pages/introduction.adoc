@@ -1,7 +1,7 @@
 = Introduction
 
 The Asciidoctor Maven Plugin is used to convert AsciiDoc documents using https://asciidoctor.org[Asciidoctor].
-The plugin offers a comprehensive way to configure a conversion process using {uri-asciidoctorj}[Asciidoctorj] in a declarative way.
+The plugin offers a comprehensive way to configure a conversion process using {uri-asciidoctorj}[AsciidoctorJ] in a declarative way.
 
 == Goals overview
 

@@ -3,7 +3,7 @@
 
 The Asciidoctor Maven Plugin is the official way to convert your {uri-asciidoc}[AsciiDoc] documentation using {uri-asciidoctor}[Asciidoctor] from an {uri-maven}[Apache Maven] build.
 
-The project main goal is to offer a thin layer on top of https://github.com/asciidoctor/asciidoctorj[Asciidoctorj] following as much as possible to common Maven practices.
+The project main goal is to offer a thin layer on top of https://github.com/asciidoctor/asciidoctorj[AsciidoctorJ] following as much as possible to common Maven practices.
 
 The conversion can happen in 2 flavors:
 
