@@ -1,10 +1,10 @@
 package org.asciidoctor.maven.commons;
 
-import org.apache.maven.project.MavenProject;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.AttributesBuilder;
 
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Utility class for re-usable logic.
@@ -26,15 +26,15 @@ public class AsciidoctorHelper {
     }
 
     /**
-     * Adds properties from the {@link MavenProject} into a {@link AttributesBuilder} taking care of Maven's XML parsing special
+     * Adds properties from the {@link Properties} into a {@link AttributesBuilder} taking care of Maven's XML parsing special
      * cases like toggles, nulls, etc.
      *
-     * @param project           Maven project
+     * @param properties        Java {@link Properties}
      * @param attributesBuilder AsciidoctorJ AttributesBuilder
      */
-    public static void addMavenProperties(MavenProject project, AttributesBuilder attributesBuilder) {
-        if (project.getProperties() != null) {
-            for (Map.Entry<Object, Object> entry : project.getProperties().entrySet()) {
+    public static void addProperties(Properties properties, AttributesBuilder attributesBuilder) {
+        if (properties != null) {
+            for (Map.Entry<Object, Object> entry : properties.entrySet()) {
                 attributesBuilder.attribute(((String) entry.getKey()).replaceAll("\\.", "-"), entry.getValue());
             }
         }

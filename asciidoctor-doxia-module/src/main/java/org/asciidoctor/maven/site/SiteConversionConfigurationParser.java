@@ -1,6 +1,5 @@
 package org.asciidoctor.maven.site;
 
-import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.AttributesBuilder;
@@ -42,7 +41,7 @@ public class SiteConversionConfigurationParser {
             return new SiteConversionConfiguration(options.get(), Collections.emptyList());
         }
 
-        AsciidoctorHelper.addMavenProperties(project, presetAttributes);
+        AsciidoctorHelper.addProperties(project.getProperties(), presetAttributes);
 
         final List<String> gemsToRequire = new ArrayList<>();
         for (Xpp3Dom asciidocOpt : asciidocConfig.getChildren()) {

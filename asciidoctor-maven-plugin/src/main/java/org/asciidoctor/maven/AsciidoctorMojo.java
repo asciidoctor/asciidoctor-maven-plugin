@@ -520,7 +520,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             attributesBuilder.dataUri(true);
         }
 
-        AsciidoctorHelper.addMavenProperties(mavenProject, attributesBuilder);
+        AsciidoctorHelper.addProperties(mavenProject.getProperties(), attributesBuilder);
         AsciidoctorHelper.addAttributes(configuration.getAttributes(), attributesBuilder);
 
         if (!configuration.getAttributesChain().isEmpty()) {
