@@ -13,6 +13,12 @@
     <artifactId>asciidoctor-maven-commons</artifactId>
     <packaging>jar</packaging>
 
+    <name>Asciidoctor Maven Commons</name>
+    <description>
+        Common components for Asciidoctor Maven Plugin and Asciidoctor Doxia Module(s).
+        These should not depend on Maven or Doxia libraries.
+    </description>
+    <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
 
     <dependencies>
         <dependency>

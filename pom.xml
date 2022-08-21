@@ -9,7 +9,8 @@
     <packaging>pom</packaging>
 
     <name>Asciidoctor Maven Tools</name>
-    <description>Asciidoctor Maven Plugin and Doxia Parser for Maven</description>
+    <description>Asciidoctor Maven Plugin and Doxia Module(s) for Maven</description>
+    <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
 
     <organization>
         <name>Asciidoctor</name>
@@ -35,6 +36,15 @@
                 <role>Contributor</role>
             </roles>
             <timezone>-7</timezone>
+        </developer>
+        <developer>
+            <id>abelsromero</id>
+            <name>Abel Salgado Romero</name>
+            <email>abelromero@gmail.com</email>
+            <roles>
+                <role>Contributor</role>
+            </roles>
+            <timezone>1</timezone>
         </developer>
     </developers>
 
