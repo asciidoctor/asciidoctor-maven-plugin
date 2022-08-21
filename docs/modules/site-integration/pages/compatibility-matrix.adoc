@@ -5,6 +5,17 @@ Release candidate releases are not accounted.
 
 == Versions
 
+Since v3.x.x the Asciidoctor Maven Plugin has been split into independent components for the Maven Mojo and Maven Site modules.
+
+|===
+|Asciidoctor Doxia Module | Maven Site Plugin | Supported
+
+|v3.x.x
+|v3.1x.x
+|Yes
+
+|===
+
 |===
 |Asciidoctor Maven Plugin | Maven Site Plugin | Supported
 
