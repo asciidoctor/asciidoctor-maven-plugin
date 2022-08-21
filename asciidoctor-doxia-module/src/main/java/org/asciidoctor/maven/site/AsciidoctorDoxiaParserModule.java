@@ -21,15 +21,14 @@ public class AsciidoctorDoxiaParserModule extends AbstractParserModule {
     public static final String SOURCE_DIRECTORY = AsciidoctorDoxiaParser.ROLE_HINT;
 
     /**
-     * The extension for AsciiDoc files.
+     * The extensions for AsciiDoc files.
      */
-    // TODO change type to String[] and value to { "adoc", "asciidoc" } once available in Doxia
-    public static final String FILE_EXTENSION = "adoc";
+    public static final String[] FILE_EXTENSIONS = new String[]{"adoc", "asciidoc"};
 
     /**
      * Build a new instance of {@link AsciidoctorDoxiaParserModule}.
      */
     public AsciidoctorDoxiaParserModule() {
-        super(SOURCE_DIRECTORY, FILE_EXTENSION, AsciidoctorDoxiaParser.ROLE_HINT);
+        super(SOURCE_DIRECTORY, AsciidoctorDoxiaParser.ROLE_HINT, FILE_EXTENSIONS);
     }
 }
