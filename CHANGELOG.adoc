@@ -13,6 +13,11 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+Improvements::
+
+  * Split plugin and site integration in sub-modules: asciidoctor-maven-plugin and asciidoctor-doxia-module (#595)
+  * Add 'asciidoc' as valid file extension in AsciidoctorDoxiaParserModule (#595)
+
 Build / Infrastructure::
   
   * Bump Doxia to v1.11.1 and maven-site-plugin in IT to 3.12.0 (#579)

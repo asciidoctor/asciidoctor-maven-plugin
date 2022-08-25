@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-tools</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctor-maven-commons</artifactId>
+    <packaging>jar</packaging>
+
+    <name>Asciidoctor Maven Commons</name>
+    <description>
+        Common components for Asciidoctor Maven Plugin and Asciidoctor Doxia Module(s).
+        These should not depend on Maven or Doxia libraries.
+    </description>
+    <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctorj</artifactId>
+            <version>${asciidoctorj.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

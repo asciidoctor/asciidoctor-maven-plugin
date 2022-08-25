@@ -16,7 +16,7 @@ To author your Maven-generated site in AsciiDoc, you must first add a dependency
             <dependencies>
                 <dependency> <!-- Add Asciidoctor Doxia Parser Module -->
                     <groupId>org.asciidoctor</groupId>
-                    <artifactId>asciidoctor-maven-plugin</artifactId>
+                    <artifactId>asciidoctor-doxia-module</artifactId>
                     <version>{release-version}</version>
                 </dependency>
             </dependencies>
@@ -90,7 +90,7 @@ Here's an example that shows how to set options, attributes and ignore partial A
     <dependencies>
         <dependency>
             <groupId>org.asciidoctor</groupId>
-            <artifactId>asciidoctor-maven-plugin</artifactId>
+            <artifactId>asciidoctor-doxia-module</artifactId>
             <version>{release-version}</version>
         </dependency>
     </dependencies>
