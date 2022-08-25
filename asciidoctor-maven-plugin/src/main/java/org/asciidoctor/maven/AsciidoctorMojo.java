@@ -1,16 +1,12 @@
 package org.asciidoctor.maven;
 
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.model.Resource;
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.filtering.MavenFilteringException;
-import org.apache.maven.shared.filtering.MavenResourcesExecution;
-import org.apache.maven.shared.filtering.MavenResourcesFiltering;
 import org.asciidoctor.*;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
@@ -23,9 +19,11 @@ import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordFormatter;
 import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
+import org.asciidoctor.maven.model.Resource;
 import org.asciidoctor.maven.process.ResourcesProcessor;
 import org.asciidoctor.maven.process.SourceDirectoryFinder;
 import org.asciidoctor.maven.process.SourceDocumentFinder;
+import org.codehaus.plexus.util.DirectoryScanner;
 import org.jruby.Ruby;
 
 import javax.inject.Inject;
@@ -34,6 +32,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE_DIR;
@@ -139,16 +138,11 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Inject
     protected MavenProject project;
 
-    @Inject
-    protected MavenSession session;
-
-    @Inject
-    protected MavenResourcesFiltering outputResourcesFiltering;
 
     protected final ResourcesProcessor defaultResourcesProcessor =
             (sourcesRootDirectory, outputRootDirectory, encoding, configuration) -> {
                 final List<Resource> finalResources = prepareResources(sourcesRootDirectory, configuration);
-                copyResources(finalResources, encoding, outputRootDirectory, outputResourcesFiltering, project, session);
+                copyResources(finalResources, outputRootDirectory);
             };
 
     @Override
@@ -324,27 +318,76 @@ public class AsciidoctorMojo extends AbstractMojo {
     /**
      * Copies the resources defined in the 'resources' attribute.
      *
-     * @param resources               Collection of {@link Resource} defining what resources to {@code outputDirectory}.
-     * @param encoding                Files expected encoding.
-     * @param outputDirectory         Directory where to copy resources.
-     * @param mavenResourcesFiltering Current {@link MavenResourcesFiltering} instance.
-     * @param mavenProject            Current {@link MavenProject} instance.
-     * @param mavenSession            Current {@link MavenSession} instance.
+     * @param resources       Collection of {@link Resource} defining what resources to {@code outputDirectory}.
+     * @param outputDirectory Directory where to copy resources.
      */
-    private void copyResources(List<Resource> resources, String encoding, File outputDirectory,
-                               MavenResourcesFiltering mavenResourcesFiltering, MavenProject mavenProject, MavenSession mavenSession) throws MojoExecutionException {
-        try {
-            // Right now "maven filtering" (replacements) is not officially supported, but could be used
-            MavenResourcesExecution resourcesExecution =
-                    new MavenResourcesExecution(resources, outputDirectory, mavenProject, encoding,
-                            Collections.emptyList(), Collections.emptyList(), mavenSession);
-            resourcesExecution.setIncludeEmptyDirs(true);
-            resourcesExecution.setAddDefaultExcludes(true);
-            mavenResourcesFiltering.filterResources(resourcesExecution);
+    private void copyResources(List<Resource> resources, File outputDirectory) {
 
-        } catch (MavenFilteringException e) {
-            throw new MojoExecutionException("Could not copy resources", e);
+        resources.stream()
+                .filter(resource -> new File(resource.getDirectory()).exists())
+                .forEach(resource -> {
+                    DirectoryScanner directoryScanner = new DirectoryScanner();
+                    directoryScanner.setBasedir(resource.getDirectory());
+
+                    if (resource.getIncludes().isEmpty())
+                        directoryScanner.setIncludes(new String[]{"**/*.*", "**/*"});
+                    else
+                        directoryScanner.setIncludes(resource.getIncludes().toArray(new String[0]));
+
+                    directoryScanner.setExcludes(resource.getExcludes().toArray(new String[0]));
+                    directoryScanner.setFollowSymlinks(false);
+                    directoryScanner.scan();
+
+                    for (String includedFile : directoryScanner.getIncludedFiles()) {
+                        // check if Basedir exists
+                        // remove null check, baseDir is mandatory and already checked
+                        File source = (directoryScanner.getBasedir() != null)
+                                ? new File(directoryScanner.getBasedir(), includedFile)
+                                : new File(includedFile);
+
+                        copyFileToDirectory(source, resource, outputDirectory);
+                    }
+                });
+    }
+
+    private void copyFileToDirectory(File source, Resource resource, File outputDirectory) {
+        try {
+            // check if resource.getTargetPath() is absolute ??
+            File target = resource.getTargetPath() == null
+                    ? outputDirectory
+                    : new File(outputDirectory, resource.getTargetPath());
+
+            Path sourceDirectoryPath = new File(resource.getDirectory()).toPath();
+            Path sourcePath = source.toPath();
+            Path relativize = sourceDirectoryPath.relativize(sourcePath);
+
+            if (relativize.getParent() == null) {
+                FileUtils.copyFileToDirectory(source, target);
+            } else {
+                Path realTarget = target.toPath().resolve(relativize.getParent());
+                File realTargetFile = realTarget.toFile();
+                FileUtils.forceMkdir(realTargetFile);
+                FileUtils.copyFileToDirectory(source, realTargetFile);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    public static List<org.apache.maven.model.Resource> mapResources(List<Resource> resources) {
+        if (resources == null || resources.isEmpty())
+            return Collections.emptyList();
+
+        return resources.stream()
+                .map(mojoResource -> {
+                    org.apache.maven.model.Resource resource = new org.apache.maven.model.Resource();
+                    resource.setDirectory(mojoResource.getDirectory());
+                    resource.setTargetPath(mojoResource.getTargetPath());
+                    resource.setIncludes(mojoResource.getIncludes());
+                    resource.setExcludes(mojoResource.getExcludes());
+                    return resource;
+                })
+                .collect(Collectors.toList());
     }
 
     /**

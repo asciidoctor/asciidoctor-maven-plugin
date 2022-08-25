@@ -2,7 +2,6 @@ package org.asciidoctor.maven;
 
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
-import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.asciidoctor.maven.extensions.ExtensionConfiguration;
@@ -480,8 +479,8 @@ public class AsciidoctorMojoTest {
 
         // Looks for import errors in all files but the one in the root folder
         Assertions.assertThat(asciidocs.stream()
-                .filter(path -> !path.getFileName().toString().equals("HelloWorld.html"))
-                .collect(Collectors.toList()))
+                        .filter(path -> !path.getFileName().toString().equals("HelloWorld.html"))
+                        .collect(Collectors.toList()))
                 .allSatisfy(path -> {
                     assertThat(path.toFile()).contains("Unresolved directive");
                 });
@@ -525,8 +524,8 @@ public class AsciidoctorMojoTest {
 
         // Looks for import errors in all files but the one in the root folder
         Assertions.assertThat(asciidocs.stream()
-                .filter(path1 -> !path1.getFileName().toString().equals("HelloWorld.html"))
-                .collect(Collectors.toList()))
+                        .filter(path1 -> !path1.getFileName().toString().equals("HelloWorld.html"))
+                        .collect(Collectors.toList()))
                 .allSatisfy(path -> assertThat(path.toFile()).contains("Unresolved directive"));
     }
 
@@ -700,32 +699,6 @@ public class AsciidoctorMojoTest {
             File[] actualChildren = actualFile.listFiles(File::isDirectory);
             assertEqualsStructure(expectedChildren, actualChildren);
         }
-    }
-
-    @Test
-    public void should_not_crash_when_enabling_maven_resource_filtering() throws MojoFailureException, MojoExecutionException {
-        // given
-        File outputDir = newOutputTestDirectory("resources");
-
-        // when
-        AsciidoctorMojo mojo = mockAsciidoctorMojo();
-        mojo.backend = "html5";
-        mojo.sourceDirectory = new File("..");
-        mojo.sourceDocumentName = "README.adoc";
-        Resource resource = new ResourceBuilder()
-                .directory(".")
-                .excludes("**/**")
-                .build();
-        resource.setFiltering(true);
-        mojo.resources = singletonList(resource);
-        mojo.outputDirectory = outputDir;
-        mojo.execute();
-
-        // then
-        File[] actualConvertedFiles = outputDir.listFiles(File::isFile);
-        Assertions.assertThat(actualConvertedFiles).hasSize(1);
-        assertThat(actualConvertedFiles[0])
-                .contains("Asciidoctor Maven Plugin");
     }
 
     @Test

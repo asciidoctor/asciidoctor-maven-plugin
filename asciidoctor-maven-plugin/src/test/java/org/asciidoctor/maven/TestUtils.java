@@ -2,16 +2,11 @@ package org.asciidoctor.maven;
 
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
-import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.filtering.DefaultMavenFileFilter;
-import org.apache.maven.shared.filtering.DefaultMavenResourcesFiltering;
 import org.asciidoctor.maven.log.LogHandler;
-import org.codehaus.plexus.logging.console.ConsoleLogger;
+import org.asciidoctor.maven.model.Resource;
 import org.mockito.Mockito;
-import org.sonatype.plexus.build.incremental.BuildContext;
-import org.sonatype.plexus.build.incremental.DefaultBuildContext;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -65,24 +60,10 @@ public class TestUtils {
             when(mavenProject.getProperties()).thenReturn(properties);
         }
 
-        final BuildContext buildContext = new DefaultBuildContext();
-
-        final DefaultMavenFileFilter mavenFileFilter = new DefaultMavenFileFilter();
-        final ConsoleLogger plexusLogger = new ConsoleLogger();
-        mavenFileFilter.enableLogging(plexusLogger);
-        setVariableValueInObject(mavenFileFilter, "buildContext", buildContext);
-
-        final DefaultMavenResourcesFiltering resourceFilter = new DefaultMavenResourcesFiltering();
-        setVariableValueInObject(resourceFilter, "mavenFileFilter", mavenFileFilter);
-        setVariableValueInObject(resourceFilter, "buildContext", buildContext);
-        resourceFilter.initialize();
-        resourceFilter.enableLogging(plexusLogger);
-
         final AsciidoctorMojo mojo = (AsciidoctorMojo) clazz.getConstructor(new Class[]{}).newInstance();
         setVariableValueInObject(mojo, "log", new SystemStreamLog());
         mojo.encoding = "UTF-8";
         mojo.project = mavenProject;
-        mojo.outputResourcesFiltering = resourceFilter;
         if (logHandler != null)
             setVariableValueInObject(mojo, "logHandler", logHandler);
 

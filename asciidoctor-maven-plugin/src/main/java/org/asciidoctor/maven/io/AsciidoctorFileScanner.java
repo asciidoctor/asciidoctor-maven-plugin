@@ -1,8 +1,8 @@
 package org.asciidoctor.maven.io;
 
 import org.apache.maven.model.Resource;
+import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.Scanner;
-import org.sonatype.plexus.build.incremental.BuildContext;
 
 import java.io.File;
 import java.util.*;
@@ -44,13 +44,6 @@ public class AsciidoctorFileScanner {
             "*-docinfo-footer.xml"
     };
 
-
-    private final BuildContext buildContext;
-
-    public AsciidoctorFileScanner(final BuildContext buildContext) {
-        this.buildContext = buildContext;
-    }
-
     /**
      * Scans a resource directory (and sub-subdirectories) returning all AsciiDoc documents found.
      *
@@ -58,7 +51,8 @@ public class AsciidoctorFileScanner {
      * @return List of found documents matching the resource properties
      */
     public List<File> scan(Resource resource) {
-        Scanner scanner = buildContext.newScanner(new File(resource.getDirectory()), true);
+        DirectoryScanner scanner = new DirectoryScanner();
+        scanner.setBasedir(new File(resource.getDirectory()));
         setupScanner(scanner, resource);
         scanner.scan();
         List<File> files = new ArrayList<>();
