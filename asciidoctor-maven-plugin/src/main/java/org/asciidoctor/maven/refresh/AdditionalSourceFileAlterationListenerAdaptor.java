@@ -6,11 +6,10 @@ import org.asciidoctor.maven.AsciidoctorRefreshMojo;
 import org.asciidoctor.maven.process.ResourcesProcessor;
 
 import java.io.File;
-import java.util.Collections;
 
 public class AdditionalSourceFileAlterationListenerAdaptor extends AbstractFileAlterationListenerAdaptor {
 
-    private static final ResourcesProcessor EMPTY_RESOURCES_PROCESSOR = (sourcesDir, outputDir, encoding, configuration) -> {
+    private static final ResourcesProcessor EMPTY_RESOURCES_PROCESSOR = (sourcesDir, outputDir, configuration) -> {
     };
 
 

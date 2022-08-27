@@ -30,7 +30,6 @@ public class ResourceCopyFileAlterationListenerAdaptor extends AbstractFileAlter
                 final File sourceDirectory = mojo.findSourceDirectory(mojo.getSourceDirectory(), mojo.getBaseDir()).get();
                 final File outputDirectory = mojo.getOutputDirectory();
 
-                // TODO understand this and see if can be reused
                 final List<Resource> resources = mapResources(mojo.getResources());
                 List<Resource> matchingResources = findMatchingResources(resources, file);
                 if (matchingResources.isEmpty()) {

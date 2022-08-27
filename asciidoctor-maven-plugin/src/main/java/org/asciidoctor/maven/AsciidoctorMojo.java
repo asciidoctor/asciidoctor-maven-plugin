@@ -1,6 +1,5 @@
 package org.asciidoctor.maven;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -14,16 +13,15 @@ import org.asciidoctor.maven.commons.AsciidoctorHelper;
 import org.asciidoctor.maven.extensions.AsciidoctorJExtensionRegistry;
 import org.asciidoctor.maven.extensions.ExtensionConfiguration;
 import org.asciidoctor.maven.extensions.ExtensionRegistry;
-import org.asciidoctor.maven.io.AsciidoctorFileScanner;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordFormatter;
 import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
 import org.asciidoctor.maven.model.Resource;
+import org.asciidoctor.maven.process.CopyResourcesProcessor;
 import org.asciidoctor.maven.process.ResourcesProcessor;
 import org.asciidoctor.maven.process.SourceDirectoryFinder;
 import org.asciidoctor.maven.process.SourceDocumentFinder;
-import org.codehaus.plexus.util.DirectoryScanner;
 import org.jruby.Ruby;
 
 import javax.inject.Inject;
@@ -34,7 +32,6 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE_DIR;
 
 
@@ -43,9 +40,6 @@ import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE
  */
 @Mojo(name = "process-asciidoc", threadSafe = true)
 public class AsciidoctorMojo extends AbstractMojo {
-
-    @Parameter(defaultValue = "${project.build.sourceEncoding}")
-    protected String encoding;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDirectory", defaultValue = "${basedir}/" + DEFAULT_SOURCE_DIR)
     protected File sourceDirectory;
@@ -139,11 +133,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected MavenProject project;
 
 
-    protected final ResourcesProcessor defaultResourcesProcessor =
-            (sourcesRootDirectory, outputRootDirectory, encoding, configuration) -> {
-                final List<Resource> finalResources = prepareResources(sourcesRootDirectory, configuration);
-                copyResources(finalResources, outputRootDirectory);
-            };
+    protected final ResourcesProcessor defaultResourcesProcessor = new CopyResourcesProcessor();
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -225,7 +215,7 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         // Copy output resources
         final File sourceDir = sourceDirectoryCandidate.get();
-        resourcesProcessor.process(sourceDir, outputDirectory, encoding, this);
+        resourcesProcessor.process(sourceDir, outputDirectory, this);
 
         // register LogHandler to capture asciidoctor messages
         final Boolean outputToConsole = logHandler.getOutputToConsole() == null ? Boolean.TRUE : logHandler.getOutputToConsole();
@@ -267,111 +257,6 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     private boolean isRelativePath(String candidateName) {
         return candidateName.startsWith("./") || candidateName.startsWith(".\\");
-    }
-
-    /**
-     * Initializes resources attribute excluding AsciiDoc documents, internal directories/files (those prefixed with
-     * underscore), and docinfo files.
-     * By default everything in the sources directories is copied.
-     *
-     * @return Collection of resources with properly configured includes and excludes conditions.
-     */
-    private List<Resource> prepareResources(File sourceDirectory, AsciidoctorMojo configuration) {
-        final List<Resource> resources = configuration.getResources() != null
-                ? configuration.getResources()
-                : new ArrayList<>();
-        if (resources.isEmpty()) {
-            // we don't want to copy files considered sources
-            Resource resource = new Resource();
-            resource.setDirectory(sourceDirectory.getAbsolutePath());
-            // exclude sourceDocumentName if defined
-            if (!isBlank(configuration.getSourceDocumentName())) {
-                resource.getExcludes()
-                        .add(configuration.getSourceDocumentName());
-            }
-            // exclude filename extensions if defined
-            resources.add(resource);
-        }
-
-        // All resources must exclude AsciiDoc documents and folders beginning with underscore
-        for (Resource resource : resources) {
-            List<String> excludes = new ArrayList<>();
-            for (String value : AsciidoctorFileScanner.INTERNAL_FOLDERS_AND_FILES_PATTERNS) {
-                excludes.add(value);
-            }
-            for (String value : AsciidoctorFileScanner.IGNORED_FILE_NAMES) {
-                excludes.add("**/" + value);
-            }
-            for (String value : AsciidoctorFileScanner.DEFAULT_ASCIIDOC_EXTENSIONS) {
-                excludes.add(value);
-            }
-            for (String docExtension : configuration.getSourceDocumentExtensions()) {
-                resource.getExcludes().add("**/*." + docExtension);
-            }
-            // in case someone wants to include some of the default excluded files (e.g. AsciiDoc sources)
-            excludes.removeAll(resource.getIncludes());
-            resource.getExcludes().addAll(excludes);
-        }
-        return resources;
-    }
-
-    /**
-     * Copies the resources defined in the 'resources' attribute.
-     *
-     * @param resources       Collection of {@link Resource} defining what resources to {@code outputDirectory}.
-     * @param outputDirectory Directory where to copy resources.
-     */
-    private void copyResources(List<Resource> resources, File outputDirectory) {
-
-        resources.stream()
-                .filter(resource -> new File(resource.getDirectory()).exists())
-                .forEach(resource -> {
-                    DirectoryScanner directoryScanner = new DirectoryScanner();
-                    directoryScanner.setBasedir(resource.getDirectory());
-
-                    if (resource.getIncludes().isEmpty())
-                        directoryScanner.setIncludes(new String[]{"**/*.*", "**/*"});
-                    else
-                        directoryScanner.setIncludes(resource.getIncludes().toArray(new String[0]));
-
-                    directoryScanner.setExcludes(resource.getExcludes().toArray(new String[0]));
-                    directoryScanner.setFollowSymlinks(false);
-                    directoryScanner.scan();
-
-                    for (String includedFile : directoryScanner.getIncludedFiles()) {
-                        // check if Basedir exists
-                        // remove null check, baseDir is mandatory and already checked
-                        File source = (directoryScanner.getBasedir() != null)
-                                ? new File(directoryScanner.getBasedir(), includedFile)
-                                : new File(includedFile);
-
-                        copyFileToDirectory(source, resource, outputDirectory);
-                    }
-                });
-    }
-
-    private void copyFileToDirectory(File source, Resource resource, File outputDirectory) {
-        try {
-            // check if resource.getTargetPath() is absolute ??
-            File target = resource.getTargetPath() == null
-                    ? outputDirectory
-                    : new File(outputDirectory, resource.getTargetPath());
-
-            Path sourceDirectoryPath = new File(resource.getDirectory()).toPath();
-            Path sourcePath = source.toPath();
-            Path relativize = sourceDirectoryPath.relativize(sourcePath);
-
-            if (relativize.getParent() == null) {
-                FileUtils.copyFileToDirectory(source, target);
-            } else {
-                Path realTarget = target.toPath().resolve(relativize.getParent());
-                File realTargetFile = realTarget.toFile();
-                FileUtils.forceMkdir(realTargetFile);
-                FileUtils.copyFileToDirectory(source, realTargetFile);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public static List<org.apache.maven.model.Resource> mapResources(List<Resource> resources) {
