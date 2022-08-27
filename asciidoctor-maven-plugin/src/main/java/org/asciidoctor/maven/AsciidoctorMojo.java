@@ -1,16 +1,11 @@
 package org.asciidoctor.maven;
 
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.filtering.MavenFilteringException;
-import org.apache.maven.shared.filtering.MavenResourcesExecution;
-import org.apache.maven.shared.filtering.MavenResourcesFiltering;
 import org.asciidoctor.*;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
@@ -18,11 +13,12 @@ import org.asciidoctor.maven.commons.AsciidoctorHelper;
 import org.asciidoctor.maven.extensions.AsciidoctorJExtensionRegistry;
 import org.asciidoctor.maven.extensions.ExtensionConfiguration;
 import org.asciidoctor.maven.extensions.ExtensionRegistry;
-import org.asciidoctor.maven.io.AsciidoctorFileScanner;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordFormatter;
 import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
+import org.asciidoctor.maven.model.Resource;
+import org.asciidoctor.maven.process.CopyResourcesProcessor;
 import org.asciidoctor.maven.process.ResourcesProcessor;
 import org.asciidoctor.maven.process.SourceDirectoryFinder;
 import org.asciidoctor.maven.process.SourceDocumentFinder;
@@ -34,8 +30,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
-import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE_DIR;
 
 
@@ -44,9 +40,6 @@ import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE
  */
 @Mojo(name = "process-asciidoc", threadSafe = true)
 public class AsciidoctorMojo extends AbstractMojo {
-
-    @Parameter(defaultValue = "${project.build.sourceEncoding}")
-    protected String encoding;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDirectory", defaultValue = "${basedir}/" + DEFAULT_SOURCE_DIR)
     protected File sourceDirectory;
@@ -139,17 +132,8 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Inject
     protected MavenProject project;
 
-    @Inject
-    protected MavenSession session;
 
-    @Inject
-    protected MavenResourcesFiltering outputResourcesFiltering;
-
-    protected final ResourcesProcessor defaultResourcesProcessor =
-            (sourcesRootDirectory, outputRootDirectory, encoding, configuration) -> {
-                final List<Resource> finalResources = prepareResources(sourcesRootDirectory, configuration);
-                copyResources(finalResources, encoding, outputRootDirectory, outputResourcesFiltering, project, session);
-            };
+    protected final ResourcesProcessor defaultResourcesProcessor = new CopyResourcesProcessor();
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -231,7 +215,7 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         // Copy output resources
         final File sourceDir = sourceDirectoryCandidate.get();
-        resourcesProcessor.process(sourceDir, outputDirectory, encoding, this);
+        resourcesProcessor.process(sourceDir, outputDirectory, this);
 
         // register LogHandler to capture asciidoctor messages
         final Boolean outputToConsole = logHandler.getOutputToConsole() == null ? Boolean.TRUE : logHandler.getOutputToConsole();
@@ -275,76 +259,20 @@ public class AsciidoctorMojo extends AbstractMojo {
         return candidateName.startsWith("./") || candidateName.startsWith(".\\");
     }
 
-    /**
-     * Initializes resources attribute excluding AsciiDoc documents, internal directories/files (those prefixed with
-     * underscore), and docinfo files.
-     * By default everything in the sources directories is copied.
-     *
-     * @return Collection of resources with properly configured includes and excludes conditions.
-     */
-    private List<Resource> prepareResources(File sourceDirectory, AsciidoctorMojo configuration) {
-        final List<Resource> resources = configuration.getResources() != null
-                ? configuration.getResources()
-                : new ArrayList<>();
-        if (resources.isEmpty()) {
-            // we don't want to copy files considered sources
-            Resource resource = new Resource();
-            resource.setDirectory(sourceDirectory.getAbsolutePath());
-            // exclude sourceDocumentName if defined
-            if (!isBlank(configuration.getSourceDocumentName())) {
-                resource.getExcludes()
-                        .add(configuration.getSourceDocumentName());
-            }
-            // exclude filename extensions if defined
-            resources.add(resource);
-        }
+    public static List<org.apache.maven.model.Resource> mapResources(List<Resource> resources) {
+        if (resources == null || resources.isEmpty())
+            return Collections.emptyList();
 
-        // All resources must exclude AsciiDoc documents and folders beginning with underscore
-        for (Resource resource : resources) {
-            List<String> excludes = new ArrayList<>();
-            for (String value : AsciidoctorFileScanner.INTERNAL_FOLDERS_AND_FILES_PATTERNS) {
-                excludes.add(value);
-            }
-            for (String value : AsciidoctorFileScanner.IGNORED_FILE_NAMES) {
-                excludes.add("**/" + value);
-            }
-            for (String value : AsciidoctorFileScanner.DEFAULT_ASCIIDOC_EXTENSIONS) {
-                excludes.add(value);
-            }
-            for (String docExtension : configuration.getSourceDocumentExtensions()) {
-                resource.getExcludes().add("**/*." + docExtension);
-            }
-            // in case someone wants to include some of the default excluded files (e.g. AsciiDoc sources)
-            excludes.removeAll(resource.getIncludes());
-            resource.getExcludes().addAll(excludes);
-        }
-        return resources;
-    }
-
-    /**
-     * Copies the resources defined in the 'resources' attribute.
-     *
-     * @param resources               Collection of {@link Resource} defining what resources to {@code outputDirectory}.
-     * @param encoding                Files expected encoding.
-     * @param outputDirectory         Directory where to copy resources.
-     * @param mavenResourcesFiltering Current {@link MavenResourcesFiltering} instance.
-     * @param mavenProject            Current {@link MavenProject} instance.
-     * @param mavenSession            Current {@link MavenSession} instance.
-     */
-    private void copyResources(List<Resource> resources, String encoding, File outputDirectory,
-                               MavenResourcesFiltering mavenResourcesFiltering, MavenProject mavenProject, MavenSession mavenSession) throws MojoExecutionException {
-        try {
-            // Right now "maven filtering" (replacements) is not officially supported, but could be used
-            MavenResourcesExecution resourcesExecution =
-                    new MavenResourcesExecution(resources, outputDirectory, mavenProject, encoding,
-                            Collections.emptyList(), Collections.emptyList(), mavenSession);
-            resourcesExecution.setIncludeEmptyDirs(true);
-            resourcesExecution.setAddDefaultExcludes(true);
-            mavenResourcesFiltering.filterResources(resourcesExecution);
-
-        } catch (MavenFilteringException e) {
-            throw new MojoExecutionException("Could not copy resources", e);
-        }
+        return resources.stream()
+                .map(mojoResource -> {
+                    org.apache.maven.model.Resource resource = new org.apache.maven.model.Resource();
+                    resource.setDirectory(mojoResource.getDirectory());
+                    resource.setTargetPath(mojoResource.getTargetPath());
+                    resource.setIncludes(mojoResource.getIncludes());
+                    resource.setExcludes(mojoResource.getExcludes());
+                    return resource;
+                })
+                .collect(Collectors.toList());
     }
 
     /**

@@ -2,22 +2,20 @@ package org.asciidoctor.maven;
 
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
-import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.filtering.DefaultMavenFileFilter;
-import org.apache.maven.shared.filtering.DefaultMavenResourcesFiltering;
+import org.asciidoctor.maven.io.AsciidoctorFileScanner;
 import org.asciidoctor.maven.log.LogHandler;
-import org.codehaus.plexus.logging.console.ConsoleLogger;
+import org.asciidoctor.maven.model.Resource;
+import org.assertj.core.api.Assertions;
 import org.mockito.Mockito;
-import org.sonatype.plexus.build.incremental.BuildContext;
-import org.sonatype.plexus.build.incremental.DefaultBuildContext;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
@@ -65,24 +63,9 @@ public class TestUtils {
             when(mavenProject.getProperties()).thenReturn(properties);
         }
 
-        final BuildContext buildContext = new DefaultBuildContext();
-
-        final DefaultMavenFileFilter mavenFileFilter = new DefaultMavenFileFilter();
-        final ConsoleLogger plexusLogger = new ConsoleLogger();
-        mavenFileFilter.enableLogging(plexusLogger);
-        setVariableValueInObject(mavenFileFilter, "buildContext", buildContext);
-
-        final DefaultMavenResourcesFiltering resourceFilter = new DefaultMavenResourcesFiltering();
-        setVariableValueInObject(resourceFilter, "mavenFileFilter", mavenFileFilter);
-        setVariableValueInObject(resourceFilter, "buildContext", buildContext);
-        resourceFilter.initialize();
-        resourceFilter.enableLogging(plexusLogger);
-
         final AsciidoctorMojo mojo = (AsciidoctorMojo) clazz.getConstructor(new Class[]{}).newInstance();
         setVariableValueInObject(mojo, "log", new SystemStreamLog());
-        mojo.encoding = "UTF-8";
         mojo.project = mavenProject;
-        mojo.outputResourcesFiltering = resourceFilter;
         if (logHandler != null)
             setVariableValueInObject(mojo, "logHandler", logHandler);
 
@@ -158,6 +141,50 @@ public class TestUtils {
 
         public static List<Resource> excludeAll() {
             return singletonList(new ResourceBuilder().directory(".").excludes("**/**").build());
+        }
+    }
+
+    /**
+     * Validates that the folder structures under certain files contain the same
+     * directories and file names.
+     *
+     * @param expected list of expected folders
+     * @param actual   list of actual folders (the ones to validate)
+     */
+    public static void assertEqualsStructure(File[] expected, File[] actual) {
+
+        List<File> sanitizedExpected = Arrays.stream(expected)
+                .filter(file -> {
+                    char firstChar = file.getName().charAt(0);
+                    return firstChar != '_' && firstChar != '.';
+                })
+                .collect(Collectors.toList());
+
+        List<String> expectedNames = sanitizedExpected.stream().map(File::getName).collect(Collectors.toList());
+        List<String> actualNames = Arrays.stream(actual).map(File::getName).collect(Collectors.toList());
+        Assertions.assertThat(expectedNames).containsExactlyInAnyOrder(actualNames.toArray(new String[]{}));
+
+        for (File actualFile : actual) {
+            File expectedFile = sanitizedExpected.stream()
+                    .filter(f -> f.getName().equals(actualFile.getName()))
+                    .findFirst()
+                    .get();
+
+            // check that at least the number of html files and asciidoc are the same in each folder
+            File[] expectedChildren = Arrays.stream(expectedFile.listFiles(File::isDirectory))
+                    .filter(f -> !f.getName().startsWith("_"))
+                    .toArray(File[]::new);
+
+            File[] htmls = actualFile.listFiles(f -> f.getName().endsWith("html"));
+            if (htmls.length > 0) {
+                File[] asciidocs = expectedFile.listFiles(f -> {
+                    String asciidocFilePattern = ".*\\." + AsciidoctorFileScanner.ASCIIDOC_FILE_EXTENSIONS_REG_EXP + "$";
+                    return f.getName().matches(asciidocFilePattern) && !f.getName().startsWith("_") && !f.getName().startsWith(".");
+                });
+                Assertions.assertThat(htmls).hasSize(asciidocs.length);
+            }
+            File[] actualChildren = actualFile.listFiles(File::isDirectory);
+            assertEqualsStructure(expectedChildren, actualChildren);
         }
     }
 

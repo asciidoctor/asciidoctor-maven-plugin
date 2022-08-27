@@ -2,11 +2,9 @@ package org.asciidoctor.maven;
 
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
-import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.asciidoctor.maven.extensions.ExtensionConfiguration;
-import org.asciidoctor.maven.io.AsciidoctorFileScanner;
 import org.asciidoctor.maven.io.ConsoleHolder;
 import org.asciidoctor.maven.test.processors.RequireCheckerTreeprocessor;
 import org.assertj.core.api.Assertions;
@@ -480,8 +478,8 @@ public class AsciidoctorMojoTest {
 
         // Looks for import errors in all files but the one in the root folder
         Assertions.assertThat(asciidocs.stream()
-                .filter(path -> !path.getFileName().toString().equals("HelloWorld.html"))
-                .collect(Collectors.toList()))
+                        .filter(path -> !path.getFileName().toString().equals("HelloWorld.html"))
+                        .collect(Collectors.toList()))
                 .allSatisfy(path -> {
                     assertThat(path.toFile()).contains("Unresolved directive");
                 });
@@ -525,8 +523,8 @@ public class AsciidoctorMojoTest {
 
         // Looks for import errors in all files but the one in the root folder
         Assertions.assertThat(asciidocs.stream()
-                .filter(path1 -> !path1.getFileName().toString().equals("HelloWorld.html"))
-                .collect(Collectors.toList()))
+                        .filter(path1 -> !path1.getFileName().toString().equals("HelloWorld.html"))
+                        .collect(Collectors.toList()))
                 .allSatisfy(path -> assertThat(path.toFile()).contains("Unresolved directive"));
     }
 
@@ -657,75 +655,6 @@ public class AsciidoctorMojoTest {
         Assertions.assertThat(FileUtils.listFiles(outputDir, new String[]{"ext"}, true)).isEmpty();
         assertThat(outputDir, "sample.html")
                 .contains("Asciidoctor default stylesheet");
-    }
-
-    /**
-     * Validates that the folder structures under certain files are the same
-     *
-     * @param expected list of expected folders
-     * @param actual   list of actual folders (the ones to validate)
-     */
-    private void assertEqualsStructure(File[] expected, File[] actual) {
-
-        List<File> sanitizedExpected = Arrays.stream(expected)
-                .filter(file -> {
-                    char firstChar = file.getName().charAt(0);
-                    return firstChar != '_' && firstChar != '.';
-                })
-                .collect(Collectors.toList());
-
-        List<String> expectedNames = sanitizedExpected.stream().map(File::getName).collect(Collectors.toList());
-        List<String> actualNames = Arrays.stream(actual).map(File::getName).collect(Collectors.toList());
-        Assertions.assertThat(expectedNames).containsExactlyInAnyOrder(actualNames.toArray(new String[]{}));
-
-        for (File actualFile : actual) {
-            File expectedFile = sanitizedExpected.stream()
-                    .filter(f -> f.getName().equals(actualFile.getName()))
-                    .findFirst()
-                    .get();
-
-            // check that at least the number of html files and asciidoc are the same in each folder
-            File[] expectedChildren = Arrays.stream(expectedFile.listFiles(File::isDirectory))
-                    .filter(f -> !f.getName().startsWith("_"))
-                    .toArray(File[]::new);
-
-            File[] htmls = actualFile.listFiles(f -> f.getName().endsWith("html"));
-            if (htmls.length > 0) {
-                File[] asciidocs = expectedFile.listFiles(f -> {
-                    String asciidocFilePattern = ".*\\." + AsciidoctorFileScanner.ASCIIDOC_FILE_EXTENSIONS_REG_EXP + "$";
-                    return f.getName().matches(asciidocFilePattern) && !f.getName().startsWith("_") && !f.getName().startsWith(".");
-                });
-                Assertions.assertThat(htmls).hasSize(asciidocs.length);
-            }
-            File[] actualChildren = actualFile.listFiles(File::isDirectory);
-            assertEqualsStructure(expectedChildren, actualChildren);
-        }
-    }
-
-    @Test
-    public void should_not_crash_when_enabling_maven_resource_filtering() throws MojoFailureException, MojoExecutionException {
-        // given
-        File outputDir = newOutputTestDirectory("resources");
-
-        // when
-        AsciidoctorMojo mojo = mockAsciidoctorMojo();
-        mojo.backend = "html5";
-        mojo.sourceDirectory = new File("..");
-        mojo.sourceDocumentName = "README.adoc";
-        Resource resource = new ResourceBuilder()
-                .directory(".")
-                .excludes("**/**")
-                .build();
-        resource.setFiltering(true);
-        mojo.resources = singletonList(resource);
-        mojo.outputDirectory = outputDir;
-        mojo.execute();
-
-        // then
-        File[] actualConvertedFiles = outputDir.listFiles(File::isFile);
-        Assertions.assertThat(actualConvertedFiles).hasSize(1);
-        assertThat(actualConvertedFiles[0])
-                .contains("Asciidoctor Maven Plugin");
     }
 
     @Test

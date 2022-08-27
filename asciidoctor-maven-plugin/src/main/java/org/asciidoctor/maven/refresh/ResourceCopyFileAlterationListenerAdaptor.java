@@ -1,10 +1,10 @@
 package org.asciidoctor.maven.refresh;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.logging.Log;
 import org.asciidoctor.maven.AsciidoctorRefreshMojo;
 import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.asciidoctor.maven.AsciidoctorMojo.mapResources;
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 
 public class ResourceCopyFileAlterationListenerAdaptor extends AbstractFileAlterationListenerAdaptor {
@@ -29,7 +30,8 @@ public class ResourceCopyFileAlterationListenerAdaptor extends AbstractFileAlter
                 final File sourceDirectory = mojo.findSourceDirectory(mojo.getSourceDirectory(), mojo.getBaseDir()).get();
                 final File outputDirectory = mojo.getOutputDirectory();
 
-                List<Resource> matchingResources = findMatchingResources(mojo.getResources(), file);
+                final List<Resource> resources = mapResources(mojo.getResources());
+                List<Resource> matchingResources = findMatchingResources(resources, file);
                 if (matchingResources.isEmpty()) {
                     final String relativePath = file.getParentFile().getCanonicalPath().substring(sourceDirectory.getCanonicalPath().length());
                     final File destinationDirectory = new File(outputDirectory, relativePath);
@@ -98,7 +100,7 @@ public class ResourceCopyFileAlterationListenerAdaptor extends AbstractFileAlter
 
     private boolean equalDirectories(File dir1, File dir2) {
         return dir1.isDirectory()
-                && dir1.isDirectory()
+                && dir2.isDirectory()
                 && equalFiles(dir1, dir2);
     }
 

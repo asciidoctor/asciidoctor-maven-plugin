@@ -19,8 +19,7 @@
 
     <properties>
         <maven.plugin.plugin.version>3.5</maven.plugin.plugin.version>
-        <maven.filtering.version>3.2.0</maven.filtering.version>
-        <plexus.utils.version>3.0.23</plexus.utils.version>
+        <plexus.utils.version>3.3.1</plexus.utils.version>
         <netty.version>4.1.77.Final</netty.version>
         <maven.coveralls.plugin.version>4.3.0</maven.coveralls.plugin.version>
     </properties>
@@ -58,11 +57,6 @@
             <version>${maven.project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.maven.shared</groupId>
-            <artifactId>maven-filtering</artifactId>
-            <version>${maven.filtering.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-interpolation</artifactId>
             <version>1.22</version>
@@ -71,6 +65,11 @@
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>
             <version>${plexus.utils.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.7</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>

@@ -1,8 +1,9 @@
 package org.asciidoctor.maven.refresh;
 
-import org.apache.maven.model.Resource;
+
 import org.apache.maven.plugin.logging.Log;
 import org.asciidoctor.maven.AsciidoctorRefreshMojo;
+import org.asciidoctor.maven.model.Resource;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.asciidoctor.maven.io.TestFilesHelper.createFileWithContent;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
@@ -143,7 +145,7 @@ public class ResourceCopyFileAlterationListenerAdaptorTest {
                 .doesNotExist();
     }
 
-    // Removal of special files is done by FileAlterationObserver, not ResourceCopyFileAlterationListenerAdaptorTest
+    // Removal of special files is done by FileAlterationObserver, not ResourceCopyFileAlterationListenerAdaptor
     @Test
     public void should_copy_special_asciidoctor_files() {
         // given
@@ -161,34 +163,28 @@ public class ResourceCopyFileAlterationListenerAdaptorTest {
 
         // when
         final String randomPrefix = UUID.randomUUID().toString();
-        final List<File> specialFiles = Arrays.asList(
-                "docinfo.html",
-                "docinfo-header.html",
-                "docinfo-footer.html",
-                randomPrefix + "-docinfo.html",
-                randomPrefix + "-docinfo-header.html",
-                randomPrefix + "-docinfo-footer.html",
-                "docinfo.xml",
-                "docinfo-header.xml",
-                "docinfo-footer.xml",
-                randomPrefix + "-docinfo.xml",
-                randomPrefix + "-docinfo-header.xml",
-                randomPrefix + "-docinfo-footer.xml"
-        )
-                .stream()
+        final List<File> specialFiles = Stream.of(
+                        "docinfo.html",
+                        "docinfo-header.html",
+                        "docinfo-footer.html",
+                        randomPrefix + "-docinfo.html",
+                        randomPrefix + "-docinfo-header.html",
+                        randomPrefix + "-docinfo-footer.html",
+                        "docinfo.xml",
+                        "docinfo-header.xml",
+                        "docinfo-footer.xml",
+                        randomPrefix + "-docinfo.xml",
+                        randomPrefix + "-docinfo-header.xml",
+                        randomPrefix + "-docinfo-footer.xml")
                 .map(filename -> createFileWithContent(srcDir, filename))
+                .peek(file -> listenerAdaptor.processFile(file, "create"))
                 .collect(Collectors.toList());
 
-        for (File specialFile : specialFiles) {
-            listenerAdaptor.processFile(specialFile, "create");
-        }
-
         // then
-        assertThat(specialFiles)
-                .allMatch(specialFile -> {
-                    File outputCandidate = new File(outputDir, specialFile.getName());
-                    return outputCandidate.exists();
-                });
+        specialFiles.forEach(specialFile -> {
+            File outputCandidate = new File(outputDir, specialFile.getName());
+            assertThat(outputCandidate).exists();
+        });
     }
 
 }
