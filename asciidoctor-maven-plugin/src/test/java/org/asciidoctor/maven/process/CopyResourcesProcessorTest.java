@@ -14,8 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static org.asciidoctor.maven.io.AsciidoctorFileScanner.IGNORED_FILE_NAMES;
 import static org.asciidoctor.maven.io.TestFilesHelper.createFileWithContent;
+import static org.asciidoctor.maven.process.CopyResourcesProcessor.IGNORED_FILE_NAMES;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CopyResourcesProcessorTest {

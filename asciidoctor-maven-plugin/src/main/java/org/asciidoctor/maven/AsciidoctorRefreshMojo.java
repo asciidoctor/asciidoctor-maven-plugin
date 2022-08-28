@@ -18,9 +18,7 @@ import java.io.FileFilter;
 import java.util.*;
 
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
-import static org.asciidoctor.maven.io.AsciidoctorFileScanner.ASCIIDOC_NON_INTERNAL_REG_EXP;
-import static org.asciidoctor.maven.process.SourceDocumentFinder.CUSTOM_FILE_EXTENSIONS_PATTERN_PREFIX;
-import static org.asciidoctor.maven.process.SourceDocumentFinder.CUSTOM_FILE_EXTENSIONS_PATTERN_SUFFIX;
+import static org.asciidoctor.maven.process.SourceDocumentFinder.*;
 
 @Mojo(name = "auto-refresh")
 public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
@@ -156,7 +154,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
             return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter(stringJoiner.toString()));
         }
 
-        return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter(ASCIIDOC_NON_INTERNAL_REG_EXP));
+        return FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), new RegexFileFilter(STANDARD_FILE_EXTENSIONS_PATTERN));
     }
 
 }
