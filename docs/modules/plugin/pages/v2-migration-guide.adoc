@@ -1,7 +1,6 @@
 = Asciidoctor-maven-plugin 2.x.x migration guide
 :navtitle: v2 migration guide
 :sectnums:
-// TODO use italics for paths
 
 The `asciidoctor-maven-plugin` 2.0.0 introduces some breaking changes.
 This guide will provide the steps required to update a project currently using 1.5.x or 1.6.x version to 2.x.x.
