@@ -13,18 +13,18 @@ public final class Zips {
 
     public static void zip(final File dir, final File zipName) throws IOException, IllegalArgumentException {
         final String[] entries = dir.list();
-        final ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipName));
 
-        String prefix = dir.getAbsolutePath();
-        if (!prefix.endsWith(File.separator)) {
-            prefix += File.separator;
-        }
+        try (final ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipName))) {
+            String prefix = dir.getAbsolutePath();
+            if (!prefix.endsWith(File.separator)) {
+                prefix += File.separator;
+            }
 
-        for (final String entry : entries) {
-            File f = new File(dir, entry);
-            zip(out, f, prefix, zipName.getName().substring(0, zipName.getName().length() - 4));
+            for (final String entry : entries) {
+                File f = new File(dir, entry);
+                zip(out, f, prefix, zipName.getName().substring(0, zipName.getName().length() - 4));
+            }
         }
-        IOUtils.closeQuietly(out);
     }
 
     private static void zip(final ZipOutputStream out, final File f, final String prefix, final String root) throws IOException {
@@ -36,11 +36,11 @@ public final class Zips {
                 }
             }
         } else {
-            final FileInputStream in = new FileInputStream(f);
-            final ZipEntry entry = new ZipEntry(root + "/" + f.getPath().replace(prefix, ""));
-            out.putNextEntry(entry);
-            IOUtils.copy(in, out);
-            IOUtils.closeQuietly(in);
+            try (final FileInputStream in = new FileInputStream(f)) {
+                final ZipEntry entry = new ZipEntry(root + "/" + f.getPath().replace(prefix, ""));
+                out.putNextEntry(entry);
+                IOUtils.copy(in, out);
+            }
         }
     }
 
