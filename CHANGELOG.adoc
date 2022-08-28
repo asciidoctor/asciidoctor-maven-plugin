@@ -20,6 +20,10 @@ Improvements::
   * Fix throwing an exception when registering a non Extension (#596)
   * Reimplement resource copy using 'plexus.util.DirectorScanner' instead of 'maven-filtering' to reduce dependencies and build time (#597)
 
+Documentation::
+
+  * Add v3.x.x migration guide (#598)
+
 Build / Infrastructure::
 
   * Bump Doxia to v1.11.1 and maven-site-plugin in IT to 3.12.0 (#579)

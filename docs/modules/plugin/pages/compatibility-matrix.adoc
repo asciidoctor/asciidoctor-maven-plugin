@@ -8,6 +8,10 @@ Release candidate releases are not accounted.
 |===
 |Asciidoctor Maven Plugin | AsciidoctorJ | Supported
 
+|v3.x.x
+|v2.x.x
+|Yes
+
 |v2.x.x
 |v2.x.x
 |Yes
