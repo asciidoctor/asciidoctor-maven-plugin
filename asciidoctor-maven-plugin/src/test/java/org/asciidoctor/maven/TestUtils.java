@@ -4,7 +4,6 @@ import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.project.MavenProject;
-import org.asciidoctor.maven.io.AsciidoctorFileScanner;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.model.Resource;
 import org.assertj.core.api.Assertions;
@@ -18,6 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
+import static org.asciidoctor.maven.process.SourceDocumentFinder.STANDARD_FILE_EXTENSIONS_PATTERN;
 import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
 import static org.mockito.Mockito.when;
 
@@ -177,11 +177,8 @@ public class TestUtils {
 
             File[] htmls = actualFile.listFiles(f -> f.getName().endsWith("html"));
             if (htmls.length > 0) {
-                File[] asciidocs = expectedFile.listFiles(f -> {
-                    String asciidocFilePattern = ".*\\." + AsciidoctorFileScanner.ASCIIDOC_FILE_EXTENSIONS_REG_EXP + "$";
-                    return f.getName().matches(asciidocFilePattern) && !f.getName().startsWith("_") && !f.getName().startsWith(".");
-                });
-                Assertions.assertThat(htmls).hasSize(asciidocs.length);
+                File[] asciiDocs = expectedFile.listFiles(f -> f.getName().matches(STANDARD_FILE_EXTENSIONS_PATTERN));
+                Assertions.assertThat(htmls).hasSize(asciiDocs.length);
             }
             File[] actualChildren = actualFile.listFiles(File::isDirectory);
             assertEqualsStructure(expectedChildren, actualChildren);

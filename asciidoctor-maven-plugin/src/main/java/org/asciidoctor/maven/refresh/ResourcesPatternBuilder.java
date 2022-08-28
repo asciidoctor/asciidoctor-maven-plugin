@@ -1,14 +1,13 @@
 package org.asciidoctor.maven.refresh;
 
-import org.asciidoctor.maven.io.AsciidoctorFileScanner;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
-import static org.asciidoctor.maven.io.AsciidoctorFileScanner.ASCIIDOC_FILE_EXTENSIONS_REG_EXP;
+import static org.asciidoctor.maven.process.CopyResourcesProcessor.IGNORED_FILE_NAMES;
+import static org.asciidoctor.maven.process.SourceDocumentFinder.ASCIIDOC_FILE_EXTENSIONS_REG_EXP;
 
 /**
  * Builds regular expression to include all valid resources, as well as exclude invalid ones
@@ -32,7 +31,7 @@ public class ResourcesPatternBuilder {
         if (!sourceDocumentExtensions.isEmpty())
             filePattern.add(String.join("|", sourceDocumentExtensions));
 
-        final String specialFiles = Arrays.stream(AsciidoctorFileScanner.IGNORED_FILE_NAMES)
+        final String specialFiles = Arrays.stream(IGNORED_FILE_NAMES)
                 .map(pattern -> pattern.replaceAll("\\*", ".*"))
                 .map(pattern -> pattern.replaceAll("\\.", "\\\\."))
                 .collect(Collectors.joining("|"));
@@ -41,7 +40,7 @@ public class ResourcesPatternBuilder {
                 .append("^")
                 .append("(?!(" + specialFiles + (isBlank(sourceDocumentName) ? "" : "|" + sourceDocumentName) + "))")
                 .append("[^_.].*\\.(?!(")
-                .append(filePattern.toString())
+                .append(filePattern)
                 .append(")).*$")
                 .toString();
     }

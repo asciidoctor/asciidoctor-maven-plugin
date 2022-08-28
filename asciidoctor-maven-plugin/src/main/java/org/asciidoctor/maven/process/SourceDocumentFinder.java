@@ -20,13 +20,23 @@ import java.util.stream.Stream;
  */
 public class SourceDocumentFinder {
 
-    /** Pattern for matching standard file extensions. */
-    private static final String STANDARD_FILE_EXTENSIONS_PATTERN = "^[^_.].*\\.a((sc(iidoc)?)|d(oc)?)$";
+    // copied from org.asciidoctor.AsciiDocDirectoryWalker.ASCIIDOC_REG_EXP_EXTENSION
+    // should probably be configured in AsciidoctorMojo through @Parameter 'extension'
+    public static final String ASCIIDOC_FILE_EXTENSIONS_REG_EXP = "a((sc(iidoc)?)|d(oc)?)";
 
-    /** Prefix for matching custom file extensions. */
+    /**
+     * Pattern for matching standard file extensions.
+     */
+    public static final String STANDARD_FILE_EXTENSIONS_PATTERN = "^[^_.].*\\." + ASCIIDOC_FILE_EXTENSIONS_REG_EXP + "$";
+
+    /**
+     * Prefix for matching custom file extensions.
+     */
     public static final String CUSTOM_FILE_EXTENSIONS_PATTERN_PREFIX = "^[^_.].*\\.(";
 
-    /** Suffix for matching custom file extensions. */
+    /**
+     * Suffix for matching custom file extensions.
+     */
     public static final String CUSTOM_FILE_EXTENSIONS_PATTERN_SUFFIX = ")$";
 
     /**

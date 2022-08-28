@@ -2,7 +2,6 @@ package org.asciidoctor.maven.process;
 
 import org.apache.commons.io.FileUtils;
 import org.asciidoctor.maven.AsciidoctorMojo;
-import org.asciidoctor.maven.io.AsciidoctorFileScanner;
 import org.asciidoctor.maven.model.Resource;
 import org.codehaus.plexus.util.DirectoryScanner;
 
@@ -24,6 +23,32 @@ import static org.asciidoctor.maven.commons.StringUtils.isBlank;
  * - Internal files and folders: those not starting with underscore '_'.
  */
 public class CopyResourcesProcessor implements ResourcesProcessor {
+
+    // docinfo snippets should not be copied
+    public static String[] IGNORED_FILE_NAMES = {
+            "docinfo.html",
+            "docinfo-header.html",
+            "docinfo-footer.html",
+            "*-docinfo.html",
+            "*-docinfo-header.html",
+            "*-docinfo-footer.html",
+            "docinfo.xml",
+            "docinfo-header.xml",
+            "docinfo-footer.xml",
+            "*-docinfo.xml",
+            "*-docinfo-header.xml",
+            "*-docinfo-footer.xml"
+    };
+
+    private static String[] DEFAULT_ASCIIDOC_EXTENSIONS = {"**/*.adoc", "**/*.ad", "**/*.asc", "**/*.asciidoc"};
+
+    // Files and directories beginning with underscore are ignored
+    private static String[] INTERNAL_FOLDERS_AND_FILES_PATTERNS = {
+            "**/_*.*",
+            "**/_*",
+            "**/.*",
+            "**/_*/**/*.*",
+    };
 
     /*
      * (non-Javadoc)
@@ -64,13 +89,14 @@ public class CopyResourcesProcessor implements ResourcesProcessor {
         for (Resource resource : resources) {
 
             List<String> excludes = new ArrayList<>();
-            for (String value : AsciidoctorFileScanner.INTERNAL_FOLDERS_AND_FILES_PATTERNS) {
+            for (String value : INTERNAL_FOLDERS_AND_FILES_PATTERNS) {
                 excludes.add(value);
             }
-            for (String value : AsciidoctorFileScanner.IGNORED_FILE_NAMES) {
+            for (String value : IGNORED_FILE_NAMES) {
                 excludes.add("**/" + value);
             }
-            for (String value : AsciidoctorFileScanner.DEFAULT_ASCIIDOC_EXTENSIONS) {
+
+            for (String value : DEFAULT_ASCIIDOC_EXTENSIONS) {
                 excludes.add(value);
             }
             // exclude filename extensions if defined
