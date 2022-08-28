@@ -259,22 +259,6 @@ public class AsciidoctorMojo extends AbstractMojo {
         return candidateName.startsWith("./") || candidateName.startsWith(".\\");
     }
 
-    public static List<org.apache.maven.model.Resource> mapResources(List<Resource> resources) {
-        if (resources == null || resources.isEmpty())
-            return Collections.emptyList();
-
-        return resources.stream()
-                .map(mojoResource -> {
-                    org.apache.maven.model.Resource resource = new org.apache.maven.model.Resource();
-                    resource.setDirectory(mojoResource.getDirectory());
-                    resource.setTargetPath(mojoResource.getTargetPath());
-                    resource.setIncludes(mojoResource.getIncludes());
-                    resource.setExcludes(mojoResource.getExcludes());
-                    return resource;
-                })
-                .collect(Collectors.toList());
-    }
-
     /**
      * Updates optionsBuilder's baseDir and toDir accordingly to the conversion configuration.
      *

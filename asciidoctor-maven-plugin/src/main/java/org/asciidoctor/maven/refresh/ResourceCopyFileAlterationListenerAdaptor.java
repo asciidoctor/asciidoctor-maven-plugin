@@ -1,8 +1,8 @@
 package org.asciidoctor.maven.refresh;
 
-import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.logging.Log;
 import org.asciidoctor.maven.AsciidoctorRefreshMojo;
+import org.asciidoctor.maven.model.Resource;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.asciidoctor.maven.AsciidoctorMojo.mapResources;
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 
 public class ResourceCopyFileAlterationListenerAdaptor extends AbstractFileAlterationListenerAdaptor {
@@ -30,8 +29,7 @@ public class ResourceCopyFileAlterationListenerAdaptor extends AbstractFileAlter
                 final File sourceDirectory = mojo.findSourceDirectory(mojo.getSourceDirectory(), mojo.getBaseDir()).get();
                 final File outputDirectory = mojo.getOutputDirectory();
 
-                final List<Resource> resources = mapResources(mojo.getResources());
-                List<Resource> matchingResources = findMatchingResources(resources, file);
+                final List<Resource> matchingResources = findMatchingResources(mojo.getResources(), file);
                 if (matchingResources.isEmpty()) {
                     final String relativePath = file.getParentFile().getCanonicalPath().substring(sourceDirectory.getCanonicalPath().length());
                     final File destinationDirectory = new File(outputDirectory, relativePath);
