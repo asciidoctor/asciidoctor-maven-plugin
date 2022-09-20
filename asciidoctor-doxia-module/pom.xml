@@ -49,6 +49,18 @@
             <artifactId>maven-core</artifactId>
             <version>${maven.project.version}</version>
         </dependency>
+        <!--
+        <dependency>
+            <groupId>org.apache.maven.doxia</groupId>
+            <artifactId>doxia-module-xhtml</artifactId>
+            <version>${doxia.version}</version>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>org.apache.maven.doxia</groupId>
+            <artifactId>doxia-module-markdown</artifactId>
+            <version>${doxia.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
