@@ -65,4 +65,45 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
 
         System.out.println("12312");
     }
+
+    // example: SinkTestDocument
+    public static void generateTable(Sink sink) {
+        int[] justify = new int[]{0, 1, 2};
+        sink.table();
+        sink.tableRows(justify, true);
+        sink.tableRow();
+        sink.tableCell();
+        sink.text("Centered");
+        sink.lineBreak();
+        sink.text("cell 1,1");
+        sink.tableCell_();
+        sink.tableCell();
+        sink.text("Left-aligned");
+        sink.lineBreak();
+        sink.text("cell 1,2");
+        sink.tableCell_();
+        sink.tableCell();
+        sink.text("Right-aligned");
+        sink.lineBreak();
+        sink.text("cell 1,3");
+        sink.tableCell_();
+        sink.tableRow_();
+        sink.tableRow();
+        sink.tableCell();
+        sink.text("cell 2,1");
+        sink.tableCell_();
+        sink.tableCell();
+        sink.text("cell 2,2");
+        sink.tableCell_();
+        sink.tableCell();
+        sink.text("cell 2,3");
+        sink.tableCell_();
+        sink.tableRow_();
+        sink.tableRows_();
+        sink.tableCaption();
+        sink.text("Table caption");
+        sink.tableCaption_();
+        sink.table_();
+    }
+
 }

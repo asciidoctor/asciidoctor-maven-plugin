@@ -17,5 +17,10 @@ public class PreambleNodeProcessor extends AbstractSinkNodeProcessor implements 
     @Override
     public void process(StructuralNode node) {
         // TODO
+        final Sink sink = getSink();
+
+        sink.paragraph();
+        sink.text("some text");
+        sink.paragraph_();
     }
 }

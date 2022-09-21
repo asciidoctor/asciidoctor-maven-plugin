@@ -17,7 +17,7 @@ public class ParagraphNodeProcessor extends AbstractSinkNodeProcessor implements
     @Override
     public void process(StructuralNode node) {
         getSink().paragraph();
-        // content returns HTML processed including bold, italics, etc., monospace, attributes resolution
+        // content returns HTML processed including bold, italics, monospace, etc. attributes resolution
         String content = (String) node.getContent();
         getSink().rawText(content);
         getSink().paragraph_();

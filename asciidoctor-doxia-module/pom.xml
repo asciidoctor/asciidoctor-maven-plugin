@@ -61,6 +61,12 @@
             <artifactId>doxia-module-markdown</artifactId>
             <version>${doxia.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven.doxia</groupId>
+            <artifactId>doxia-site-renderer</artifactId>
+            <version>${doxia.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
