@@ -1,10 +1,7 @@
 package ast;
 
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.doxia.sink.SinkEventAttributes;
-import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.jruby.ast.impl.SectionImpl;
 
 public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
 
@@ -20,20 +17,15 @@ public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements N
     // TODO use asciidoctor id (would require writing plain HTML)
     @Override
     public void process(StructuralNode node) {
-        String id = node.getId();
-        String style = node.getStyle();
-        String name = ((SectionImpl) node).getSectionName();
-        String numeral = ((SectionImpl) node).getNumeral();
-
         sectionTitle(getSink(), node.getLevel(), node.getTitle());
     }
 
     private void sectionTitle(Sink sink, int level, String title) {
         switch (level) {
             case 0:
-                sink.sectionTitle();
-                sink.text(title);
-                sink.sectionTitle_();
+                // Kept for completeness, real document title is treated in
+                // DocumentNodeProcessor
+                sink.rawText("<h1>" + title + "</h1>");
                 break;
             case 1:
                 sink.sectionTitle1();
