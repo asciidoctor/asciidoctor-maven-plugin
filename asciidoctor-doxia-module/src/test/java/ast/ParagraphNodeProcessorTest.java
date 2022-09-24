@@ -58,6 +58,16 @@ public class ParagraphNodeProcessorTest {
                 .isEqualTo("<p>Some <code>text</code></p>");
     }
 
+    @Test
+    void should_convert_paragraph_with_inline_image() {
+        String content = documentWithParagraph("image:images/tiger.png[Kitty]");
+
+        String html = process(content);
+
+        assertThat(html)
+                .isEqualTo("<p><span class=\"image\"><img src=\"images/tiger.png\" alt=\"Kitty\"></span></p>");
+    }
+
     private String documentWithParagraph(String text) {
         return "= Tile\n\n" + "== Section\n\n" + text;
     }

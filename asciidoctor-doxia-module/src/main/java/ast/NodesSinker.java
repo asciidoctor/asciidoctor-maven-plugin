@@ -33,7 +33,8 @@ public class NodesSinker {
                 unorderedListNodeProcessor,
                 orderedListNodeProcessor,
                 new TableNodeProcessor(sink),
-                new ListingNodeProcessor(sink)
+                new ListingNodeProcessor(sink),
+                new ImageNodeProcessor(sink)
         );
     }
 
