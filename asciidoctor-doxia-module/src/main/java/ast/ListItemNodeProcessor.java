@@ -4,7 +4,6 @@ import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.StructuralNode;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class ListItemNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
@@ -55,7 +54,7 @@ public class ListItemNodeProcessor extends AbstractSinkNodeProcessor implements 
     }
 
     private static boolean isUnorderedListItem(ListItem item) {
-        String marker = item.getMarker();
+        final String marker = item.getMarker();
         return marker.startsWith("*") || marker.startsWith("-");
     }
 }

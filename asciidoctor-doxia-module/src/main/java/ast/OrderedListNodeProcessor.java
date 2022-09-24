@@ -27,23 +27,22 @@ public class OrderedListNodeProcessor extends AbstractSinkNodeProcessor implemen
         return true;
     }
 
-    // TODO: asciidoctor levels are
-    // 1 -> number
-    // 2 -> lower case
-    // 3 -> roman
-    // 4 -> upper case
+    // TODO: support asciidoctor levels in same order
+    //   1 -> number
+    //   2 -> lower case
+    //   3 -> roman
+    //   4 -> upper case
     @Override
     public void process(StructuralNode node) {
         final List<StructuralNode> items = node.getBlocks();
         final Sink sink = getSink();
 
-        // TODO support other asciidoctor numberings
         /**
-         * @param numberingStyle 0: 1. 2.
-         *                       1: a. b.
-         *                       2: A. B.
-         *                       3: i. ii.
-         *                       >: 1. 2.
+         * doxia numberingStyle 0: 1. 2.
+         *                      1: a. b.
+         *                      2: A. B.
+         *                      3: i. ii.
+         *                      >: 1. 2.
          */
         if (!items.isEmpty()) {
             sink.numberedList(0);

@@ -3,23 +3,18 @@ package ast.test;
 import ast.NodeProcessor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.doxia.siterenderer.RenderingContext;
-import org.apache.maven.doxia.siterenderer.sink.SiteRendererSink;
 import org.asciidoctor.Asciidoctor;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestInstancePostProcessor;
-import org.mockito.Mockito;
 
 import java.io.StringWriter;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 
 public class JUnitNodeProcessorExtension implements TestInstancePostProcessor {
 
     @Override
-    public void postProcessTestInstance(Object testInstance, ExtensionContext extensionContext) throws Exception {
+    public void postProcessTestInstance(Object testInstance, ExtensionContext extensionContext) throws IllegalAccessException, NoSuchFieldException {
         final Field asciidoctorField = findField(testInstance, Asciidoctor.class);
         if (asciidoctorField != null) {
             injectField(testInstance, asciidoctorField, Asciidoctor.Factory.create());
@@ -27,8 +22,13 @@ public class JUnitNodeProcessorExtension implements TestInstancePostProcessor {
 
         final Field nodeProcessorField = findField(testInstance, NodeProcessor.class);
         if (nodeProcessorField != null) {
-            Pair<? extends NodeProcessor, Sink> np = nodeProcessor(extractNodeProcessorType(testInstance));
+            Pair<? extends NodeProcessor, Sink> np = TestNodeProcessorFactory.create(extractNodeProcessorType(testInstance));
             injectField(testInstance, nodeProcessorField, np.getLeft());
+
+            final Field sinkField = findField(testInstance, Sink.class);
+            if (sinkField != null) {
+                injectField(testInstance, sinkField, np.getRight());
+            }
 
             final Field sinkWriter = findField(testInstance, StringWriter.class);
             if (sinkWriter != null) {
@@ -39,12 +39,6 @@ public class JUnitNodeProcessorExtension implements TestInstancePostProcessor {
         }
     }
 
-    private Pair<? extends NodeProcessor, Sink> nodeProcessor(Class<? extends NodeProcessor> clazz) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        RenderingContext renderingContext = Mockito.mock(RenderingContext.class);
-        Sink siteRendererSink = new SiteRendererSink(renderingContext);
-        Constructor<? extends NodeProcessor> constructor = clazz.getConstructor(Sink.class);
-        return Pair.of(constructor.newInstance(siteRendererSink), siteRendererSink);
-    }
 
     private Field findField(Object testInstance, Class<?> clazz) {
         for (Field field : testInstance.getClass().getDeclaredFields()) {
