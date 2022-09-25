@@ -67,14 +67,14 @@ public class UnorderedListNodeProcessorTest {
 
     private static String buildDocumentWithSimpleList() {
         return "= Document tile\n\n"
-                + "= Section\n\n"
+                + "== Section\n\n"
                 + "* unordered item 1\n"
                 + "* unordered item 2\n";
     }
 
     private static String buildDocumentWithNestedLists() {
         return "= Document tile\n\n"
-                + "= Section\n\n"
+                + "== Section\n\n"
                 + "* unordered item 1\n"
                 + "** unordered item 1 1\n"
                 + "** unordered item 1 2\n"

@@ -31,7 +31,7 @@ public class LiteralNodeProcessorTest {
 
     private String documentWithLiteralBlock() {
         return "= Document tile\n\n"
-                + "= Section\n\n This is a literal line.\n";
+                + "== Section\n\n This is a literal line.\n";
     }
 
     private String process(String content, int level) {

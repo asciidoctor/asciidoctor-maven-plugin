@@ -96,7 +96,7 @@ public class ListingNodeProcessorTest {
 
     private static String buildDocument(String blockDefinition) {
         return "= Document tile\n\n"
-                + "= Section\n\n"
+                + "== Section\n\n"
                 + blockDefinition + "\n" +
                 "----\n" +
                 "class HelloWorldLanguage {\n" +

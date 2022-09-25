@@ -63,14 +63,14 @@ public class OrderedListNodeProcessorTest {
 
     private static String buildDocumentWithSimpleList() {
         return "= Document tile\n\n"
-                + "= Section\n\n"
+                + "== Section\n\n"
                 + ". ordered item 1\n"
                 + ". ordered item 2\n";
     }
 
     private static String buildDocumentWithNestedLists() {
         return "= Document tile\n\n"
-                + "= Section\n\n"
+                + "== Section\n\n"
                 + ". ordered item 1\n"
                 + ".. ordered item 1 1\n"
                 + ". ordered item 1 2\n"

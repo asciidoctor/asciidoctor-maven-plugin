@@ -5,6 +5,7 @@ import org.asciidoctor.ast.Cell;
 import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.ast.impl.TableImpl;
+import org.asciidoctor.maven.commons.StringUtils;
 
 import java.util.List;
 
@@ -23,7 +24,6 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
 
     @Override
     public void process(StructuralNode node) {
-        // TODO
         final TableImpl tableNode = (TableImpl) node;
 
         final Sink sink = getSink();
@@ -31,9 +31,8 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
         // issue: creates an extra row
         sink.tableRows(new int[]{JUSTIFY_LEFT}, false);
 
+        // TODO header row is white in MD example
         List<Row> header = tableNode.getHeader();
-        // note: use rawText to allow injecting HTML
-        // since asciidoctor returns styled text already
         if (!header.isEmpty()) {
             sink.tableRow();
 //            sink.rawText("<thead>");
@@ -59,51 +58,27 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
         }
         sink.tableRows_();
 
-        // TODO caption
+        processCaption(node, sink);
 
         sink.table_();
-
-        System.out.println("12312");
     }
 
-    // example: SinkTestDocument
-    public static void generateTable(Sink sink) {
-        int[] justify = new int[]{0, 1, 2};
-        sink.table();
-        sink.tableRows(justify, true);
-        sink.tableRow();
-        sink.tableCell();
-        sink.text("Centered");
-        sink.lineBreak();
-        sink.text("cell 1,1");
-        sink.tableCell_();
-        sink.tableCell();
-        sink.text("Left-aligned");
-        sink.lineBreak();
-        sink.text("cell 1,2");
-        sink.tableCell_();
-        sink.tableCell();
-        sink.text("Right-aligned");
-        sink.lineBreak();
-        sink.text("cell 1,3");
-        sink.tableCell_();
-        sink.tableRow_();
-        sink.tableRow();
-        sink.tableCell();
-        sink.text("cell 2,1");
-        sink.tableCell_();
-        sink.tableCell();
-        sink.text("cell 2,2");
-        sink.tableCell_();
-        sink.tableCell();
-        sink.text("cell 2,3");
-        sink.tableCell_();
-        sink.tableRow_();
-        sink.tableRows_();
-        sink.tableCaption();
-        sink.text("Table caption");
-        sink.tableCaption_();
-        sink.table_();
+    private void processCaption(StructuralNode node, Sink sink) {
+        // 'null' when not set or '[caption=]'
+        final String tableCaption = (String) node.getAttribute("table-caption");
+        // disable single caption
+
+        final String title = node.getTitle();
+        if (StringUtils.isNotBlank(title)) {
+            node.getContentModel();
+            sink.tableCaption();
+            // It's safe: getCaption returns "" when '[caption=]' is set
+            if (StringUtils.isBlank(node.getCaption()))
+                sink.text(node.getTitle());
+            else
+                sink.text(node.getCaption() + node.getTitle());
+            sink.tableCaption_();
+        }
     }
 
 }

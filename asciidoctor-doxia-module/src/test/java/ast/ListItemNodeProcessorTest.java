@@ -48,7 +48,7 @@ public class ListItemNodeProcessorTest {
 
     private static String buildDocument(String marker) {
         return "= Document tile\n\n"
-                + "= Section\n\n"
+                + "== Section\n\n"
                 + marker + " unordered item\n";
     }
 
