@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
 public class SiteConversionConfigurationParser {
@@ -27,8 +26,8 @@ public class SiteConversionConfigurationParser {
     }
 
     public SiteConversionConfiguration processAsciiDocConfig(Xpp3Dom siteConfig,
-                                                      OptionsBuilder presetOptions,
-                                                      AttributesBuilder presetAttributes) {
+                                                             OptionsBuilder presetOptions,
+                                                             AttributesBuilder presetAttributes) {
 
         if (siteConfig == null) {
             OptionsBuilder options = presetOptions.attributes(presetAttributes);
@@ -62,7 +61,7 @@ public class SiteConversionConfigurationParser {
                             //     <require>time</require>
                             // </requires>
                             String value = requireNode.getValue();
-                            if (!isBlank(value))
+                            if (isNotBlank(value))
                                 gemsToRequire.add(value.trim());
                         }
                     }

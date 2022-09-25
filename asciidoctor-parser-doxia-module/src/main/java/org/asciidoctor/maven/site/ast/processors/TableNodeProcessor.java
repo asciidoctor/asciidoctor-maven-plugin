@@ -11,6 +11,8 @@ import org.asciidoctor.maven.site.ast.NodeProcessor;
 import java.util.List;
 
 import static org.apache.maven.doxia.sink.Sink.JUSTIFY_LEFT;
+import static org.asciidoctor.maven.commons.StringUtils.isBlank;
+import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
 public class TableNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
 
@@ -70,11 +72,11 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
         // disable single caption
 
         final String title = node.getTitle();
-        if (StringUtils.isNotBlank(title)) {
+        if (isNotBlank(title)) {
             node.getContentModel();
             sink.tableCaption();
             // It's safe: getCaption returns "" when '[caption=]' is set
-            if (StringUtils.isBlank(node.getCaption()))
+            if (isBlank(node.getCaption()))
                 sink.text(node.getTitle());
             else
                 sink.text(node.getCaption() + node.getTitle());

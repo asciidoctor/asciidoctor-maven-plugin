@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.*;
 
-import static org.asciidoctor.maven.commons.StringUtils.isBlank;
+import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 import static org.asciidoctor.maven.process.SourceDocumentFinder.*;
 
 @Mojo(name = "auto-refresh")
@@ -109,7 +109,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
         }
 
         { // included-sources monitor
-            if (!isBlank(refreshOn)) {
+            if (isNotBlank(refreshOn)) {
                 final FileAlterationObserver observer = new FileAlterationObserver(sourceDirectory, new RegexFileFilter(refreshOn));
                 final FileAlterationListener listener = new AdditionalSourceFileAlterationListenerAdaptor(this, () -> showWaitMessage(), getLog());
 
@@ -143,7 +143,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     }
 
     private IOFileFilter buildSourcesFileFilter() {
-        if (!isBlank(sourceDocumentName))
+        if (isNotBlank(sourceDocumentName))
             return new NameFileFilter(sourceDocumentName);
 
         if (!sourceDocumentExtensions.isEmpty()) {

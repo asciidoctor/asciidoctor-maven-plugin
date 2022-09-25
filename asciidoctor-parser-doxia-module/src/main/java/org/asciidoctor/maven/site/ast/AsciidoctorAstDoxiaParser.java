@@ -7,7 +7,6 @@ import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.*;
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.maven.commons.StringUtils;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordFormatter;
 import org.asciidoctor.maven.log.MemoryLogHandler;
@@ -24,6 +23,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.logging.Logger;
+
+import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
 /**
  * This class is used by <a href="https://maven.apache.org/doxia/overview.html">the Doxia framework</a>
@@ -81,7 +82,7 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
 
         sink.body();
         Document document = asciidoctor.load(source, conversionConfig.getOptions());
-        if (StringUtils.isNotBlank(reference))
+        if (isNotBlank(reference))
             getLog().debug("Document loaded: " + reference);
         new NodesSinker(sink).processNode(document, 0);
         sink.body_();
