@@ -10,11 +10,11 @@
     </parent>
 
     <groupId>org.asciidoctor</groupId>
-    <artifactId>asciidoctor-doxia-module</artifactId>
+    <artifactId>asciidoctor-parser-doxia-module</artifactId>
     <packaging>jar</packaging>
 
-    <name>Asciidoctor Doxia Parser</name>
-    <description>Asciidoctor Doxia Parser (for Maven Site integration)</description>
+    <name>Asciidoctor Parser Doxia Module</name>
+    <description>Asciidoctor Doxia Module based on Asciidoctor AST processing</description>
     <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
 
     <properties>

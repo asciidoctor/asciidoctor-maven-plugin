@@ -19,7 +19,6 @@
 
     <properties>
         <maven.plugin.plugin.version>3.5</maven.plugin.plugin.version>
-        <plexus.utils.version>3.3.1</plexus.utils.version>
         <netty.version>4.1.77.Final</netty.version>
         <maven.coveralls.plugin.version>4.3.0</maven.coveralls.plugin.version>
     </properties>
@@ -60,11 +59,6 @@
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-interpolation</artifactId>
             <version>1.22</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-utils</artifactId>
-            <version>${plexus.utils.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>

@@ -16,15 +16,29 @@
     <name>Asciidoctor Maven Commons</name>
     <description>
         Common components for Asciidoctor Maven Plugin and Asciidoctor Doxia Module(s).
-        These should not depend on Maven or Doxia libraries.
+        These should not depend on Doxia libraries, only shared Maven ones used by all.
     </description>
     <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
+
+    <properties>
+        <plexus.utils.version>3.3.1</plexus.utils.version>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.asciidoctor</groupId>
             <artifactId>asciidoctorj</artifactId>
             <version>${asciidoctorj.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>${maven.project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>${plexus.utils.version}</version>
         </dependency>
     </dependencies>
 
