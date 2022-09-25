@@ -18,6 +18,7 @@
         Common components for Asciidoctor Maven Plugin and Asciidoctor Doxia Module(s).
         These should not depend on Doxia libraries, only shared Maven ones used by all
         and provided as runtime.
+        This is an internal library and does not ensure backward compatibility.
     </description>
     <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
 
