@@ -14,8 +14,7 @@
     <packaging>jar</packaging>
 
     <name>Asciidoctor Parser Doxia Module</name>
-    <description>Asciidoctor Doxia Module based on Asciidoctor AST processing</description>
-    <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
+    <description>Asciidoctor Doxia Module based on Asciidoctor AST processing (for Maven Site integration)</description>
 
     <properties>
         <doxia.version>1.11.1</doxia.version>

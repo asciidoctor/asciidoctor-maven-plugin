@@ -10,11 +10,11 @@
     </parent>
 
     <groupId>org.asciidoctor</groupId>
-    <artifactId>asciidoctor-doxia-module</artifactId>
+    <artifactId>asciidoctor-converter-doxia-module</artifactId>
     <packaging>jar</packaging>
 
-    <name>Asciidoctor Doxia Parser</name>
-    <description>Asciidoctor Doxia Parser (for Maven Site integration)</description>
+    <name>Asciidoctor Converter Doxia Parser</name>
+    <description>Asciidoctor Doxia Parser based on Asciidoctor Html converter (for Maven Site integration)</description>
     <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
 
     <properties>
