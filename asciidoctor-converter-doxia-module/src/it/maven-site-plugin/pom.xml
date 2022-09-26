@@ -59,7 +59,7 @@
                 <dependencies>
                     <dependency><!-- add Asciidoctor Doxia Module to maven-site-plugin -->
                         <groupId>org.asciidoctor</groupId>
-                        <artifactId>asciidoctor-doxia-module</artifactId>
+                        <artifactId>asciidoctor-converter-doxia-module</artifactId>
                         <version>@project.version@</version>
                     </dependency>
                 </dependencies>
