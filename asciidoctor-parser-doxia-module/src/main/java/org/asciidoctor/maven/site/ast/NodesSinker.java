@@ -1,15 +1,12 @@
 package org.asciidoctor.maven.site.ast;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.doxia.sink.Sink;
-import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.ast.processors.*;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 public class NodesSinker {
 
@@ -28,6 +25,7 @@ public class NodesSinker {
         orderedListNodeProcessor.setItemNodeProcessor(listItemNodeProcessor);
 
         nodeProcessors = Arrays.asList(
+                new DocumentNodeProcessor(sink),
                 new PreambleNodeProcessor(sink),
                 new ParagraphNodeProcessor(sink),
                 new SectionNodeProcessor(sink),
@@ -35,18 +33,12 @@ public class NodesSinker {
                 orderedListNodeProcessor,
                 new TableNodeProcessor(sink),
                 new ListingNodeProcessor(sink),
-                new ImageNodeProcessor(sink)
+                new ImageNodeProcessor(sink),
+                new LiteralNodeProcessor(sink)
         );
     }
 
     public void processNode(StructuralNode node, int depth) {
-        // TODO debug? is
-        String message = protectedApply(node, ContentNode::getNodeName) + " (" + node.getClass().getSimpleName() + ")";
-        message += "\t\t\t\t context: " + protectedApply(node, ContentNode::getContext);
-        message += "\t\t\t\t style: " + protectedApply(node, StructuralNode::getStyle);
-        message += "\t\t\t\t level: " + protectedApply(node, n -> String.valueOf(n.getLevel()));
-
-        println(message, depth);
         try {
             // Only one matches in current NodeProcessors implementation
             Optional<NodeProcessor> nodeProcessor = nodeProcessors.stream()
@@ -72,20 +64,4 @@ public class NodesSinker {
                 .forEach(b -> processNode(b, depth + 1));
     }
 
-    private String protectedApply(StructuralNode node, Function<StructuralNode, String> function) {
-        try {
-            return function.apply(node);
-        } catch (Exception e) {
-            return "ERROR";
-        }
-    }
-
-    public void println(String message, int depth) {
-        final String prefix = prefix(depth);
-        System.out.println("[info] " + prefix + message);
-    }
-
-    private String prefix(int length) {
-        return length <= 0 ? "" : StringUtils.repeat("  ", length + 1);
-    }
 }
