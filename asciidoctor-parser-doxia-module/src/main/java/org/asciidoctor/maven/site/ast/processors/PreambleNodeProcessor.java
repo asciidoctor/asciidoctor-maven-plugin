@@ -15,8 +15,10 @@ public class PreambleNodeProcessor extends AbstractSinkNodeProcessor implements 
         return "preamble".equals(node.getNodeName());
     }
 
+    /**
+     * Do nothing. Preamble aggregates other blocks.
+     **/
     @Override
     public void process(StructuralNode node) {
-        getSink().rawText((String) node.getContent());
     }
 }

@@ -12,6 +12,10 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * PreambleNodeProcessor does nothing, contents are blocks processed
+ * by their respective processors.
+ */
 @NodeProcessorTest(PreambleNodeProcessor.class)
 public class PreambleNodeProcessorTest {
 
@@ -26,10 +30,7 @@ public class PreambleNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<div class=\"paragraph\">\n" +
-                        "<p>This is a preamble.\n" +
-                        "With two lines.</p>\n" +
-                        "</div>");
+                .isEqualTo("");
     }
 
     @Test
@@ -39,9 +40,7 @@ public class PreambleNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<div class=\"paragraph\">\n" +
-                        "<p>This <strong>is</strong> <em>a</em> simple <code>preamble</code>.</p>\n" +
-                        "</div>");
+                .isEqualTo("");
     }
 
     private String documentWithPreamble() {
