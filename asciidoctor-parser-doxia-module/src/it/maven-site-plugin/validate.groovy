@@ -10,7 +10,7 @@ final File file = new File(outputDir, expectedFile)
 
 new FileAsserter().isNotEmpty(file)
 
-String htmlContent = Files.readString(file.toPath())
+String htmlContent = file.text
 new HtmlAsserter(htmlContent).with { asserter ->
 
     asserter.containsDocumentTitle("Sample")
