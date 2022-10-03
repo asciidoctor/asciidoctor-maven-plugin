@@ -5,10 +5,14 @@ import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.project.MavenProject;
-import org.asciidoctor.*;
+import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.SafeMode;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordFormatter;
+import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
 import org.asciidoctor.maven.site.SiteConversionConfiguration;
 import org.asciidoctor.maven.site.SiteConversionConfigurationParser;
@@ -81,10 +85,21 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
         final MemoryLogHandler memoryLogHandler = asciidoctorLoggingSetup(asciidoctor, logHandler, siteDirectory);
 
         sink.body();
-        Document document = asciidoctor.load(source, conversionConfig.getOptions());
         if (isNotBlank(reference))
             getLog().debug("Document loaded: " + reference);
-        new NodesSinker(sink).processNode(document, 0);
+
+        Document document = asciidoctor.load(source, conversionConfig.getOptions());
+
+        try {
+            // process log messages according to mojo configuration
+            new LogRecordsProcessors(logHandler, siteDirectory, errorMessage -> getLog().error(errorMessage))
+                    .processLogRecords(memoryLogHandler);
+
+        } catch (Exception exception) {
+            throw new ParseException(exception.getMessage(), exception);
+        }
+
+        new NodesSinker(sink).processNode(document);
         sink.body_();
     }
 
@@ -140,9 +155,4 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
             }
         }
     }
-
-    protected String convertAsciiDoc(Asciidoctor asciidoctor, String source, Options options) {
-        return asciidoctor.convert(source, options);
-    }
-
 }

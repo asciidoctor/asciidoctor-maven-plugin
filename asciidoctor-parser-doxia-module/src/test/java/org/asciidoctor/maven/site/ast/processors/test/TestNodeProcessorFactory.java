@@ -14,9 +14,12 @@ public class TestNodeProcessorFactory {
 
     @SneakyThrows
     public static <T extends NodeProcessor> Pair<T, Sink> create(Class<T> clazz) {
-        RenderingContext renderingContext = Mockito.mock(RenderingContext.class);
-        Sink siteRendererSink = new SiteRendererSink(renderingContext);
+        final Sink siteRendererSink = createSink();
         Constructor<T> constructor = clazz.getConstructor(Sink.class);
         return Pair.of(constructor.newInstance(siteRendererSink), siteRendererSink);
+    }
+
+    public static Sink createSink() {
+        return new SiteRendererSink(Mockito.mock(RenderingContext.class));
     }
 }

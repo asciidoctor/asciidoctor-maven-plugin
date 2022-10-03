@@ -10,11 +10,9 @@ import java.util.Optional;
 
 public class NodesSinker {
 
-    private final Sink sink;
     private final List<NodeProcessor> nodeProcessors;
 
     public NodesSinker(Sink sink) {
-        this.sink = sink;
 
         UnorderedListNodeProcessor unorderedListNodeProcessor = new UnorderedListNodeProcessor(sink);
         OrderedListNodeProcessor orderedListNodeProcessor = new OrderedListNodeProcessor(sink);
@@ -38,7 +36,11 @@ public class NodesSinker {
         );
     }
 
-    public void processNode(StructuralNode node, int depth) {
+    public void processNode(StructuralNode node) {
+        processNode(node, 0);
+    }
+
+    private void processNode(StructuralNode node, int depth) {
         try {
             // Only one matches in current NodeProcessors implementation
             Optional<NodeProcessor> nodeProcessor = nodeProcessors.stream()
@@ -53,9 +55,8 @@ public class NodesSinker {
             } else {
                 traverse(node, depth);
             }
-
         } catch (Exception e) {
-            System.out.println(e);
+            throw new RuntimeException("Could not process node", e);
         }
     }
 
@@ -63,5 +64,4 @@ public class NodesSinker {
         node.getBlocks()
                 .forEach(b -> processNode(b, depth + 1));
     }
-
 }

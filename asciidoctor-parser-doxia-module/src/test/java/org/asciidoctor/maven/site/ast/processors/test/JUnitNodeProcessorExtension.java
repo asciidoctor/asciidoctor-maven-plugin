@@ -9,7 +9,8 @@ import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 
 import java.io.StringWriter;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+
+import static org.asciidoctor.maven.site.ast.processors.test.ReflectionUtils.*;
 
 public class JUnitNodeProcessorExtension implements TestInstancePostProcessor {
 
@@ -39,40 +40,14 @@ public class JUnitNodeProcessorExtension implements TestInstancePostProcessor {
         }
     }
 
-
-    private Field findField(Object testInstance, Class<?> clazz) {
-        for (Field field : testInstance.getClass().getDeclaredFields()) {
-            if (clazz.equals(field.getType())) return field;
-        }
-        return null;
-    }
-
-    private void injectField(Object testInstance, Field field, Object value) throws IllegalAccessException {
-
-        if (Modifier.isPrivate(field.getModifiers())) {
-            field.setAccessible(true);
-            field.set(testInstance, value);
-            field.setAccessible(false);
-        } else {
-            field.set(testInstance, value);
-        }
-    }
-
-    private Class<? extends NodeProcessor> extractNodeProcessorType(Object testInstance) {
-        return extractAnnotation(testInstance)
+    private Class<? extends NodeProcessor> extractNodeProcessorType(Object instance) {
+        return extractAnnotation(instance)
                 .value();
     }
 
-    private NodeProcessorTest extractAnnotation(Object testInstance) {
-        return testInstance
+    private NodeProcessorTest extractAnnotation(Object instance) {
+        return instance
                 .getClass()
                 .getAnnotation(NodeProcessorTest.class);
-    }
-
-    private StringWriter extractField(Object sink, String writer) throws NoSuchFieldException, IllegalAccessException {
-        Field field = sink.getClass().getDeclaredField("writer");
-        // We don't care to alter the instance, only lives during the test
-        field.setAccessible(true);
-        return (StringWriter) field.get(sink);
     }
 }
