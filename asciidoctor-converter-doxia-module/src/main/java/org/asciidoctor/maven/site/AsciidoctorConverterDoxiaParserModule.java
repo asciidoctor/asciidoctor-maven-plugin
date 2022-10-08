@@ -12,13 +12,13 @@ import org.codehaus.plexus.component.annotations.Component;
  *
  * @author jdlee
  */
-@Component(role = ParserModule.class, hint = AsciidoctorDoxiaParser.ROLE_HINT)
-public class AsciidoctorDoxiaParserModule extends AbstractParserModule {
+@Component(role = ParserModule.class, hint = AsciidoctorConverterDoxiaParser.ROLE_HINT)
+public class AsciidoctorConverterDoxiaParserModule extends AbstractParserModule {
 
     /**
      * The source directory for AsciiDoc files.
      */
-    public static final String SOURCE_DIRECTORY = AsciidoctorDoxiaParser.ROLE_HINT;
+    public static final String SOURCE_DIRECTORY = AsciidoctorConverterDoxiaParser.ROLE_HINT;
 
     /**
      * The extensions for AsciiDoc files.
@@ -26,9 +26,9 @@ public class AsciidoctorDoxiaParserModule extends AbstractParserModule {
     public static final String[] FILE_EXTENSIONS = new String[]{"adoc", "asciidoc"};
 
     /**
-     * Build a new instance of {@link AsciidoctorDoxiaParserModule}.
+     * Build a new instance of {@link AsciidoctorConverterDoxiaParserModule}.
      */
-    public AsciidoctorDoxiaParserModule() {
-        super(SOURCE_DIRECTORY, AsciidoctorDoxiaParser.ROLE_HINT, FILE_EXTENSIONS);
+    public AsciidoctorConverterDoxiaParserModule() {
+        super(SOURCE_DIRECTORY, AsciidoctorConverterDoxiaParser.ROLE_HINT, FILE_EXTENSIONS);
     }
 }

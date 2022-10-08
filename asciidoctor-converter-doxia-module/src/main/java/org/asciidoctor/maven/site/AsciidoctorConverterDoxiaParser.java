@@ -30,14 +30,14 @@ import java.util.logging.Logger;
  * @author jdlee
  * @author mojavelinux
  */
-@Component(role = Parser.class, hint = AsciidoctorDoxiaParser.ROLE_HINT)
-public class AsciidoctorDoxiaParser extends AbstractTextParser {
+@Component(role = Parser.class, hint = AsciidoctorConverterDoxiaParser.ROLE_HINT)
+public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
 
     @Inject
     protected Provider<MavenProject> mavenProjectProvider;
 
     /**
-     * The role hint for the {@link AsciidoctorDoxiaParser} Plexus component.
+     * The role hint for the {@link AsciidoctorConverterDoxiaParser} Plexus component.
      */
     public static final String ROLE_HINT = "asciidoc";
 

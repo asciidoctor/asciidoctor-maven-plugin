@@ -26,6 +26,7 @@ import javax.inject.Provider;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
@@ -99,7 +100,8 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
             throw new ParseException(exception.getMessage(), exception);
         }
 
-        new NodesSinker(sink).processNode(document);
+        final NodesSinker nodesSinker = new NodesSinker(sink);
+        nodesSinker.processNode(document);
         sink.body_();
     }
 

@@ -17,22 +17,19 @@ import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-public class AsciidoctorDoxiaParserTest {
+public class AsciidoctorConverterDoxiaParserTest {
 
     private static final String TEST_DOCS_PATH = "src/test/resources/";
 
     @Test
     public void should_convert_html_without_any_configuration() throws FileNotFoundException, ParseException {
-        // given
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "sample.asciidoc");
         final Sink sink = createSinkMock();
 
-        AsciidoctorDoxiaParser parser = mockAsciidoctorDoxiaParser();
+        AsciidoctorConverterDoxiaParser parser = mockAsciidoctorDoxiaParser();
 
-        // when
         parser.parse(new FileReader(srcAsciidoc), sink);
 
-        // then
         assertThat(((TextProviderSink) sink).text)
                 .contains("<h1>Document Title</h1>")
                 .contains("<div class=\"ulist\">")
@@ -43,12 +40,11 @@ public class AsciidoctorDoxiaParserTest {
 
     @Test
     public void should_convert_html_with_an_attribute() throws FileNotFoundException, ParseException {
-        // given
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "sample.asciidoc");
         Reader reader = new FileReader(srcAsciidoc);
 
         Sink sink = createSinkMock();
-        AsciidoctorDoxiaParser parser = mockAsciidoctorDoxiaParser(
+        AsciidoctorConverterDoxiaParser parser = mockAsciidoctorDoxiaParser(
                 "<configuration>\n" +
                         "  <asciidoc>\n" +
                         "    <attributes>\n" +
@@ -57,31 +53,27 @@ public class AsciidoctorDoxiaParserTest {
                         "  </asciidoc>\n" +
                         "</configuration>");
 
-        // when
         parser.parse(reader, sink);
 
-        // then
         assertThat(((TextProviderSink) sink).text)
                 .contains("<i class=\"fa icon-note\" title=\"Note\"></i>");
     }
 
     @Test
     public void should_convert_html_with_baseDir_option() throws FileNotFoundException, ParseException {
-        // given
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "main-document.adoc");
         final Sink sink = createSinkMock();
 
-        AsciidoctorDoxiaParser parser = mockAsciidoctorDoxiaParser(
+        AsciidoctorConverterDoxiaParser parser = mockAsciidoctorDoxiaParser(
                 "<configuration>\n" +
                         "  <asciidoc>\n" +
                         "    <baseDir>" + new File(srcAsciidoc.getParent()).getAbsolutePath() + "</baseDir>\n" +
                         "  </asciidoc>\n" +
                         "</configuration>");
 
-        // when
         parser.parse(new FileReader(srcAsciidoc), sink);
 
-        // then: 'include works'
+        // 'include works'
         assertThat(((TextProviderSink) sink).text)
                 .contains("<h1>Include test</h1>")
                 .contains("println \"HelloWorld from Groovy on ${new Date()}\"");
@@ -89,21 +81,19 @@ public class AsciidoctorDoxiaParserTest {
 
     @Test
     public void should_convert_html_with_relative_baseDir_option() throws FileNotFoundException, ParseException {
-        // given
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "main-document.adoc");
         final Sink sink = createSinkMock();
 
-        AsciidoctorDoxiaParser parser = mockAsciidoctorDoxiaParser(
+        AsciidoctorConverterDoxiaParser parser = mockAsciidoctorDoxiaParser(
                 "<configuration>\n" +
                         "  <asciidoc>\n" +
                         "    <baseDir>" + TEST_DOCS_PATH + "</baseDir>\n" +
                         "  </asciidoc>\n" +
                         "</configuration>");
 
-        // when
         parser.parse(new FileReader(srcAsciidoc), sink);
 
-        // then: 'include works'
+        // 'include works'
         assertThat(((TextProviderSink) sink).text)
                 .contains("<h1>Include test</h1>")
                 .contains("println \"HelloWorld from Groovy on ${new Date()}\"");
@@ -111,11 +101,10 @@ public class AsciidoctorDoxiaParserTest {
 
     @Test
     public void should_convert_html_with_templateDir_option() throws FileNotFoundException, ParseException {
-        // given
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "sample.asciidoc");
         final Sink sink = createSinkMock();
 
-        AsciidoctorDoxiaParser parser = mockAsciidoctorDoxiaParser(
+        AsciidoctorConverterDoxiaParser parser = mockAsciidoctorDoxiaParser(
                 "<configuration>\n" +
                         "  <asciidoc>\n" +
                         "    <templateDirs>\n" +
@@ -124,10 +113,8 @@ public class AsciidoctorDoxiaParserTest {
                         "  </asciidoc>\n" +
                         "</configuration>");
 
-        // when
         parser.parse(new FileReader(srcAsciidoc), sink);
 
-        // then
         assertThat(((TextProviderSink) sink).text)
                 .contains("<h1>Document Title</h1>")
                 .contains("<p class=\"custom-template \">");
@@ -135,11 +122,10 @@ public class AsciidoctorDoxiaParserTest {
 
     @Test
     public void should_convert_html_with_attributes_and_baseDir_option() throws FileNotFoundException, ParseException {
-        // given
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "main-document.adoc");
         final Sink sink = createSinkMock();
 
-        AsciidoctorDoxiaParser parser = mockAsciidoctorDoxiaParser(
+        AsciidoctorConverterDoxiaParser parser = mockAsciidoctorDoxiaParser(
                 "<configuration>\n" +
                         "  <asciidoc>\n" +
                         "    <baseDir>" + new File(srcAsciidoc.getParent()).getAbsolutePath() + "</baseDir>\n" +
@@ -151,10 +137,8 @@ public class AsciidoctorDoxiaParserTest {
                         "  </asciidoc>\n" +
                         "</configuration>");
 
-        // when
         parser.parse(new FileReader(srcAsciidoc), sink);
 
-        // then
         assertThat(((TextProviderSink) sink).text)
                 .contains("<h1>Include test</h1>")
                 .contains("<h2 id=\"code\">1. Code</h2>")
@@ -166,11 +150,10 @@ public class AsciidoctorDoxiaParserTest {
 
     @Test
     public void should_process_empty_selfclosing_XML_attributes() throws FileNotFoundException, ParseException {
-        // given
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "sample.asciidoc");
         final Sink sink = createSinkMock();
 
-        AsciidoctorDoxiaParser parser = mockAsciidoctorDoxiaParser(
+        AsciidoctorConverterDoxiaParser parser = mockAsciidoctorDoxiaParser(
                 "<configuration>\n" +
                         "  <asciidoc>\n" +
                         "    <attributes>\n" +
@@ -179,10 +162,8 @@ public class AsciidoctorDoxiaParserTest {
                         "  </asciidoc>\n" +
                         "</configuration>");
 
-        // when
         parser.parse(new FileReader(srcAsciidoc), sink);
 
-        // then
         assertThat(((TextProviderSink) sink).text)
                 .contains("<h2 id=\"id_section_a\">1. Section A</h2>")
                 .contains("<h3 id=\"id_section_a_subsection\">1.1. Section A Subsection</h3>");
@@ -190,11 +171,10 @@ public class AsciidoctorDoxiaParserTest {
 
     @Test
     public void should_process_empty_value_XML_attributes() throws FileNotFoundException, ParseException {
-        // given
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "sample.asciidoc");
         final Sink sink = createSinkMock();
 
-        AsciidoctorDoxiaParser parser = mockAsciidoctorDoxiaParser(
+        AsciidoctorConverterDoxiaParser parser = mockAsciidoctorDoxiaParser(
                 "<configuration>\n" +
                         "  <asciidoc>\n" +
                         "    <attributes>\n" +
@@ -203,10 +183,8 @@ public class AsciidoctorDoxiaParserTest {
                         "  </asciidoc>\n" +
                         "</configuration>");
 
-        // when
         parser.parse(new FileReader(srcAsciidoc), sink);
 
-        // then
         assertThat(((TextProviderSink) sink).text)
                 .contains("<h2 id=\"id_section_a\">1. Section A</h2>")
                 .contains("<h3 id=\"id_section_a_subsection\">1.1. Section A Subsection</h3>");
@@ -214,11 +192,10 @@ public class AsciidoctorDoxiaParserTest {
 
     @Test
     public void should_fail_when_logHandler_failIf_is_WARNING() {
-        // given
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "errors/document-with-missing-include.adoc");
         final Sink sink = createSinkMock();
 
-        AsciidoctorDoxiaParser parser = mockAsciidoctorDoxiaParser(
+        AsciidoctorConverterDoxiaParser parser = mockAsciidoctorDoxiaParser(
                 "<configuration>\n" +
                         "  <asciidoc>\n" +
                         "    <logHandler>\n" +
@@ -230,10 +207,9 @@ public class AsciidoctorDoxiaParserTest {
                         "  </asciidoc>\n" +
                         "</configuration>");
 
-        // when
         Throwable throwable = catchThrowable(() -> parser.parse(new FileReader(srcAsciidoc), sink));
 
-        // then: 'issues with WARN and ERROR are returned'
+        // 'issues with WARN and ERROR are returned'
         assertThat(throwable)
                 .isInstanceOf(org.apache.maven.doxia.parser.ParseException.class)
                 .hasMessageContaining("Found 4 issue(s) of severity WARN or higher during conversion");
@@ -251,15 +227,13 @@ public class AsciidoctorDoxiaParserTest {
     }
 
     @SneakyThrows
-    private AsciidoctorDoxiaParser mockAsciidoctorDoxiaParser() {
-        AsciidoctorDoxiaParser parser = new AsciidoctorDoxiaParser();
-        setVariableValueInObject(parser, "mavenProjectProvider", createMavenProjectMock(null));
-        return parser;
+    private AsciidoctorConverterDoxiaParser mockAsciidoctorDoxiaParser() {
+        return mockAsciidoctorDoxiaParser(null);
     }
 
     @SneakyThrows
-    private AsciidoctorDoxiaParser mockAsciidoctorDoxiaParser(String configuration) {
-        AsciidoctorDoxiaParser parser = new AsciidoctorDoxiaParser();
+    private AsciidoctorConverterDoxiaParser mockAsciidoctorDoxiaParser(String configuration) {
+        AsciidoctorConverterDoxiaParser parser = new AsciidoctorConverterDoxiaParser();
         setVariableValueInObject(parser, "mavenProjectProvider", createMavenProjectMock(configuration));
         return parser;
     }
