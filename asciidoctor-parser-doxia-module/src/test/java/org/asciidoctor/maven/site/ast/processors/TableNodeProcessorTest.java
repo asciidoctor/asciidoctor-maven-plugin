@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import static java.util.Collections.emptyList;
 import static org.asciidoctor.maven.site.ast.processors.TableNodeProcessorTest.DocumentBuilder.CaptionOptions.*;
 import static org.asciidoctor.maven.site.ast.processors.TableNodeProcessorTest.DocumentBuilder.documentWithTable;
+import static org.asciidoctor.maven.site.ast.processors.test.StringTestUtils.clean;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -41,15 +42,15 @@ public class TableNodeProcessorTest {
 
         // Header for now is just first row with class=a
         assertThat(html)
-                .isEqualTo("<table border=\"0\" class=\"bodyTable\">\n" +
-                        "<tr class=\"a\">\n" +
-                        "<th>Name</th>\n" +
-                        "<th>Language</th></tr>\n" +
-                        "<tr class=\"b\">\n" +
-                        "<td align=\"left\">JRuby</td>\n" +
-                        "<td>Java</td></tr>\n" +
-                        "<tr class=\"a\">\n" +
-                        "<td align=\"left\">Rubinius</td>\n" +
+                .isEqualTo("<table border=\"0\" class=\"bodyTable\">" +
+                        "<tr class=\"a\">" +
+                        "<th>Name</th>" +
+                        "<th>Language</th></tr>" +
+                        "<tr class=\"b\">" +
+                        "<td align=\"left\">JRuby</td>" +
+                        "<td>Java</td></tr>" +
+                        "<tr class=\"a\">" +
+                        "<td align=\"left\">Rubinius</td>" +
                         "<td>Ruby</td></tr></table>");
     }
 
@@ -60,13 +61,13 @@ public class TableNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<table border=\"0\" class=\"bodyTable\">\n" +
-                        "<tr class=\"a\">\n" +
-                        "<td align=\"left\">JRuby</td>\n" +
-                        "<td>Java</td></tr>\n" +
-                        "<tr class=\"b\">\n" +
-                        "<td align=\"left\">Rubinius</td>\n" +
-                        "<td>Ruby</td></tr></table>");
+                .isEqualTo(clean("<table border=\"0\" class=\"bodyTable\">" +
+                        "<tr class=\"a\">" +
+                        "<td align=\"left\">JRuby</td>" +
+                        "<td>Java</td></tr>" +
+                        "<tr class=\"b\">" +
+                        "<td align=\"left\">Rubinius</td>" +
+                        "<td>Ruby</td></tr></table>"));
     }
 
     @Test
@@ -87,12 +88,12 @@ public class TableNodeProcessorTest {
 
         assertThat(html)
                 .startsWith("<table border=\"0\" class=\"bodyTable\"><caption>Table 1. Table caption&#8230;&#8203;or title</caption>")
-                .isEqualTo("<table border=\"0\" class=\"bodyTable\"><caption>Table 1. Table caption&#8230;&#8203;or title</caption>\n" +
-                        "<tr class=\"a\">\n" +
-                        "<td align=\"left\">JRuby</td>\n" +
-                        "<td>Java</td></tr>\n" +
-                        "<tr class=\"b\">\n" +
-                        "<td align=\"left\">Rubinius</td>\n" +
+                .isEqualTo("<table border=\"0\" class=\"bodyTable\"><caption>Table 1. Table caption&#8230;&#8203;or title</caption>" +
+                        "<tr class=\"a\">" +
+                        "<td align=\"left\">JRuby</td>" +
+                        "<td>Java</td></tr>" +
+                        "<tr class=\"b\">" +
+                        "<td align=\"left\">Rubinius</td>" +
                         "<td>Ruby</td></tr></table>");
     }
 
@@ -123,25 +124,25 @@ public class TableNodeProcessorTest {
     }
 
     private static String expectedTableWithoutLabel() {
-        return "<table border=\"0\" class=\"bodyTable\"><caption>Table caption&#8230;&#8203;or title</caption>\n" +
-                "<tr class=\"a\">\n" +
-                "<td align=\"left\">JRuby</td>\n" +
-                "<td>Java</td></tr>\n" +
-                "<tr class=\"b\">\n" +
-                "<td align=\"left\">Rubinius</td>\n" +
+        return "<table border=\"0\" class=\"bodyTable\"><caption>Table caption&#8230;&#8203;or title</caption>" +
+                "<tr class=\"a\">" +
+                "<td align=\"left\">JRuby</td>" +
+                "<td>Java</td></tr>" +
+                "<tr class=\"b\">" +
+                "<td align=\"left\">Rubinius</td>" +
                 "<td>Ruby</td></tr></table>";
     }
 
     private static String expectedTableWithoutCaption() {
-        return "<table border=\"0\" class=\"bodyTable\">\n" +
-                "<tr class=\"a\">\n" +
-                "<td align=\"left\">JRuby</td>\n" +
-                "<td>Java</td></tr>\n" +
-                "<tr class=\"b\">\n" +
-                "<td align=\"left\">Rubinius</td>\n" +
-                "<td>Ruby</td></tr>\n" +
-                "<tr class=\"a\">\n" +
-                "<td align=\"left\"><strong>Opal</strong></td>\n" +
+        return "<table border=\"0\" class=\"bodyTable\">" +
+                "<tr class=\"a\">" +
+                "<td align=\"left\">JRuby</td>" +
+                "<td>Java</td></tr>" +
+                "<tr class=\"b\">" +
+                "<td align=\"left\">Rubinius</td>" +
+                "<td>Ruby</td></tr>" +
+                "<tr class=\"a\">" +
+                "<td align=\"left\"><strong>Opal</strong></td>" +
                 "<td><em>JavaScript</em></td></tr></table>";
     }
 
@@ -170,7 +171,7 @@ public class TableNodeProcessorTest {
             return "= Document tile\n" +
                     (captionOptions.disableGlobally ? ":table-caption!:\n" : "") +
                     "\n" +
-                    "== Section\n\n" +
+                    "== Section\n" +
                     (captionOptions.disableForTable ? "[caption=]\n" : "") +
                     (captionOptions.include ? ".Table caption...or title\n" : "") +
                     "|===\n" +
@@ -189,6 +190,6 @@ public class TableNodeProcessorTest {
 
         nodeProcessor.process(node);
 
-        return sinkWriter.toString();
+        return clean(sinkWriter.toString());
     }
 }

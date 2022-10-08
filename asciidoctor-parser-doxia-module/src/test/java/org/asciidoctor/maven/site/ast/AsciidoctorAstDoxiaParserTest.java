@@ -1,6 +1,7 @@
 package org.asciidoctor.maven.site.ast;
 
 import lombok.SneakyThrows;
+import org.apache.maven.doxia.parser.AbstractTextParser;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.project.MavenProject;
@@ -11,7 +12,9 @@ import org.mockito.Mockito;
 
 import java.io.*;
 
+import static org.asciidoctor.maven.site.ast.AsciidoctorAstDoxiaParserTest.TestMocks.mockAsciidoctorDoxiaParser;
 import static org.asciidoctor.maven.site.ast.processors.test.ReflectionUtils.extractField;
+import static org.asciidoctor.maven.site.ast.processors.test.StringTestUtils.clean;
 import static org.asciidoctor.maven.site.ast.processors.test.TestNodeProcessorFactory.createSink;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -38,19 +41,19 @@ public class AsciidoctorAstDoxiaParserTest {
 
         AsciidoctorAstDoxiaParser parser = mockAsciidoctorDoxiaParser();
 
-        parser.parse(new FileReader(srcAsciidoc), sink);
+        String result = parse(parser, srcAsciidoc);
 
-        assertThat(sinkWriter.toString())
-                .isEqualTo("<h1>Document Title</h1><p>Preamble paragraph.</p>\n" +
-                        "<h2><a name=\"Section_A\"></a>Section A</h2>\n" +
-                        "<p><strong>Section A</strong> paragraph.</p>\n" +
-                        "<h3><a name=\"Section_A_Subsection\"></a>Section A Subsection</h3>\n" +
-                        "<p><strong>Section A</strong> <em>subsection</em> paragraph.</p>\n" +
-                        "<h2><a name=\"Section_B\"></a>Section B</h2>\n" +
-                        "<p><strong>Section B</strong> paragraph.</p>\n" +
-                        "<ul>\n" +
-                        "<li>Item 1</li>\n" +
-                        "<li>Item 2</li>\n" +
+        assertThat(result)
+                .isEqualTo("<h1>Document Title</h1><p>Preamble paragraph.</p>" +
+                        "<h2><a name=\"Section_A\"></a>Section A</h2>" +
+                        "<p><strong>Section A</strong> paragraph.</p>" +
+                        "<h3><a name=\"Section_A_Subsection\"></a>Section A Subsection</h3>" +
+                        "<p><strong>Section A</strong> <em>subsection</em> paragraph.</p>" +
+                        "<h2><a name=\"Section_B\"></a>Section B</h2>" +
+                        "<p><strong>Section B</strong> paragraph.</p>" +
+                        "<ul>" +
+                        "<li>Item 1</li>" +
+                        "<li>Item 2</li>" +
                         "<li>Item 3</li></ul><div class=\"source\"><pre class=\"prettyprint\"><code>require 'asciidoctor'</code></pre></div>");
     }
 
@@ -69,9 +72,9 @@ public class AsciidoctorAstDoxiaParserTest {
                         "  </asciidoc>\n" +
                         "</configuration>");
 
-        parser.parse(new StringReader(source), sink);
+        String result = parse(parser, source);
 
-        assertThat(sinkWriter.toString())
+        assertThat(result)
                 .contains("<p>My attribute value is a_value.</p>");
     }
 
@@ -88,9 +91,9 @@ public class AsciidoctorAstDoxiaParserTest {
                         "  </asciidoc>\n" +
                         "</configuration>");
 
-        parser.parse(new StringReader(source), sink);
+        String result = parse(parser, source);
 
-        assertThat(sinkWriter.toString())
+        assertThat(result)
                 .contains("</a>1. Section A</h2>")
                 .contains("</a>1.1. Section A Subsection</h3>")
                 .contains("</a>2. Section B</h2>")
@@ -111,9 +114,9 @@ public class AsciidoctorAstDoxiaParserTest {
                         "  </asciidoc>\n" +
                         "</configuration>");
 
-        parser.parse(new StringReader(source), sink);
+        String result = parse(parser, source);
 
-        assertThat(sinkWriter.toString())
+        assertThat(result)
                 .contains("</a>1. Section A</h2>")
                 .contains("</a>Section A Subsection</h3>")
                 .contains("</a>2. Section B</h2>")
@@ -133,9 +136,9 @@ public class AsciidoctorAstDoxiaParserTest {
                         "  </asciidoc>\n" +
                         "</configuration>");
 
-        parser.parse(new StringReader(source), sink);
+        String result = parse(parser, source);
 
-        assertThat(sinkWriter.toString())
+        assertThat(result)
                 .contains("</a>1. Section A</h2>")
                 .contains("</a>1.1. Section A Subsection</h3>")
                 .contains("</a>2. Section B</h2>")
@@ -179,28 +182,40 @@ public class AsciidoctorAstDoxiaParserTest {
                 .hasMessageContaining("Found 2 issue(s) of severity WARN or higher during conversion");
     }
 
-    @SneakyThrows
-    private javax.inject.Provider<MavenProject> createMavenProjectMock(String configuration) {
-        MavenProject mockProject = Mockito.mock(MavenProject.class);
-        when(mockProject.getBasedir())
-                .thenReturn(new File("."));
-        when(mockProject.getGoalConfiguration(anyString(), anyString(), anyString(), anyString()))
-                .thenReturn(configuration != null ? Xpp3DomBuilder.build(new StringReader(configuration)) : null);
-
-        return () -> mockProject;
+    private String parse(AbstractTextParser parser, File source) throws FileNotFoundException, ParseException {
+        parser.parse(new FileReader(source), sink);
+        return clean(sinkWriter.toString());
     }
 
-    @SneakyThrows
-    private AsciidoctorAstDoxiaParser mockAsciidoctorDoxiaParser() {
-        AsciidoctorAstDoxiaParser parser = new AsciidoctorAstDoxiaParser();
-        setVariableValueInObject(parser, "mavenProjectProvider", createMavenProjectMock(null));
-        return mockAsciidoctorDoxiaParser(null);
+    private String parse(AbstractTextParser parser, String source) throws ParseException {
+        parser.parse(new StringReader(source), sink);
+        return clean(sinkWriter.toString());
     }
 
-    @SneakyThrows
-    private AsciidoctorAstDoxiaParser mockAsciidoctorDoxiaParser(String configuration) {
-        AsciidoctorAstDoxiaParser parser = new AsciidoctorAstDoxiaParser();
-        setVariableValueInObject(parser, "mavenProjectProvider", createMavenProjectMock(configuration));
-        return parser;
+    static class TestMocks {
+        @SneakyThrows
+        static javax.inject.Provider<MavenProject> createMavenProjectMock(String configuration) {
+            MavenProject mockProject = Mockito.mock(MavenProject.class);
+            when(mockProject.getBasedir())
+                    .thenReturn(new File("."));
+            when(mockProject.getGoalConfiguration(anyString(), anyString(), anyString(), anyString()))
+                    .thenReturn(configuration != null ? Xpp3DomBuilder.build(new StringReader(configuration)) : null);
+
+            return () -> mockProject;
+        }
+
+        @SneakyThrows
+        static AsciidoctorAstDoxiaParser mockAsciidoctorDoxiaParser() {
+            AsciidoctorAstDoxiaParser parser = new AsciidoctorAstDoxiaParser();
+            setVariableValueInObject(parser, "mavenProjectProvider", createMavenProjectMock(null));
+            return mockAsciidoctorDoxiaParser(null);
+        }
+
+        @SneakyThrows
+        static AsciidoctorAstDoxiaParser mockAsciidoctorDoxiaParser(String configuration) {
+            AsciidoctorAstDoxiaParser parser = new AsciidoctorAstDoxiaParser();
+            setVariableValueInObject(parser, "mavenProjectProvider", createMavenProjectMock(configuration));
+            return parser;
+        }
     }
 }

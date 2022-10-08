@@ -13,6 +13,7 @@ import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static org.asciidoctor.maven.site.ast.processors.test.StringTestUtils.clean;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(UnorderedListNodeProcessor.class)
@@ -38,9 +39,10 @@ public class UnorderedListNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<ul>\n" +
-                        "<li>unordered item 1</li>\n" +
-                        "<li>unordered item 2</li></ul>");
+                .isEqualTo("<ul>" +
+                        "<li>unordered item 1</li>" +
+                        "<li>unordered item 2</li>" +
+                        "</ul>");
     }
 
     @Test
@@ -50,17 +52,17 @@ public class UnorderedListNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<ul>\n" +
-                        "<li>unordered item 1\n" +
-                        "<ul>\n" +
-                        "<li>unordered item 1 1</li>\n" +
+                .isEqualTo("<ul>" +
+                        "<li>unordered item 1" +
+                        "<ul>" +
+                        "<li>unordered item 1 1</li>" +
                         "<li>unordered item 1 2</li>" +
                         "</ul>" +
-                        "</li>\n" +
-                        "<li>unordered item 2\n" +
-                        "<ul>\n" +
-                        "<li>unordered item 2 1\n" +
-                        "<ul>\n" +
+                        "</li>" +
+                        "<li>unordered item 2" +
+                        "<ul>" +
+                        "<li>unordered item 2 1" +
+                        "<ul>" +
                         "<li>unordered item 2 1 1</li></ul></li></ul>" +
                         "</li>" +
                         "</ul>");
@@ -91,6 +93,6 @@ public class UnorderedListNodeProcessorTest {
 
         nodeProcessor.process(node);
 
-        return sinkWriter.toString();
+        return clean(sinkWriter.toString());
     }
 }

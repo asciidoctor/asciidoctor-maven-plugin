@@ -13,6 +13,7 @@ import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static org.asciidoctor.maven.site.ast.processors.test.StringTestUtils.clean;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(OrderedListNodeProcessor.class)
@@ -38,8 +39,8 @@ public class OrderedListNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<ol style=\"list-style-type: decimal\">\n" +
-                        "<li>ordered item 1</li>\n" +
+                .isEqualTo("<ol style=\"list-style-type: decimal\">" +
+                        "<li>ordered item 1</li>" +
                         "<li>ordered item 2</li></ol>");
     }
 
@@ -50,15 +51,15 @@ public class OrderedListNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<ol style=\"list-style-type: decimal\">\n" +
-                        "<li>ordered item 1\n" +
-                        "<ol style=\"list-style-type: decimal\">\n" +
-                        "<li>ordered item 1 1</li></ol></li>\n" +
-                        "<li>ordered item 1 2</li>\n" +
-                        "<li>ordered item 2\n" +
-                        "<ol style=\"list-style-type: decimal\">\n" +
-                        "<li>ordered item 2 1\n" +
-                        "<ol style=\"list-style-type: decimal\">\n" +
+                .isEqualTo("<ol style=\"list-style-type: decimal\">" +
+                        "<li>ordered item 1" +
+                        "<ol style=\"list-style-type: decimal\">" +
+                        "<li>ordered item 1 1</li></ol></li>" +
+                        "<li>ordered item 1 2</li>" +
+                        "<li>ordered item 2" +
+                        "<ol style=\"list-style-type: decimal\">" +
+                        "<li>ordered item 2 1" +
+                        "<ol style=\"list-style-type: decimal\">" +
                         "<li>ordered item 2 1 1</li></ol></li></ol></li></ol>");
     }
 
@@ -87,6 +88,6 @@ public class OrderedListNodeProcessorTest {
 
         nodeProcessor.process(node);
 
-        return sinkWriter.toString();
+        return clean(sinkWriter.toString());
     }
 }

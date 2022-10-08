@@ -1,4 +1,3 @@
-import java.nio.file.Files
 import java.util.stream.Collectors
 
 File outputDir = new File(basedir, "target/site")
@@ -60,12 +59,13 @@ class FileAsserter {
 }
 
 class HtmlAsserter {
+
     private final String content
 
     private int lastAssertionCursor = 0
 
     HtmlAsserter(String content) {
-        this.content = content.replaceAll("\n", "")
+        this.content = clean(content)
     }
 
     void fail(String msg) {
@@ -185,7 +185,13 @@ class HtmlAsserter {
             fail("Number of rows do not match. Found: ${count - 1}, expected: $rows")
         }
     }
-}
 
+    // Removes linebreaks to validate to avoid OS dependant issues.
+    private String clean(String value) {
+        return value.replaceAll("\r\n", "")
+                .replaceAll("\n", "")
+                .trim();
+    }
+}
 
 return true

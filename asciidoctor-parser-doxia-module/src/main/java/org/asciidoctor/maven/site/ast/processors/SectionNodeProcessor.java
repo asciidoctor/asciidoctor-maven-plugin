@@ -65,9 +65,9 @@ public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements N
     }
 
     private String formatTitle(String title, Section node) {
-        Boolean numbered = ((SectionImpl) node).getBoolean("numbered");
-        Long sectnumlevels = getSectnumlevels(node);
-        int level = node.getLevel();
+        final Boolean numbered = node.isNumbered();
+        final Long sectnumlevels = getSectnumlevels(node);
+        final int level = node.getLevel();
         if (numbered && level <= sectnumlevels) {
             String sectnum = ((SectionImpl) node).getString("sectnum");
             return String.format("%s %s", sectnum, title);

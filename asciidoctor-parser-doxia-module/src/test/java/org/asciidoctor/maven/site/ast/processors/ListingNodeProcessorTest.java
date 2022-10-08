@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.io.StringWriter;
 import java.util.Collections;
 
+import static org.asciidoctor.maven.site.ast.processors.test.StringTestUtils.clean;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(ListingNodeProcessor.class)
@@ -42,10 +43,10 @@ public class ListingNodeProcessorTest {
 
     private static String expectedHtmlCodeBlock() {
         // Actual styling is added in JS by prettify
-        return "<div class=\"source\"><pre class=\"prettyprint\"><code>class HelloWorldLanguage {\n" +
-                "    public static void main(String[] args) {\n" +
-                "        System.out.println(\"Hello, World!\");\n" +
-                "    }\n" +
+        return "<div class=\"source\"><pre class=\"prettyprint\"><code>class HelloWorldLanguage {" +
+                "    public static void main(String[] args) {" +
+                "        System.out.println(\"Hello, World!\");" +
+                "    }" +
                 "}</code></pre></div>";
     }
 
@@ -76,10 +77,10 @@ public class ListingNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<div><pre>class HelloWorldLanguage {\n" +
-                        "    public static void main(String[] args) {\n" +
-                        "        System.out.println(\"Hello, World!\");\n" +
-                        "    }\n" +
+                .isEqualTo("<div><pre>class HelloWorldLanguage {" +
+                        "    public static void main(String[] args) {" +
+                        "        System.out.println(\"Hello, World!\");" +
+                        "    }" +
                         "}</pre></div>");
     }
 
@@ -115,6 +116,6 @@ public class ListingNodeProcessorTest {
 
         nodeProcessor.process(node);
 
-        return sinkWriter.toString();
+        return clean(sinkWriter.toString());
     }
 }
