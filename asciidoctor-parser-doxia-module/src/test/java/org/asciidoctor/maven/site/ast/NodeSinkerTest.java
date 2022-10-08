@@ -1,9 +1,12 @@
 package org.asciidoctor.maven.site.ast;
 
 import org.apache.maven.doxia.sink.Sink;
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.ast.impl.BlockImpl;
+import org.asciidoctor.jruby.ast.impl.DocumentImpl;
+import org.asciidoctor.jruby.ast.impl.SectionImpl;
 import org.asciidoctor.jruby.ast.impl.TableImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -88,7 +91,10 @@ public class NodeSinkerTest {
 
     @Test
     void should_process_section_node() {
-        StructuralNode mockNode = mockNode("section");
+        StructuralNode mockNode = mockNode("section", SectionImpl.class);
+        Document mockDocument = mockNode("section", DocumentImpl.class);
+        Mockito.when(mockDocument.getAttribute(Mockito.anyString())).thenReturn(null);
+        Mockito.when(mockNode.getDocument()).thenReturn(mockDocument);
 
         nodesSinker.processNode(mockNode);
 

@@ -66,10 +66,30 @@ public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements N
 
     private String formatTitle(String title, Section node) {
         Boolean numbered = ((SectionImpl) node).getBoolean("numbered");
-        if (numbered) {
+        Long sectnumlevels = getSectnumlevels(node);
+        int level = node.getLevel();
+        if (numbered && level <= sectnumlevels) {
             String sectnum = ((SectionImpl) node).getString("sectnum");
             return String.format("%s %s", sectnum, title);
         }
         return title;
+    }
+
+    private Long getSectnumlevels(Section node) {
+        Object sectnumlevels = node.getDocument().getAttribute("sectnumlevels");
+
+        if (sectnumlevels != null) {
+            // Injecting from Maven configuration
+            if (sectnumlevels instanceof String) {
+                return Long.valueOf((String) sectnumlevels);
+            }
+            // For tests, using AttributesBuilder
+            if (sectnumlevels instanceof Long) {
+                return (Long) sectnumlevels;
+            }
+        }
+        // Asciidoctor default = 3 (====)
+        // https://github.com/asciidoctor/asciidoctor/blob/4bab183b9f3fad538f86071b2106f3b8185d3832/lib/asciidoctor/converter/html5.rb#L387
+        return 3L;
     }
 }

@@ -98,6 +98,29 @@ public class AsciidoctorAstDoxiaParserTest {
     }
 
     @Test
+    public void should_process_config_with_sectnumlevels() throws ParseException {
+        final String source = sectionsSample();
+
+        AsciidoctorAstDoxiaParser parser = mockAsciidoctorDoxiaParser(
+                "<configuration>\n" +
+                        "  <asciidoc>\n" +
+                        "    <attributes>\n" +
+                        "      <sectnums/>\n" +
+                        "      <sectnumlevels>1</sectnumlevels>\n" +
+                        "    </attributes>\n" +
+                        "  </asciidoc>\n" +
+                        "</configuration>");
+
+        parser.parse(new StringReader(source), sink);
+
+        assertThat(sinkWriter.toString())
+                .contains("</a>1. Section A</h2>")
+                .contains("</a>Section A Subsection</h3>")
+                .contains("</a>2. Section B</h2>")
+                .contains("</a>Section B Subsection</h3>");
+    }
+
+    @Test
     public void should_process_empty_value_XML_attributes() throws ParseException {
         final String source = sectionsSample();
 
