@@ -1,6 +1,14 @@
 = Introduction
 :maven-doxia-url: https://maven.apache.org/doxia/
 
-The Asciidoctor Maven Site integration provides a {maven-doxia-url}[Maven Doxia] module to author your content with the {Maven Site Plugin}[maven-site-plugin].
+The Asciidoctor Maven Site integration provides two {maven-doxia-url}[Maven Doxia] modules to author your content with the {uri-maven-site-plugin}[Maven Site Plugin].
 
-Read the xref:setup-and-configuration.adoc#setup[setup] section to know about how start using it.
+* xref:converter-module-setup-and-configuration.adoc[Converter Doxia Module] converts AsciiDoc sources into HTML using Asciidoctor without customizations.
+That means you will get the same HTML as using Asciidoctor but some elements may not be well presented due to incompatibilities with Doxia Skins.
+You may need to add custom CSS or Asciidoctor templates. +
+This is continuation of the previous `asciidoctor-maven-plugin`.
+* xref:parser-module-setup-and-configuration.adoc[Parser Doxia Module] converts AsciiDoc sources into HTML using custom converters, adapting the output to better match Maven Site styles.
+This module offers the better out-of-the-box experience and does not require additional CSS styles or other elements. +
+However, not all AsciiDoc structures are supported _YET_ and this module is considered _experimental_.
+See the list of currently supported features in xref:parser-module-setup-and-configuration.adoc#supported-asciidoc-elements[Supported AsciiDoc elements].
+

@@ -1,4 +1,8 @@
 * Maven Site Integration
 ** xref:introduction.adoc[]
-** xref:setup-and-configuration.adoc[]
+** Modules
+*** xref:converter-module-setup-and-configuration.adoc[]
+*** xref:parser-module-setup-and-configuration.adoc[]
 ** xref:compatibility-matrix.adoc[]
+** Help & Guides
+*** xref:v3-migration-guide.adoc[]

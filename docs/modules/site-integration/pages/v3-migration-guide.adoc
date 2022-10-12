@@ -2,7 +2,7 @@
 :navtitle: v3 migration guide
 :sectnums:
 
-The `asciidoctor-maven-plugin` 3.0.0 introduces some breaking changes.
+The `asciidoctor-maven-plugin` and its Doxia Modules 3.0.0 introduces some breaking changes.
 This guide will provide the steps required to update a project currently using 2.x.x version.
 For each of the breaking changes, the motivation and new equivalent configuration will be offered.
 
@@ -14,29 +14,27 @@ Changes in this version have been motivated to improve the plugin evolution and 
 With that goal in mind, the single project that contained both the maven plugin and site integration components has been split into different maven submodules.
 The main advantage for most users is that usage of the asciidoctor-maven-plugin will not require downloading Doxia dependencies.
 
-Users of the site module see xref:site-integration:v3-migration-guide.adoc[v3 migration guide for site module].
-
 == Changes
 
-=== Minimal AsciidoctorJ version
+=== Site plugin module renamed
+:doxia-module-name: asciidoctor-converter-doxia-module
 
-Support for Asciidoctorj v1.6.x (released 14th Feb, 2019) has been totally removed and will fail when configured.
-This simplifies the current plugin code and allows for removal of Java reflection usage.
+The https://maven.apache.org/doxia/[Doxia] module has been extracted into a separated subproject named `{doxia-module-name}`.
 
-*If you are setting the AsciidoctorJ dependency directly, ensure it's v2.0.0 or higher*.
+*Rename the maven-site-plugin dependency from `asciidoctor-maven-plugin` to `{doxia-module-name}`.*
 
 [source,xml,subs=attributes+]
-.invalid configuration
+.new configuration
 ----
- <plugin>
-    <groupId>org.asciidoctor</groupId>
-    <artifactId>asciidoctor-maven-plugin</artifactId>
-    <version>{release-version}</version>
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-site-plugin</artifactId>
+    <version>{maven-site-plugin-version}</version>
     <dependencies>
         <dependency>
             <groupId>org.asciidoctor</groupId>
-            <artifactId>asciidoctorj</artifactId>
-            <version>1.6.2</version>
+            <artifactId>{doxia-module-name}</artifactId>
+            <version>{release-version}</version>
         </dependency>
     </dependencies>
 </plugin>
