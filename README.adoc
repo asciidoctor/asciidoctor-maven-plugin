@@ -1,4 +1,4 @@
-= Asciidoctor Maven Plugin
+= Asciidoctor Maven Tools (Plugin & Site Integration)
 // Metadata
 :release-version: 2.2.2
 :docs-version: 2.2
