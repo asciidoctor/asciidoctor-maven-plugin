@@ -26,7 +26,7 @@
         <dependency>
             <groupId>org.asciidoctor</groupId>
             <artifactId>asciidoctor-maven-commons</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.asciidoctor</groupId>
