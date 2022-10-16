@@ -13,6 +13,7 @@ import java.util.List;
 
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
+
 /**
  * {@link ResourcesProcessor} implementation that copies all valid resources from
  * a source directory to an output one.

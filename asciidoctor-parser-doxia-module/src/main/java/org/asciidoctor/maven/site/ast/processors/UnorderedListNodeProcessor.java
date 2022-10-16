@@ -28,8 +28,6 @@ public class UnorderedListNodeProcessor extends AbstractSinkNodeProcessor implem
         return true;
     }
 
-    // TODO title
-    // TODO custom markers https://docs.asciidoctor.org/asciidoc/latest/lists/unordered/#markers
     @Override
     public void process(StructuralNode node) {
         final List<StructuralNode> items = node.getBlocks();

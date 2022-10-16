@@ -24,7 +24,6 @@ public class ImageNodeProcessor extends AbstractSinkNodeProcessor implements Nod
 
     @Override
     public void process(StructuralNode node) {
-        // Block image macro
         final String target = (String) node.getAttribute("target");
         final String alt = (String) node.getAttribute("alt");
 

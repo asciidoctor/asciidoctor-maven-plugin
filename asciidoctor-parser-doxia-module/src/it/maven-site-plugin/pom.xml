@@ -27,22 +27,7 @@
                 <configuration>
                     <asciidoc>
                         <baseDir>${project.basedir}/src/site/asciidoc</baseDir>
-                        <templateDirs>
-                            <dir>src/site/asciidoc/templates</dir>
-                        </templateDirs>
-                        <!-- or...
-                        <templateDir>src/site/asciidoc/templates</templateDir>
-                        -->
-                        <requires>
-                            <require>base64</require>
-                            <require>time</require>
-                        </requires>
-                        <!-- or...
-                        <requires>base64,time</requires>
-                        -->
                         <attributes>
-                            <source-highlighter>coderay</source-highlighter>
-                            <coderay-css>style</coderay-css>
                             <toclevels>2</toclevels>
                         </attributes>
                     </asciidoc>

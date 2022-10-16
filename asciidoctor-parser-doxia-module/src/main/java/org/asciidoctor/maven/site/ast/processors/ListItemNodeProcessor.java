@@ -11,8 +11,6 @@ public class ListItemNodeProcessor extends AbstractSinkNodeProcessor implements 
 
     private List<NodeProcessor> nodeProcessors;
 
-    // TODO refactor construction, maybe add nodeProcessors to super Abstract o create another Abstract (NestedNodeProcessor?)
-    // we are creating an extra *ListNodeProcessor instance
     public ListItemNodeProcessor(Sink sink) {
         super(sink);
 
@@ -27,8 +25,6 @@ public class ListItemNodeProcessor extends AbstractSinkNodeProcessor implements 
         return "list_item".equals(node.getNodeName());
     }
 
-    // TODO title
-    // TODO custom markers https://docs.asciidoctor.org/asciidoc/latest/lists/unordered/#markers
     @Override
     public void process(StructuralNode node) {
         final ListItem item = (ListItem) node;

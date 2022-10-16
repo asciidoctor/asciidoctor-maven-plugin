@@ -16,7 +16,7 @@ public class PreambleNodeProcessor extends AbstractSinkNodeProcessor implements 
     }
 
     /**
-     * Do nothing. Preamble aggregates other blocks.
+     * Do nothing, preamble only aggregates other blocks.
      **/
     @Override
     public void process(StructuralNode node) {

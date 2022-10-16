@@ -17,7 +17,6 @@ public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements N
         return "section".equals(node.getNodeName());
     }
 
-    // TODO use asciidoctor id (would require writing plain HTML)
     @Override
     public void process(StructuralNode node) {
         sectionTitle(getSink(), node.getLevel(), node.getTitle(), (Section) node);

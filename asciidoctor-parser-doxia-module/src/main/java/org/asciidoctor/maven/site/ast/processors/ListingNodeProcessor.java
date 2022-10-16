@@ -63,8 +63,8 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
         getSink().rawText(contentBuilder.toString());
     }
 
-    // linenums-option attribute is set with empty string value
     private boolean isLinenumsEnabled(StructuralNode node) {
+        // linenums attribute can be set with empty string value
         return LINENUMS_ATTRIBUTE.equals(node.getAttribute("linenums"))
                 || node.getAttribute(LINENUMS_OPTION_ATTRIBUTE) != null;
     }

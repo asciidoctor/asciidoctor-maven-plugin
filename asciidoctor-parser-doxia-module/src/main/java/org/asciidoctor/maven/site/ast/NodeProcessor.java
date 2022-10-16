@@ -2,6 +2,15 @@ package org.asciidoctor.maven.site.ast;
 
 import org.asciidoctor.ast.StructuralNode;
 
+/**
+ * Basic unit for content generation.
+ * <p>
+ * A NodeProcessor is responsible for generating the output (HTML)
+ * for one AST node. In Asciidoctor terms, it's a Converter for
+ * a specific Node type (but can be accommodated to convert multiples).
+ *
+ * @author abelsromero
+ */
 public interface NodeProcessor {
 
     /**
@@ -12,7 +21,7 @@ public interface NodeProcessor {
     boolean applies(StructuralNode node);
 
     /**
-     * Tells whether the processor processes the current node and sub-nodes.
+     * Whether sub-nodes should be processed recursively.
      *
      * @param node candidate node to process
      */

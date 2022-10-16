@@ -26,19 +26,16 @@ import javax.inject.Provider;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
 /**
  * This class is used by <a href="https://maven.apache.org/doxia/overview.html">the Doxia framework</a>
- * to handle the actual parsing of the AsciiDoc input files into HTML to be consumed/wrapped
- * by the Maven site generation process
+ * to handle the actual parsing of the AsciiDoc input files and pass the AST to converters (NodeProcessors).
  * (see <a href="https://maven.apache.org/plugins/maven-site-plugin/">maven-site-plugin</a>).
  *
- * @author jdlee
- * @author mojavelinux
+ * @author abelsromero
  */
 @Component(role = Parser.class, hint = AsciidoctorAstDoxiaParser.ROLE_HINT)
 public class AsciidoctorAstDoxiaParser extends AbstractTextParser {

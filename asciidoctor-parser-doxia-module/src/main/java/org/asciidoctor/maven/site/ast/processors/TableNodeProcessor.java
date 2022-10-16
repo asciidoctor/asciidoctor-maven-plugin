@@ -5,7 +5,6 @@ import org.asciidoctor.ast.Cell;
 import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.ast.impl.TableImpl;
-import org.asciidoctor.maven.commons.StringUtils;
 import org.asciidoctor.maven.site.ast.NodeProcessor;
 
 import java.util.List;
@@ -31,14 +30,11 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
 
         final Sink sink = getSink();
         sink.table();
-        // issue: creates an extra row
         sink.tableRows(new int[]{JUSTIFY_LEFT}, false);
-
-        // TODO header row is white in MD example
         List<Row> header = tableNode.getHeader();
         if (!header.isEmpty()) {
             sink.tableRow();
-//            sink.rawText("<thead>");
+
             for (Row headerRow : header) {
                 for (Cell cell : headerRow.getCells()) {
                     sink.tableHeaderCell();
@@ -46,7 +42,6 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
                     sink.tableHeaderCell_();
                 }
             }
-//            sink.rawText("</thead>");
             sink.tableRow_();
         }
 

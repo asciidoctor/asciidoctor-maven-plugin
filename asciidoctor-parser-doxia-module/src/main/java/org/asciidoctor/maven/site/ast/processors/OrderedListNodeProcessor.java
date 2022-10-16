@@ -28,11 +28,6 @@ public class OrderedListNodeProcessor extends AbstractSinkNodeProcessor implemen
         return true;
     }
 
-    // TODO: support asciidoctor levels in same order
-    //   1 -> number
-    //   2 -> lower case
-    //   3 -> roman
-    //   4 -> upper case
     @Override
     public void process(StructuralNode node) {
         final List<StructuralNode> items = node.getBlocks();

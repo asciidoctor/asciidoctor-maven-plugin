@@ -8,6 +8,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Document processor.
+ * Responsible for initializing the different Node Processors
+ * and traverse the AST.
+ *
+ * @author abelsromero
+ */
 public class NodesSinker {
 
     private final List<NodeProcessor> nodeProcessors;
