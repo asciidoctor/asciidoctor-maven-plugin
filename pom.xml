@@ -341,7 +341,8 @@
 
     <modules>
         <module>asciidoctor-maven-plugin</module>
-        <module>asciidoctor-doxia-module</module>
+        <module>asciidoctor-converter-doxia-module</module>
+        <module>asciidoctor-parser-doxia-module</module>
         <module>asciidoctor-maven-commons</module>
     </modules>
 

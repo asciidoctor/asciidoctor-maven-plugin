@@ -10,16 +10,18 @@ NOTE: New configuration details are highlighted in *bold*.
 
 == Motivations
 
-Changes are motivated to improve the plugin evolution.
+Changes in this version have been motivated to improve the plugin evolution and maintenance.
 With that goal in mind, the single project that contained both the maven plugin and site integration components has been split into different maven submodules.
-
 The main advantage for most users is that usage of the asciidoctor-maven-plugin will not require downloading Doxia dependencies.
+
+Users of the site module see xref:site-integration:v3-migration-guide.adoc[v3 migration guide for site module].
 
 == Changes
 
 === Minimal AsciidoctorJ version
 
-Support for Asciidoctorj v1.6.x has been totally removed and will fail when configured.
+Support for Asciidoctorj v1.6.x (released 14th Feb, 2019) has been totally removed and will fail when configured.
+This simplifies the current plugin code and allows for removal of Java reflection usage.
 
 *If you are setting the AsciidoctorJ dependency directly, ensure it's v2.0.0 or higher*.
 
@@ -35,30 +37,6 @@ Support for Asciidoctorj v1.6.x has been totally removed and will fail when conf
             <groupId>org.asciidoctor</groupId>
             <artifactId>asciidoctorj</artifactId>
             <version>1.6.2</version>
-        </dependency>
-    </dependencies>
-</plugin>
-----
-
-=== Site plugin module renamed
-:doxia-module-name: asciidoctor-doxia-module
-
-The https://maven.apache.org/doxia/[Doxia] module has been extracted into a separated subproject named `{doxia-module-name}`·
-
-*Rename thee maven-site-plugin dependency from `asciidoctor-maven-plugin` to `{doxia-module-name}`.*
-
-[source,xml,subs=attributes+]
-.new configuration
-----
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-site-plugin</artifactId>
-    <version>{maven-site-plugin-version}</version>
-    <dependencies>
-        <dependency> <!-- Asciidoctor Doxia Parser Module -->
-            <groupId>org.asciidoctor</groupId>
-            <artifactId>{doxia-module-name}</artifactId>
-            <version>{release-version}</version>
         </dependency>
     </dependencies>
 </plugin>

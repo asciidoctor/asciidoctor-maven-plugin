@@ -1,0 +1,194 @@
+= Asciidoctor Parser Doxia Module
+:doxia-module-name: asciidoctor-parser-doxia-module
+:fluido-skin-url: https://maven.apache.org/skins/maven-fluido-skin/
+
+WARNING: This module is still considered experimental and early stages.
+Please, consider sharing feedback and report any issue you find or improvement you consider to help us improve.
+
+This module uses Asciidoctor to parse AsciiDoc source files and then uses a custom converter adapted to Maven Site styles.
+Compatibility is being validated with the default skin and specially https://maven.apache.org/skins/maven-fluido-skin/[Fluido skin].
+
+This module should be used by those desiring a simple out-of-the-box experience and willing to sacrifice from AsciiDoc feature.
+Some noteworthy features not yet supported are admonitions or includes.
+
+== Setup
+
+To author your Maven-generated site in AsciiDoc, you must first add a dependency on the Asciidoctor plugin to your maven-site-plugin declaration.
+
+[source,xml,subs=attributes+]
+.Maven site integration
+-----
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>{maven-site-plugin-version}</version>
+            <dependencies>
+                <dependency> <!-- Add Asciidoctor Doxia Module -->
+                    <groupId>org.asciidoctor</groupId>
+                    <artifactId>{doxia-module-name}</artifactId>
+                    <version>{release-version}</version>
+                </dependency>
+            </dependencies>
+        </plugin>
+    </plugins>
+</build>
+-----
+
+TIP: You can find a full example in the {uri-examples}[Asciidoctor Maven examples] project.
+
+The Asciidoctor Doxia module follows the maven-site-plugin conventions for file location, and delegates all resource management to it.
+
+First, all of your AsciiDoc-based files should be placed in [.path]_src/site/asciidoc_ with an extension of `.adoc`.
+These files will be converted into the [.path]_target/site_ directory.
+For example, the file [.path]_src/site/asciidoc/usage.adoc_ will be converted into [.path]_target/site/usage.html_.
+
+Then, all resources (images, css, etc.) should be placed in [.path]_src/site/resources_.
+These will be automatically copied into [.path]_target/site_.
+
+Also, note that AsciiDoc files are converted to embeddable HTML and inserted into the site's page layout.
+This disables certain features such as the sidebar toc.
+
+Make sure you add a `menu` item for each page so you can access it from the site navigation:
+
+[source,xml]
+.site.xml
+-----
+<body>
+    ...
+    <menu name="User guide">
+        <item href="usage.html" name="Usage" />
+    </menu>
+    ...
+</body>
+-----
+
+== Configuration
+
+[IMPORTANT]
+====
+Given the modules implements a custom converter, the following features are limited:
+
+* `templateDirs` configurations are not supported in this module.
+* Extensions injected with `requires` can only modify the AST. Modifications of output won't be applied.
+====
+
+As of version 1.5.3 of the plugin, you can configure Asciidoctor by specifying configuration properties in the plugin declaration, just like with the other goals of the plugin.
+There are two important differences, however.
+
+. All the configuration for Asciidoctor in the site integration must be nested inside an `<asciidoc>` element.
+This is necessary since the `<configuration>` element is used to configure more than just the Asciidoctor integration.
++
+Here's an example that shows how to set options, attributes and ignore partial AsciiDoc files (i.e., files that begin with an underscore).
++
+[source,xml,subs=attributes+]
+.Maven site integration with Asciidoctor configuration
+----
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-site-plugin</artifactId>
+    <version>{maven-site-plugin-version}</version>
+    <configuration>
+        <asciidoc>
+            <requires>
+                <require>asciidoctor-diagram</require>
+            </requires>
+            <attributes>
+                <source-highlighter>coderay</source-highlighter>
+                <coderay-css>style</coderay-css>
+            </attributes>
+        </asciidoc>
+        <moduleExcludes>
+            <asciidoc>**/_*.adoc</asciidoc>
+        </moduleExcludes>
+    </configuration>
+    <dependencies>
+        <dependency>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>{doxia-module-name}</artifactId>
+            <version>{release-version}</version>
+        </dependency>
+    </dependencies>
+</plugin>
+----
++
+IMPORTANT: The Asciidoctor base directory (i.e., document root) is configured as [.path]_src/site/asciidoc_ by default, though this can be overridden.
+To do so, you can use either maven-site-plugin `siteDirectory` or Asciidoctor `baseDir` configuration options.
+Note that the first will affect the default resources directory also.
++
+You'll notice in the example that excludes have been added for certain AsciiDoc files.
+This prevents the site integration from processing partial files (i.e., includes) as individual pages.
+You can tune this pattern to your liking.
+There's currently no way (that we can tell) to configure this automatically.
+
+. Not all options found in the asciidoctor-maven-plugin are available in the `<asciidoc>` element.
+This is for simplicity and restrictions in how maven-site-plugin manages resources.
++
+The supported ones are:
+
+baseDir::
+Same as the plugin's `baseDir`.
+Sets the root path for resources.
+Not set by default, AsciiDoc documents will be searched in [.path]_src/site/asciidoc_.
+External resources should be located in [.path]_src/site/resources_.
++
+NOTE: Consider using maven-site-plugin's `siteDirectory` instead for better integration with the site functions (ie. resource copying).
+
+requires::
+Same as the plugin's `requires`, but with the consideration that only extensions that add elements to the Asciidoctor AST can be used. +
+Specifies additional Ruby libraries not packaged in AsciidoctorJ, `empty` by default.
+
+attributes::
+Similar to the plugin's `attributes`. +
+Allows defining a set of Asciidoctor attributes to be passed to the conversion. +
+In addition to attributes set in this section, Maven properties are also passed as attribute (replacing . by - in the name).
+These include those defined in the `<properties>` section of the project, parent projects and the user's `settings.xml`.
++
+[source,xml]
+----
+<properties>
+  <my-site.version>2.3.0</my-site.version> <!--.-->
+</properties>
+----
+<.> Will be passed as `my-site-version` to the converter.
+
+logHandler::
+Enables processing of Asciidoctor messages.
+For example to hide them, enable finer detail or fail the build on certain scenarios (e.g. missing included files).
+To see all options refer to the main plugin xref:plugin:goals/http.adoc#configuration-logHandler[logHandler configuration].
++
+IMPORTANT: Due to limitations in how Maven site integration works, it is not possible to provide the filename in the error message.
+We are aware this is not ideal and are tracking any development on the Maven side towards this goal (https://issues.apache.org/jira/browse/DOXIA-555[DOXIA-555]).
+
+== Supported AsciiDoc elements
+
+This module is still under development, here is a summary of supported features:
+
+* Document Title, present in page
+
+* Section titles from 1 to level 5
+** Support for `sectnums` and `sectnumlevels`
+
+* Paragraphs
+** Basic formatting (bold, italics, etc.)
+** Attributes substitutions
+
+* Lists
+** Unordered, for `*` and `-` markers
+** Ordered, only arabic numerals
+
+* Code blocks with source-highlighting using https://maven.apache.org/skins/maven-fluido-skin/#source-code-line-numbers[Fluido Skin Pretiffy].
+** Support for numbered lines with `linenums`
+
+* Literal blocks
+* Quotes
+
+* Tables
+** With and without headers
+** Non-nested tables with basic layouts
+** Basic formatting inside tables (bold, italics, etc.)
+
+* Images, both as block and inline
+
+* Captions in elements listed above

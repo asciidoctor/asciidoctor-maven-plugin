@@ -1,0 +1,41 @@
+= Asciidoctor-maven-plugin 3.x.x migration guide
+:navtitle: v3 migration guide
+:sectnums:
+
+The `asciidoctor-maven-plugin` and its Doxia Modules 3.0.0 introduces some breaking changes.
+This guide will provide the steps required to update a project currently using 2.x.x version.
+For each of the breaking changes, the motivation and new equivalent configuration will be offered.
+
+NOTE: New configuration details are highlighted in *bold*.
+
+== Motivations
+
+Changes in this version have been motivated to improve the plugin evolution and maintenance.
+With that goal in mind, the single project that contained both the maven plugin and site integration components has been split into different maven submodules.
+The main advantage for most users is that usage of the asciidoctor-maven-plugin will not require downloading Doxia dependencies.
+
+== Changes
+
+=== Site plugin module renamed
+:doxia-module-name: asciidoctor-converter-doxia-module
+
+The https://maven.apache.org/doxia/[Doxia] module has been extracted into a separated subproject named `{doxia-module-name}`.
+
+*Rename the maven-site-plugin dependency from `asciidoctor-maven-plugin` to `{doxia-module-name}`.*
+
+[source,xml,subs=attributes+]
+.new configuration
+----
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-site-plugin</artifactId>
+    <version>{maven-site-plugin-version}</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>{doxia-module-name}</artifactId>
+            <version>{release-version}</version>
+        </dependency>
+    </dependencies>
+</plugin>
+----

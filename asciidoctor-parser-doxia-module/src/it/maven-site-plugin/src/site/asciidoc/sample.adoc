@@ -1,0 +1,69 @@
+= Sample
+
+This is an example `.adoc` file that was processed by the Doxia Parser module in the Asciidoctor Maven Plugin.
+Version {docs-version}.
+
+== First section
+
+This is the first section of the page.
+
+=== Sub section
+
+This is a subsection of the first section
+
+== Features
+
+This is the second section of the page.
+
+=== Image
+
+image::images/asciidoctor-logo.png[Asciidoctor is awesome]
+
+=== Table
+
+.Ruby platforms
+|===
+|Name |Language
+
+|JRuby |Java
+|Opal |JavaScript
+|Rubinius |Ruby
+|===
+
+=== Literal
+
+ This is a literal.
+
+=== Code blocks
+
+[source,ruby]
+----
+puts "Hello, World!"
+----
+
+[,java]
+----
+public class HelloWorld {
+
+    public static void main(String[] args) {
+        // Prints "Hello, World" to the terminal window.
+        System.out.println("Hello, World");
+    }
+
+}
+----
+
+=== Lists
+
+==== Unordered list
+
+* Apples
+* Oranges
+* Walnuts
+* Almonds
+
+==== Ordered list
+
+. Protons
+. Electrons
+. Neutrons

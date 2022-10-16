@@ -1,7 +1,7 @@
 package org.asciidoctor.maven.log;
 
 
-import static org.asciidoctor.maven.commons.StringUtils.isBlank;
+import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
 /**
  * POJO for Maven XML mapping.
@@ -34,7 +34,7 @@ public class LogHandler {
     }
 
     public boolean isContainsTextNotBlank() {
-        return failIf != null && !isBlank(failIf.getContainsText());
+        return failIf != null && isNotBlank(failIf.getContainsText());
     }
 
 }

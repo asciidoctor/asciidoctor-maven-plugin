@@ -1,0 +1,8 @@
+<project name="Maven Site Plugin IT">
+    <body>
+        <menu name="AsciiDoc Pages">
+            <item name="Sample" href="sample.html"/>
+        </menu>
+      ${reports}
+    </body>
+</project>

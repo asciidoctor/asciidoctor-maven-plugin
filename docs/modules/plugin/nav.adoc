@@ -11,3 +11,4 @@
 ** Help & Guides
 *** xref:tips-and-tricks.adoc[]
 *** xref:v2-migration-guide.adoc[]
+*** xref:v3-migration-guide.adoc[]

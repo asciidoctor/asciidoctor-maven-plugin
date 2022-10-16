@@ -1,0 +1,15 @@
+<project name="Maven Site Plugin IT">
+    <body>
+        <menu ref="reports" inherit="top"/>
+        <menu ref="modules"/>
+        <menu name="AsciiDoc Pages">
+            <item name="File with TOC" href="file-with-toc.html"/>
+            <item name="Sample" href="sample.html"/>
+        </menu>
+    </body>
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.11.1</version>
+    </skin>
+</project>

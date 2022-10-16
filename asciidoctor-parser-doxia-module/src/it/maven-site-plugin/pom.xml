@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+	<groupId>org.asciidoctor</groupId>
+	<artifactId>maven-site-plugin-it</artifactId>
+	<version>1.0-SNAPSHOT</version>
+    <name>Maven Site Plugin IT</name>
+    <description>Checks asciidoctor integration in Maven Site Plugin through Doxia Parser Module</description>
+
+    <properties>
+        <docs.version>v1.2.3</docs.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.1.2</version>
+            </plugin>
+            <!-- tag::plugin-decl[] -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.12.1</version>
+                <configuration>
+                    <asciidoc>
+                        <baseDir>${project.basedir}/src/site/asciidoc</baseDir>
+                        <attributes>
+                            <toclevels>2</toclevels>
+                        </attributes>
+                    </asciidoc>
+                    <moduleExcludes>
+                        <asciidoc>**/_*.adoc</asciidoc>
+                    </moduleExcludes>
+                </configuration>
+                <dependencies>
+                    <dependency><!-- add Asciidoctor Doxia Module to maven-site-plugin -->
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctor-parser-doxia-module</artifactId>
+                        <version>@project.version@</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <!-- end::plugin-decl[] -->
+        </plugins>
+    </build>
+</project>

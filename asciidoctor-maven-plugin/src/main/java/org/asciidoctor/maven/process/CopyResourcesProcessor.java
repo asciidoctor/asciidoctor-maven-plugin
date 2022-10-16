@@ -11,7 +11,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.asciidoctor.maven.commons.StringUtils.isBlank;
+import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
+
 
 /**
  * {@link ResourcesProcessor} implementation that copies all valid resources from
@@ -78,7 +79,7 @@ public class CopyResourcesProcessor implements ResourcesProcessor {
             Resource resource = new Resource();
             resource.setDirectory(sourceDirectory.getAbsolutePath());
             // exclude sourceDocumentName if defined
-            if (!isBlank(configuration.getSourceDocumentName())) {
+            if (isNotBlank(configuration.getSourceDocumentName())) {
                 resource.getExcludes()
                         .add(configuration.getSourceDocumentName());
             }

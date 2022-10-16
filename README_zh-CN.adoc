@@ -329,7 +329,7 @@ Maven 可以多次执行 Mojo。
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-site-plugin</artifactId>
-            <version>3.4</version>
+            <version>3.12.1</version>
             <dependencies>
                 <dependency>
                     <groupId>org.asciidoctor</groupId>
@@ -380,7 +380,7 @@ Asciidoctor 基础目录默认配置为 `src/site/asciidoc`，这可以被覆盖
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-site-plugin</artifactId>
-    <version>3.4</version>
+    <version>3.12.1</version>
     <configuration>
         <asciidoc>
             <templateDirs>
