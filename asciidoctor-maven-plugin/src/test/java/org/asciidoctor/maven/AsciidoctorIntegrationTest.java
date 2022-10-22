@@ -314,7 +314,7 @@ public class AsciidoctorIntegrationTest {
 
         // then
         assertThat(outputDir, "github-include.html")
-                .contains("link:https://raw.githubusercontent.com/cometd/cometd/4.0.x/pom.xml[]");
+                .contains("link:https://raw.githubusercontent.com/cometd/cometd/4.0.x/pom.xml[role=include]");
     }
 
     @Test
