@@ -69,7 +69,7 @@
     </issueManagement>
 
     <prerequisites>
-        <maven>3.0.5</maven>
+        <maven>3.8.5</maven>
     </prerequisites>
 
     <properties>
@@ -78,7 +78,7 @@
         <project.execution.environment>JavaSE-1.8</project.execution.environment>
         <asciidoctorj.version>2.5.7</asciidoctorj.version>
         <jruby.version>9.3.8.0</jruby.version>
-        <maven.project.version>3.0.5</maven.project.version>
+        <maven.project.version>3.8.6</maven.project.version>
         <maven.jacoco.plugin.version>0.8.8</maven.jacoco.plugin.version>
     </properties>
 
