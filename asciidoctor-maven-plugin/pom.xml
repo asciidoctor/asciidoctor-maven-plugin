@@ -18,7 +18,7 @@
     <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
 
     <properties>
-        <maven.plugin.plugin.version>3.5</maven.plugin.plugin.version>
+        <maven.plugin.plugin.version>3.7.0</maven.plugin.plugin.version>
         <netty.version>4.1.77.Final</netty.version>
         <maven.coveralls.plugin.version>4.3.0</maven.coveralls.plugin.version>
     </properties>
@@ -43,6 +43,7 @@
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
             <version>${maven.project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
@@ -54,11 +55,12 @@
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
             <version>${maven.project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-interpolation</artifactId>
-            <version>1.22</version>
+            <version>1.26</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
