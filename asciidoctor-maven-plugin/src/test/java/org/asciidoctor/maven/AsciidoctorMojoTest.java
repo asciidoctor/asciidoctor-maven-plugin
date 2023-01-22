@@ -177,9 +177,9 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_convert_to_html_with_a_custom_template() throws MojoFailureException, MojoExecutionException {
+    public void should_convert_to_html_with_a_custom_slim_template() throws MojoFailureException, MojoExecutionException {
         // given
-        final String templatesPath = "target/test-classes/templates/";
+        final String templatesPath = "target/test-classes/templates/slim/";
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory();
 
@@ -201,6 +201,31 @@ public class AsciidoctorMojoTest {
                 .isNotEmpty()
                 .contains("custom-admonition-block")
                 .contains("custom-block-style");
+    }
+
+    @Test
+    public void should_convert_to_html_with_a_custom_erb_template() throws MojoFailureException, MojoExecutionException {
+        // given
+        final String templatesPath = "target/test-classes/templates/";
+        File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
+        File outputDir = newOutputTestDirectory();
+
+        // when
+        AsciidoctorMojo mojo = mockAsciidoctorMojo();
+        mojo.backend = "html";
+        mojo.sourceDirectory = srcDir;
+        mojo.sourceDocumentName = "sample.asciidoc";
+        mojo.resources = excludeAll();
+        mojo.outputDirectory = outputDir;
+        mojo.templateDirs = Arrays.asList(
+                new File(templatesPath, "erb")
+        );
+        mojo.execute();
+
+        // then
+        assertThat(outputDir, "sample.html")
+                .isNotEmpty()
+                .contains("custom-style");
     }
 
     @Test
