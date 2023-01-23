@@ -10,6 +10,7 @@ import org.asciidoctor.*;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
 import org.asciidoctor.maven.commons.AsciidoctorHelper;
+import org.asciidoctor.maven.commons.StringUtils;
 import org.asciidoctor.maven.extensions.AsciidoctorJExtensionRegistry;
 import org.asciidoctor.maven.extensions.ExtensionConfiguration;
 import org.asciidoctor.maven.extensions.ExtensionRegistry;
@@ -32,6 +33,7 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE_DIR;
 
 
@@ -81,13 +83,13 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected String attributesChain = "";
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.BACKEND, defaultValue = "html5")
-    protected String backend = "";
+    protected String backend = "html5";
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.DOCTYPE)
     protected String doctype;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.ERUBY)
-    protected String eruby = "";
+    protected String eruby;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "headerFooter")
     protected boolean headerFooter = true;
@@ -116,14 +118,14 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter
     protected List<ExtensionConfiguration> extensions = new ArrayList<>();
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "embedAssets")
+    @Parameter(property = AsciidoctorMaven.PREFIX + "embedAssets", defaultValue = "false")
     protected boolean embedAssets = false;
 
     // List of resources to copy to the output directory (e.g., images, css). By default everything is copied
     @Parameter
     protected List<Resource> resources;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "verbose")
+    @Parameter(property = AsciidoctorMaven.PREFIX + "verbose", defaultValue = "false")
     protected boolean enableVerbose = false;
 
     @Parameter
@@ -388,8 +390,10 @@ public class AsciidoctorMojo extends AbstractMojo {
                 .backend(configuration.getBackend())
                 .safe(SafeMode.UNSAFE)
                 .headerFooter(configuration.isHeaderFooter())
-                .eruby(configuration.getEruby())
                 .mkDirs(true);
+
+        if (!isBlank(configuration.getEruby()))
+            optionsBuilder.eruby(configuration.getEruby());
 
         if (configuration.isSourcemap())
             optionsBuilder.option(Options.SOURCEMAP, true);

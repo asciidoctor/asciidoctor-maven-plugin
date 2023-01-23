@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+Bug Fixes::
+
+  * Fixed default value for eruby which caused a fail when using erb templates (#610)
+
 Improvements::
 
   * Split plugin and site integration in sub-modules: asciidoctor-maven-plugin and asciidoctor-doxia-module (#595)
