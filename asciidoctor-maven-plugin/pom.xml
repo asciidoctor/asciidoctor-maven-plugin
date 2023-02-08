@@ -19,7 +19,7 @@
 
     <properties>
         <maven.plugin.plugin.version>3.7.0</maven.plugin.plugin.version>
-        <netty.version>4.1.77.Final</netty.version>
+        <netty.version>4.1.87.Final</netty.version>
         <maven.coveralls.plugin.version>4.3.0</maven.coveralls.plugin.version>
     </properties>
 
