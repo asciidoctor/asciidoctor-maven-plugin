@@ -39,6 +39,7 @@ Build / Infrastructure::
   * Upgrade Asciidoctorj to v2.5.7 (#604)
   * Upgrade build related Maven plugins to the latest versions (#606)
   * Set minimal maven version to 3.8.5 (#607)
+  * Bump jRuby to v9.3.10.0 (#TODO)
 
 Maintenance::
   * Replace use of reflection by direct JavaExtensionRegistry calls to register extensions (#596)
