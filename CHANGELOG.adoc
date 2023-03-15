@@ -19,6 +19,7 @@ Build / Infrastructure::
   * Bump netty-codec-http to v4.1.77.Final (fix CVE-2021-21290) (#582)
   * Upgrade Asciidoctorj to v2.5.4 and jRuby to v9.3.4.0 (#584)
   * Upgrade Asciidoctorj to v2.5.5 (#591)
+  * Upgrade build related Maven plugins to the latest versions (#606)
 
 Documentation::
 
