@@ -1,0 +1,28 @@
+<%#encoding:UTF-8%><%
+slevel = @level.zero? && @special ? 1 : @level
+anchor = link_start = link_end = nil
+if @id
+  if @document.attr? :sectanchors
+    anchor = %(<a class="anchor" href="##{@id}"></a>)
+  elsif @document.attr? :sectlinks
+    link_start = %(<a class="link" href="##{@id}">)
+    link_end = '</a>'
+  end
+end
+if slevel.zero?
+  %><h1<%= @id && %( id="#{@id}") %> class="sect0"><%= %(#{anchor}#{link_start}#{title}#{link_end}) %></h1>
+<%= content %><%
+else
+  snum = @numbered && @caption.nil? && slevel <= (@document.attr 'sectnumlevels', 3).to_i ? %(#{sectnum} ) : nil
+  hlevel = slevel + 1
+  %><div class="<%= [%(sect#{slevel}),role].compact * ' ' %>">
+<h<%= hlevel %><%= @id && %( id="#{@id}") %>><%= %(#{anchor}#{link_start}#{snum}#{captioned_title}#{link_end}) %></h<%= hlevel %>><%
+  if slevel == 1 %>
+<div class="sectionbody custom-style">
+<%= content %>
+</div><%
+  else %>
+<%= content %><%
+  end %>
+</div><%
+end %>
