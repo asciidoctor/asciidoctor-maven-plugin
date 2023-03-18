@@ -2,7 +2,7 @@
 // Metadata
 :release-version: 2.2.2
 :docs-version: 2.2
-:maven-site-plugin-version: 3.9.0
+:maven-site-plugin-version: 3.12.1
 // Settings
 :idprefix:
 :idseparator: -

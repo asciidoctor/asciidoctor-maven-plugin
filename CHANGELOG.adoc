@@ -29,6 +29,7 @@ Build / Infrastructure::
   * Delete unused TravisCI configuration (#622)
   * Bump Maven build plugins (#623)
   * Bump GH 'checkout' and 'setup-java' to v3 (#624)
+  * Bump Doxia to v1.12.0 and maven-site-plugin in IT to 3.12.1 (#625)
 
 Documentation::
 
