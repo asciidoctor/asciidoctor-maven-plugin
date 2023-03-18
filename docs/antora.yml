@@ -11,7 +11,7 @@ asciidoc:
     uri-examples: https://github.com/asciidoctor/asciidoctor-maven-examples
     uri-maven: https://maven.apache.org
     uri-maven-site-plugin: https://maven.apache.org/plugins/maven-site-plugin
-    maven-site-plugin-version: 3.10.0
+    maven-site-plugin-version: 3.12.1
 nav:
 - modules/plugin/nav.adoc
 - modules/site-integration/nav.adoc
