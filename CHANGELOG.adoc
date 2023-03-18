@@ -26,6 +26,7 @@ Build / Infrastructure::
   * Upgrade build related Maven plugins to the latest versions (#606)
   * Upgrade Asciidoctorj to v2.5.7 (#604)
   * Bump netty-codec-http to v4.1.90.Final (fix several CVEs)
+  * Delete unused TravisCI configuration (#622)
 
 Documentation::
 
