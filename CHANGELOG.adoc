@@ -28,6 +28,7 @@ Build / Infrastructure::
   * Bump netty-codec-http to v4.1.90.Final (fix several CVEs)
   * Delete unused TravisCI configuration (#622)
   * Bump Maven build plugins (#623)
+  * Bump GH 'checkout' and 'setup-java' to v3 (#624)
 
 Documentation::
 
