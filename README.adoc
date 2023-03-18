@@ -1,6 +1,6 @@
 = Asciidoctor Maven Plugin
 // Metadata
-:release-version: 2.2.2
+:release-version: 2.2.3
 :docs-version: 2.2
 :maven-site-plugin-version: 3.12.1
 // Settings
