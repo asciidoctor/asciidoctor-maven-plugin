@@ -20,7 +20,7 @@
     <properties>
         <doxia.version>1.11.1</doxia.version>
         <maven.coveralls.plugin.version>4.3.0</maven.coveralls.plugin.version>
-        <plexus.component.metadata.version>1.7</plexus.component.metadata.version>
+        <plexus.component.metadata.version>2.1.1</plexus.component.metadata.version>
     </properties>
 
     <dependencies>
