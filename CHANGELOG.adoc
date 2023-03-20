@@ -44,6 +44,7 @@ Build / Infrastructure::
   * Bump GH 'checkout' and 'setup-java' to v3 & delete unused TravisCI configuration (#627)
   * Bump netty-codec-http to v4.1.90.Final (#628)
   * Bump plugins versions & set CI Maven to v3.9.1 (#629)
+  * Add Maven matrix testing + define Maven compatibility policy (#632)
 
 Maintenance::
   * Replace use of reflection by direct JavaExtensionRegistry calls to register extensions (#596)
