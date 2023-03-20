@@ -62,6 +62,8 @@ ifeval::['{tag}' == 'main']
 ====
 You're viewing the documentation for the upcoming release.
 If you're looking for the documentation for an older release, please refer to one of the following tags: +
+{uri-repo}/tree/asciidoctor-maven-plugin-2.2.3#readme[2.2.3]
+&hybull;
 {uri-repo}/tree/asciidoctor-maven-plugin-2.1.0#readme[2.1.0]
 &hybull;
 {uri-repo}/tree/asciidoctor-maven-plugin-2.0.0#readme[2.0.0]
