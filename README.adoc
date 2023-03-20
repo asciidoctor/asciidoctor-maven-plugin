@@ -116,6 +116,11 @@ These are the minimal steps to convert your AsciiDoc documents to HTML with the 
 
 You can find examples ready to copy-paste in the {uri-examples}[Asciidoctor Maven examples] project.
 
+== Maven compatible versions
+
+// 1-year-old versions + most recent minor
+asciidoctor-maven-plugin supports Maven 3.8.5+ and 3.9.x versions.
+
 == Contributing
 
 This plugin is an open source project made possible with the help of users and enthusiasts.
