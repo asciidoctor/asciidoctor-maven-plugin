@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+Build / Infrastructure::
+
+ * Add Maven matrix testing + define Maven compatibility policy (#632)
+
 == v2.2.3 (2023-03-18)
 
 Bug Fixes::
