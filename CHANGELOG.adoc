@@ -45,7 +45,8 @@ Build / Infrastructure::
   * Bump netty-codec-http to v4.1.90.Final (#628)
   * Bump plugins versions & set CI Maven to v3.9.1 (#629)
   * Add Maven matrix testing + define Maven compatibility policy (#632)
-  * Bump build related Maven plugins to the latest versions (#606)
+  * Bump build related Maven plugins to the latest versions (#635)
+  * Remove use of deprecated 'parent.version' Maven property (#606)
 
 Maintenance::
   * Replace use of reflection by direct JavaExtensionRegistry calls to register extensions (#596)
