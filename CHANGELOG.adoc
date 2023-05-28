@@ -17,7 +17,8 @@ Build / Infrastructure::
 
   * Add Maven matrix testing + define Maven compatibility policy (#632)
   * Bump Asciidoctorj to v2.5.8 and jRuby to v9.3.10.0 (#639)
-  * Add maven-site-pluing v3.10.0 integration test (#641)
+  * Add maven-site-plugin v3.10.0 integration test (#641)
+  * Fix warning messages reported since Maven 3.9.2 (#634)
 
 == v2.2.3 (2023-03-18)
 
