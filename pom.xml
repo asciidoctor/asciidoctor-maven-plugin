@@ -3,7 +3,7 @@
 
     <groupId>org.asciidoctor</groupId>
     <artifactId>asciidoctor-maven-plugin</artifactId>
-    <version>2.2.4</version>
+    <version>2.2.5-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>Asciidoctor Maven Plugin and Doxia Parser</name>
@@ -62,7 +62,7 @@
         <url>scm:git:git@github.com:asciidoctor/asciidoctor-maven-plugin.git</url>
         <connection>scm:git:git@github.com:asciidoctor/asciidoctor-maven-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:asciidoctor/asciidoctor-maven-plugin.git</developerConnection>
-        <tag>asciidoctor-maven-plugin-2.2.4</tag>
+        <tag>asciidoctor-maven-plugin-2.2.2</tag>
     </scm>
 
     <issueManagement>
