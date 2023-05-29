@@ -25,6 +25,10 @@ Improvements::
   * Reimplement resource copy using 'plexus.util.DirectorScanner' instead of 'maven-filtering' to reduce dependencies and build time (#597)
   * Set minimal Maven version to v3.8.5 (#629)
 
+Build / Infrastructure::
+
+  * Fix maven-source-plugin configuration for releases (#644)
+
 Documentation::
 
   * Add v3.x.x migration guide (#598)
