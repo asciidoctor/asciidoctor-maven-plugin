@@ -1,21 +1,21 @@
 package org.asciidoctor.maven.site;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.apache.maven.project.MavenProject;
+import org.asciidoctor.Attributes;
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.maven.commons.AsciidoctorHelper;
 import org.asciidoctor.maven.commons.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
@@ -33,17 +33,21 @@ public class SiteConversionConfigurationParser {
 
         AsciidoctorHelper.addProperties(project.getProperties(), presetAttributes);
 
-        final Xpp3Dom siteConfiguration = Optional.ofNullable(siteConfig)
-                .map(sc -> sc.getChild("asciidoc"))
-                .orElse(null);
+        final Attributes attributes = presetAttributes.build();
 
-        if (siteConfiguration == null) {
-            final OptionsBuilder options = presetOptions.attributes(presetAttributes.build());
-            return new SiteConversionConfiguration(options.build(), Collections.emptyList());
+        if (siteConfig == null) {
+            final Options options = presetOptions.attributes(attributes).build();
+            return new SiteConversionConfiguration(options, Collections.emptyList());
+        }
+
+        final Xpp3Dom asciidocConfig = siteConfig.getChild("asciidoc");
+        if (asciidocConfig == null) {
+            final Options options = presetOptions.attributes(attributes).build();
+            return new SiteConversionConfiguration(options, Collections.emptyList());
         }
 
         final List<String> gemsToRequire = new ArrayList<>();
-        for (Xpp3Dom asciidocOpt : siteConfiguration.getChildren()) {
+        for (Xpp3Dom asciidocOpt : asciidocConfig.getChildren()) {
             String optName = asciidocOpt.getName();
 
             if ("requires".equals(optName)) {
@@ -83,12 +87,12 @@ public class SiteConversionConfigurationParser {
             }
         }
 
-        final Options options = presetOptions.attributes(presetAttributes.build()).build();
+        final Options options = presetOptions.attributes(attributes).build();
         return new SiteConversionConfiguration(options, gemsToRequire);
     }
 
     private File resolveProjectDir(MavenProject project, String path) {
         final File filePath = new File(path);
-        return !filePath.isAbsolute() ? new File(project.getBasedir(), filePath.toString()): filePath;
+        return !filePath.isAbsolute() ? new File(project.getBasedir(), filePath.toString()).getAbsoluteFile() : filePath;
     }
 }

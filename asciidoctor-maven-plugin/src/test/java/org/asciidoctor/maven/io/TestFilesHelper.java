@@ -11,11 +11,17 @@ public class TestFilesHelper {
     public static final String TEST_OUTPUT_BASE_PATH = "target/test-outputs/";
 
     public static File newOutputTestDirectory() {
-        return createDirectory(TEST_OUTPUT_BASE_PATH + UUID.randomUUID());
+        return normalize(createDirectory(TEST_OUTPUT_BASE_PATH + UUID.randomUUID()));
     }
 
     public static File newOutputTestDirectory(String subDir) {
-        return createDirectory(TEST_OUTPUT_BASE_PATH + subDir + "/" + UUID.randomUUID());
+        return normalize(createDirectory(TEST_OUTPUT_BASE_PATH + subDir + "/" + UUID.randomUUID()));
+    }
+
+    // Since v3.0.0, path must be absolute https://github.com/asciidoctor/asciidoctorj/pull/1249.
+    // Note: in real Mojo execution, paths are always absolute.
+    private static File normalize(File file) {
+        return file.getAbsoluteFile();
     }
 
     private static File createDirectory(String path) {

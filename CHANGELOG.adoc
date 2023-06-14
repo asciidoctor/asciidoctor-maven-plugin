@@ -16,6 +16,7 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 Build / Infrastructure::
 
   * Fix javadoc check flake in CI (#814)
+  * Bump AsciidoctorJ to v3.0.0 (#651)
 
 == v3.0.0 (2024-01-30)
 
