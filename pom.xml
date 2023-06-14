@@ -75,9 +75,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.java.version>11</project.java.version>
-        <maven.project.version>3.9.1</maven.project.version>
-        <asciidoctorj.version>2.5.11</asciidoctorj.version>
+        <project.execution.environment>JavaSE-1.8</project.execution.environment>
+        <asciidoctorj.version>3.0.0-alpha.1</asciidoctorj.version>
         <jruby.version>9.4.5.0</jruby.version>
+        <maven.project.version>3.9.1</maven.project.version>
     </properties>
 
     <dependencies>

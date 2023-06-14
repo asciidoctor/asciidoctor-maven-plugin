@@ -3,6 +3,7 @@ package org.asciidoctor.maven.test.processors;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.extension.PreprocessorReader;
+import org.asciidoctor.extension.Reader;
 
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public class FailingPreprocessor extends Preprocessor {
     }
 
     @Override
-    public void process(Document document, PreprocessorReader reader) {
+    public Reader process(Document document, PreprocessorReader reader) {
         System.out.println("Processing " + this.getClass().getSimpleName());
         System.out.println("Processing: blocks found: " + document.getBlocks().size());
         throw new RuntimeException("That's all folks");
