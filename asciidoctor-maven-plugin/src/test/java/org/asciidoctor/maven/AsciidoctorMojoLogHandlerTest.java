@@ -40,7 +40,7 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         mojo.execute();
 
@@ -64,7 +64,7 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         mojo.execute();
 
@@ -105,7 +105,7 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         mojo.execute();
 
@@ -148,7 +148,7 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         mojo.enableVerbose = true;
         mojo.execute();
@@ -188,7 +188,7 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         mojo.enableVerbose = true;
         mojo.gemPath = System.getProperty("java.io.tmpdir");
@@ -226,7 +226,7 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         Throwable throwable = catchThrowable(mojo::execute);
 
@@ -253,7 +253,7 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         Throwable throwable = catchThrowable(mojo::execute);
 
@@ -280,7 +280,7 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         mojo.execute();
 
@@ -308,7 +308,7 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         Throwable throwable = catchThrowable(mojo::execute);
 
@@ -354,7 +354,7 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         Throwable throwable = catchThrowable(mojo::execute);
 
@@ -390,7 +390,7 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         mojo.execute();
 

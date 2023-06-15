@@ -32,9 +32,9 @@ Note this also imposes versions on dependencies, for example:
 Support for AsciidoctorJ v1.6.x (released 14th Feb, 2019) has been totally removed and will fail when configured.
 This simplifies the current plugin code and allows for removal of Java reflection usage.
 
-*If you are setting the AsciidoctorJ dependency directly, ensure it's v2.0.0 or higher*.
+*If you are setting the AsciidoctorJ dependency directly, ensure it's v2.0.0 or higher.*
 
-[source,xml,subs=attributes+]
+[,xml,subs=attributes+]
 .invalid configuration
 ----
  <plugin>
@@ -48,5 +48,39 @@ This simplifies the current plugin code and allows for removal of Java reflectio
             <version>1.6.2</version>
         </dependency>
     </dependencies>
+</plugin>
+----
+
+=== Replace deprecated option 'headerFooter' by 'standalone'
+
+`headerFooter` option in Asciidoctor has been replaced by the easier to understand 'standalone'.
+The plugin aligns with that change replacing the option with `standalone` in the `<configuration>` block.
+The new option works exactly the same with the same semantics.
+
+*If you are using `headerFooter` option, just replace it with `standalone`.*
+
+[,xml]
+.invalid configuration
+----
+ <plugin>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctor-maven-plugin</artifactId>
+    <version>3.0.0</version>
+    <configuration>
+      <standalone>false</standalone>
+    </configuration>
+</plugin>
+----
+
+[,xml]
+.new configuration
+----
+ <plugin>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctor-maven-plugin</artifactId>
+    <version>3.0.0</version>
+    <configuration>
+      <standalone>false</standalone>
+    </configuration>
 </plugin>
 ----

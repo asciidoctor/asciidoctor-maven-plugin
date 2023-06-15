@@ -351,7 +351,7 @@ public class AsciidoctorRefreshMojoTest {
 
         // when
         Thread mojoThread = runMojoAsynchronously(mojo -> {
-            mojo.headerFooter = false;
+            mojo.standalone = false;
             mojo.backend = "html5";
             mojo.sourceDirectory = srcDir;
             mojo.outputDirectory = outputDir;
