@@ -42,7 +42,7 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null, "linkcss!", "");
         mojo.extensions = Arrays.asList(extensionConfiguration("non.existent.Processor"));
         Throwable throwable = Assertions.catchThrowable(mojo::execute);
@@ -66,7 +66,7 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null, "linkcss!", "");
         mojo.extensions = Arrays.asList(extensionConfiguration(FailingPreprocessor.class));
         Throwable throwable = Assertions.catchThrowable(mojo::execute);
@@ -140,7 +140,7 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         mojo.extensions = singletonList(extensionConfiguration("org.asciidoctor.maven.test.processors." + extensionClassName));
         mojo.execute();
@@ -163,7 +163,7 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         mojo.extensions = Arrays.asList(extensionConfiguration(ChangeAttributeValuePreprocessor.class));
         mojo.execute();
@@ -184,7 +184,7 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         mojo.extensions = singletonList(extensionConfiguration(YellBlockProcessor.class, "yell"));
         mojo.execute();
@@ -205,7 +205,7 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         mojo.extensions = singletonList(extensionConfiguration(MetaDocinfoProcessor.class, "yell"));
         mojo.execute();
@@ -226,7 +226,7 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         mojo.extensions = singletonList(extensionConfiguration(GistBlockMacroProcessor.class, "gist"));
         mojo.execute();
@@ -247,7 +247,7 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         mojo.extensions = singletonList(extensionConfiguration(ManpageInlineMacroProcessor.class, "man"));
         mojo.execute();
@@ -268,7 +268,7 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         mojo.extensions = singletonList(extensionConfiguration(UriIncludeProcessor.class));
         mojo.execute();
@@ -290,7 +290,7 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         mojo.extensions = Arrays.asList(
                 extensionConfiguration(ChangeAttributeValuePreprocessor.class),
@@ -320,7 +320,7 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null);
         mojo.extensions = Arrays.asList(
                 extensionConfiguration("org.asciidoctor.maven.test.processors.ChangeAttributeValuePreprocessor"),
@@ -348,7 +348,7 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", "",
                 "linkcss", "",
                 "copycss!", "");
@@ -386,7 +386,7 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null, "linkcss!", "");
         mojo.execute();
         // then

@@ -96,8 +96,8 @@ doctype:: defaults to `null` (which trigger's Asciidoctor's default of `article`
 [#configuration-eruby]
 eruby:: defaults to erb, the version used in JRuby
 
-[#configuration-headerFooter]
-headerFooter:: defaults to `true`
+[#configuration-standalone]
+standalone:: add frame around that content (i.e., the header and footer in HTML), defaults to `true`
 
 [#configuration-templateDirs]
 templateDirs:: list of directories of compatible templates to be used instead of the default built-in templates, empty by default.

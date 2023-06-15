@@ -35,7 +35,7 @@
               <sourceDirectory>src/main/doc</sourceDirectory>
               <outputDirectory>target/docs</outputDirectory>
               <backend>html</backend>
-              <headerFooter>false</headerFooter>
+              <standalone>false</standalone>
             </configuration>
           </execution>
         </executions>

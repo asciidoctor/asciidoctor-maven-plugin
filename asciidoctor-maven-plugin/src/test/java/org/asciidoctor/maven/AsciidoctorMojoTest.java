@@ -159,7 +159,7 @@ public class AsciidoctorMojoTest {
         mojo.sourceDocumentName = "sample.asciidoc";
         mojo.resources = excludeAll();
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("toc", null,
                 "linkcss!", "",
                 "source-highlighter", "coderay");

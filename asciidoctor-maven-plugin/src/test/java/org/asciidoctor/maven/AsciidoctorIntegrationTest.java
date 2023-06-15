@@ -357,7 +357,7 @@ public class AsciidoctorIntegrationTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "book.adoc";
         mojo.outputDirectory = outputDir;
-        mojo.headerFooter = true;
+        mojo.standalone = true;
         mojo.attributes = map("linkcss", "", "copycss!", "");
         mojo.execute();
 

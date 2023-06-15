@@ -10,7 +10,6 @@ import org.asciidoctor.*;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
 import org.asciidoctor.maven.commons.AsciidoctorHelper;
-import org.asciidoctor.maven.commons.StringUtils;
 import org.asciidoctor.maven.extensions.AsciidoctorJExtensionRegistry;
 import org.asciidoctor.maven.extensions.ExtensionConfiguration;
 import org.asciidoctor.maven.extensions.ExtensionRegistry;
@@ -31,7 +30,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE_DIR;
@@ -91,8 +89,8 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.ERUBY)
     protected String eruby;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "headerFooter")
-    protected boolean headerFooter = true;
+    @Parameter(property = AsciidoctorMaven.PREFIX + "standalone", defaultValue = "true")
+    protected boolean standalone = true;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "templateDirs")
     protected List<File> templateDirs = new ArrayList<>();
@@ -389,7 +387,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         final OptionsBuilder optionsBuilder = OptionsBuilder.options()
                 .backend(configuration.getBackend())
                 .safe(SafeMode.UNSAFE)
-                .headerFooter(configuration.isHeaderFooter())
+                .standalone(configuration.standalone)
                 .mkDirs(true);
 
         if (!isBlank(configuration.getEruby()))
@@ -508,14 +506,6 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     public void setAttributes(Map<String, Object> attributes) {
         this.attributes = attributes;
-    }
-
-    public boolean isHeaderFooter() {
-        return headerFooter;
-    }
-
-    public void setHeaderFooter(boolean headerFooter) {
-        this.headerFooter = headerFooter;
     }
 
     public String getTemplateEngine() {

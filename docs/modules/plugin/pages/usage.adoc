@@ -73,7 +73,7 @@ An example of this setup is below:
     </executions>
     <configuration>  <!--.-->
         <sourceDirectory>src/main/asciidoc</sourceDirectory>
-        <headerFooter>true</headerFooter>
+        <standalone>true</standalone>
     </configuration>
 </plugin>
 ----
