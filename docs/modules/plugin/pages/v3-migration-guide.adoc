@@ -18,9 +18,18 @@ Users of the site module see xref:site-integration:v3-migration-guide.adoc[v3 mi
 
 == Changes
 
+=== Minimal Java version
+
+Minimal Java version is 11.
+
+For anyone in need of a Java 8 compatible release, v2.5.x of the plugin will be supported for some time after v3.0.x release.
+Note this also imposes versions on dependencies, for example:
+* Only AsciidoctorJ v2.5.x
+* Only asciidoctorj-diagram previous v2.2.8
+
 === Minimal AsciidoctorJ version
 
-Support for Asciidoctorj v1.6.x (released 14th Feb, 2019) has been totally removed and will fail when configured.
+Support for AsciidoctorJ v1.6.x (released 14th Feb, 2019) has been totally removed and will fail when configured.
 This simplifies the current plugin code and allows for removal of Java reflection usage.
 
 *If you are setting the AsciidoctorJ dependency directly, ensure it's v2.0.0 or higher*.

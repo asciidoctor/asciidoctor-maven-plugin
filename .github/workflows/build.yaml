@@ -27,7 +27,6 @@ jobs:
           - windows-latest
           - macos-latest
         java:
-          - 8
           - 11
           - 17
         # Support for 1 year old version
