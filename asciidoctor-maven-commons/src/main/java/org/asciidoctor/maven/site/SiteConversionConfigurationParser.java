@@ -1,7 +1,9 @@
 package org.asciidoctor.maven.site;
 
 import org.apache.maven.project.MavenProject;
+import org.asciidoctor.Attributes;
 import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.maven.commons.AsciidoctorHelper;
 import org.asciidoctor.maven.commons.StringUtils;
@@ -29,18 +31,19 @@ public class SiteConversionConfigurationParser {
                                                              OptionsBuilder presetOptions,
                                                              AttributesBuilder presetAttributes) {
 
+        AsciidoctorHelper.addProperties(project.getProperties(), presetAttributes);
+        final Attributes attributes = presetAttributes.build();
+
         if (siteConfig == null) {
-            OptionsBuilder options = presetOptions.attributes(presetAttributes);
-            return new SiteConversionConfiguration(options.get(), Collections.emptyList());
+            OptionsBuilder options = presetOptions.attributes(attributes);
+            return new SiteConversionConfiguration(options.build(), Collections.emptyList());
         }
 
         final Xpp3Dom asciidocConfig = siteConfig.getChild("asciidoc");
         if (asciidocConfig == null) {
-            OptionsBuilder options = presetOptions.attributes(presetAttributes);
-            return new SiteConversionConfiguration(options.get(), Collections.emptyList());
+            OptionsBuilder options = presetOptions.attributes(attributes);
+            return new SiteConversionConfiguration(options.build(), Collections.emptyList());
         }
-
-        AsciidoctorHelper.addProperties(project.getProperties(), presetAttributes);
 
         final List<String> gemsToRequire = new ArrayList<>();
         for (Xpp3Dom asciidocOpt : asciidocConfig.getChildren()) {
@@ -68,7 +71,7 @@ public class SiteConversionConfigurationParser {
                 }
             } else if ("attributes".equals(optName)) {
                 for (Xpp3Dom asciidocAttr : asciidocOpt.getChildren()) {
-                    AsciidoctorHelper.addAttribute(asciidocAttr.getName(), asciidocAttr.getValue(), presetAttributes);
+                    AsciidoctorHelper.addAttribute(asciidocAttr.getName(), asciidocAttr.getValue(), attributes);
                 }
             } else if ("templateDirs".equals(optName) || "template_dirs".equals(optName)) {
                 List<File> dirs = Arrays.stream(asciidocOpt.getChildren("dir"))
@@ -83,7 +86,8 @@ public class SiteConversionConfigurationParser {
             }
         }
 
-        return new SiteConversionConfiguration(presetOptions.attributes(presetAttributes).get(), gemsToRequire);
+        final Options options = presetOptions.attributes(attributes).build();
+        return new SiteConversionConfiguration(options, gemsToRequire);
     }
 
     private File resolveProjectDir(MavenProject project, String path) {

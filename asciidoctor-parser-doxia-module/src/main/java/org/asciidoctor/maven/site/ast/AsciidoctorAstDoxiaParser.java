@@ -5,10 +5,7 @@ import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.project.MavenProject;
-import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.AttributesBuilder;
-import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.SafeMode;
+import org.asciidoctor.*;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordFormatter;
@@ -133,14 +130,14 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
     }
 
     protected OptionsBuilder defaultOptions(File siteDirectory) {
-        return OptionsBuilder.options()
+        return Options.builder()
                 .backend("xhtml")
                 .safe(SafeMode.UNSAFE)
                 .baseDir(new File(siteDirectory, ROLE_HINT));
     }
 
     protected AttributesBuilder defaultAttributes() {
-        return AttributesBuilder.attributes()
+        return Attributes.builder()
                 .attribute("idprefix", "@")
                 .attribute("showtitle", "@");
     }

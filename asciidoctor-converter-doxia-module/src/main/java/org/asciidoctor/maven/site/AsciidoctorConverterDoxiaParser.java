@@ -119,14 +119,14 @@ public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
     }
 
     protected OptionsBuilder defaultOptions(File siteDirectory) {
-        return OptionsBuilder.options()
+        return Options.builder()
                 .backend("xhtml")
                 .safe(SafeMode.UNSAFE)
                 .baseDir(new File(siteDirectory, ROLE_HINT));
     }
 
     protected AttributesBuilder defaultAttributes() {
-        return AttributesBuilder.attributes()
+        return Attributes.builder()
                 .attribute("idprefix", "@")
                 .attribute("showtitle", "@");
     }
