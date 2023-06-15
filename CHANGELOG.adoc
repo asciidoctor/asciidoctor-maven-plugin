@@ -26,6 +26,7 @@ Improvements::
   * Reimplement resource copy using 'plexus.util.DirectorScanner' instead of 'maven-filtering' to reduce dependencies and build time (#597)
   * Set minimal Maven version to v3.8.5 (#629)
   * Replace deprecated 'headerFooter' by 'standalone' in configuration (#649)
+  * Remove internal use of 'destinationDir' AsciidoctorJ method (no changes for users) (#650)
 
 Build / Infrastructure::
 

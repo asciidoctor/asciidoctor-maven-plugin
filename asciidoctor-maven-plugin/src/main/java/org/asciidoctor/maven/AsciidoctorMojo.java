@@ -286,18 +286,18 @@ public class AsciidoctorMojo extends AbstractMojo {
             if (configuration.isPreserveDirectories()) {
                 final String candidatePath = sourceFile.getParentFile().getCanonicalPath().substring(sourceDirectory.getCanonicalPath().length());
                 final File relativePath = new File(outputDir.getCanonicalPath() + candidatePath);
-                optionsBuilder.toDir(relativePath).destinationDir(relativePath);
+                optionsBuilder.toDir(relativePath);
             } else {
-                optionsBuilder.toDir(outputDir).destinationDir(outputDir);
+                optionsBuilder.toDir(outputDir);
             }
             final File outputFile = configuration.getOutputFile();
-            final String destinationDir = (String) optionsBuilder.asMap().get(Options.DESTINATION_DIR);
+            final String toDir = (String) optionsBuilder.build().map().get(Options.TO_DIR);
             if (outputFile != null) {
                 // allow overriding the output file name
                 optionsBuilder.toFile(outputFile);
-                return outputFile.isAbsolute() ? outputFile : new File(destinationDir, outputFile.getPath());
+                return outputFile.isAbsolute() ? outputFile : new File(toDir, outputFile.getPath());
             } else {
-                return new File(destinationDir, sourceFile.getName());
+                return new File(toDir, sourceFile.getName());
             }
         } catch (IOException e) {
             throw new MojoExecutionException("Unable to locate output directory", e);
@@ -305,7 +305,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     }
 
     protected Asciidoctor getAsciidoctorInstance(String gemPath) throws MojoExecutionException {
-        Asciidoctor asciidoctor = null;
+        Asciidoctor asciidoctor;
         if (gemPath == null) {
             asciidoctor = AsciidoctorJRuby.Factory.create();
         } else {
