@@ -411,9 +411,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         if (!configuration.getTemplateDirs().isEmpty())
             optionsBuilder.templateDirs(templateDirs.toArray(new File[]{}));
 
-        if (!attributesBuilder.asMap().isEmpty())
-            optionsBuilder.attributes(attributesBuilder);
-
+        optionsBuilder.attributes(attributesBuilder.build());
         return optionsBuilder;
     }
 

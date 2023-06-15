@@ -54,6 +54,7 @@ public class TestUtils {
     }
 
     @SneakyThrows
+    @SuppressWarnings("unchecked")
     private static <T> T mockAsciidoctorMojo(Class<T> clazz, Map<String, String> mavenProperties, LogHandler logHandler) {
         final MavenProject mavenProject = Mockito.mock(MavenProject.class);
         when(mavenProject.getBasedir()).thenReturn(new File("."));

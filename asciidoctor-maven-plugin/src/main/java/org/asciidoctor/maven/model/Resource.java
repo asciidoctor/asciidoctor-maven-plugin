@@ -32,7 +32,7 @@ public class Resource {
 
     public List<String> getIncludes() {
         if (this.includes == null) {
-            this.includes = new ArrayList();
+            this.includes = new ArrayList<>();
         }
 
         return this.includes;
@@ -44,7 +44,7 @@ public class Resource {
 
     public List<String> getExcludes() {
         if (this.excludes == null) {
-            this.excludes = new ArrayList();
+            this.excludes = new ArrayList<>();
         }
 
         return this.excludes;

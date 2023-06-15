@@ -160,7 +160,7 @@ public class SiteConversionConfigurationParserTest {
                 .addChild("imagesdir", "./images")
                 .parent().addChild("source-highlighter", "coderay")
                 .parent().addChild("sectnums")
-                .parent().addChild("toc", null)
+                .parent().addChild("toc")
                 .build();
 
         // when
@@ -391,7 +391,32 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_return_and_format_any_maven_project_property_as_attribute() {
+    public void should_return_and_format_any_maven_project_property_as_attribute_when_site_config_is_not_present() {
+        // given
+        final Map<String, String> projectProperties = new HashMap<>();
+        projectProperties.put("mvn.property-test1", "value-1");
+        projectProperties.put("mvn-property.test2", "value_2");
+        final MavenProject project = fakeProject(projectProperties);
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
+
+        // when
+        SiteConversionConfiguration configuration = new SiteConversionConfigurationParser(project)
+                .processAsciiDocConfig(null, emptyOptions, emptyAttributes);
+
+        // then
+        final Map<String, Object> optionsMap = configuration.getOptions().map();
+        assertThat(optionsMap)
+                .containsOnlyKeys(ATTRIBUTES);
+        Map attributes = (Map) optionsMap.get(ATTRIBUTES);
+        assertThat(attributes).containsExactlyInAnyOrderEntriesOf(map(
+                entry("mvn-property-test1", "value-1"),
+                entry("mvn-property-test2", "value_2")
+        ));
+    }
+
+    @Test
+    public void should_return_and_format_any_maven_project_property_as_attribute_when_site_config_is_present() {
         // given
         final Map<String, String> projectProperties = new HashMap<>();
         projectProperties.put("mvn.property-test1", "value-1");
