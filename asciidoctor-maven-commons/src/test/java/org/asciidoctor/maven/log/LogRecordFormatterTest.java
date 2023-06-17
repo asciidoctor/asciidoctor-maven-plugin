@@ -12,12 +12,12 @@ import java.io.IOException;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LogRecordFormatterTest {
+class LogRecordFormatterTest {
 
     private static final String PROJECT_NAME = "asciidoctor-maven-commons";
 
     @Test
-    public void should_apply_full_format_logRecord_with_all_data() {
+    void should_apply_full_format_logRecord_with_all_data() {
         // given
         final Cursor cursor = new TestCursor(new File("file.adoc").getAbsolutePath(), 3, "path", "dir");
         final LogRecord logRecord = new LogRecord(Severity.INFO, cursor, "a message");
@@ -29,7 +29,7 @@ public class LogRecordFormatterTest {
     }
 
     @Test
-    public void should_apply_simple_format_when_cursor_is_null() {
+    void should_apply_simple_format_when_cursor_is_null() {
         // given
         final LogRecord logRecord = new LogRecord(Severity.INFO, null, "a message");
         // when
@@ -39,7 +39,7 @@ public class LogRecordFormatterTest {
     }
 
     @Test
-    public void should_apply_simple_format_when_cursor_is_empty() {
+    void should_apply_simple_format_when_cursor_is_empty() {
         // given
         final Cursor cursor = new TestCursor(null, 0, null, null);
         final LogRecord logRecord = new LogRecord(Severity.INFO, cursor, "a message");
@@ -50,7 +50,7 @@ public class LogRecordFormatterTest {
     }
 
     @Test
-    public void should_format_full_logRecord_with_file_absolute_path_when_sourceDir_is_not_valid() throws IOException {
+    void should_format_full_logRecord_with_file_absolute_path_when_sourceDir_is_not_valid() throws IOException {
         // given
         final Cursor cursor = new TestCursor(new File("file.adoc").getAbsolutePath(), 3, "path", "dir");
         final LogRecord logRecord = new LogRecord(Severity.INFO, cursor, "a message");
@@ -63,7 +63,7 @@ public class LogRecordFormatterTest {
     }
 
     @Test
-    public void should_format_logRecords_with_empty_lineNumber_absolute_path_when_sourceDir_is_not_valid() throws IOException {
+    void should_format_logRecords_with_empty_lineNumber_absolute_path_when_sourceDir_is_not_valid() throws IOException {
         // given
         final Cursor cursor = new TestCursor(new File("file.adoc").getAbsolutePath(), 0, "path", "dir");
         final LogRecord logRecord = new LogRecord(Severity.INFO, cursor, "a message");
@@ -76,7 +76,7 @@ public class LogRecordFormatterTest {
     }
 
     @Test
-    public void should_format_logRecords_when_source_is_not_under_sourceDir() {
+    void should_format_logRecords_when_source_is_not_under_sourceDir() {
         // given
         final Cursor cursor = new TestCursor(new File("..", "../file.adoc").toString(), 2, "path", "dir");
         final LogRecord logRecord = new LogRecord(Severity.INFO, cursor, "a message");
@@ -88,7 +88,7 @@ public class LogRecordFormatterTest {
     }
 
     @Test
-    public void should_format_full_logRecord_when_cursor_is_http_source() {
+    void should_format_full_logRecord_when_cursor_is_http_source() {
         // given
         final TestCursor cursor = new TestCursor("http://something/source.adoc", 3, "path", "dir");
         final LogRecord logRecord = new LogRecord(Severity.INFO, cursor, "a message");
@@ -99,7 +99,7 @@ public class LogRecordFormatterTest {
     }
 
     @Test
-    public void should_format_full_logRecord_when_cursor_is_https_source() {
+    void should_format_full_logRecord_when_cursor_is_https_source() {
         // given
         final TestCursor cursor = new TestCursor("https://something/source.adoc", 3, "path", "dir");
         final LogRecord logRecord = new LogRecord(Severity.INFO, cursor, "a message");

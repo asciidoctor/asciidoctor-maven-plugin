@@ -66,5 +66,4 @@ public class AsciidoctorHelper {
             attributesBuilder.attribute(attribute, value);
         }
     }
-
 }

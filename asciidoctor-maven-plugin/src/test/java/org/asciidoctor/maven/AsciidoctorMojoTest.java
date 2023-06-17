@@ -13,10 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
@@ -26,13 +23,13 @@ import static org.asciidoctor.maven.TestUtils.ResourceBuilder.excludeAll;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 
 
-public class AsciidoctorMojoTest {
+class AsciidoctorMojoTest {
 
     private static final String DEFAULT_SOURCE_DIRECTORY = "target/test-classes/src/asciidoctor";
 
 
     @Test
-    public void should_skip_execution_when_skip_is_set() throws MojoFailureException, MojoExecutionException {
+    void should_skip_execution_when_skip_is_set() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory();
@@ -51,7 +48,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_skip_processing_when_source_directory_does_no_exist() throws MojoFailureException, MojoExecutionException {
+    void should_skip_processing_when_source_directory_does_no_exist() throws MojoFailureException, MojoExecutionException {
         // given
         PrintStream originalOut = System.out;
         OutputStream newOut = new ByteArrayOutputStream();
@@ -76,7 +73,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_skip_processing_when_there_are_no_sources() throws MojoFailureException, MojoExecutionException {
+    void should_skip_processing_when_there_are_no_sources() throws MojoFailureException, MojoExecutionException {
         // given
         PrintStream originalOut = System.out;
         OutputStream newOut = new ByteArrayOutputStream();
@@ -102,7 +99,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_convert_to_docbook() throws MojoFailureException, MojoExecutionException {
+    void should_convert_to_docbook() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory();
@@ -123,7 +120,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_convert_to_html5_with_defaults() throws MojoFailureException, MojoExecutionException {
+    void should_convert_to_html5_with_defaults() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory();
@@ -147,7 +144,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_convert_to_html_with_attributes() throws MojoFailureException, MojoExecutionException {
+    void should_convert_to_html_with_attributes() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory();
@@ -160,7 +157,7 @@ public class AsciidoctorMojoTest {
         mojo.resources = excludeAll();
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null,
+        mojo.attributes = Map.of("toc", "",
                 "linkcss!", "",
                 "source-highlighter", "coderay");
 
@@ -177,7 +174,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_convert_to_html_with_a_custom_slim_template() throws MojoFailureException, MojoExecutionException {
+    void should_convert_to_html_with_a_custom_slim_template() throws MojoFailureException, MojoExecutionException {
         // given
         final String templatesPath = "target/test-classes/templates/slim/";
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
@@ -204,7 +201,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_convert_to_html_with_a_custom_erb_template() throws MojoFailureException, MojoExecutionException {
+    void should_convert_to_html_with_a_custom_erb_template() throws MojoFailureException, MojoExecutionException {
         // given
         final String templatesPath = "target/test-classes/templates/";
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
@@ -229,7 +226,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_set_output_file() throws MojoFailureException, MojoExecutionException {
+    void should_set_output_file() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory();
@@ -237,7 +234,7 @@ public class AsciidoctorMojoTest {
         // when
         AsciidoctorMojo mojo = mockAsciidoctorMojo();
         mojo.backend = "html5";
-        mojo.attributes = map("icons", "font");
+        mojo.attributes = Map.of("icons", "font");
         mojo.embedAssets = true;
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "sample-embedded.adoc";
@@ -255,7 +252,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_override_output_directory_with_output_file_with_absolute_path() throws MojoFailureException, MojoExecutionException {
+    void should_override_output_directory_with_output_file_with_absolute_path() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory();
@@ -264,7 +261,7 @@ public class AsciidoctorMojoTest {
         // when
         AsciidoctorMojo mojo = mockAsciidoctorMojo();
         mojo.backend = "html5";
-        mojo.attributes = map("icons", "font");
+        mojo.attributes = Map.of("icons", "font");
         mojo.embedAssets = true;
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "sample-embedded.adoc";
@@ -286,7 +283,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_set_file_extension() throws MojoFailureException, MojoExecutionException {
+    void should_set_file_extension() throws MojoFailureException, MojoExecutionException {
         // given
         File outputDir = newOutputTestDirectory();
         Assertions.assertThat(outputDir).doesNotExist();
@@ -315,7 +312,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_set_flag_attribute_as_true() throws MojoFailureException, MojoExecutionException {
+    void should_set_flag_attribute_as_true() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory();
@@ -328,7 +325,7 @@ public class AsciidoctorMojoTest {
         mojo.outputDirectory = outputDir;
         // IMPORTANT Maven can only assign string values or null, so we have to emulate the value precisely in the test!
         // Believe it or not, null is the equivalent of writing <toc/> in the XML configuration
-        mojo.attributes = map("toc2", "true");
+        mojo.attributes = Map.of("toc2", "true");
         mojo.execute();
 
         // then
@@ -338,7 +335,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_unset_flag_attribute_as_false() throws MojoFailureException, MojoExecutionException {
+    void should_unset_flag_attribute_as_false() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory();
@@ -351,7 +348,7 @@ public class AsciidoctorMojoTest {
         mojo.outputDirectory = outputDir;
         // IMPORTANT Maven can only assign string values or null, so we have to emulate the value precisely in the test!
         // Believe it or not, null is the equivalent of writing <toc/> in the XML configuration
-        mojo.attributes = map("toc2", "false");
+        mojo.attributes = Map.of("toc2", "false");
         mojo.execute();
 
         // then
@@ -361,7 +358,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_set_flag_attribute_as_null() throws MojoFailureException, MojoExecutionException {
+    void should_set_flag_attribute_as_null() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory();
@@ -374,7 +371,7 @@ public class AsciidoctorMojoTest {
         mojo.outputDirectory = outputDir;
         // IMPORTANT Maven can only assign string values or null, so we have to emulate the value precisely in the test!
         // Believe it or not, null is the equivalent of writing <toc/> in the XML configuration
-        mojo.attributes = map("toc", null);
+        mojo.attributes = Map.of("toc", "");
         mojo.execute();
 
         // then
@@ -394,7 +391,7 @@ public class AsciidoctorMojoTest {
      * - all documents are correctly converted with the import
      */
     @Test
-    public void should_replicate_source_structure_when_standard_paths() throws MojoFailureException, MojoExecutionException, IOException {
+    void should_replicate_source_structure_when_standard_paths() throws MojoFailureException, MojoExecutionException, IOException {
         // given
         File srcDir = new File("src/test/resources/src/asciidoctor/relative-path-treatment");
         File outputDir = newOutputTestDirectory("relative");
@@ -406,7 +403,7 @@ public class AsciidoctorMojoTest {
         mojo.outputDirectory = outputDir;
         mojo.preserveDirectories = true;
         mojo.relativeBaseDir = true;
-        mojo.attributes = map("icons", "font");
+        mojo.attributes = Map.of("icons", "font");
         mojo.execute();
 
         // then
@@ -435,7 +432,7 @@ public class AsciidoctorMojoTest {
      * - all documents are correctly converted with the import
      */
     @Test
-    public void should_replicate_source_structure_when_complex_paths() throws MojoFailureException, MojoExecutionException, IOException {
+    void should_replicate_source_structure_when_complex_paths() throws MojoFailureException, MojoExecutionException, IOException {
         // given
         File srcDir = new File("src/test/resources/src/asciidoctor/relative-path-treatment/../relative-path-treatment");
         File outputDir = newOutputTestDirectory("relative");
@@ -447,7 +444,7 @@ public class AsciidoctorMojoTest {
         mojo.outputDirectory = outputDir;
         mojo.preserveDirectories = true;
         mojo.relativeBaseDir = true;
-        mojo.attributes = map("icons", "font");
+        mojo.attributes = Map.of("icons", "font");
         mojo.execute();
 
         // then
@@ -478,7 +475,7 @@ public class AsciidoctorMojoTest {
      * - all documents but 1 (in the root) are incorrectly converted because they cannot find the imported file
      */
     @Test
-    public void should_not_replicate_source_structure_when_complex_paths() throws MojoFailureException, MojoExecutionException, IOException {
+    void should_not_replicate_source_structure_when_complex_paths() throws MojoFailureException, MojoExecutionException, IOException {
         // given
         File srcDir = new File("src/test/resources/src/asciidoctor/relative-path-treatment/../relative-path-treatment");
         File outputDir = newOutputTestDirectory("relative");
@@ -521,7 +518,7 @@ public class AsciidoctorMojoTest {
      * - all documents but 1 (in the root) are incorrectly converted because they cannot find the imported file
      */
     @Test
-    public void should_replicate_source_structure_when_no_baseDir_rewrite() throws MojoFailureException, MojoExecutionException, IOException {
+    void should_replicate_source_structure_when_no_baseDir_rewrite() throws MojoFailureException, MojoExecutionException, IOException {
         // given
         File srcDir = new File("src/test/resources/src/asciidoctor/relative-path-treatment");
         File outputDir = newOutputTestDirectory("relative");
@@ -534,7 +531,7 @@ public class AsciidoctorMojoTest {
         mojo.preserveDirectories = true;
         mojo.baseDir = srcDir;
         //mojo.relativeBaseDir = true
-        mojo.attributes = map("icons", "font");
+        mojo.attributes = Map.of("icons", "font");
         mojo.execute();
 
         // then
@@ -562,7 +559,7 @@ public class AsciidoctorMojoTest {
      * Expected: all documents are correctly converted in the same folder
      */
     @Test
-    public void should_not_replicate_source_structure_when_baseDir_rewrite() throws MojoFailureException, MojoExecutionException, IOException {
+    void should_not_replicate_source_structure_when_baseDir_rewrite() throws MojoFailureException, MojoExecutionException, IOException {
         // given
         File srcDir = new File("src/test/resources/src/asciidoctor/relative-path-treatment");
         File outputDir = newOutputTestDirectory("relative");
@@ -574,7 +571,7 @@ public class AsciidoctorMojoTest {
         mojo.outputDirectory = outputDir;
         mojo.preserveDirectories = false;
         mojo.relativeBaseDir = true;
-        mojo.attributes = map("icons", "font");
+        mojo.attributes = Map.of("icons", "font");
         mojo.execute();
 
         // then
@@ -592,7 +589,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_copy_all_resources_into_output_folder() throws MojoFailureException, MojoExecutionException {
+    void should_copy_all_resources_into_output_folder() throws MojoFailureException, MojoExecutionException {
         // given
         File outputDir = newOutputTestDirectory("multiple-resources-multiple-sources");
         String relativeTestsPath = DEFAULT_SOURCE_DIRECTORY + "/relative-path-treatment";
@@ -636,7 +633,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_not_copy_files_in_hidden_directories() throws MojoFailureException, MojoExecutionException {
+    void should_not_copy_files_in_hidden_directories() throws MojoFailureException, MojoExecutionException {
         // given
         String relativeTestsPath = DEFAULT_SOURCE_DIRECTORY + "/relative-path-treatment";
         File outputDir = newOutputTestDirectory("hidden-resources");
@@ -659,7 +656,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_not_copy_custom_source_documents_when_custom_extensions_are_set() throws MojoFailureException, MojoExecutionException {
+    void should_not_copy_custom_source_documents_when_custom_extensions_are_set() throws MojoFailureException, MojoExecutionException {
         // given
         File outputDir = newOutputTestDirectory("resources");
 
@@ -683,7 +680,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_only_convert_documents_and_not_copy_any_resources_when_resources_directory_does_no_exist() throws MojoFailureException, MojoExecutionException {
+    void should_only_convert_documents_and_not_copy_any_resources_when_resources_directory_does_no_exist() throws MojoFailureException, MojoExecutionException {
         // given
         File outputDir = newOutputTestDirectory("multiple-sources-error-source-not-found");
 
@@ -706,7 +703,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_convert_single_document_and_not_copy_any_resources_when_excluding_all_resources() throws MojoFailureException, MojoExecutionException {
+    void should_convert_single_document_and_not_copy_any_resources_when_excluding_all_resources() throws MojoFailureException, MojoExecutionException {
         // given
         File outputDir = newOutputTestDirectory();
 
@@ -727,7 +724,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_only_convert_a_single_file_and_not_copy_any_resource() throws MojoFailureException, MojoExecutionException {
+    void should_only_convert_a_single_file_and_not_copy_any_resource() throws MojoFailureException, MojoExecutionException {
         // given
         File outputDir = newOutputTestDirectory("multiple-resources-file-pattern");
 
@@ -751,7 +748,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_require_ruby_gem() throws MojoFailureException, MojoExecutionException {
+    void should_require_ruby_gem() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory();
@@ -774,7 +771,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_embed_resources() throws MojoFailureException, MojoExecutionException {
+    void should_embed_resources() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory("embedAssets");
@@ -785,7 +782,7 @@ public class AsciidoctorMojoTest {
         mojo.sourceDocumentName = "sample-embedded.adoc";
         mojo.sourceDirectory = srcDir;
         mojo.outputDirectory = outputDir;
-        mojo.attributes = map("icons", "font");
+        mojo.attributes = Map.of("icons", "font");
         mojo.embedAssets = true;
         mojo.execute();
 
@@ -801,7 +798,7 @@ public class AsciidoctorMojoTest {
 
     // issue-78
     @Test
-    public void should_embed_image_in_included_adoc() throws MojoFailureException, MojoExecutionException {
+    void should_embed_image_in_included_adoc() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File("target/test-classes/src/asciidoctor/issue-78");
         File outputDir = newOutputTestDirectory("embedAssets");
@@ -824,7 +821,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_pass_images_directory_as_attribute() throws MojoFailureException, MojoExecutionException {
+    void should_pass_images_directory_as_attribute() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory();
@@ -835,7 +832,7 @@ public class AsciidoctorMojoTest {
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "imageDir.adoc";
         mojo.outputDirectory = outputDir;
-        mojo.attributes = map("imagesdir", "custom-images-dir");
+        mojo.attributes = Map.of("imagesdir", "custom-images-dir");
         mojo.execute();
 
         // then
@@ -844,7 +841,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_pass_attributes_from_pom_configuration() throws MojoFailureException, MojoExecutionException {
+    void should_pass_attributes_from_pom_configuration() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory("attributes");
@@ -855,7 +852,7 @@ public class AsciidoctorMojoTest {
         mojo.sourceDocumentName = "attributes-example.adoc";
         mojo.sourceDirectory = srcDir;
         mojo.outputDirectory = outputDir;
-        mojo.attributes = map(
+        mojo.attributes = Map.of(
                 "plugin-configuration-attribute", "plugin configuration",
                 "execution-attribute", "execution configuration"
         );
@@ -869,13 +866,13 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_pass_attributes_from_maven_properties() throws MojoFailureException, MojoExecutionException {
+    void should_pass_attributes_from_maven_properties() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory("attributes");
         //  when
 
-        AsciidoctorMojo mojo = mockAsciidoctorMojo(map("project.property.attribute", "project property configuration"));
+        AsciidoctorMojo mojo = mockAsciidoctorMojo(Map.of("project.property.attribute", "project property configuration"));
         mojo.backend = "html5";
         mojo.sourceDocumentName = "attributes-example.adoc";
         mojo.sourceDirectory = srcDir;
@@ -889,7 +886,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void command_line_attributes_should_replace_configurations_and_attributes() throws MojoFailureException, MojoExecutionException {
+    void command_line_attributes_should_replace_configurations_and_attributes() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory("configuration");
@@ -900,7 +897,7 @@ public class AsciidoctorMojoTest {
         mojo.sourceDocumentName = "sample.asciidoc";
         mojo.sourceDirectory = srcDir;
         mojo.outputDirectory = outputDir;
-        mojo.attributes = map(
+        mojo.attributes = Map.of(
                 "toc", "left",
                 "source-highlighter", "coderay");
         // replace some options
@@ -914,7 +911,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_show_message_when_overwriting_files_without_outputFile() throws MojoFailureException, MojoExecutionException {
+    void should_show_message_when_overwriting_files_without_outputFile() throws MojoFailureException, MojoExecutionException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
         // srcDir contains 6 documents, 2 of them with the same name (HellowWorld3.adoc)
@@ -943,7 +940,7 @@ public class AsciidoctorMojoTest {
     }
 
     @Test
-    public void should_show_message_when_overwriting_files_using_outputFile() throws MojoFailureException, MojoExecutionException {
+    void should_show_message_when_overwriting_files_using_outputFile() throws MojoFailureException, MojoExecutionException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY, "relative-path-treatment/");
@@ -971,7 +968,7 @@ public class AsciidoctorMojoTest {
 
     @SneakyThrows
     @Test
-    public void should_not_show_message_when_overwriting_files_using_outputFile_and_preserveDirectories() {
+    void should_not_show_message_when_overwriting_files_using_outputFile_and_preserveDirectories() {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY, "/relative-path-treatment/");
@@ -997,5 +994,4 @@ public class AsciidoctorMojoTest {
         // cleanup
         consoleHolder.release();
     }
-
 }

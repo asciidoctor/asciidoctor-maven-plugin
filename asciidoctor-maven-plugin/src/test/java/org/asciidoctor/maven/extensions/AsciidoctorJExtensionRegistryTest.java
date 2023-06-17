@@ -10,7 +10,7 @@ import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AsciidoctorJExtensionRegistryTest {
+class AsciidoctorJExtensionRegistryTest {
 
     private JavaExtensionRegistry javaExtensionRegistry;
     private AsciidoctorJExtensionRegistry pluginExtensionRegistry;

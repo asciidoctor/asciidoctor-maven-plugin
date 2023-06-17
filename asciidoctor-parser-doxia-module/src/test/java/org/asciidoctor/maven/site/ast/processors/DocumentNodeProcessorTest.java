@@ -12,7 +12,7 @@ import java.io.StringWriter;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(DocumentNodeProcessor.class)
-public class DocumentNodeProcessorTest {
+class DocumentNodeProcessorTest {
 
     private Asciidoctor asciidoctor;
     private NodeProcessor nodeProcessor;

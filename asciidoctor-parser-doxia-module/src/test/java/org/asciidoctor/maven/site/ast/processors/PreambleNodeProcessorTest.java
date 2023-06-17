@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * by their respective processors.
  */
 @NodeProcessorTest(PreambleNodeProcessor.class)
-public class PreambleNodeProcessorTest {
+class PreambleNodeProcessorTest {
 
     private Asciidoctor asciidoctor;
     private NodeProcessor nodeProcessor;

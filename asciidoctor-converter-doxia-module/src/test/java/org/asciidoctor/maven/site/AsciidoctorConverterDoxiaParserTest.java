@@ -17,12 +17,12 @@ import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-public class AsciidoctorConverterDoxiaParserTest {
+class AsciidoctorConverterDoxiaParserTest {
 
     private static final String TEST_DOCS_PATH = "src/test/resources/";
 
     @Test
-    public void should_convert_html_without_any_configuration() throws FileNotFoundException, ParseException {
+    void should_convert_html_without_any_configuration() throws FileNotFoundException, ParseException {
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "sample.asciidoc");
         final Sink sink = createSinkMock();
 
@@ -39,7 +39,7 @@ public class AsciidoctorConverterDoxiaParserTest {
     }
 
     @Test
-    public void should_convert_html_with_an_attribute() throws FileNotFoundException, ParseException {
+    void should_convert_html_with_an_attribute() throws FileNotFoundException, ParseException {
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "sample.asciidoc");
         Reader reader = new FileReader(srcAsciidoc);
 
@@ -60,7 +60,7 @@ public class AsciidoctorConverterDoxiaParserTest {
     }
 
     @Test
-    public void should_convert_html_with_baseDir_option() throws FileNotFoundException, ParseException {
+    void should_convert_html_with_baseDir_option() throws FileNotFoundException, ParseException {
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "main-document.adoc");
         final Sink sink = createSinkMock();
 
@@ -80,7 +80,7 @@ public class AsciidoctorConverterDoxiaParserTest {
     }
 
     @Test
-    public void should_convert_html_with_relative_baseDir_option() throws FileNotFoundException, ParseException {
+    void should_convert_html_with_relative_baseDir_option() throws FileNotFoundException, ParseException {
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "main-document.adoc");
         final Sink sink = createSinkMock();
 
@@ -100,7 +100,7 @@ public class AsciidoctorConverterDoxiaParserTest {
     }
 
     @Test
-    public void should_convert_html_with_templateDir_option() throws FileNotFoundException, ParseException {
+    void should_convert_html_with_templateDir_option() throws FileNotFoundException, ParseException {
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "sample.asciidoc");
         final Sink sink = createSinkMock();
 
@@ -121,7 +121,7 @@ public class AsciidoctorConverterDoxiaParserTest {
     }
 
     @Test
-    public void should_convert_html_with_attributes_and_baseDir_option() throws FileNotFoundException, ParseException {
+    void should_convert_html_with_attributes_and_baseDir_option() throws FileNotFoundException, ParseException {
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "main-document.adoc");
         final Sink sink = createSinkMock();
 
@@ -149,7 +149,7 @@ public class AsciidoctorConverterDoxiaParserTest {
     }
 
     @Test
-    public void should_process_empty_selfclosing_XML_attributes() throws FileNotFoundException, ParseException {
+    void should_process_empty_selfclosing_XML_attributes() throws FileNotFoundException, ParseException {
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "sample.asciidoc");
         final Sink sink = createSinkMock();
 
@@ -170,7 +170,7 @@ public class AsciidoctorConverterDoxiaParserTest {
     }
 
     @Test
-    public void should_process_empty_value_XML_attributes() throws FileNotFoundException, ParseException {
+    void should_process_empty_value_XML_attributes() throws FileNotFoundException, ParseException {
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "sample.asciidoc");
         final Sink sink = createSinkMock();
 
@@ -191,7 +191,7 @@ public class AsciidoctorConverterDoxiaParserTest {
     }
 
     @Test
-    public void should_fail_when_logHandler_failIf_is_WARNING() {
+    void should_fail_when_logHandler_failIf_is_WARNING() {
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "errors/document-with-missing-include.adoc");
         final Sink sink = createSinkMock();
 
@@ -243,7 +243,7 @@ public class AsciidoctorConverterDoxiaParserTest {
     }
 
     class TextProviderSink extends AbstractTextSink {
-        public String text;
+        String text;
 
         @Override
         public void rawText(String text) {

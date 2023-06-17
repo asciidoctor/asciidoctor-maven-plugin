@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-public class SiteLogHandlerDeserializerTest {
+class SiteLogHandlerDeserializerTest {
 
     @Test
-    public void should_deserialize_null_logHandler() {
+    void should_deserialize_null_logHandler() {
         // given
         final Xpp3Dom logHandlerConfig = null;
         // when
@@ -25,7 +25,7 @@ public class SiteLogHandlerDeserializerTest {
     }
 
     @Test
-    public void should_deserialize_empty_logHandler() {
+    void should_deserialize_empty_logHandler() {
         // given
         final Xpp3Dom logHandlerConfig = Xpp3DoomBuilder.asciidocNode()
                 .build();
@@ -39,7 +39,7 @@ public class SiteLogHandlerDeserializerTest {
     }
 
     @Test
-    public void should_deserialize_valid_outputToConsole() {
+    void should_deserialize_valid_outputToConsole() {
         // given
         final Xpp3Dom logHandlerConfig = Xpp3DoomBuilder.logHandler()
                 .addChild("outputToConsole", "false")
@@ -56,7 +56,7 @@ public class SiteLogHandlerDeserializerTest {
     }
 
     @Test
-    public void should_deserialize_invalid_outputToConsole() {
+    void should_deserialize_invalid_outputToConsole() {
         // given
         final Xpp3Dom logHandlerConfig = Xpp3DoomBuilder.logHandler()
                 .addChild("outputToConsole", "text")
@@ -73,7 +73,7 @@ public class SiteLogHandlerDeserializerTest {
     }
 
     @Test
-    public void should_deserialize_empty_failIf() {
+    void should_deserialize_empty_failIf() {
         // given
         final Xpp3Dom logHandlerConfig = Xpp3DoomBuilder.logHandler()
                 .addChild("failIf")
@@ -88,7 +88,7 @@ public class SiteLogHandlerDeserializerTest {
     }
 
     @Test
-    public void should_deserialize_failIf_with_valid_severity() {
+    void should_deserialize_failIf_with_valid_severity() {
         // given
         final Xpp3Dom logHandlerConfig = Xpp3DoomBuilder.logHandler()
                 .addChild("failIf")
@@ -108,7 +108,7 @@ public class SiteLogHandlerDeserializerTest {
     }
 
     @Test
-    public void should_deserialize_failIf_with_invalid_severity() {
+    void should_deserialize_failIf_with_invalid_severity() {
         // given
         final Xpp3Dom logHandlerConfig = Xpp3DoomBuilder.logHandler()
                 .addChild("failIf")
@@ -124,7 +124,7 @@ public class SiteLogHandlerDeserializerTest {
     }
 
     @Test
-    public void should_deserialize_failIf_with_empty_severity() {
+    void should_deserialize_failIf_with_empty_severity() {
         // given
         final Xpp3Dom logHandlerConfig = Xpp3DoomBuilder.logHandler()
                 .addChild("failIf")
@@ -140,7 +140,7 @@ public class SiteLogHandlerDeserializerTest {
     }
 
     @Test
-    public void should_deserialize_failIf_with_containsText() {
+    void should_deserialize_failIf_with_containsText() {
         // given
         final String textPattern = "some words";
         final Xpp3Dom logHandlerConfig = Xpp3DoomBuilder.logHandler()
@@ -161,7 +161,7 @@ public class SiteLogHandlerDeserializerTest {
     }
 
     @Test
-    public void should_deserialize_failIf_empty_containsText() {
+    void should_deserialize_failIf_empty_containsText() {
         // given
         final Xpp3Dom logHandlerConfig = Xpp3DoomBuilder.logHandler()
                 .addChild("failIf")
@@ -177,7 +177,7 @@ public class SiteLogHandlerDeserializerTest {
     }
 
     @Test
-    public void should_deserialize_failIf_with_severity_and_containsText() {
+    void should_deserialize_failIf_with_severity_and_containsText() {
 
         // given
         final String textPattern = "some words";

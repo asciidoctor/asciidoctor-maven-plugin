@@ -21,11 +21,11 @@ import static org.asciidoctor.maven.TestUtils.mockAsciidoctorZipMojo;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class AsciidoctorZipMojoTest {
+class AsciidoctorZipMojoTest {
 
 
     @Test
-    public void should_create_simple_zip() throws IOException, MojoFailureException, MojoExecutionException {
+    void should_create_simple_zip() throws IOException, MojoFailureException, MojoExecutionException {
         // given: an empty output directory
         File outputDir = TestFilesHelper.newOutputTestDirectory("asciidoctor-zip-output");
 
@@ -63,7 +63,7 @@ public class AsciidoctorZipMojoTest {
     }
 
     @Test
-    public void should_replicate_source_structure_in_zip_standard_paths() throws MojoFailureException, MojoExecutionException, IOException {
+    void should_replicate_source_structure_in_zip_standard_paths() throws MojoFailureException, MojoExecutionException, IOException {
         // given
         File srcDir = new File("src/test/resources/src/asciidoctor/relative-path-treatment");
         File outputDir = TestFilesHelper.newOutputTestDirectory("asciidoctor-zip-output");
@@ -109,7 +109,7 @@ public class AsciidoctorZipMojoTest {
     }
 
     @Test
-    public void should_not_replicate_source_structure_in_zip_standard_paths() throws IOException, MojoFailureException, MojoExecutionException {
+    void should_not_replicate_source_structure_in_zip_standard_paths() throws IOException, MojoFailureException, MojoExecutionException {
         // setup
         File srcDir = new File("src/test/resources/src/asciidoctor/relative-path-treatment");
         File outputDir = TestFilesHelper.newOutputTestDirectory("asciidoctor-zip-output");

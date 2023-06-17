@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * The tests refer to caption as the combination of both.
  */
 @NodeProcessorTest(TableNodeProcessor.class)
-public class TableNodeProcessorTest {
+class TableNodeProcessorTest {
 
     private Asciidoctor asciidoctor;
     private NodeProcessor nodeProcessor;

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(ImageNodeProcessor.class)
-public class ImageNodeProcessorTest {
+class ImageNodeProcessorTest {
 
     private Asciidoctor asciidoctor;
     private NodeProcessor nodeProcessor;

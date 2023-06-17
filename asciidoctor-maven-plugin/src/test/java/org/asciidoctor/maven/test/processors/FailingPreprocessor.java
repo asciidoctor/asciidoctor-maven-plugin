@@ -10,13 +10,12 @@ public class FailingPreprocessor extends Preprocessor {
 
     public FailingPreprocessor(Map<String, Object> config) {
         super(config);
-        System.out.println(this.getClass().getSimpleName() + "("
-                + this.getClass().getSuperclass().getSimpleName() + ") initialized");
+        System.out.println(String.format("%s(%s) initialized", this.getClass().getSimpleName(), this.getClass().getSuperclass().getSimpleName()));
     }
 
     @Override
     public void process(Document document, PreprocessorReader reader) {
-        System.out.println("Processing "+ this.getClass().getSimpleName());
+        System.out.println("Processing " + this.getClass().getSimpleName());
         System.out.println("Processing: blocks found: " + document.getBlocks().size());
         throw new RuntimeException("That's all folks");
     }

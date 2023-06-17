@@ -18,7 +18,7 @@ class StringsCollectionsInputStream extends InputStream {
 
     private static final String LINEBREAK = "\r\n";
 
-    private AtomicInteger index = new AtomicInteger(0);
+    private final AtomicInteger index = new AtomicInteger(0);
     private final List<String> lines = new ArrayList<>();
 
     private volatile Semaphore mutex = new Semaphore(1);
@@ -30,7 +30,7 @@ class StringsCollectionsInputStream extends InputStream {
 
     @SneakyThrows
     @Override
-    public int read() throws IOException {
+    public int read() {
         mutex.acquire();
         int indexValue = index.get();
         return indexValue >= lines.size() ? -1 : lines.get(indexValue).charAt(0);

@@ -13,7 +13,7 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(ParagraphNodeProcessor.class)
-public class ParagraphNodeProcessorTest {
+class ParagraphNodeProcessorTest {
 
     private Asciidoctor asciidoctor;
     private NodeProcessor nodeProcessor;
