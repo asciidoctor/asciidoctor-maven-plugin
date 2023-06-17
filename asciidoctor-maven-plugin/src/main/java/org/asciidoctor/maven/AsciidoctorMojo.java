@@ -231,7 +231,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             if (!uniquePaths.add(destinationPath))
                 getLog().warn("Duplicated destination found: overwriting file: " + destinationPath.getAbsolutePath());
 
-            convertFile(asciidoctor, optionsBuilder.asMap(), source);
+            convertFile(asciidoctor, optionsBuilder.build(), source);
 
             try {
                 // process log messages according to mojo configuration
@@ -359,7 +359,7 @@ public class AsciidoctorMojo extends AbstractMojo {
                 finder.find(sourceDirectoryPath, sourceDocumentExtensions);
     }
 
-    protected void convertFile(Asciidoctor asciidoctor, Map<String, Object> options, File f) {
+    protected void convertFile(Asciidoctor asciidoctor, Options options, File f) {
         asciidoctor.convertFile(f, options);
         logConvertedFile(f);
     }
@@ -384,7 +384,7 @@ public class AsciidoctorMojo extends AbstractMojo {
      */
     protected OptionsBuilder createOptionsBuilder(AsciidoctorMojo configuration, AttributesBuilder attributesBuilder) {
 
-        final OptionsBuilder optionsBuilder = OptionsBuilder.options()
+        final OptionsBuilder optionsBuilder = Options.builder()
                 .backend(configuration.getBackend())
                 .safe(SafeMode.UNSAFE)
                 .standalone(configuration.standalone)
@@ -411,12 +411,9 @@ public class AsciidoctorMojo extends AbstractMojo {
         if (!configuration.getTemplateDirs().isEmpty())
             optionsBuilder.templateDirs(templateDirs.toArray(new File[]{}));
 
-        if (!attributesBuilder.asMap().isEmpty())
-            optionsBuilder.attributes(attributesBuilder);
-
+        optionsBuilder.attributes(attributesBuilder.build());
         return optionsBuilder;
     }
-
 
     /**
      * Creates an AttributesBuilder instance with the attributes defined in the configuration.
@@ -427,7 +424,7 @@ public class AsciidoctorMojo extends AbstractMojo {
      */
     protected AttributesBuilder createAttributesBuilder(AsciidoctorMojo configuration, MavenProject mavenProject) {
 
-        final AttributesBuilder attributesBuilder = AttributesBuilder.attributes();
+        final AttributesBuilder attributesBuilder = Attributes.builder();
 
         if (configuration.isEmbedAssets()) {
             attributesBuilder.linkCss(false);

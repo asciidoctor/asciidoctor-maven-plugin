@@ -2,7 +2,9 @@ package org.asciidoctor.maven.site;
 
 import org.apache.maven.model.Model;
 import org.apache.maven.project.MavenProject;
+import org.asciidoctor.Attributes;
 import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.junit.jupiter.api.Test;
@@ -22,8 +24,8 @@ public class SiteConversionConfigurationParserTest {
     public void should_return_default_configuration_when_site_xml_is_null() {
         // given
         final MavenProject project = fakeProject();
-        OptionsBuilder emptyOptions = OptionsBuilder.options();
-        AttributesBuilder emptyAttributes = AttributesBuilder.attributes();
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
 
         // when
         SiteConversionConfiguration configuration = new SiteConversionConfigurationParser(project)
@@ -40,8 +42,8 @@ public class SiteConversionConfigurationParserTest {
     public void should_return_default_configuration_when_asciidoc_xml_is_null() {
         // given
         final MavenProject project = fakeProject();
-        OptionsBuilder emptyOptions = OptionsBuilder.options();
-        AttributesBuilder emptyAttributes = AttributesBuilder.attributes();
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
         Xpp3Dom siteConfig = Xpp3DoomBuilder.siteNode()
                 .build();
         // when
@@ -59,8 +61,8 @@ public class SiteConversionConfigurationParserTest {
     public void should_return_simple_single_requires() {
         // given
         final MavenProject project = fakeProject();
-        OptionsBuilder emptyOptions = OptionsBuilder.options();
-        AttributesBuilder emptyAttributes = AttributesBuilder.attributes();
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
         Xpp3Dom siteConfig = Xpp3DoomBuilder.asciidocNode()
                 .addChild("requires")
                 .addChild("require", "gem")
@@ -82,8 +84,8 @@ public class SiteConversionConfigurationParserTest {
     public void should_return_multiple_requires() {
         // given
         final MavenProject project = fakeProject();
-        OptionsBuilder emptyOptions = OptionsBuilder.options();
-        AttributesBuilder emptyAttributes = AttributesBuilder.attributes();
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
         Xpp3Dom siteConfig = Xpp3DoomBuilder.asciidocNode()
                 .addChild("requires")
                 .addChild("require", "gem_1", "gem_2", "gem_3")
@@ -105,8 +107,8 @@ public class SiteConversionConfigurationParserTest {
     public void should_return_multiple_requires_when_defined_in_single_element() {
         // given
         final MavenProject project = fakeProject();
-        OptionsBuilder emptyOptions = OptionsBuilder.options();
-        AttributesBuilder emptyAttributes = AttributesBuilder.attributes();
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
         Xpp3Dom siteConfig = Xpp3DoomBuilder.asciidocNode()
                 .addChild("requires")
                 .addChild("require", "gem_1,gem_2, gem_3")
@@ -128,8 +130,8 @@ public class SiteConversionConfigurationParserTest {
     public void should_remove_empty_and_blank_requires() {
         // given
         final MavenProject project = fakeProject();
-        OptionsBuilder emptyOptions = OptionsBuilder.options();
-        AttributesBuilder emptyAttributes = AttributesBuilder.attributes();
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
         Xpp3Dom siteConfig = Xpp3DoomBuilder.asciidocNode()
                 .addChild("requires")
                 .addChild("require", "gem_1,,gem_2", "", ",,", "gem_3")
@@ -151,14 +153,14 @@ public class SiteConversionConfigurationParserTest {
     public void should_return_attributes() {
         // given
         final MavenProject project = fakeProject();
-        OptionsBuilder emptyOptions = OptionsBuilder.options();
-        AttributesBuilder emptyAttributes = AttributesBuilder.attributes();
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
         Xpp3Dom siteConfig = Xpp3DoomBuilder.asciidocNode()
                 .addChild("attributes")
                 .addChild("imagesdir", "./images")
                 .parent().addChild("source-highlighter", "coderay")
                 .parent().addChild("sectnums")
-                .parent().addChild("toc", null)
+                .parent().addChild("toc")
                 .build();
 
         // when
@@ -182,8 +184,8 @@ public class SiteConversionConfigurationParserTest {
     public void should_map_null_attributes_as_empty_string() {
         // given
         final MavenProject project = fakeProject();
-        OptionsBuilder emptyOptions = OptionsBuilder.options();
-        AttributesBuilder emptyAttributes = AttributesBuilder.attributes();
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
         Xpp3Dom siteConfig = Xpp3DoomBuilder.asciidocNode()
                 .addChild("attributes")
                 .addChild("toc", null)
@@ -208,8 +210,8 @@ public class SiteConversionConfigurationParserTest {
     public void should_map_true_boolean_attribute_as_empty_string_value() {
         // given
         final MavenProject project = fakeProject();
-        OptionsBuilder emptyOptions = OptionsBuilder.options();
-        AttributesBuilder emptyAttributes = AttributesBuilder.attributes();
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
         Xpp3Dom siteConfig = Xpp3DoomBuilder.asciidocNode()
                 .addChild("attributes")
                 .addChild("toc", "true")
@@ -234,8 +236,8 @@ public class SiteConversionConfigurationParserTest {
     public void should_map_false_boolean_attribute_as_null_value() {
         // given
         final MavenProject project = fakeProject();
-        OptionsBuilder emptyOptions = OptionsBuilder.options();
-        AttributesBuilder emptyAttributes = AttributesBuilder.attributes();
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
         Xpp3Dom siteConfig = Xpp3DoomBuilder.asciidocNode()
                 .addChild("attributes")
                 .addChild("toc", "false")
@@ -260,8 +262,8 @@ public class SiteConversionConfigurationParserTest {
     public void should_return_template_dirs_when_defined_as_templateDirs_dir() {
         // given
         final MavenProject project = fakeProject();
-        OptionsBuilder emptyOptions = OptionsBuilder.options();
-        AttributesBuilder emptyAttributes = AttributesBuilder.attributes();
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
         Xpp3Dom siteConfig = Xpp3DoomBuilder.asciidocNode()
                 .addChild("templateDirs")
                 .addChild("dir", "path")
@@ -288,8 +290,8 @@ public class SiteConversionConfigurationParserTest {
     public void should_return_template_dirs_when_defined_as_template_dirs_dir() {
         // given
         final MavenProject project = fakeProject();
-        OptionsBuilder emptyOptions = OptionsBuilder.options();
-        AttributesBuilder emptyAttributes = AttributesBuilder.attributes();
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
         Xpp3Dom siteConfig = Xpp3DoomBuilder.asciidocNode()
                 .addChild("template_dirs")
                 .addChild("dir", "path")
@@ -316,8 +318,8 @@ public class SiteConversionConfigurationParserTest {
     public void should_not_return_empty_template_dirs() {
         // given
         final MavenProject project = fakeProject();
-        OptionsBuilder emptyOptions = OptionsBuilder.options();
-        AttributesBuilder emptyAttributes = AttributesBuilder.attributes();
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
         Xpp3Dom siteConfig = Xpp3DoomBuilder.asciidocNode()
                 .addChild("template_dirs")
                 .addChild("dir", "")
@@ -339,8 +341,8 @@ public class SiteConversionConfigurationParserTest {
     public void should_return_baseDir_dirs_when_defined_as_template_dirs_dir() {
         // given
         final MavenProject project = fakeProject();
-        OptionsBuilder emptyOptions = OptionsBuilder.options();
-        AttributesBuilder emptyAttributes = AttributesBuilder.attributes();
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
         Xpp3Dom siteConfig = Xpp3DoomBuilder.asciidocNode()
                 .addChild("baseDir", "path")
                 .build();
@@ -362,8 +364,8 @@ public class SiteConversionConfigurationParserTest {
     public void should_return_any_configuration_inside_asciidoc_node_as_option() {
         // given
         final MavenProject project = fakeProject();
-        OptionsBuilder emptyOptions = OptionsBuilder.options();
-        AttributesBuilder emptyAttributes = AttributesBuilder.attributes();
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
         Xpp3Dom siteConfig = Xpp3DoomBuilder.asciidocNode()
                 .addChild("option-1", "value-1")
                 .parent().addChild("option_2", "value-2")
@@ -389,14 +391,39 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_return_and_format_any_maven_project_property_as_attribute() {
+    public void should_return_and_format_any_maven_project_property_as_attribute_when_site_config_is_not_present() {
         // given
         final Map<String, String> projectProperties = new HashMap<>();
         projectProperties.put("mvn.property-test1", "value-1");
         projectProperties.put("mvn-property.test2", "value_2");
         final MavenProject project = fakeProject(projectProperties);
-        OptionsBuilder emptyOptions = OptionsBuilder.options();
-        AttributesBuilder emptyAttributes = AttributesBuilder.attributes();
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
+
+        // when
+        SiteConversionConfiguration configuration = new SiteConversionConfigurationParser(project)
+                .processAsciiDocConfig(null, emptyOptions, emptyAttributes);
+
+        // then
+        final Map<String, Object> optionsMap = configuration.getOptions().map();
+        assertThat(optionsMap)
+                .containsOnlyKeys(ATTRIBUTES);
+        Map attributes = (Map) optionsMap.get(ATTRIBUTES);
+        assertThat(attributes).containsExactlyInAnyOrderEntriesOf(map(
+                entry("mvn-property-test1", "value-1"),
+                entry("mvn-property-test2", "value_2")
+        ));
+    }
+
+    @Test
+    public void should_return_and_format_any_maven_project_property_as_attribute_when_site_config_is_present() {
+        // given
+        final Map<String, String> projectProperties = new HashMap<>();
+        projectProperties.put("mvn.property-test1", "value-1");
+        projectProperties.put("mvn-property.test2", "value_2");
+        final MavenProject project = fakeProject(projectProperties);
+        OptionsBuilder emptyOptions = Options.builder();
+        AttributesBuilder emptyAttributes = Attributes.builder();
         Xpp3Dom siteConfig = Xpp3DoomBuilder.asciidocNode().build();
 
         // when

@@ -21,5 +21,4 @@ public class SiteConversionConfiguration {
     public List<String> getRequires() {
         return requires;
     }
-
 }
