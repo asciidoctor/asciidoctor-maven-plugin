@@ -6,61 +6,39 @@ import org.asciidoctor.extension.PreprocessorReader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class UriIncludeProcessor extends IncludeProcessor {
 
     public UriIncludeProcessor(Map<String, Object> config) {
         super(config);
-        System.out.println(this.getClass().getSimpleName() + "(" 
-              + this.getClass().getSuperclass().getSimpleName() + ") initialized");
+        System.out.println(String.format("%s(%s) initialized", this.getClass().getSimpleName(), this.getClass().getSuperclass().getSimpleName()));
     }
 
     @Override
     public boolean handles(String target) {
-        return target.startsWith("http://") || target.startsWith("https://");
+        return target.matches("^https?://.*");
     }
 
     @Override
     public void process(Document document, PreprocessorReader reader, String target,
                         Map<String, Object> attributes) {
-
-        System.out.println("Processing "+ this.getClass().getSimpleName());
-
-        StringBuilder content = readContent(target);
-        reader.push_include(content.toString(), target, target, 1, attributes);
-
+        System.out.println("Processing " + this.getClass().getSimpleName());
+        final String content = readContent(target);
+        reader.push_include(content, target, target, 1, attributes);
     }
 
-    private StringBuilder readContent(String target) {
-
-        StringBuilder content = new StringBuilder();
-
-        try {
-
-            URL url = new URL(target);
-            InputStream openStream = url.openStream();
-
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(openStream));
-
-            String line = null;
-            while ((line = bufferedReader.readLine()) != null) {
-                content.append(line + "\n");
+    private String readContent(String target) {
+        try (var openStream = new URL(target).openStream()) {
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(openStream))) {
+                return bufferedReader.lines()
+                        .collect(Collectors.joining("\n"));
             }
-
-            bufferedReader.close();
-
-        } catch (MalformedURLException e) {
-            throw new IllegalArgumentException(e);
         } catch (IOException e) {
-            throw new IllegalArgumentException(e);
+            throw new RuntimeException(e);
         }
-        return content;
     }
-
-  }
+}

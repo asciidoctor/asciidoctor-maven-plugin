@@ -22,7 +22,7 @@ import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-public class AsciidoctorAstDoxiaParserTest {
+class AsciidoctorAstDoxiaParserTest {
 
     private static final String TEST_DOCS_PATH = "src/test/resources/";
 
@@ -36,7 +36,7 @@ public class AsciidoctorAstDoxiaParserTest {
     }
 
     @Test
-    public void should_convert_html_without_any_configuration() throws FileNotFoundException, ParseException {
+    void should_convert_html_without_any_configuration() throws FileNotFoundException, ParseException {
         final File srcAsciidoc = new File(TEST_DOCS_PATH, "sample.asciidoc");
 
         AsciidoctorAstDoxiaParser parser = mockAsciidoctorDoxiaParser();
@@ -58,7 +58,7 @@ public class AsciidoctorAstDoxiaParserTest {
     }
 
     @Test
-    public void should_convert_html_with_an_attribute() throws ParseException {
+    void should_convert_html_with_an_attribute() throws ParseException {
         final String source = "= Document Title\n\n" +
                 "== Section A\n\n" +
                 "My attribute value is {custom-attribute}.\n";
@@ -79,7 +79,7 @@ public class AsciidoctorAstDoxiaParserTest {
     }
 
     @Test
-    public void should_process_empty_selfclosing_XML_attributes() throws ParseException {
+    void should_process_empty_selfclosing_XML_attributes() throws ParseException {
         final String source = sectionsSample();
 
         AsciidoctorAstDoxiaParser parser = mockAsciidoctorDoxiaParser(
@@ -101,7 +101,7 @@ public class AsciidoctorAstDoxiaParserTest {
     }
 
     @Test
-    public void should_process_config_with_sectnumlevels() throws ParseException {
+    void should_process_config_with_sectnumlevels() throws ParseException {
         final String source = sectionsSample();
 
         AsciidoctorAstDoxiaParser parser = mockAsciidoctorDoxiaParser(
@@ -124,7 +124,7 @@ public class AsciidoctorAstDoxiaParserTest {
     }
 
     @Test
-    public void should_process_empty_value_XML_attributes() throws ParseException {
+    void should_process_empty_value_XML_attributes() throws ParseException {
         final String source = sectionsSample();
 
         AsciidoctorAstDoxiaParser parser = mockAsciidoctorDoxiaParser(
@@ -158,7 +158,7 @@ public class AsciidoctorAstDoxiaParserTest {
     }
 
     @Test
-    public void should_fail_when_logHandler_failIf_is_WARNING() {
+    void should_fail_when_logHandler_failIf_is_WARNING() {
         final String source = "= My Document\n\n" +
                 "include::unexistingdoc.adoc[]\n\n" +
                 "include::unexistingdoc.adoc[]";

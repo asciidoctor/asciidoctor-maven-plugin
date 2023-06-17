@@ -12,10 +12,10 @@ import java.util.function.Consumer;
 import static org.asciidoctor.maven.process.SourceDirectoryFinder.ORDERED_CANDIDATE_PATHS;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SourceDirectoryFinderTest {
+class SourceDirectoryFinderTest {
 
     @TempDir
-    public File testDirectory;
+    private File testDirectory;
 
     private static final File MOJO_DEFAULT_SOURCE_DIR = new File(SourceDirectoryFinder.DEFAULT_SOURCE_DIR);
     private static final File[] FALLBACK_CANDIDATES = new File[]{
@@ -23,12 +23,12 @@ public class SourceDirectoryFinderTest {
             new File(ORDERED_CANDIDATE_PATHS[2]),
     };
 
-    public static final Consumer<File> EMPTY_CONSUMER = dir -> {
+    static final Consumer<File> EMPTY_CONSUMER = dir -> {
     };
 
 
     @Test
-    public void should_not_try_candidates_and_not_find_when_initial_does_not_match_default_value() {
+    void should_not_try_candidates_and_not_find_when_initial_does_not_match_default_value() {
         // given
         final File fakePath = new File("fake_path");
 
@@ -43,7 +43,7 @@ public class SourceDirectoryFinderTest {
     }
 
     @Test
-    public void should_not_try_candidates_and_find_when_initial_does_not_match_default_value() {
+    void should_not_try_candidates_and_find_when_initial_does_not_match_default_value() {
         // given
         final File fakePath = new File("fake_path");
         new File(testDirectory, fakePath.toString()).mkdirs();
@@ -57,7 +57,7 @@ public class SourceDirectoryFinderTest {
     }
 
     @Test
-    public void should_find_default_candidate_when_set_as_relative_path() {
+    void should_find_default_candidate_when_set_as_relative_path() {
         // given
         final File candidate = MOJO_DEFAULT_SOURCE_DIR;
         new File(testDirectory, candidate.toString()).mkdirs();
@@ -73,7 +73,7 @@ public class SourceDirectoryFinderTest {
     }
 
     @Test
-    public void should_find_default_candidate_when_set_as_absolute_path() {
+    void should_find_default_candidate_when_set_as_absolute_path() {
         // given
         final File candidate = new File(testDirectory, MOJO_DEFAULT_SOURCE_DIR.toString());
         candidate.mkdirs();
@@ -89,7 +89,7 @@ public class SourceDirectoryFinderTest {
     }
 
     @Test
-    public void should_find_first_fallback_candidate_when_set_as_relative_path() {
+    void should_find_first_fallback_candidate_when_set_as_relative_path() {
         // given
         final File candidate = FALLBACK_CANDIDATES[0];
         new File(testDirectory, FALLBACK_CANDIDATES[0].toString()).mkdirs();
@@ -106,7 +106,7 @@ public class SourceDirectoryFinderTest {
     }
 
     @Test
-    public void should_find_first_fallback_candidate_when_set_as_absolute_path() {
+    void should_find_first_fallback_candidate_when_set_as_absolute_path() {
         // given
         final File candidate = new File(testDirectory, FALLBACK_CANDIDATES[0].toString());
         candidate.mkdirs();
@@ -123,7 +123,7 @@ public class SourceDirectoryFinderTest {
     }
 
     @Test
-    public void should_find_second_fallback_candidate_when_set_as_relative_path() {
+    void should_find_second_fallback_candidate_when_set_as_relative_path() {
         // given
         final File candidate = FALLBACK_CANDIDATES[1];
         new File(testDirectory, FALLBACK_CANDIDATES[1].toString()).mkdirs();
@@ -140,7 +140,7 @@ public class SourceDirectoryFinderTest {
     }
 
     @Test
-    public void should_find_second_fallback_candidate_when_set_as_absolute_path() {
+    void should_find_second_fallback_candidate_when_set_as_absolute_path() {
         // given
         final File candidate = new File(testDirectory, FALLBACK_CANDIDATES[1].toString());
         candidate.mkdirs();
@@ -157,7 +157,7 @@ public class SourceDirectoryFinderTest {
     }
 
     @Test
-    public void should_try_all_candidates_and_not_find_any_candidate_when_initial_is_default() {
+    void should_try_all_candidates_and_not_find_any_candidate_when_initial_is_default() {
         // given
         final File defaultSourceDir = MOJO_DEFAULT_SOURCE_DIR;
 

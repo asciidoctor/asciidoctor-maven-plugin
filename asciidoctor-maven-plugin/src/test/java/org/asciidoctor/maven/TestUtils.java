@@ -6,7 +6,6 @@ import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.model.Resource;
-import org.assertj.core.api.Assertions;
 import org.mockito.Mockito;
 
 import java.io.File;
@@ -18,6 +17,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 import static org.asciidoctor.maven.process.SourceDocumentFinder.STANDARD_FILE_EXTENSIONS_PATTERN;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
 import static org.mockito.Mockito.when;
 
@@ -71,25 +71,6 @@ public class TestUtils {
             setVariableValueInObject(mojo, "logHandler", logHandler);
 
         return (T) mojo;
-    }
-
-    public static <T> Map<String, T> map(String key1, T value1) {
-        return Collections.singletonMap(key1, value1);
-    }
-
-    public static Map<String, Object> map(String key1, Object value1, String key2, Object value2) {
-        Map<String, Object> map = new HashMap<>();
-        map.put(key1, value1);
-        map.put(key2, value2);
-        return map;
-    }
-
-    public static Map<String, Object> map(String key1, Object value1, String key2, Object value2, String key3, Object value3) {
-        Map<String, Object> map = new HashMap<>();
-        map.put(key1, value1);
-        map.put(key2, value2);
-        map.put(key3, value3);
-        return map;
     }
 
     @SneakyThrows
@@ -155,15 +136,12 @@ public class TestUtils {
     public static void assertEqualsStructure(File[] expected, File[] actual) {
 
         List<File> sanitizedExpected = Arrays.stream(expected)
-                .filter(file -> {
-                    char firstChar = file.getName().charAt(0);
-                    return firstChar != '_' && firstChar != '.';
-                })
+                .filter(TestUtils::isHidden)
                 .collect(Collectors.toList());
 
         List<String> expectedNames = sanitizedExpected.stream().map(File::getName).collect(Collectors.toList());
         List<String> actualNames = Arrays.stream(actual).map(File::getName).collect(Collectors.toList());
-        Assertions.assertThat(expectedNames).containsExactlyInAnyOrder(actualNames.toArray(new String[]{}));
+        assertThat(expectedNames).containsExactlyInAnyOrder(actualNames.toArray(new String[]{}));
 
         for (File actualFile : actual) {
             File expectedFile = sanitizedExpected.stream()
@@ -179,11 +157,15 @@ public class TestUtils {
             File[] htmls = actualFile.listFiles(f -> f.getName().endsWith("html"));
             if (htmls.length > 0) {
                 File[] asciiDocs = expectedFile.listFiles(f -> f.getName().matches(STANDARD_FILE_EXTENSIONS_PATTERN));
-                Assertions.assertThat(htmls).hasSize(asciiDocs.length);
+                assertThat(htmls).hasSize(asciiDocs.length);
             }
             File[] actualChildren = actualFile.listFiles(File::isDirectory);
             assertEqualsStructure(expectedChildren, actualChildren);
         }
     }
 
+    private static boolean isHidden(File file) {
+        char firstChar = file.getName().charAt(0);
+        return firstChar != '_' && firstChar != '.';
+    }
 }

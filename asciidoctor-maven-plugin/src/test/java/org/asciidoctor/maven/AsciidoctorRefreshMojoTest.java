@@ -24,13 +24,13 @@ import static org.asciidoctor.maven.io.TestFilesHelper.createFileWithContent;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AsciidoctorRefreshMojoTest {
+class AsciidoctorRefreshMojoTest {
 
     private static final String TEST_DIR = "refresh-mojo";
 
 
     @Test
-    public void should_stop_with_exit_command() {
+    void should_stop_with_exit_command() {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -49,7 +49,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_stop_with_quit_command() {
+    void should_stop_with_quit_command() {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -68,7 +68,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_show_tip_when_command_is_not_valid() {
+    void should_show_tip_when_command_is_not_valid() {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -88,7 +88,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_only_auto_convert_file_with_custom_sourceDocumentName_when_source_is_updated() throws IOException {
+    void should_only_auto_convert_file_with_custom_sourceDocumentName_when_source_is_updated() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -136,7 +136,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_auto_convert_file_with_custom_file_extension_when_source_is_updated() throws IOException {
+    void should_auto_convert_file_with_custom_file_extension_when_source_is_updated() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -178,7 +178,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_auto_convert_file_in_root_when_source_is_updated() throws IOException {
+    void should_auto_convert_file_in_root_when_source_is_updated() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -214,7 +214,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_auto_convert_file_in_subDir_when_source_is_updated() throws IOException {
+    void should_auto_convert_file_in_subDir_when_source_is_updated() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -250,7 +250,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_auto_convert_file_when_new_source_is_created() throws IOException {
+    void should_auto_convert_file_when_new_source_is_created() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -290,7 +290,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_copy_resources_when_updated_but_not_on_start_when_there_are_no_sources() throws IOException {
+    void should_copy_resources_when_updated_but_not_on_start_when_there_are_no_sources() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -326,7 +326,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_convert_additional_sources_when_set_in_refreshOn() throws IOException {
+    void should_convert_additional_sources_when_set_in_refreshOn() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -385,7 +385,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_copy_resource_in_root_when_resource_is_updated() throws IOException {
+    void should_copy_resource_in_root_when_resource_is_updated() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -424,7 +424,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_copy_resource_in_subDir_when_resource_is_updated() throws IOException {
+    void should_copy_resource_in_subDir_when_resource_is_updated() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -464,7 +464,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_copy_resource_to_targetPath_in_resource_when_resources_configuration_is_set() throws IOException {
+    void should_copy_resource_to_targetPath_in_resource_when_resources_configuration_is_set() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -517,7 +517,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_copy_resource_to_outputDirectory_in_resource_when_resources_configuration_does_not_set_targePath() throws IOException {
+    void should_copy_resource_to_outputDirectory_in_resource_when_resources_configuration_does_not_set_targePath() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -569,7 +569,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_ignore_resource_file_when_matches_custom_source_file_extensions() throws IOException {
+    void should_ignore_resource_file_when_matches_custom_source_file_extensions() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -625,7 +625,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_ignore_resource_file_when_matches_custom_source_sourceDocumentName() throws IOException {
+    void should_ignore_resource_file_when_matches_custom_source_sourceDocumentName() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -685,7 +685,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_copy_resource_when_new_resource_is_created() throws IOException {
+    void should_copy_resource_when_new_resource_is_created() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -727,7 +727,7 @@ public class AsciidoctorRefreshMojoTest {
     }
 
     @Test
-    public void should_run_full_convert_with_refresh_command() throws IOException {
+    void should_run_full_convert_with_refresh_command() throws IOException {
         // given
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 

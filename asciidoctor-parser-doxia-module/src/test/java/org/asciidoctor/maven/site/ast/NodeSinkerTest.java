@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Validate node processors are registered.
  */
-public class NodeSinkerTest {
+class NodeSinkerTest {
 
     private NodesSinker nodesSinker;
     private StringWriter sinkWriter;

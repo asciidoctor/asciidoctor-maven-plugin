@@ -15,7 +15,7 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(ListItemNodeProcessor.class)
-public class ListItemNodeProcessorTest {
+class ListItemNodeProcessorTest {
 
     private Asciidoctor asciidoctor;
     private NodeProcessor nodeProcessor;

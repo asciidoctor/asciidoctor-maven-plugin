@@ -19,7 +19,7 @@ import static org.asciidoctor.maven.io.TestFilesHelper.createFileWithContent;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ResourceCopyFileAlterationListenerAdaptorTest {
+class ResourceCopyFileAlterationListenerAdaptorTest {
 
     private static final String TEST_DIR = "resource-copy-listener";
 
@@ -28,7 +28,7 @@ public class ResourceCopyFileAlterationListenerAdaptorTest {
 
 
     @Test
-    public void should_copy_files_when_match_resource_includes() {
+    void should_copy_files_when_match_resource_includes() {
         // given
         final File srcDir = newOutputTestDirectory(TEST_DIR);
         final File outputDir = newOutputTestDirectory(TEST_DIR);
@@ -67,7 +67,7 @@ public class ResourceCopyFileAlterationListenerAdaptorTest {
     }
 
     @Test
-    public void should_not_copy_files_when_match_resource_excludes() {
+    void should_not_copy_files_when_match_resource_excludes() {
         // given
         final File srcDir = newOutputTestDirectory(TEST_DIR);
         final File outputDir = newOutputTestDirectory(TEST_DIR);
@@ -106,7 +106,7 @@ public class ResourceCopyFileAlterationListenerAdaptorTest {
     }
 
     @Test
-    public void should_copy_and_ignore_files_when_matching_both_resource_includes_and_excludes() {
+    void should_copy_and_ignore_files_when_matching_both_resource_includes_and_excludes() {
         // given
         final File srcDir = newOutputTestDirectory(TEST_DIR);
         final File outputDir = newOutputTestDirectory(TEST_DIR);
@@ -147,7 +147,7 @@ public class ResourceCopyFileAlterationListenerAdaptorTest {
 
     // Removal of special files is done by FileAlterationObserver, not ResourceCopyFileAlterationListenerAdaptor
     @Test
-    public void should_copy_special_asciidoctor_files() {
+    void should_copy_special_asciidoctor_files() {
         // given
         final File srcDir = newOutputTestDirectory(TEST_DIR);
         final File outputDir = newOutputTestDirectory(TEST_DIR);
@@ -186,5 +186,4 @@ public class ResourceCopyFileAlterationListenerAdaptorTest {
             assertThat(outputCandidate).exists();
         });
     }
-
 }

@@ -8,27 +8,26 @@ import org.asciidoctor.maven.log.LogHandler;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.asciidoctor.log.Severity.ERROR;
 import static org.asciidoctor.log.Severity.WARN;
-import static org.asciidoctor.maven.TestUtils.map;
 import static org.asciidoctor.maven.TestUtils.mockAsciidoctorMojo;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 
-public class AsciidoctorMojoLogHandlerTest {
+class AsciidoctorMojoLogHandlerTest {
 
     private static final String DEFAULT_SOURCE_DIRECTORY = "target/test-classes/src/asciidoctor";
 
     @Test
-    public void should_not_fail_when_logHandler_is_not_set() throws MojoFailureException, MojoExecutionException {
+    void should_not_fail_when_logHandler_is_not_set() throws MojoFailureException, MojoExecutionException {
         // setup
         String sourceDocument = "errors/document-with-missing-include.adoc";
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
@@ -41,7 +40,6 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         mojo.execute();
 
         // then: process completes but the document contains errors
@@ -65,7 +63,6 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         mojo.execute();
 
         // then
@@ -106,7 +103,6 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         mojo.execute();
 
         // then: output file exists & shows include error
@@ -132,7 +128,7 @@ public class AsciidoctorMojoLogHandlerTest {
 
     @Disabled
     @Test
-    public void should_not_fail_and_log_errors_as_INFO_when_outputToConsole_is_set_and_doc_contains_messages_without_cursor_and_verbose_is_enabled() throws MojoFailureException, MojoExecutionException {
+    void should_not_fail_and_log_errors_as_INFO_when_outputToConsole_is_set_and_doc_contains_messages_without_cursor_and_verbose_is_enabled() throws MojoFailureException, MojoExecutionException {
         // setup
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -149,7 +145,7 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
+        mojo.attributes = Map.of("toc", null);
         mojo.enableVerbose = true;
         mojo.execute();
 
@@ -172,7 +168,7 @@ public class AsciidoctorMojoLogHandlerTest {
 
     @Disabled
     @Test
-    public void should_not_fail_and_log_verbose_errors_when_gempath_is_set() throws MojoFailureException, MojoExecutionException {
+    void should_not_fail_and_log_verbose_errors_when_gempath_is_set() throws MojoFailureException, MojoExecutionException {
         // setup
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -189,7 +185,6 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         mojo.enableVerbose = true;
         mojo.gemPath = System.getProperty("java.io.tmpdir");
         mojo.execute();
@@ -210,7 +205,7 @@ public class AsciidoctorMojoLogHandlerTest {
     }
 
     @Test
-    public void should_fail_when_logHandler_failIf_is_WARNING() {
+    void should_fail_when_logHandler_failIf_is_WARNING() {
         // setup
         String sourceDocument = "errors/document-with-missing-include.adoc";
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
@@ -227,7 +222,6 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         Throwable throwable = catchThrowable(mojo::execute);
 
         // then: issues with WARN and ERROR are returned
@@ -237,7 +231,7 @@ public class AsciidoctorMojoLogHandlerTest {
     }
 
     @Test
-    public void should_fail_when_logHandler_failIf_is_ERROR() {
+    void should_fail_when_logHandler_failIf_is_ERROR() {
         // setup
         String sourceDocument = "errors/document-with-missing-include.adoc";
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
@@ -254,7 +248,6 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         Throwable throwable = catchThrowable(mojo::execute);
 
         // then
@@ -264,7 +257,7 @@ public class AsciidoctorMojoLogHandlerTest {
     }
 
     @Test
-    public void should_not_fail_if_containsText_does_not_match_any_message() throws MojoFailureException, MojoExecutionException {
+    void should_not_fail_if_containsText_does_not_match_any_message() throws MojoFailureException, MojoExecutionException {
         // setup
         String sourceDocument = "errors/document-with-missing-include.adoc";
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
@@ -281,7 +274,6 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         mojo.execute();
 
         // then
@@ -290,7 +282,7 @@ public class AsciidoctorMojoLogHandlerTest {
     }
 
     @Test
-    public void should_fail_when_containsText_matches() {
+    void should_fail_when_containsText_matches() {
         // setup
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -309,7 +301,6 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         Throwable throwable = catchThrowable(mojo::execute);
 
         // then
@@ -335,7 +326,7 @@ public class AsciidoctorMojoLogHandlerTest {
     }
 
     @Test
-    public void should_fail_and_filter_errors_that_match_both_severity_and_text() {
+    void should_fail_and_filter_errors_that_match_both_severity_and_text() {
         // setup
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -355,7 +346,6 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         Throwable throwable = catchThrowable(mojo::execute);
 
         // then
@@ -374,7 +364,7 @@ public class AsciidoctorMojoLogHandlerTest {
     // `asciidoctor` JUL logger inherits a ConsoleHandler that needs to be disabled
     // to avoid redundant messages in error channel
     @Test
-    public void should_not_print_default_AsciidoctorJ_messages() throws MojoFailureException, MojoExecutionException {
+    void should_not_print_default_AsciidoctorJ_messages() throws MojoFailureException, MojoExecutionException {
         // setup
         final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
@@ -391,7 +381,6 @@ public class AsciidoctorMojoLogHandlerTest {
         mojo.sourceDocumentName = sourceDocument;
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         mojo.execute();
 
         // then: output file exists & shows include error

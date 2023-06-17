@@ -8,10 +8,7 @@ public class AutoregisteredProcessor implements ExtensionRegistry {
 
     @Override
     public void register(Asciidoctor asciidoctor) {
-
-        JavaExtensionRegistry javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
-        javaExtensionRegistry.preprocessor(ChangeAttributeValuePreprocessor.class);
-
+        asciidoctor.javaExtensionRegistry()
+                .preprocessor(ChangeAttributeValuePreprocessor.class);
     }
-
 }

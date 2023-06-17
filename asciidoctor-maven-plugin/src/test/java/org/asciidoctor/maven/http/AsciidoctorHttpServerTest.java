@@ -21,13 +21,13 @@ import static org.asciidoctor.maven.io.TestFilesHelper.createFileWithContent;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AsciidoctorHttpServerTest {
+class AsciidoctorHttpServerTest {
 
     private static final Random RANDOM = new Random();
 
 
     @Test
-    public void should_start_and_stop_server() {
+    void should_start_and_stop_server() {
         // given
         int port = randomPort();
         final File outputDir = newOutputTestDirectory();
@@ -51,7 +51,7 @@ public class AsciidoctorHttpServerTest {
     }
 
     @Test
-    public void should_return_404_when_resource_does_not_exist() {
+    void should_return_404_when_resource_does_not_exist() {
         // given
         int port = randomPort();
         final File outputDir = newOutputTestDirectory();
@@ -73,7 +73,7 @@ public class AsciidoctorHttpServerTest {
     }
 
     @Test
-    public void should_return_405_when_method_is_not_GET_or_HEAD() {
+    void should_return_405_when_method_is_not_GET_or_HEAD() {
         // given
         int port = randomPort();
         final File outputDir = newOutputTestDirectory();
@@ -97,7 +97,7 @@ public class AsciidoctorHttpServerTest {
     }
 
     @Test
-    public void should_return_205_when_method_is_HEAD_and_resource_exists() {
+    void should_return_205_when_method_is_HEAD_and_resource_exists() {
         // given
         int port = randomPort();
         final File outputDir = newOutputTestDirectory();
@@ -122,7 +122,7 @@ public class AsciidoctorHttpServerTest {
     }
 
     @Test
-    public void should_return_404_when_method_is_HEAD_does_not_exists() {
+    void should_return_404_when_method_is_HEAD_does_not_exists() {
         // given
         int port = randomPort();
         final File outputDir = newOutputTestDirectory();
@@ -146,7 +146,7 @@ public class AsciidoctorHttpServerTest {
     }
 
     @Test
-    public void should_return_modified_html_content_without_modifying_original() {
+    void should_return_modified_html_content_without_modifying_original() {
         // given
         int port = randomPort();
         final File outputDir = newOutputTestDirectory();
@@ -174,7 +174,7 @@ public class AsciidoctorHttpServerTest {
     }
 
     @Test
-    public void should_return_non_html_content_without_modifications() {
+    void should_return_non_html_content_without_modifications() {
         // given
         int port = randomPort();
         final File outputDir = newOutputTestDirectory();
@@ -202,7 +202,7 @@ public class AsciidoctorHttpServerTest {
     }
 
     @Test
-    public void should_return_default_resource_when_url_is_root() {
+    void should_return_default_resource_when_url_is_root() {
         // given
         int port = randomPort();
         final File outputDir = newOutputTestDirectory();

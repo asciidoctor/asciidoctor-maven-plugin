@@ -19,8 +19,7 @@ public class TestFilesHelper {
     }
 
     private static File createDirectory(String path) {
-        final File file = new File(path);
-        return file;
+        return new File(path);
     }
 
     public static File createFileWithContent(File srcDir, String filename) {

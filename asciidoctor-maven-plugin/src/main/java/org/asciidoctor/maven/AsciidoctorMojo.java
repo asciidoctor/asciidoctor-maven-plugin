@@ -219,7 +219,7 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         // register LogHandler to capture asciidoctor messages
         final Boolean outputToConsole = logHandler.getOutputToConsole() == null ? Boolean.TRUE : logHandler.getOutputToConsole();
-        final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(outputToConsole, sourceDir,
+        final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(outputToConsole,
                 logRecord -> getLog().info(LogRecordFormatter.format(logRecord, sourceDir)));
         asciidoctor.registerLogHandler(memoryLogHandler);
         // disable default console output of AsciidoctorJ

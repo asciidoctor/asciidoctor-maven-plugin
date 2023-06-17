@@ -18,10 +18,10 @@ import java.util.Map;
 import static org.asciidoctor.Options.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SiteConversionConfigurationParserTest {
+class SiteConversionConfigurationParserTest {
 
     @Test
-    public void should_return_default_configuration_when_site_xml_is_null() {
+    void should_return_default_configuration_when_site_xml_is_null() {
         // given
         final MavenProject project = fakeProject();
         OptionsBuilder emptyOptions = Options.builder();
@@ -39,7 +39,7 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_return_default_configuration_when_asciidoc_xml_is_null() {
+    void should_return_default_configuration_when_asciidoc_xml_is_null() {
         // given
         final MavenProject project = fakeProject();
         OptionsBuilder emptyOptions = Options.builder();
@@ -58,7 +58,7 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_return_simple_single_requires() {
+    void should_return_simple_single_requires() {
         // given
         final MavenProject project = fakeProject();
         OptionsBuilder emptyOptions = Options.builder();
@@ -81,7 +81,7 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_return_multiple_requires() {
+    void should_return_multiple_requires() {
         // given
         final MavenProject project = fakeProject();
         OptionsBuilder emptyOptions = Options.builder();
@@ -104,7 +104,7 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_return_multiple_requires_when_defined_in_single_element() {
+    void should_return_multiple_requires_when_defined_in_single_element() {
         // given
         final MavenProject project = fakeProject();
         OptionsBuilder emptyOptions = Options.builder();
@@ -127,7 +127,7 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_remove_empty_and_blank_requires() {
+    void should_remove_empty_and_blank_requires() {
         // given
         final MavenProject project = fakeProject();
         OptionsBuilder emptyOptions = Options.builder();
@@ -150,7 +150,7 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_return_attributes() {
+    void should_return_attributes() {
         // given
         final MavenProject project = fakeProject();
         OptionsBuilder emptyOptions = Options.builder();
@@ -181,14 +181,14 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_map_null_attributes_as_empty_string() {
+    void should_map_null_attributes_as_empty_string() {
         // given
         final MavenProject project = fakeProject();
         OptionsBuilder emptyOptions = Options.builder();
         AttributesBuilder emptyAttributes = Attributes.builder();
         Xpp3Dom siteConfig = Xpp3DoomBuilder.asciidocNode()
                 .addChild("attributes")
-                .addChild("toc", null)
+                .addChild("toc")
                 .build();
 
         // when
@@ -207,7 +207,7 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_map_true_boolean_attribute_as_empty_string_value() {
+    void should_map_true_boolean_attribute_as_empty_string_value() {
         // given
         final MavenProject project = fakeProject();
         OptionsBuilder emptyOptions = Options.builder();
@@ -233,7 +233,7 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_map_false_boolean_attribute_as_null_value() {
+    void should_map_false_boolean_attribute_as_null_value() {
         // given
         final MavenProject project = fakeProject();
         OptionsBuilder emptyOptions = Options.builder();
@@ -259,7 +259,7 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_return_template_dirs_when_defined_as_templateDirs_dir() {
+    void should_return_template_dirs_when_defined_as_templateDirs_dir() {
         // given
         final MavenProject project = fakeProject();
         OptionsBuilder emptyOptions = Options.builder();
@@ -287,7 +287,7 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_return_template_dirs_when_defined_as_template_dirs_dir() {
+    void should_return_template_dirs_when_defined_as_template_dirs_dir() {
         // given
         final MavenProject project = fakeProject();
         OptionsBuilder emptyOptions = Options.builder();
@@ -315,7 +315,7 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_not_return_empty_template_dirs() {
+    void should_not_return_empty_template_dirs() {
         // given
         final MavenProject project = fakeProject();
         OptionsBuilder emptyOptions = Options.builder();
@@ -324,7 +324,7 @@ public class SiteConversionConfigurationParserTest {
                 .addChild("template_dirs")
                 .addChild("dir", "")
                 .parent()
-                .addChild("dir", null)
+                .addChild("dir")
                 .build();
 
         // when
@@ -338,7 +338,7 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_return_baseDir_dirs_when_defined_as_template_dirs_dir() {
+    void should_return_baseDir_dirs_when_defined_as_template_dirs_dir() {
         // given
         final MavenProject project = fakeProject();
         OptionsBuilder emptyOptions = Options.builder();
@@ -361,7 +361,7 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_return_any_configuration_inside_asciidoc_node_as_option() {
+    void should_return_any_configuration_inside_asciidoc_node_as_option() {
         // given
         final MavenProject project = fakeProject();
         OptionsBuilder emptyOptions = Options.builder();
@@ -391,7 +391,7 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_return_and_format_any_maven_project_property_as_attribute_when_site_config_is_not_present() {
+    void should_return_and_format_any_maven_project_property_as_attribute_when_site_config_is_not_present() {
         // given
         final Map<String, String> projectProperties = new HashMap<>();
         projectProperties.put("mvn.property-test1", "value-1");
@@ -416,7 +416,7 @@ public class SiteConversionConfigurationParserTest {
     }
 
     @Test
-    public void should_return_and_format_any_maven_project_property_as_attribute_when_site_config_is_present() {
+    void should_return_and_format_any_maven_project_property_as_attribute_when_site_config_is_present() {
         // given
         final Map<String, String> projectProperties = new HashMap<>();
         projectProperties.put("mvn.property-test1", "value-1");
@@ -469,5 +469,4 @@ public class SiteConversionConfigurationParserTest {
     private AbstractMap.SimpleEntry<String, Object> entry(String key, Object value) {
         return new AbstractMap.SimpleEntry<>(key, value);
     }
-
 }

@@ -21,11 +21,10 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.asciidoctor.maven.TestUtils.mockAsciidoctorHttpMojo;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AsciidoctorHttpMojoTest {
-
+class AsciidoctorHttpMojoTest {
 
     @Test
-    public void http_front_should_let_access_converted_files() throws IOException {
+    void http_front_should_let_access_converted_files() throws IOException {
         // given
         File srcDir = new File("target/test-classes/src/asciidoctor-http");
         File outputDir = TestFilesHelper.newOutputTestDirectory("http-mojo");
@@ -64,7 +63,7 @@ public class AsciidoctorHttpMojoTest {
     }
 
     @Test
-    public void should_return_default_page() throws IOException {
+    void should_return_default_page() throws IOException {
         // given
         File srcDir = new File("target/test-classes/src/asciidoctor-http-default");
         File outputDir = TestFilesHelper.newOutputTestDirectory("http-mojo");
@@ -103,7 +102,7 @@ public class AsciidoctorHttpMojoTest {
     }
 
     @Test
-    public void should_return_404_when_file_does_not_exist() {
+    void should_return_404_when_file_does_not_exist() {
         // given
         File emptySrcDir = new File("some_path");
         File outputDir = TestFilesHelper.newOutputTestDirectory("http-mojo");
@@ -139,7 +138,7 @@ public class AsciidoctorHttpMojoTest {
     }
 
     @Test
-    public void should_return_405_when_method_is_not_POST() {
+    void should_return_405_when_method_is_not_POST() {
         // given
         File emptySrcDir = new File("some_path");
         File outputDir = TestFilesHelper.newOutputTestDirectory("http-mojo");
@@ -175,7 +174,7 @@ public class AsciidoctorHttpMojoTest {
     }
 
     @Test
-    public void should_return_205_when_method_is_HEAD_and_resource_exists() {
+    void should_return_205_when_method_is_HEAD_and_resource_exists() {
         // given
         File emptySrcDir = new File("some_path");
         File outputDir = TestFilesHelper.newOutputTestDirectory("http-mojo");

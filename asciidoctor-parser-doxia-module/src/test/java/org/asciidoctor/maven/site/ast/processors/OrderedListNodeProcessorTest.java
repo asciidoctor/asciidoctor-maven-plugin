@@ -17,7 +17,7 @@ import static org.asciidoctor.maven.site.ast.processors.test.StringTestUtils.cle
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(OrderedListNodeProcessor.class)
-public class OrderedListNodeProcessorTest {
+class OrderedListNodeProcessorTest {
 
     private Asciidoctor asciidoctor;
     private NodeProcessor nodeProcessor;

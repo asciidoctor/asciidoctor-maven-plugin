@@ -12,27 +12,27 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Map;
 
 import static java.util.Collections.singletonList;
-import static org.asciidoctor.maven.TestUtils.map;
 import static org.asciidoctor.maven.TestUtils.mockAsciidoctorMojo;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Specific tests to validate usage of AsciidoctorJ extension in AsciidoctorMojo.
- *
+ * <p>
  * Most of the examples have been directly adapted from the ones found in AsciidoctorJ
  * documentation.
  *
  * @author abelsromero
  */
-public class AsciidoctorMojoExtensionsTest {
+class AsciidoctorMojoExtensionsTest {
 
     private static final String SRC_DIR = "target/test-classes/src/asciidoctor/";
 
     @Test
-    public void should_fail_when_extension_is_not_found_in_classpath() {
+    void should_fail_when_extension_is_not_found_in_classpath() {
         // given
         File srcDir = new File(SRC_DIR);
         File outputDir = newOutputTestDirectory("preprocessor");
@@ -43,7 +43,6 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null, "linkcss!", "");
         mojo.extensions = Arrays.asList(extensionConfiguration("non.existent.Processor"));
         Throwable throwable = Assertions.catchThrowable(mojo::execute);
         // then
@@ -56,7 +55,7 @@ public class AsciidoctorMojoExtensionsTest {
 
     // This test is added to keep track of possible changes in the extension"s SPI
     @Test
-    public void should_fail_when_extension_throws_an_uncaught_exception() {
+    void should_fail_when_extension_throws_an_uncaught_exception() {
         // given
         File srcDir = new File(SRC_DIR);
         File outputDir = newOutputTestDirectory("preprocessor");
@@ -67,7 +66,6 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null, "linkcss!", "");
         mojo.extensions = Arrays.asList(extensionConfiguration(FailingPreprocessor.class));
         Throwable throwable = Assertions.catchThrowable(mojo::execute);
         // then
@@ -79,7 +77,7 @@ public class AsciidoctorMojoExtensionsTest {
     }
 
     @Test
-    public void should_register_and_run_Preprocessor() {
+    void should_register_and_run_Preprocessor() {
 
         String extensionClassName = "ChangeAttributeValuePreprocessor";
         String expectedMessage = "ChangeAttributeValuePreprocessor(Preprocessor) initialized";
@@ -89,7 +87,7 @@ public class AsciidoctorMojoExtensionsTest {
     }
 
     @Test
-    public void should_register_and_run_Treeprocessor() {
+    void should_register_and_run_Treeprocessor() {
 
         String extensionClassName = "DummyTreeprocessor";
         String expectedMessage = "DummyTreeprocessor(Treeprocessor) initialized";
@@ -99,7 +97,7 @@ public class AsciidoctorMojoExtensionsTest {
     }
 
     @Test
-    public void should_register_and_run_PostProcessor() {
+    void should_register_and_run_PostProcessor() {
 
         String extensionClassName = "DummyPostprocessor";
         String expectedMessage = "DummyPostprocessor(Postprocessor) initialized";
@@ -109,7 +107,7 @@ public class AsciidoctorMojoExtensionsTest {
     }
 
     @Test
-    public void should_register_and_run_DocinfoProcessor() {
+    void should_register_and_run_DocinfoProcessor() {
 
         String extensionClassName = "MetaDocinfoProcessor";
         String expectedMessage = "MetaDocinfoProcessor(DocinfoProcessor) initialized";
@@ -119,7 +117,7 @@ public class AsciidoctorMojoExtensionsTest {
     }
 
     @Test
-    public void should_register_and_run_IncludeProcessor() {
+    void should_register_and_run_IncludeProcessor() {
 
         String extensionClassName = "UriIncludeProcessor";
         String expectedMessage = "UriIncludeProcessor(IncludeProcessor) initialized";
@@ -141,11 +139,12 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
+        mojo.attributes = Map.of("toc", "");
         mojo.extensions = singletonList(extensionConfiguration("org.asciidoctor.maven.test.processors." + extensionClassName));
         mojo.execute();
         // then
-        assertThat(consoleHolder.getOutput())
+        String output = consoleHolder.getOutput();
+        assertThat(output)
                 .contains(initializationMessage)
                 .contains(executionMessage);
         // cleanup
@@ -153,7 +152,7 @@ public class AsciidoctorMojoExtensionsTest {
     }
 
     @Test
-    public void should_convert_to_html_with_a_preprocessor() throws MojoFailureException, MojoExecutionException {
+    void should_convert_to_html_with_a_preprocessor() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(SRC_DIR);
         File outputDir = newOutputTestDirectory("preprocessor");
@@ -164,7 +163,6 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         mojo.extensions = Arrays.asList(extensionConfiguration(ChangeAttributeValuePreprocessor.class));
         mojo.execute();
         // then
@@ -174,7 +172,7 @@ public class AsciidoctorMojoExtensionsTest {
     }
 
     @Test
-    public void should_convert_to_html_with_a_blockprocessor() throws MojoFailureException, MojoExecutionException {
+    void should_convert_to_html_with_a_blockprocessor() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(SRC_DIR);
         File outputDir = newOutputTestDirectory("blockprocessor");
@@ -185,7 +183,6 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         mojo.extensions = singletonList(extensionConfiguration(YellBlockProcessor.class, "yell"));
         mojo.execute();
         // then
@@ -195,7 +192,7 @@ public class AsciidoctorMojoExtensionsTest {
     }
 
     @Test
-    public void should_convert_to_html_and_add_meta_tag_with_a_DocinfoProcessor() throws MojoFailureException, MojoExecutionException {
+    void should_convert_to_html_and_add_meta_tag_with_a_DocinfoProcessor() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(SRC_DIR);
         File outputDir = newOutputTestDirectory("docinfoProcessor");
@@ -206,7 +203,6 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         mojo.extensions = singletonList(extensionConfiguration(MetaDocinfoProcessor.class, "yell"));
         mojo.execute();
         // then
@@ -216,7 +212,7 @@ public class AsciidoctorMojoExtensionsTest {
     }
 
     @Test
-    public void should_convert_to_html_and_modify_output_with_a_BlockMacroProcessor() throws MojoFailureException, MojoExecutionException {
+    void should_convert_to_html_and_modify_output_with_a_BlockMacroProcessor() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(SRC_DIR);
         File outputDir = newOutputTestDirectory("blockMacroProcessor");
@@ -227,7 +223,6 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         mojo.extensions = singletonList(extensionConfiguration(GistBlockMacroProcessor.class, "gist"));
         mojo.execute();
         // then
@@ -237,7 +232,7 @@ public class AsciidoctorMojoExtensionsTest {
     }
 
     @Test
-    public void should_convert_to_html_and_modify_output_with_a_InlineMacroProcessor() throws MojoFailureException, MojoExecutionException {
+    void should_convert_to_html_and_modify_output_with_a_InlineMacroProcessor() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(SRC_DIR);
         File outputDir = newOutputTestDirectory("inlineMacroProcessor");
@@ -248,7 +243,6 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         mojo.extensions = singletonList(extensionConfiguration(ManpageInlineMacroProcessor.class, "man"));
         mojo.execute();
         // then
@@ -258,7 +252,7 @@ public class AsciidoctorMojoExtensionsTest {
     }
 
     @Test
-    public void should_convert_to_html_and_modify_output_with_an_IncludeProcessor() throws MojoFailureException, MojoExecutionException {
+    void should_convert_to_html_and_modify_output_with_an_IncludeProcessor() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(SRC_DIR);
         File outputDir = newOutputTestDirectory("includeProcessor");
@@ -269,7 +263,6 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         mojo.extensions = singletonList(extensionConfiguration(UriIncludeProcessor.class));
         mojo.execute();
         // then
@@ -279,7 +272,7 @@ public class AsciidoctorMojoExtensionsTest {
     }
 
     @Test
-    public void should_run_the_same_preprocessor_twice_when_registered_twice() throws MojoFailureException, MojoExecutionException {
+    void should_run_the_same_preprocessor_twice_when_registered_twice() throws MojoFailureException, MojoExecutionException {
         // given
         ConsoleHolder consoleHolder = ConsoleHolder.start();
         File srcDir = new File(SRC_DIR);
@@ -291,7 +284,6 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         mojo.extensions = Arrays.asList(
                 extensionConfiguration(ChangeAttributeValuePreprocessor.class),
                 extensionConfiguration(ChangeAttributeValuePreprocessor.class)
@@ -310,7 +302,7 @@ public class AsciidoctorMojoExtensionsTest {
 
     // Adding a BlockMacroProcessor or BlockProcessor makes the conversion fail
     @Test
-    public void should_convert_to_html_with_Preprocessor_DocinfoProcessor_InlineMacroProcessor_and_IncludeProcessor() throws MojoFailureException, MojoExecutionException {
+    void should_convert_to_html_with_Preprocessor_DocinfoProcessor_InlineMacroProcessor_and_IncludeProcessor() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(SRC_DIR);
         File outputDir = newOutputTestDirectory("preprocessor");
@@ -321,7 +313,6 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null);
         mojo.extensions = Arrays.asList(
                 extensionConfiguration("org.asciidoctor.maven.test.processors.ChangeAttributeValuePreprocessor"),
                 extensionConfiguration("org.asciidoctor.maven.test.processors.MetaDocinfoProcessor"),
@@ -338,7 +329,7 @@ public class AsciidoctorMojoExtensionsTest {
     }
 
     @Test
-    public void should_convert_to_html_using_all_extension_types() throws MojoFailureException, MojoExecutionException {
+    void should_convert_to_html_using_all_extension_types() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(SRC_DIR);
         File outputDir = newOutputTestDirectory("preprocessor");
@@ -349,7 +340,7 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", "",
+        mojo.attributes = Map.of("toc", "",
                 "linkcss", "",
                 "copycss!", "");
         mojo.extensions = Arrays.asList(
@@ -370,13 +361,13 @@ public class AsciidoctorMojoExtensionsTest {
     }
 
     /**
-     *  Manual test to validate automatic extension registration.
-     *  To execute, copy _org.asciidoctor.extension.spi.ExtensionRegistry to
-     *  /src/test/resources/META-INF/services/ and execute
+     * Manual test to validate automatic extension registration.
+     * To execute, copy _org.asciidoctor.extension.spi.ExtensionRegistry to
+     * /src/test/resources/META-INF/services/ and execute
      */
     @Disabled
     @Test
-    public void property_extension() throws MojoFailureException, MojoExecutionException {
+    void property_extension() throws MojoFailureException, MojoExecutionException {
         // given
         File srcDir = new File(SRC_DIR);
         File outputDir = newOutputTestDirectory("preprocessor");
@@ -387,7 +378,7 @@ public class AsciidoctorMojoExtensionsTest {
         mojo.sourceDocumentName = "processors-sample.adoc";
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
-        mojo.attributes = map("toc", null, "linkcss!", "");
+        mojo.attributes = Map.of("toc", null, "linkcss!", "");
         mojo.execute();
         // then
         AsciidoctorAsserter.assertThat(outputDir, "processors-sample.html")

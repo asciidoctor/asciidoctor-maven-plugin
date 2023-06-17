@@ -383,5 +383,4 @@ public class CopyResourcesProcessorTest {
             assertThat(outputDir.list()).hasSize(0);
         }
     }
-
 }

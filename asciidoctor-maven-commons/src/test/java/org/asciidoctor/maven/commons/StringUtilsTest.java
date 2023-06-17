@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StringUtilsTest {
+class StringUtilsTest {
 
     @Test
     void should_detect_null_as_blank_string() {

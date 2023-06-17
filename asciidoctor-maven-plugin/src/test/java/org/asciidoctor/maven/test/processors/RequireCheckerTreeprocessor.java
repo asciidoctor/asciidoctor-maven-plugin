@@ -12,7 +12,8 @@ public class RequireCheckerTreeprocessor extends Treeprocessor {
     public Document process(Document document) {
         assertEquals("constant", JRubyRuntimeContext.get(document).evalScriptlet("defined? ::DateTime").toString());
         // Leave a trace in the converted document so that the test can check that I was called
-        document.getBlocks().add(createBlock(document, "paragraph", RequireCheckerTreeprocessor.class.getSimpleName() + " was here"));
+        document.getBlocks()
+                .add(createBlock(document, "paragraph", RequireCheckerTreeprocessor.class.getSimpleName() + " was here"));
         return document;
     }
 }

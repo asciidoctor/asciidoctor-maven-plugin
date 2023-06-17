@@ -10,12 +10,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SourceDocumentFinderTest {
+class SourceDocumentFinderTest {
 
     private static final String DEFAULT_SOURCE_DIRECTORY = "src/test/resources/src/asciidoctor";
 
     @Test
-    public void should_init_SourceDocumentFinder() {
+    void should_init_SourceDocumentFinder() {
         // when
         SourceDocumentFinder walker = new SourceDocumentFinder();
         // then
@@ -23,7 +23,7 @@ public class SourceDocumentFinderTest {
     }
 
     @Test
-    public void should_match_standard_file_extensions() {
+    void should_match_standard_file_extensions() {
         // given
         final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/file-extensions";
 
@@ -38,7 +38,7 @@ public class SourceDocumentFinderTest {
     }
 
     @Test
-    public void should_match_custom_file_extension() {
+    void should_match_custom_file_extension() {
         // given
         final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/file-extensions";
 
@@ -52,7 +52,7 @@ public class SourceDocumentFinderTest {
     }
 
     @Test
-    public void should_match_custom_file_extensions() {
+    void should_match_custom_file_extensions() {
         // given
         final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/file-extensions";
         List<String> customFileExtensions = Arrays.asList("my-adoc", "adoc");
@@ -68,7 +68,7 @@ public class SourceDocumentFinderTest {
     }
 
     @Test
-    public void should_not_match_custom_empty_file_extensions() {
+    void should_not_match_custom_empty_file_extensions() {
         // given
         final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/file-extensions";
 
@@ -81,7 +81,7 @@ public class SourceDocumentFinderTest {
     }
 
     @Test
-    public void should_return_empty_list_if_wrong_source_directory() {
+    void should_return_empty_list_if_wrong_source_directory() {
         // given
         final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/file-extensions/non-existing";
 
@@ -94,7 +94,7 @@ public class SourceDocumentFinderTest {
     }
 
     @Test
-    public void should_exclude_hidden_sources() {
+    void should_exclude_hidden_sources() {
         // given
         final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/relative-path-treatment";
         final List<String> fileExtensions = Collections.singletonList("adoc");
@@ -109,7 +109,7 @@ public class SourceDocumentFinderTest {
     }
 
     @Test
-    public void should_not_treat_enclosing_parent_paths_as_hidden() {
+    void should_not_treat_enclosing_parent_paths_as_hidden() {
         // given
         final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/source-finder/_enclosing/src/";
         final List<String> fileExtensions = Collections.singletonList("adoc");
@@ -125,7 +125,7 @@ public class SourceDocumentFinderTest {
     }
 
     @Test
-    public void should_exclude_hidden_directories() {
+    void should_exclude_hidden_directories() {
         // given
         final String rootDirectory = DEFAULT_SOURCE_DIRECTORY + "/relative-path-treatment";
         final List<String> fileExtensions = Collections.singletonList("adoc");
