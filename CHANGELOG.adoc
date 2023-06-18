@@ -33,6 +33,7 @@ Build / Infrastructure::
 
   * Fix maven-source-plugin configuration for releases (#644)
   * Set Java 11 as minimal version (remove Java8 support) (#652)
+  * Use Maven v3.9.2 in CI and wrapper (#658)
 
 Documentation::
 
