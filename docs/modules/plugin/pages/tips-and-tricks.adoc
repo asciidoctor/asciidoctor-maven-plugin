@@ -78,6 +78,6 @@ Automatically add version details to header and footer to all documents.
 == Show Asciidoctor version
 
 If you are not sure what version of the Asciidoctor converter is being used.
-You can obtain it using the version attribute like in the example blow.
+You can obtain it using the version attribute like in the example below.
 
  Asciidoctor version: {asciidoctor-version}
