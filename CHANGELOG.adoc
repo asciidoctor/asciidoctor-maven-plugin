@@ -35,6 +35,7 @@ Build / Infrastructure::
   * Set Java 11 as minimal version (remove Java8 support) (#652)
   * Use Maven v3.9.2 in CI and wrapper (#658)
   * Use Maven v3.9.5 in CI and wrapper (#662)
+  * Add Java 21 to CI (#664)
 
 Documentation::
 
