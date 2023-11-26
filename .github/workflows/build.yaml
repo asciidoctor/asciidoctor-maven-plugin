@@ -31,12 +31,12 @@ jobs:
           - 17
         # Support 1-year-old version + latest minor
         maven:
-          - 3.8.5
+          - 3.8.7
           - 3.8.8
-          - 3.9.2
+          - 3.9.5
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: s4u/setup-maven-action@v1.7.0
+      - uses: s4u/setup-maven-action@v1.11.0
         with:
           java-distribution: 'temurin'
           java-version: ${{ matrix.java }}
