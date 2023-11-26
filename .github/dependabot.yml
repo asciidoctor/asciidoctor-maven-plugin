@@ -1,0 +1,40 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+    commit-message:
+      prefix: "(main)"
+    target-branch: "main"
+    ignore:
+      - dependency-name: org.jruby:jruby
+      - dependency-name: org.apache.maven:*
+      - dependency-name: org.apache.maven.plugin-tools:*
+      - dependency-name: org.apache.maven.doxia:*
+      - dependency-name: org.codehaus.plexus:*
+      - dependency-name: commons-io:commons-io
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+    commit-message:
+      prefix: "(v2.2.x)"
+    target-branch: "v2.2.x"
+    ignore:
+      - dependency-name: org.jruby:jruby
+      - dependency-name: org.apache.maven:*
+      - dependency-name: org.apache.maven.plugin-tools:*
+      - dependency-name: org.apache.maven.doxia:*
+      - dependency-name: org.codehaus.plexus:*
+      - dependency-name: commons-io:commons-io
