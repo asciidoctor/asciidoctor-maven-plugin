@@ -17,6 +17,7 @@ Bug Fixes::
 
   * Fix default value for eruby which caused a fail when using erb templates (#610)
   * Fix maven properties not being injected as attributes during site conversion (#656)
+  * Remove Java 'requires open access' module warning in modern Java versions with JRuby v9.4.5.0 (#553)
 
 Improvements::
 
