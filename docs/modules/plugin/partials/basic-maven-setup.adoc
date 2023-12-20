@@ -8,11 +8,13 @@ As this is a typical Maven plugin, simply declare the plugin in the `<plugins>` 
         <groupId>org.asciidoctor</groupId>
         <artifactId>asciidoctor-maven-plugin</artifactId>
         <version>{release-version}</version>
-        <dependency> <!--1-->
-            <groupId>org.asciidoctor</groupId>
-            <artifactId>asciidoctorj</artifactId>
-            <version>${asciidoctorj.version}</version>
-        </dependency>
+        <dependencies>
+            <dependency> <!--1-->
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctorj</artifactId>
+                <version>${asciidoctorj.version}</version>
+            </dependency>
+        </dependencies>
         ...
     </plugin>
 </plugins>
