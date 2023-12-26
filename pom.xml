@@ -79,7 +79,7 @@
         <asciidoctorj.version>2.5.10</asciidoctorj.version>
         <jruby.version>9.4.5.0</jruby.version>
         <maven.project.version>3.9.1</maven.project.version>
-        <maven.jacoco.plugin.version>0.8.8</maven.jacoco.plugin.version>
+        <maven.jacoco.plugin.version>0.8.11</maven.jacoco.plugin.version>
     </properties>
 
     <dependencies>
