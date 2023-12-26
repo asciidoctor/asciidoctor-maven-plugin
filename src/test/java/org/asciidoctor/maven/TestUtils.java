@@ -7,8 +7,9 @@ import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.filtering.DefaultMavenFileFilter;
 import org.apache.maven.shared.filtering.DefaultMavenResourcesFiltering;
+import org.apache.maven.shared.filtering.MavenFileFilter;
+import org.apache.maven.shared.filtering.MavenResourcesFiltering;
 import org.asciidoctor.maven.log.LogHandler;
-import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.mockito.Mockito;
 import org.sonatype.plexus.build.incremental.BuildContext;
 import org.sonatype.plexus.build.incremental.DefaultBuildContext;
@@ -66,17 +67,8 @@ public class TestUtils {
         }
 
         final BuildContext buildContext = new DefaultBuildContext();
-
-        final DefaultMavenFileFilter mavenFileFilter = new DefaultMavenFileFilter();
-        final ConsoleLogger plexusLogger = new ConsoleLogger();
-        mavenFileFilter.enableLogging(plexusLogger);
-        setVariableValueInObject(mavenFileFilter, "buildContext", buildContext);
-
-        final DefaultMavenResourcesFiltering resourceFilter = new DefaultMavenResourcesFiltering();
-        setVariableValueInObject(resourceFilter, "mavenFileFilter", mavenFileFilter);
-        setVariableValueInObject(resourceFilter, "buildContext", buildContext);
-        resourceFilter.initialize();
-        resourceFilter.enableLogging(plexusLogger);
+        final MavenFileFilter mavenFileFilter = new DefaultMavenFileFilter(buildContext);
+        final MavenResourcesFiltering resourceFilter = new DefaultMavenResourcesFiltering(mavenFileFilter, buildContext);
 
         final AsciidoctorMojo mojo = (AsciidoctorMojo) clazz.getConstructor(new Class[]{}).newInstance();
         setVariableValueInObject(mojo, "log", new SystemStreamLog());
@@ -160,5 +152,4 @@ public class TestUtils {
             return singletonList(new ResourceBuilder().directory(".").excludes("**/**").build());
         }
     }
-
 }

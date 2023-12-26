@@ -80,7 +80,7 @@
         <maven.jacoco.plugin.version>0.8.10</maven.jacoco.plugin.version>
         <maven.plugin.plugin.version>3.9.0</maven.plugin.plugin.version>
         <maven.project.version>3.8.5</maven.project.version>
-        <maven.filtering.version>3.2.0</maven.filtering.version>
+        <maven.filtering.version>3.3.1</maven.filtering.version>
         <plexus.utils.version>3.5.1</plexus.utils.version>
         <plexus.component.metadata.version>2.1.1</plexus.component.metadata.version>
         <netty.version>4.1.104.Final</netty.version>
