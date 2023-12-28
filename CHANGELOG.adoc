@@ -21,6 +21,7 @@ Build / Infrastructure::
 
   * Bump AsciidoctorJ to v2.5.10 and jRuby to v9.4.2.0 (#648)
   * Use Maven v3.9.2 in CI and wrapper (#659)
+  * Upgrade Asciidoctorj to v2.5.11 (#689)
 
 == v2.2.4 (2023-05-28)
 
