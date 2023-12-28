@@ -29,6 +29,7 @@ Improvements::
   * Replace deprecated 'headerFooter' by 'standalone' in configuration (#649)
   * Remove internal use of 'destinationDir' AsciidoctorJ method (no changes for users) (#650)
   * Upgrade Asciidoctorj to v2.5.10 and jRuby to v9.4.2.0 (#647)
+  * Upgrade Asciidoctorj to v2.5.11 (#688)
 
 Build / Infrastructure::
 
