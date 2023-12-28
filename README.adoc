@@ -33,8 +33,6 @@ endif::[]
 
 // Badges
 ifdef::badges[]
-image:https://ci.appveyor.com/api/projects/status/chebmu91f08dlmsc/branch/main?svg=true["Build Status (AppVeyor)", link="https://ci.appveyor.com/project/asciidoctor/asciidoctor-maven-plugin"]
-image:http://img.shields.io/travis/asciidoctor/asciidoctor-maven-plugin/main.svg["Build Status (Travis CI)", link="https://travis-ci.org/asciidoctor/asciidoctor-maven-plugin"]
 image:{uri-repo}/workflows/Build/badge.svg[Build Status,link={uri-repo}/actions]
 image:http://img.shields.io/coveralls/{project-repo}/main.svg["Coverage Status", link="https://coveralls.io/r/{project-repo}?branch=main"]
 image:https://maven-badges.herokuapp.com/maven-central/org.asciidoctor/asciidoctor-maven-plugin/badge.svg["Maven Central",link="https://maven-badges.herokuapp.com/maven-central/org.asciidoctor/asciidoctor-maven-plugin"]
