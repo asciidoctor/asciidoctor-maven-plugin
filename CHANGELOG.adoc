@@ -39,6 +39,7 @@ Build / Infrastructure::
   * Use Maven v3.9.5 in CI and wrapper (#662)
   * Add Java 21 to CI (#664)
   * Add Dependabot to automate dependency management (#669)
+  * Improvements to dependency management (#690)
 
 Documentation::
 

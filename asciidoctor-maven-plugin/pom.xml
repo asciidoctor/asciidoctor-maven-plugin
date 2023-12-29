@@ -20,7 +20,6 @@
     <properties>
         <maven.plugin.plugin.version>3.8.1</maven.plugin.plugin.version>
         <netty.version>4.1.104.Final</netty.version>
-        <maven.coveralls.plugin.version>4.3.0</maven.coveralls.plugin.version>
     </properties>
 
     <dependencies>
@@ -79,19 +78,6 @@
             <plugin>
                 <groupId>org.eluder.coveralls</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>
-                <version>${maven.coveralls.plugin.version}</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>jakarta.xml.bind</groupId>
-                        <artifactId>jakarta.xml.bind-api</artifactId>
-                        <version>2.3.3</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.glassfish.jaxb</groupId>
-                        <artifactId>jaxb-runtime</artifactId>
-                        <version>2.3.3</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
 
