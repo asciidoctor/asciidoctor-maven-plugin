@@ -17,6 +17,10 @@
     <description>Asciidoctor Maven Plugin to convert AsciiDoc documents with Asciidoctor</description>
     <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
 
+    <prerequisites>
+        <maven>3.8.5</maven>
+    </prerequisites>
+
     <properties>
         <maven.plugin.plugin.version>3.8.1</maven.plugin.plugin.version>
         <netty.version>4.1.104.Final</netty.version>
