@@ -46,6 +46,9 @@ updates:
       - dependency-name: org.apache.maven.doxia:*
       - dependency-name: org.codehaus.plexus:*
       - dependency-name: commons-io:commons-io
+      - dependency-name: org.mockito:mockito-core
+        update-types:
+          - "version-update:semver-major"
       - dependency-name: org.glassfish.jaxb:jaxb-runtime
         update-types:
           - "version-update:semver-major"
