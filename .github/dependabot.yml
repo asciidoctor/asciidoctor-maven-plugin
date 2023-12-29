@@ -22,6 +22,14 @@ updates:
       - dependency-name: org.apache.maven.doxia:*
       - dependency-name: org.codehaus.plexus:*
       - dependency-name: commons-io:commons-io
+      - dependency-name: org.glassfish.jaxb:jaxb-runtime
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+      - dependency-name: jakarta.xml.bind:jakarta.xml.bind-api
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
   - package-ecosystem: "maven"
     directory: "/"
     schedule:
@@ -38,3 +46,11 @@ updates:
       - dependency-name: org.apache.maven.doxia:*
       - dependency-name: org.codehaus.plexus:*
       - dependency-name: commons-io:commons-io
+      - dependency-name: org.glassfish.jaxb:jaxb-runtime
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+      - dependency-name: jakarta.xml.bind:jakarta.xml.bind-api
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
