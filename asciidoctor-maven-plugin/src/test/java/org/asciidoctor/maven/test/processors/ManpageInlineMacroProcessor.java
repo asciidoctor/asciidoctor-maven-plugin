@@ -1,6 +1,7 @@
 package org.asciidoctor.maven.test.processors;
 
-import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.PhraseNode;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.InlineMacroProcessor;
 
 import java.util.HashMap;
@@ -13,11 +14,10 @@ public class ManpageInlineMacroProcessor extends InlineMacroProcessor {
     }
 
     @Override
-    public String process(ContentNode parent, String target, Map<String, Object> attributes) {
-
+    public PhraseNode process(StructuralNode parent, String target, Map<String, Object> attributes) {
         final Map<String, Object> options = new HashMap<>();
         options.put("type", ":link");
         options.put("target", target + ".html");
-        return createPhraseNode(parent, "anchor", target, attributes, options).convert();
+        return createPhraseNode(parent, "anchor", target, attributes, options);
     }
 }

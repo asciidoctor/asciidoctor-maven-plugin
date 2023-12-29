@@ -28,7 +28,7 @@ public class UriIncludeProcessor extends IncludeProcessor {
                         Map<String, Object> attributes) {
         System.out.println("Processing " + this.getClass().getSimpleName());
         final String content = readContent(target);
-        reader.push_include(content, target, target, 1, attributes);
+        reader.pushInclude(content, target, target, 1, attributes);
     }
 
     private String readContent(String target) {
