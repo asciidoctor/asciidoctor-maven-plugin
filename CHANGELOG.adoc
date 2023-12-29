@@ -28,6 +28,10 @@ Improvements::
   * Set minimal Maven version to v3.8.5 (#629)
   * Replace deprecated 'headerFooter' by 'standalone' in configuration (#649)
   * Remove internal use of 'destinationDir' AsciidoctorJ method (no changes for users) (#650)
+  * Upgrade Asciidoctorj to v2.5.4 and jRuby to v9.3.4.0 (#584)
+  * Upgrade Asciidoctorj to v2.5.5 (#591)
+  * Upgrade Asciidoctorj to v2.5.6 and jRuby to v9.3.8.0 (#602)
+  * Upgrade Asciidoctorj to v2.5.7 (#604)
   * Upgrade Asciidoctorj to v2.5.10 and jRuby to v9.4.2.0 (#647)
   * Upgrade Asciidoctorj to v2.5.11 (#688)
 
@@ -38,25 +42,10 @@ Build / Infrastructure::
   * Use Maven v3.9.2 in CI and wrapper (#658)
   * Use Maven v3.9.5 in CI and wrapper (#662)
   * Add Java 21 to CI (#664)
-  * Add Dependabot to automate dependency management (#669)
-  * Improvements to dependency management (#690)
-  * Test Javadoc generation in CI (#690)
-  * Fix maven-deploy-plugin and prerequisites Maven warnings (#709)
-
-Documentation::
-
-  * Add v3.x.x migration guide (#598)
-
-Build / Infrastructure::
-
   * Bump Doxia to v1.11.1 and maven-site-plugin in IT to 3.12.0 (#579)
   * Bump netty-codec-http to v4.1.77.Final (fix CVE-2021-21290) (#582)
   * Bump netty-codec-http to v4.1.87.Final (fix CVE-2022-41915) (#612)
   * Bump netty-codec-http to v4.1.89.Final (#615)
-  * Upgrade Asciidoctorj to v2.5.4 and jRuby to v9.3.4.0 (#584)
-  * Upgrade Asciidoctorj to v2.5.5 (#591)
-  * Upgrade Asciidoctorj to v2.5.6 and jRuby to v9.3.8.0 (#602)
-  * Upgrade Asciidoctorj to v2.5.7 (#604)
   * Upgrade build related Maven plugins to the latest versions (#606)
   * Set minimal maven version to 3.8.5 (#607)
   * Bump GH 'checkout' and 'setup-java' to v3 & delete unused TravisCI configuration (#627)
@@ -65,6 +54,10 @@ Build / Infrastructure::
   * Add Maven matrix testing + define Maven compatibility policy (#632)
   * Bump build related Maven plugins to the latest versions (#635)
   * Remove use of deprecated 'parent.version' Maven property (#606)
+  * Add Dependabot to automate dependency management (#669)
+  * Improvements to dependency management (#690)
+  * Test Javadoc generation in CI (#690)
+  * Fix maven-deploy-plugin and prerequisites Maven warnings (#709)
 
 Maintenance::
   * Replace use of reflection by direct JavaExtensionRegistry calls to register extensions (#596)
@@ -72,6 +65,7 @@ Maintenance::
 Documentation::
 
   * Fix absolute path in usage example and AsciiDoc references in docs (https://github.com/MarkusTiede[@MarkusTiede])(#592)
+  * Add v3.x.x migration guide (#598)
 
 == v2.2.2 (2022-01-30)
 
