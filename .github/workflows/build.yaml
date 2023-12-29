@@ -45,3 +45,23 @@ jobs:
         run: mvn -version
       - name: Build & Test
         run: mvn -B -Prun-its clean verify
+  javadocs:
+    name: Javadocs
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        java:
+          - 11
+        maven:
+          - 3.9.6
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: s4u/setup-maven-action@v1.11.0
+        with:
+          java-distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+          maven-version: ${{ matrix.maven }}
+      - name: Build & Test
+        run: mvn -B clean javadoc:jar

@@ -17,7 +17,7 @@ import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 /**
  * {@link ResourcesProcessor} implementation that copies all valid resources from
  * a source directory to an output one.
- * <p/>
+ * <p>
  * Following resources are not valid:
  * - AsciiDoc documents: based on file extension.
  * - Asciidoctor Docinfo files.

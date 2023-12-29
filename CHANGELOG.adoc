@@ -40,6 +40,7 @@ Build / Infrastructure::
   * Add Java 21 to CI (#664)
   * Add Dependabot to automate dependency management (#669)
   * Improvements to dependency management (#690)
+  * Test Javadoc generation in CI (#690)
 
 Documentation::
 

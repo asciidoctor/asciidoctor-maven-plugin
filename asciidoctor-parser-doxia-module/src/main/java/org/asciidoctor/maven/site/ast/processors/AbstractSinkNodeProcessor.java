@@ -18,7 +18,10 @@ public class AbstractSinkNodeProcessor {
 
     /**
      * Tests for the presence of an attribute in current and parent nodes.
-     * Returns first match.
+     *
+     * @param name attribute name
+     * @param node node to check
+     * @return true if attribute is found
      */
     protected boolean hasAttribute(String name, ContentNode node) {
         ContentNode current = node;
