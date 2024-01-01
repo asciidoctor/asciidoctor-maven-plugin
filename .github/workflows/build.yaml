@@ -101,5 +101,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: artifacts.tar.gz
+          name: artifacts
           path: ${{ env.ARTIFACTS_DIR }}
