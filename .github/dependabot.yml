@@ -17,6 +17,9 @@ updates:
     target-branch: "main"
     ignore:
       - dependency-name: org.jruby:jruby
+      - dependency-name: org.codehaus.plexus:plexus-utils
+        update-types:
+          - "version-update:semver-major"
       - dependency-name: org.glassfish.jaxb:jaxb-runtime
         update-types:
           - "version-update:semver-major"
