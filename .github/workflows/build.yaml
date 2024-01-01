@@ -83,7 +83,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Prepare signature
-        run: echo -e "$GPG_PRIVATE_KEY" | gpg --import
+        run: echo -e "$GPG_PRIVATE_KEY" | gpg --import --batch
       - uses: s4u/setup-maven-action@v1.11.0
         with:
           java-distribution: 'temurin'
