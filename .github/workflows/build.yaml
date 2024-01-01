@@ -69,9 +69,6 @@ jobs:
     name: Sign artifacts
     environment: test
     env:
-      GPG_KEYNAME: ${{ secrets.GPG_KEYNAME }}
-      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
       ARTIFACTS_DIR: target/artifacts
     strategy:
       fail-fast: false
@@ -108,5 +105,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: artifacts
+          name: signed-artifacts
           path: ${{ env.ARTIFACTS_DIR }}
