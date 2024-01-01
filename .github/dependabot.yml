@@ -17,7 +17,6 @@ updates:
     target-branch: "main"
     ignore:
       - dependency-name: org.jruby:jruby
-      - dependency-name: org.apache.maven:*
       - dependency-name: org.glassfish.jaxb:jaxb-runtime
         update-types:
           - "version-update:semver-major"

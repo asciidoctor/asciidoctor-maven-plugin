@@ -23,7 +23,6 @@
 
     <properties>
         <maven-plugin-tools.version>3.10.2</maven-plugin-tools.version>
-        <netty.version>4.1.104.Final</netty.version>
     </properties>
 
     <dependencies>
@@ -44,8 +43,8 @@
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
-            <artifactId>maven-plugin-api</artifactId>
-            <version>${maven.project.version}</version>
+            <artifactId>maven-core</artifactId>
+            <version>${maven.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -55,17 +54,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-core</artifactId>
-            <version>${maven.project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-interpolation</artifactId>
-            <version>1.27</version>
-        </dependency>
-        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.15.1</version>
@@ -73,7 +61,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-codec-http</artifactId>
-            <version>${netty.version}</version>
+            <version>4.1.104.Final</version>
         </dependency>
     </dependencies>
 
@@ -94,32 +82,6 @@
                     <configuration>
                         <goalPrefix>asciidoctor</goalPrefix>
                         <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
-                    </configuration>
-                </plugin>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.apache.maven.plugins</groupId>
-                                        <artifactId>maven-plugin-plugin</artifactId>
-                                        <versionRange>[${maven.plugin.plugin.version},)</versionRange>
-                                        <goals>
-                                            <goal>descriptor</goal>
-                                            <goal>helpmojo</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <execute/>
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
             </plugins>

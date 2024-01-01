@@ -60,6 +60,7 @@ Build / Infrastructure::
   * Fix maven-deploy-plugin and prerequisites Maven warnings (#709)
   * Use latest maven-plugin-tools and remove Dependabot exclusion (CI test ensure backward compatibility) (#717)
   * Use latest Maven Doxia and remove Dependabot exclusion (CI test ensure backward compatibility) (#719)
+  * Use latest Maven and remove Dependabot exclusion (CI test ensure backward compatibility) (#722)
 
 Maintenance::
   * Replace use of reflection by direct JavaExtensionRegistry calls to register extensions (#596)
