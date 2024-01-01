@@ -236,8 +236,10 @@
     <profiles>
         <profile>
             <!--
-              To release to bintray, add your credentials to ~/.m2/settings.xml and run:
-
+              To release, define environment variables:
+                export GPG_KEYNAME=""
+                export GPG_PASSPHRASE=""
+              Then, run
                $ mvn deploy
             -->
             <id>release</id>

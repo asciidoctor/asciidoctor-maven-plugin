@@ -98,6 +98,8 @@ jobs:
           mkdir -p $ARTIFACTS_DIR
           cp -r $HOME/.m2/repository/org/asciidoctor/asciidoctor-maven-* $ARTIFACTS_DIR
           cp -r $HOME/.m2/repository/org/asciidoctor/*-doxia-module $ARTIFACTS_DIR
+      - name: Print jar signatures
+        run: find $ARTIFACTS_DIR -type f -name "*.jar" -exec gpg --verify "{}.asc" \;
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
