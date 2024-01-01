@@ -6,6 +6,7 @@ public class Xpp3DoomBuilder {
 
     private Xpp3Dom rootNode;
     private Xpp3Dom currentNode;
+    private Xpp3Dom parentNode;
 
     private Xpp3DoomBuilder(String name) {
         rootNode = currentNode = new Xpp3Dom(name);
@@ -26,6 +27,7 @@ public class Xpp3DoomBuilder {
     public Xpp3DoomBuilder addChild(String name) {
         final Xpp3Dom newNode = new Xpp3Dom(name);
         currentNode.addChild(newNode);
+        parentNode = currentNode;
         currentNode = newNode;
         return this;
     }
@@ -42,12 +44,13 @@ public class Xpp3DoomBuilder {
                 currentNode.addChild(newNode);
             }
         }
+        parentNode = currentNode;
         currentNode = newNode;
         return this;
     }
 
     public Xpp3DoomBuilder parent() {
-        currentNode = currentNode.getParent();
+        currentNode = parentNode;
         return this;
     }
 
