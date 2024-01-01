@@ -71,7 +71,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.java.version>11</project.java.version>
-        <maven.project.version>4.0.0-alpha-10</maven.project.version>
+        <maven.version>4.0.0-alpha-10</maven.version>
         <doxia.version>1.12.0</doxia.version>
         <plexus-component-metadata.version>2.2.0</plexus-component-metadata.version>
         <asciidoctorj.version>2.5.11</asciidoctorj.version>
