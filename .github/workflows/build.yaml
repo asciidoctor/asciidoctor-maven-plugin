@@ -72,7 +72,7 @@ jobs:
       GPG_KEYNAME: ${{ secrets.GPG_KEYNAME }}
       GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-
+      ARTIFACTS_DIR: target/artifacts
     strategy:
       fail-fast: false
       matrix:
@@ -95,10 +95,11 @@ jobs:
         run: mvn -B clean install -Psign -DskipTests
       - name: Collect artifacts
         run: |
-          cp -r $HOME/.m2/repository/org/asciidoctor/asciidoctor-maven-*  target/artifacts
-          cp -r $HOME/.m2/repository/org/asciidoctor/*-doxia-module  target/artifacts
+          mkdir -p $ARTIFACTS_DIR
+          cp -r $HOME/.m2/repository/org/asciidoctor/asciidoctor-maven-* $ARTIFACTS_DIR
+          cp -r $HOME/.m2/repository/org/asciidoctor/*-doxia-module $ARTIFACTS_DIR
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: artifacts.tar.gz
-          path: target/artifacts
+          path: ${{ env.ARTIFACTS_DIR }}
