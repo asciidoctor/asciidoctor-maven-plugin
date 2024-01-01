@@ -69,6 +69,9 @@ jobs:
     name: Sign artifacts
     environment: test
     env:
+      GPG_KEYNAME: ${{ env.GPG_KEYNAME }}
+      GPG_PASSPHRASE: ${{ env.GPG_PASSPHRASE }}
+      GPG_PRIVATE_KEY: ${{ env.GPG_PRIVATE_KEY }}
       ARTIFACTS_DIR: target/artifacts
     strategy:
       fail-fast: false
