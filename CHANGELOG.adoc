@@ -58,6 +58,7 @@ Build / Infrastructure::
   * Improvements to dependency management (#690)
   * Test Javadoc generation in CI (#690)
   * Fix maven-deploy-plugin and prerequisites Maven warnings (#709)
+  * Use latest maven-plugin-tools and remove Dependabot exclusion (CI test ensure backward compatibility) (#717)
 
 Maintenance::
   * Replace use of reflection by direct JavaExtensionRegistry calls to register extensions (#596)
