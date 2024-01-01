@@ -16,11 +16,6 @@
     <name>Asciidoctor Parser Doxia Module</name>
     <description>Asciidoctor Doxia Module based on Asciidoctor AST processing (for Maven Site integration)</description>
 
-    <properties>
-        <doxia.version>1.11.1</doxia.version>
-        <plexus.component.metadata.version>2.1.1</plexus.component.metadata.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.asciidoctor</groupId>
@@ -56,7 +51,7 @@
         <dependency>
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-site-renderer</artifactId>
-            <version>${doxia.version}</version>
+            <version>1.11.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -66,7 +61,7 @@
             <plugin>
                 <groupId>org.codehaus.plexus</groupId>
                 <artifactId>plexus-component-metadata</artifactId>
-                <version>${plexus.component.metadata.version}</version>
+                <version>${plexus-component-metadata.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -80,36 +75,6 @@
                 <artifactId>coveralls-maven-plugin</artifactId>
             </plugin>
         </plugins>
-
-        <pluginManagement>
-            <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.codehaus.plexus</groupId>
-                                        <artifactId>plexus-component-metadata</artifactId>
-                                        <versionRange>[${plexus.component.metadata.version},)</versionRange>
-                                        <goals>
-                                            <goal>generate-metadata</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <execute/>
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
 
 </project>
