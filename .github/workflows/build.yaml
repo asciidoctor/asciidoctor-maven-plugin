@@ -84,6 +84,11 @@ jobs:
           - 3.9.6
     runs-on: ${{ matrix.os }}
     steps:
+      - name: debug
+        run: |
+          echo $GPG_KEYNAME
+          echo $GPG_PASSPHRASE
+          echo $GPG_PRIVATE_KEY
       - name: Prepare signature
         run: echo -e "$GPG_PRIVATE_KEY" | gpg --import --batch
       - uses: s4u/setup-maven-action@v1.11.0
