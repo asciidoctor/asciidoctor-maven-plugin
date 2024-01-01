@@ -236,11 +236,13 @@
     <profiles>
         <profile>
             <!--
-              To release to bintray, add your credentials to ~/.m2/settings.xml and run:
-
+              To release, define environment variables:
+                export GPG_KEYNAME=""
+                export GPG_PASSPHRASE=""
+              Then, run
                $ mvn deploy
             -->
-            <id>release-profile</id>
+            <id>release</id>
             <build>
                 <plugins>
                     <plugin>
@@ -275,8 +277,8 @@
                         <artifactId>maven-gpg-plugin</artifactId>
                         <configuration>
                             <executable>gpg2</executable>
-                            <keyname>${gpg.keyname}</keyname>
-                            <passphrase>${gpg.passphrase}</passphrase>
+                            <keyname>${env.GPG_KEYNAME}</keyname>
+                            <passphrase>${env.GPG_PASSPHRASE}</passphrase>
                             <gpgArguments>
                                 <arg>--pinentry-mode</arg>
                                 <arg>loopback</arg>
