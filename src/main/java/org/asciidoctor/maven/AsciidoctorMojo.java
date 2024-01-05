@@ -244,8 +244,9 @@ public class AsciidoctorMojo extends AbstractMojo {
         final Set<File> uniquePaths = new HashSet<>();
         for (final File source : sourceFiles) {
             final File destinationPath = setDestinationPaths(source, optionsBuilder, sourceDir, this);
-            if (!uniquePaths.add(destinationPath))
+            if (!uniquePaths.add(destinationPath)) {
                 getLog().warn("Duplicated destination found: overwriting file: " + destinationPath.getAbsolutePath());
+            }
 
             convertFile(asciidoctor, optionsBuilder.asMap(), source);
 
@@ -379,9 +380,8 @@ public class AsciidoctorMojo extends AbstractMojo {
                 optionsBuilder.toDir(outputDir).destinationDir(outputDir);
             }
             final File outputFile = configuration.getOutputFile();
-            final String destinationDir = (String) optionsBuilder.asMap().get(Options.DESTINATION_DIR);
+            final String destinationDir = getDestinationDir(optionsBuilder);
             if (outputFile != null) {
-                // allow overriding the output file name
                 optionsBuilder.toFile(outputFile);
                 return outputFile.isAbsolute() ? outputFile : new File(destinationDir, outputFile.getPath());
             } else {
@@ -390,6 +390,12 @@ public class AsciidoctorMojo extends AbstractMojo {
         } catch (IOException e) {
             throw new MojoExecutionException("Unable to locate output directory", e);
         }
+    }
+
+    private static String getDestinationDir(OptionsBuilder optionsBuilder) {
+        final Map<String, Object> options = optionsBuilder.asMap();
+        return (String) Optional.ofNullable(options.get(Options.DESTINATION_DIR))
+                .orElse(options.get(Options.TO_DIR));
     }
 
     protected Asciidoctor getAsciidoctorInstance(String gemPath) throws MojoExecutionException {

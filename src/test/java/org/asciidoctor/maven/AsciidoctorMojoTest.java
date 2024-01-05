@@ -5,12 +5,17 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.asciidoctor.Options;
+import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.maven.extensions.ExtensionConfiguration;
 import org.asciidoctor.maven.io.AsciidoctorFileScanner;
 import org.asciidoctor.maven.io.ConsoleHolder;
 import org.asciidoctor.maven.test.processors.RequireCheckerTreeprocessor;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -1069,4 +1074,22 @@ public class AsciidoctorMojoTest {
         consoleHolder.release();
     }
 
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {"output.html"})
+    public void should_return_absolute_path_when_calculating_destination(String outputFile) throws MojoExecutionException {
+        // given
+        final AsciidoctorMojo mojo = mockAsciidoctorMojo();
+        mojo.setOutputDirectory(newOutputTestDirectory("overlapping-outputFile"));
+        if (outputFile != null) mojo.setOutputFile(outputFile);
+        final File source = new File("source.adoc");
+        final OptionsBuilder builder = Options.builder();
+        final File sourceDir = new File(".");
+
+        // when
+        File file = mojo.setDestinationPaths(source, builder, sourceDir, mojo);
+
+        // then
+        Assertions.assertThat(file).isAbsolute();
+    }
 }
