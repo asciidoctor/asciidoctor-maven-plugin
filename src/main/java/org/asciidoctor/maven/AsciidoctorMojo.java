@@ -1,5 +1,6 @@
 package org.asciidoctor.maven;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
@@ -243,9 +244,15 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         final Set<File> uniquePaths = new HashSet<>();
         for (final File source : sourceFiles) {
-            final File destinationPath = setDestinationPaths(source, optionsBuilder, sourceDir, this);
+            final Destination destination = setDestinationPaths(source, optionsBuilder, sourceDir, this);
+            final File destinationPath = destination.path;
             if (!uniquePaths.add(destinationPath)) {
-                getLog().warn("Duplicated destination found: overwriting file: " + destinationPath.getAbsolutePath());
+                String destinationFile = destinationPath.getAbsolutePath();
+                if (!destination.isOutput) {
+                    String baseName = FilenameUtils.getBaseName(destinationPath.getName());
+                    destinationFile = destinationPath.getParentFile().getAbsolutePath() + File.separator + baseName + ".*";
+                }
+                getLog().warn("Duplicated destination found: overwriting file: " + destinationFile);
             }
 
             convertFile(asciidoctor, optionsBuilder.asMap(), source);
@@ -358,8 +365,8 @@ public class AsciidoctorMojo extends AbstractMojo {
      * @return the final destination file path.
      * @throws MojoExecutionException If output is not valid
      */
-    public File setDestinationPaths(final File sourceFile, final OptionsBuilder optionsBuilder, final File sourceDirectory,
-                                    final AsciidoctorMojo configuration) throws MojoExecutionException {
+    public Destination setDestinationPaths(final File sourceFile, final OptionsBuilder optionsBuilder, final File sourceDirectory,
+                                           final AsciidoctorMojo configuration) throws MojoExecutionException {
         try {
             if (configuration.getBaseDir() != null) {
                 optionsBuilder.baseDir(configuration.getBaseDir());
@@ -383,12 +390,25 @@ public class AsciidoctorMojo extends AbstractMojo {
             final String destinationDir = getDestinationDir(optionsBuilder);
             if (outputFile != null) {
                 optionsBuilder.toFile(outputFile);
-                return outputFile.isAbsolute() ? outputFile : new File(destinationDir, outputFile.getPath());
+                return outputFile.isAbsolute()
+                        ? new Destination(outputFile, true)
+                        : new Destination(new File(destinationDir, outputFile.getPath()), true);
             } else {
-                return new File(destinationDir, sourceFile.getName());
+                return new Destination(new File(destinationDir, sourceFile.getName()), false);
             }
         } catch (IOException e) {
             throw new MojoExecutionException("Unable to locate output directory", e);
+        }
+    }
+
+    class Destination {
+        final File path;
+        // Whether path is the actual output file or an approximation
+        final boolean isOutput;
+
+        Destination(File destination, boolean isSource) {
+            this.path = destination;
+            this.isOutput = isSource;
         }
     }
 

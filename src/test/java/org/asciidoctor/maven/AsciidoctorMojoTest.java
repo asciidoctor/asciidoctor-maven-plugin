@@ -7,6 +7,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.maven.AsciidoctorMojo.Destination;
 import org.asciidoctor.maven.extensions.ExtensionConfiguration;
 import org.asciidoctor.maven.io.AsciidoctorFileScanner;
 import org.asciidoctor.maven.io.ConsoleHolder;
@@ -14,7 +15,7 @@ import org.asciidoctor.maven.test.processors.RequireCheckerTreeprocessor;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.*;
@@ -1075,7 +1076,7 @@ public class AsciidoctorMojoTest {
     }
 
     @ParameterizedTest
-    @NullAndEmptySource
+    @NullSource
     @ValueSource(strings = {"output.html"})
     public void should_return_absolute_path_when_calculating_destination(String outputFile) throws MojoExecutionException {
         // given
@@ -1087,9 +1088,10 @@ public class AsciidoctorMojoTest {
         final File sourceDir = new File(".");
 
         // when
-        File file = mojo.setDestinationPaths(source, builder, sourceDir, mojo);
+        Destination file = mojo.setDestinationPaths(source, builder, sourceDir, mojo);
 
         // then
-        Assertions.assertThat(file).isAbsolute();
+        Assertions.assertThat(file.path).isAbsolute();
+        Assertions.assertThat(file.isOutput).isEqualTo(outputFile != null);
     }
 }

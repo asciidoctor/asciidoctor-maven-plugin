@@ -16,7 +16,7 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 Bug Fixes::
 
   * Remove Java 'requires open access' module warning in modern Java versions with JRuby v9.4.5.0 (#553)
-  * Check for both destinationDir and toDir when to avoid invalid "Duplicated destination found" messages (#728)
+  * Check for both destinationDir and toDir when to avoid invalid "Duplicated destination found" messages, and improve warning message (#728)
 
 Build / Infrastructure::
 
