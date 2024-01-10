@@ -46,3 +46,88 @@ jobs:
         run: mvn -version
       - name: Build & Test
         run: mvn -B -Prun-its clean verify
+  javadocs:
+    name: Javadocs
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        java:
+          - 11
+        maven:
+          - 3.9.6
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: s4u/setup-maven-action@v1.11.0
+        with:
+          java-distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+          maven-version: ${{ matrix.maven }}
+      - name: Build & Test
+        run: mvn -B clean javadoc:jar
+  signature:
+    name: Sign artifacts
+    environment: test
+    env:
+      ARTIFACTS_DIR: target/artifacts
+      GPG_KEYNAME: AD1FC1D8A84C23D92DC1377D519F6A9DA113C4F3
+      GPG_PASSPHRASE: 1234567890
+      GPG_PRIVATE_KEY: |
+        -----BEGIN PGP PRIVATE KEY BLOCK-----
+
+        lIYEZZNGnRYJKwYBBAHaRw8BAQdACk2kGg4AXHMDO4yyfUgVoxNkdgwH5JeU4RKC
+        oWiJ8T7+BwMCsLucYGxSgqf/wrrRjmsWthIvcmSGikVBbmURXvygOSEAVvM6/dqW
+        exlh52f1W38SeQV1lteQjNUP5qc+F7y4eD8wqQQ3MRf6C3lTciMHr7RAYXNjaWlk
+        b2N0b3ItbWF2ZW4tcGx1Z2luIHRlc3RpbmcgPGFzY2lpZG9jdG9yLXRlc3RpbmdA
+        ZmFrZS5tYWlsPoiZBBMWCgBBFiEErR/B2KhMI9ktwTd9UZ9qnaETxPMFAmWTRp0C
+        GwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQUZ9qnaETxPPJ
+        BgD/Zrvgxa74ectHRj+lOF1Tc+u47B5RraAbGsDRcVRzYJABALWXYMywNLObobpU
+        pvNBnCyBYWwrW/+o1D3FI6aDzhgBnIsEZZNGnRIKKwYBBAGXVQEFAQEHQLdLXbH0
+        Q6wiP0b/QF+gJfXDNcJCWu4yAYO3WrdhyddmAwEIB/4HAwI8l2WaMrWsVP9cRuJg
+        ifCy3/n6Sk2DSC4028DJRCFx99oQx85dwDysmLMCccL/Od/X5RR9X4c9mCP9ZI2V
+        i9Fp7zcNKGCy7TafFoS2w5RTiH4EGBYKACYWIQStH8HYqEwj2S3BN31Rn2qdoRPE
+        8wUCZZNGnQIbDAUJBaOagAAKCRBRn2qdoRPE86XrAPwPakum1coasOY7U2mNbky3
+        X1Exlurk0IMFiW/GJkNcjgD+PkU7pXgRSy2YEl7ZWswheLvlQQT0PsyNSfkWS201
+        /ww=
+        =BCbM
+        -----END PGP PRIVATE KEY BLOCK-----
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        java:
+          - 11
+        maven:
+          - 3.9.6
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: debug
+        run: |
+          echo "${{ env.GPG_KEYNAME }}"
+          echo "${{ env.GPG_PASSPHRASE }}"
+          echo "${{ env.GPG_PRIVATE_KEY }}"
+      - name: Prepare key
+        run: echo -e "${{ env.GPG_PRIVATE_KEY }}" | gpg --import --batch
+      - name: List kys
+        run: gpg --list-keys
+      - uses: s4u/setup-maven-action@v1.11.0
+        with:
+          java-distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+          maven-version: ${{ matrix.maven }}
+      - name: Build & Test
+        run: mvn -B clean install -Prelease -DskipTests
+      - name: Collect artifacts
+        run: |
+          mkdir -p $ARTIFACTS_DIR
+          cp -r $HOME/.m2/repository/org/asciidoctor/asciidoctor-maven-* $ARTIFACTS_DIR
+          cp -r $HOME/.m2/repository/org/asciidoctor/*-doxia-module $ARTIFACTS_DIR
+      - name: Verify JAR signatures
+        run: find $ARTIFACTS_DIR -type f -name "*.jar" -exec gpg --verify "{}.asc" \;
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: signed-artifacts
+          path: ${{ env.ARTIFACTS_DIR }}
