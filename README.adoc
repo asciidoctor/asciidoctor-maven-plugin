@@ -1,6 +1,6 @@
 = Asciidoctor Maven Plugin
 // Metadata
-:release-version: 2.2.4
+:release-version: 2.2.5
 :docs-version: 2.2
 :maven-site-plugin-version: 3.12.1
 // Settings
@@ -59,7 +59,10 @@ ifeval::['{tag}' == 'main']
 [NOTE]
 ====
 You're viewing the documentation for the upcoming release.
-If you're looking for the documentation for an older release, please refer to one of the following tags: +
+If you're looking for the documentation for an older release, please refer to one of the following tags:
++
+{uri-repo}/tree/asciidoctor-maven-plugin-2.2.4#readme[2.2.4]
+&hybull;
 {uri-repo}/tree/asciidoctor-maven-plugin-2.2.3#readme[2.2.3]
 &hybull;
 {uri-repo}/tree/asciidoctor-maven-plugin-2.1.0#readme[2.1.0]

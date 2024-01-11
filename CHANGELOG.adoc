@@ -13,6 +13,8 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+== v2.2.5 (2024-01-11)
+
 Bug Fixes::
 
   * Remove Java 'requires open access' module warning in modern Java versions with JRuby v9.4.5.0 (#553)
