@@ -63,6 +63,7 @@ Build / Infrastructure::
   * Use latest Maven Doxia and remove Dependabot exclusion (CI test ensure backward compatibility) (#719)
   * Use latest Maven and remove Dependabot exclusion (CI test ensure backward compatibility) (#722)
   * Test artifact's signature with Maven in CI (#736)
+  * Automate release using GH Actions (#141)
 
 Maintenance::
   * Replace use of reflection by direct JavaExtensionRegistry calls to register extensions (#596)

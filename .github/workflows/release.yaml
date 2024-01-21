@@ -1,0 +1,44 @@
+name: Release
+
+on: workflow_dispatch
+permissions:
+  contents: write
+
+jobs:
+  release:
+    environment: release
+    env:
+      GPG_KEYNAME: ${{ secrets.GPG_KEYNAME }}
+      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 11
+      - uses: s4u/maven-settings-action@v3.0.0
+        with:
+          servers: |
+            [{
+              "id": "ossrh",
+              "username": "${{ secrets.OSS_SONATYPE_USERNAME }}",
+              "password": "${{ secrets.OSS_SONATYPE_PASSWORD }}"
+            }]
+      - name: Configure Git user
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+      - name: Configure GPG key
+        run: echo -e "${{ env.GPG_PRIVATE_KEY }}" | gpg --import --batch
+      - name: Build artifacts
+        run: ./mvnw clean verify -B -Prelease -Dmaven.test.skip
+      - name: Publish artifacts
+        run: ./mvnw release:prepare release:perform -B -Darguments="-Prelease -Dmaven.test.skip"
+      - name: Close release
+        run: |
+          echo "Release completed 🎉"
+          echo "Remember to 'Close' & 'Release' at https://oss.sonatype.org"
