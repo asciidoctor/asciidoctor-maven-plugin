@@ -56,9 +56,9 @@
     </licenses>
 
     <scm>
-        <url>scm:git:git@github.com:asciidoctor/asciidoctor-maven-plugin.git</url>
-        <connection>scm:git:git@github.com:asciidoctor/asciidoctor-maven-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:asciidoctor/asciidoctor-maven-plugin.git</developerConnection>
+        <url>scm:git:https://github.com/asciidoctor/asciidoctor-maven-plugin.git</url>
+        <connection>scm:git:https://github.com/asciidoctor/asciidoctor-maven-plugin.git</connection>
+        <developerConnection>scm:git:https://github.com/asciidoctor/asciidoctor-maven-plugin.git</developerConnection>
         <tag>asciidoctor-maven-plugin-2.2.2</tag>
     </scm>
 
