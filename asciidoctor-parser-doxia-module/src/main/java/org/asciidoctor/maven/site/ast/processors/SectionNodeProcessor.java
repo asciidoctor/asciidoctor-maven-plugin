@@ -6,8 +6,20 @@ import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.ast.impl.SectionImpl;
 import org.asciidoctor.maven.site.ast.NodeProcessor;
 
+/**
+ * Section title processor.
+ * Supports 'sectnum' and 'sectnum' attributes.
+ *
+ * @author abelsromero
+ * @since 3.0.0
+ */
 public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
 
+    /**
+     * Constructor.
+     *
+     * @param sink Doxia {@link Sink}
+     */
     public SectionNodeProcessor(Sink sink) {
         super(sink);
     }

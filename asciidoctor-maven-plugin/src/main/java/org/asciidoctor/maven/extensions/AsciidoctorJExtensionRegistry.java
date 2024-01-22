@@ -1,7 +1,16 @@
 package org.asciidoctor.maven.extensions;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.extension.*;
+import org.asciidoctor.extension.BlockMacroProcessor;
+import org.asciidoctor.extension.BlockProcessor;
+import org.asciidoctor.extension.DocinfoProcessor;
+import org.asciidoctor.extension.IncludeProcessor;
+import org.asciidoctor.extension.InlineMacroProcessor;
+import org.asciidoctor.extension.JavaExtensionRegistry;
+import org.asciidoctor.extension.Postprocessor;
+import org.asciidoctor.extension.Preprocessor;
+import org.asciidoctor.extension.Processor;
+import org.asciidoctor.extension.Treeprocessor;
 
 /**
  * Class responsible for registering extensions.
@@ -12,6 +21,11 @@ public class AsciidoctorJExtensionRegistry implements ExtensionRegistry {
 
     private JavaExtensionRegistry javaExtensionRegistry;
 
+    /**
+     * Constructor.
+     *
+     * @param asciidoctorInstance Asciidoctor instance
+     */
     public AsciidoctorJExtensionRegistry(Asciidoctor asciidoctorInstance) {
         javaExtensionRegistry = asciidoctorInstance.javaExtensionRegistry();
     }

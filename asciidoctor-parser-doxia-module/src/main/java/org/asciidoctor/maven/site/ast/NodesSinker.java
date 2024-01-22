@@ -1,12 +1,22 @@
 package org.asciidoctor.maven.site.ast;
 
-import org.apache.maven.doxia.sink.Sink;
-import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.maven.site.ast.processors.*;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import org.apache.maven.doxia.sink.Sink;
+import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.maven.site.ast.processors.DocumentNodeProcessor;
+import org.asciidoctor.maven.site.ast.processors.ImageNodeProcessor;
+import org.asciidoctor.maven.site.ast.processors.ListItemNodeProcessor;
+import org.asciidoctor.maven.site.ast.processors.ListingNodeProcessor;
+import org.asciidoctor.maven.site.ast.processors.LiteralNodeProcessor;
+import org.asciidoctor.maven.site.ast.processors.OrderedListNodeProcessor;
+import org.asciidoctor.maven.site.ast.processors.ParagraphNodeProcessor;
+import org.asciidoctor.maven.site.ast.processors.PreambleNodeProcessor;
+import org.asciidoctor.maven.site.ast.processors.SectionNodeProcessor;
+import org.asciidoctor.maven.site.ast.processors.TableNodeProcessor;
+import org.asciidoctor.maven.site.ast.processors.UnorderedListNodeProcessor;
 
 /**
  * Document processor.
@@ -14,11 +24,17 @@ import java.util.Optional;
  * and traverse the AST.
  *
  * @author abelsromero
+ * @since 3.0.0
  */
 public class NodesSinker {
 
     private final List<NodeProcessor> nodeProcessors;
 
+    /**
+     * Constructor.
+     *
+     * @param sink Doxia {@link Sink}
+     */
     public NodesSinker(Sink sink) {
 
         UnorderedListNodeProcessor unorderedListNodeProcessor = new UnorderedListNodeProcessor(sink);
@@ -43,6 +59,11 @@ public class NodesSinker {
         );
     }
 
+    /**
+     * Processes an Asciidoctor AST node.
+     *
+     * @param node Asciidoctor {@link StructuralNode}
+     */
     public void processNode(StructuralNode node) {
         processNode(node, 0);
     }

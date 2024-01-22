@@ -18,6 +18,9 @@ import java.io.File;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * HTTP server to expose AsciiDoc converted sources.
+ */
 public class AsciidoctorHttpServer {
 
     private static final String HOST = "localhost";
@@ -32,13 +35,26 @@ public class AsciidoctorHttpServer {
     private ServerBootstrap bootstrap;
     private NioEventLoopGroup workerGroup;
 
-    public AsciidoctorHttpServer(final Log logger, final int port, final File outputDirectory, final String defaultPage) {
+    /**
+     * Constructor.
+     *
+     * @param logger           server logger
+     * @param port             server port
+     * @param workingDirectory sources location
+     * @param defaultPage      default page used for root (aka. index)
+     */
+    public AsciidoctorHttpServer(final Log logger, final int port, final File workingDirectory, final String defaultPage) {
         this.logger = logger;
         this.port = port;
-        this.workDir = outputDirectory;
+        this.workDir = workingDirectory;
         this.defaultPage = defaultPage;
     }
 
+    /**
+     * Start server.
+     *
+     * @return server instance
+     */
     public AsciidoctorHttpServer start() {
         final AtomicInteger threadId = new AtomicInteger(1);
         workerGroup = new NioEventLoopGroup(THREAD_NUMBER, runnable -> {
@@ -85,6 +101,9 @@ public class AsciidoctorHttpServer {
         return this;
     }
 
+    /**
+     * Stop server.
+     */
     public void stop() {
         Future<?> shutdownGracefully = workerGroup.shutdownGracefully();
         logger.info("Server stopping...");

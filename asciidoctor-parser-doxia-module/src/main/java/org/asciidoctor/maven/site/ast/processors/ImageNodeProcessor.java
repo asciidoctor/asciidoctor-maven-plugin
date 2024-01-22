@@ -10,9 +10,17 @@ import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 
 /**
  * Inline images are processed as paragraphs.
+ *
+ * @author abelsromero
+ * @since 3.0.0
  */
 public class ImageNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
 
+    /**
+     * Constructor.
+     *
+     * @param sink Doxia {@link Sink}
+     */
     public ImageNodeProcessor(Sink sink) {
         super(sink);
     }

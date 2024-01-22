@@ -13,8 +13,19 @@ import static org.apache.maven.doxia.sink.Sink.JUSTIFY_LEFT;
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
+/**
+ * Table processor.
+ *
+ * @author abelsromero
+ * @since 3.0.0
+ */
 public class TableNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
 
+    /**
+     * Constructor.
+     *
+     * @param sink Doxia {@link Sink}
+     */
     public TableNodeProcessor(Sink sink) {
         super(sink);
     }
@@ -78,5 +89,4 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
             sink.tableCaption_();
         }
     }
-
 }

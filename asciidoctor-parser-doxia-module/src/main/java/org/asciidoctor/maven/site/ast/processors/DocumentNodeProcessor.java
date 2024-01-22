@@ -4,8 +4,19 @@ import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.ast.NodeProcessor;
 
+/**
+ * Root document processor.
+ *
+ * @author abelsromero
+ * @since 3.0.0
+ */
 public class DocumentNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
 
+    /**
+     * Constructor.
+     *
+     * @param sink Doxia {@link Sink}
+     */
     public DocumentNodeProcessor(Sink sink) {
         super(sink);
     }
