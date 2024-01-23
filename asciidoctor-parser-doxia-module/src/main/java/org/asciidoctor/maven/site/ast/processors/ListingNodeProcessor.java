@@ -10,6 +10,9 @@ import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 /**
  * Processes code blocks.
  * Create a block compatible with maven-fluido-skin's use code-prettify.
+ *
+ * @author abelsromero
+ * @since 3.0.0
  */
 public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
 
@@ -19,6 +22,11 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
 
     private final ListItemNodeProcessor itemNodeProcessor;
 
+    /**
+     * Constructor.
+     *
+     * @param sink Doxia {@link Sink}
+     */
     public ListingNodeProcessor(Sink sink) {
         super(sink);
         this.itemNodeProcessor = new ListItemNodeProcessor(sink);

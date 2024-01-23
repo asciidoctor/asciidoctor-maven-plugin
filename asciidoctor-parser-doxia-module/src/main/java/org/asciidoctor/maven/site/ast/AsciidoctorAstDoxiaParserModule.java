@@ -11,6 +11,7 @@ import org.codehaus.plexus.component.annotations.Component;
  * <a href="https://maven.apache.org/doxia/references/">Doxia provided modules</a>.
  *
  * @author abelsromero
+ * @since 3.0.0
  */
 @Component(role = ParserModule.class, hint = AsciidoctorAstDoxiaParser.ROLE_HINT)
 public class AsciidoctorAstDoxiaParserModule extends AbstractParserModule {

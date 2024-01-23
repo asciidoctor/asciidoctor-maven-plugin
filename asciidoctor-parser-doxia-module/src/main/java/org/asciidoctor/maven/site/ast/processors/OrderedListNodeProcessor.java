@@ -6,16 +6,32 @@ import org.asciidoctor.maven.site.ast.NodeProcessor;
 
 import java.util.List;
 
+/**
+ * Ordered list processor.
+ *
+ * @author abelsromero
+ * @since 3.0.0
+ */
 public class OrderedListNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
 
     private ListItemNodeProcessor itemNodeProcessor;
 
+    /**
+     * Constructor.
+     *
+     * @param sink Doxia {@link Sink}
+     */
     public OrderedListNodeProcessor(Sink sink) {
         super(sink);
     }
 
-    public void setItemNodeProcessor(ListItemNodeProcessor itemNodeProcessor) {
-        this.itemNodeProcessor = itemNodeProcessor;
+    /**
+     * Inject a {@link ListItemNodeProcessor}.
+     *
+     * @param nodeProcessor {@link ListItemNodeProcessor}
+     */
+    public void setItemNodeProcessor(ListItemNodeProcessor nodeProcessor) {
+        this.itemNodeProcessor = nodeProcessor;
     }
 
     @Override

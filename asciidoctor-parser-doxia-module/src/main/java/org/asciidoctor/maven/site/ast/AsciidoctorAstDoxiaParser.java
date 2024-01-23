@@ -5,7 +5,12 @@ import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.project.MavenProject;
-import org.asciidoctor.*;
+import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Attributes;
+import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.Options;
+import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.SafeMode;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordFormatter;
@@ -33,6 +38,7 @@ import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
  * (see <a href="https://maven.apache.org/plugins/maven-site-plugin/">maven-site-plugin</a>).
  *
  * @author abelsromero
+ * @since 3.0.0
  */
 @Component(role = Parser.class, hint = AsciidoctorAstDoxiaParser.ROLE_HINT)
 public class AsciidoctorAstDoxiaParser extends AbstractTextParser {

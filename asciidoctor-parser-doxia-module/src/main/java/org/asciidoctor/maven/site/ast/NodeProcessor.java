@@ -10,6 +10,7 @@ import org.asciidoctor.ast.StructuralNode;
  * a specific Node type (but can be accommodated to convert multiples).
  *
  * @author abelsromero
+ * @since 3.0.0
  */
 public interface NodeProcessor {
 
@@ -17,6 +18,7 @@ public interface NodeProcessor {
      * Whether the processor can process the node.
      *
      * @param node candidate node to process
+     * @return {@literal true} if the node can be processed
      */
     boolean applies(StructuralNode node);
 
@@ -24,6 +26,7 @@ public interface NodeProcessor {
      * Whether sub-nodes should be processed recursively.
      *
      * @param node candidate node to process
+     * @return {@literal true} if the node is terminal
      */
     default boolean isTerminal(StructuralNode node) {
         return false;

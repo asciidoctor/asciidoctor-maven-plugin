@@ -7,15 +7,31 @@ import org.asciidoctor.maven.site.ast.NodeProcessor;
 
 import java.util.List;
 
+/**
+ * List items processor, including numbered and unnumbered.
+ *
+ * @author abelsromero
+ * @since 3.0.0
+ */
 public class ListItemNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
 
     private List<NodeProcessor> nodeProcessors;
 
+    /**
+     * Constructor.
+     *
+     * @param sink Doxia {@link Sink}
+     */
     public ListItemNodeProcessor(Sink sink) {
         super(sink);
 
     }
 
+    /**
+     * Inject a list of {@link NodeProcessor}.
+     *
+     * @param nodeProcessors {@link List} of {@link NodeProcessor}
+     */
     public void setNodeProcessors(List<NodeProcessor> nodeProcessors) {
         this.nodeProcessors = nodeProcessors;
     }
