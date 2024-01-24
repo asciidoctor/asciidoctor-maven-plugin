@@ -7,7 +7,12 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.asciidoctor.*;
+import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Attributes;
+import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.Options;
+import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.SafeMode;
 import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
 import org.asciidoctor.maven.commons.AsciidoctorHelper;
@@ -29,10 +34,18 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
+import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE_DIR;
 
 
@@ -52,10 +65,10 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected File outputFile;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "preserveDirectories", defaultValue = "false")
-    protected boolean preserveDirectories = false;
+    protected boolean preserveDirectories;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "relativeBaseDir", defaultValue = "false")
-    protected boolean relativeBaseDir = false;
+    protected boolean relativeBaseDir;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "projectDirectory", defaultValue = "${basedir}")
     protected File projectDirectory;
@@ -66,8 +79,8 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "baseDir")
     protected File baseDir;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "skip")
-    protected boolean skip = false;
+    @Parameter(property = AsciidoctorMaven.PREFIX + "skip", defaultValue = "false")
+    protected boolean skip;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "gemPath")
     protected String gemPath;
@@ -79,10 +92,10 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected Map<String, Object> attributes = new HashMap<>();
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.ATTRIBUTES)
-    protected String attributesChain = "";
+    protected String attributesChain;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.BACKEND, defaultValue = "html5")
-    protected String backend = "html5";
+    protected String backend;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + Options.DOCTYPE)
     protected String doctype;
@@ -91,7 +104,7 @@ public class AsciidoctorMojo extends AbstractMojo {
     protected String eruby;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "standalone", defaultValue = "true")
-    protected boolean standalone = true;
+    protected boolean standalone;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "templateDirs")
     protected List<File> templateDirs = new ArrayList<>();
@@ -99,8 +112,8 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "templateEngine")
     protected String templateEngine;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "templateCache")
-    protected boolean templateCache = true;
+    @Parameter(property = AsciidoctorMaven.PREFIX + "templateCache", defaultValue = "true")
+    protected boolean templateCache;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDocumentName")
     protected String sourceDocumentName;
@@ -108,24 +121,24 @@ public class AsciidoctorMojo extends AbstractMojo {
     @Parameter(property = AsciidoctorMaven.PREFIX + "sourceDocumentExtensions")
     protected List<String> sourceDocumentExtensions = new ArrayList<>();
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "sourcemap")
-    protected boolean sourcemap = false;
+    @Parameter(property = AsciidoctorMaven.PREFIX + "sourcemap", defaultValue = "false")
+    protected boolean sourcemap;
 
-    @Parameter(property = AsciidoctorMaven.PREFIX + "catalogAssets")
-    protected boolean catalogAssets = false;
+    @Parameter(property = AsciidoctorMaven.PREFIX + "catalogAssets", defaultValue = "false")
+    protected boolean catalogAssets;
 
     @Parameter
     protected List<ExtensionConfiguration> extensions = new ArrayList<>();
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "embedAssets", defaultValue = "false")
-    protected boolean embedAssets = false;
+    protected boolean embedAssets;
 
-    // List of resources to copy to the output directory (e.g., images, css). By default everything is copied
+    // List of resources to copy to the output directory (e.g., images, css). By default, everything is copied
     @Parameter
     protected List<Resource> resources;
 
     @Parameter(property = AsciidoctorMaven.PREFIX + "verbose", defaultValue = "false")
-    protected boolean enableVerbose = false;
+    protected boolean enableVerbose;
 
     @Parameter
     private LogHandler logHandler = new LogHandler();
@@ -455,7 +468,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         AsciidoctorHelper.addProperties(mavenProject.getProperties(), attributesBuilder);
         AsciidoctorHelper.addAttributes(configuration.getAttributes(), attributesBuilder);
 
-        if (!configuration.getAttributesChain().isEmpty()) {
+        if (isNotBlank(configuration.getAttributesChain())) {
             getLog().info("Attributes: " + attributesChain);
             attributesBuilder.arguments(attributesChain);
         }

@@ -1,8 +1,16 @@
 package org.asciidoctor.maven;
 
 import lombok.SneakyThrows;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.ClassFileVersion;
+import net.bytebuddy.description.annotation.AnnotationDescription;
+import net.bytebuddy.description.annotation.AnnotationValue;
+import net.bytebuddy.description.field.FieldDescription;
+import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.pool.TypePool;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.logging.SystemStreamLog;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.model.Resource;
@@ -12,16 +20,23 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 import static org.asciidoctor.maven.process.SourceDocumentFinder.STANDARD_FILE_EXTENSIONS_PATTERN;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatPath;
 import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
 import static org.mockito.Mockito.when;
 
 public class TestUtils {
+
+    private static final ParametersInitializer parametersInitializer = new ParametersInitializer();
 
     @SneakyThrows
     public static AsciidoctorRefreshMojo newFakeRefreshMojo() {
@@ -65,6 +80,7 @@ public class TestUtils {
         }
 
         final AsciidoctorMojo mojo = (AsciidoctorMojo) clazz.getConstructor(new Class[]{}).newInstance();
+        parametersInitializer.initialize(mojo);
         setVariableValueInObject(mojo, "log", new SystemStreamLog());
         mojo.project = mavenProject;
         if (logHandler != null)
