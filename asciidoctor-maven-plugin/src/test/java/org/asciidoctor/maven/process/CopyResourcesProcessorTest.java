@@ -2,7 +2,7 @@ package org.asciidoctor.maven.process;
 
 import org.apache.commons.io.FileUtils;
 import org.asciidoctor.maven.AsciidoctorMojo;
-import org.asciidoctor.maven.TestUtils.ResourceBuilder;
+import org.asciidoctor.maven.test.TestUtils.ResourceBuilder;
 import org.asciidoctor.maven.model.Resource;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

@@ -17,7 +17,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.asciidoctor.maven.TestUtils.mockAsciidoctorZipMojo;
+import static org.asciidoctor.maven.test.TestUtils.mockAsciidoctorZipMojo;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -41,11 +41,10 @@ class AsciidoctorZipMojoTest {
                 "= Title\n\ntest", UTF_8);
 
         AsciidoctorZipMojo mojo = mockAsciidoctorZipMojo();
-        mojo.backend = "html";
         mojo.sourceDirectory = srcDir;
         mojo.outputDirectory = outputDir;
         mojo.zipDestination = zip;
-        mojo.zip = true;
+        mojo.attach = false;
         mojo.execute();
 
         // then: a zip is created
@@ -72,13 +71,12 @@ class AsciidoctorZipMojoTest {
 
         // when
         AsciidoctorZipMojo mojo = mockAsciidoctorZipMojo();
-        mojo.backend = "html5";
         mojo.sourceDirectory = srcDir;
         mojo.outputDirectory = outputDir;
         mojo.preserveDirectories = true;
         mojo.relativeBaseDir = true;
         mojo.zipDestination = zip;
-        mojo.zip = true;
+        mojo.attach = false;
         mojo.execute();
 
         // then
@@ -118,11 +116,10 @@ class AsciidoctorZipMojoTest {
 
         // when
         AsciidoctorZipMojo mojo = mockAsciidoctorZipMojo();
-        mojo.backend = "html5";
         mojo.sourceDirectory = srcDir;
         mojo.outputDirectory = outputDir;
         mojo.zipDestination = zip;
-        mojo.zip = true;
+        mojo.attach = false;
         mojo.execute();
 
         // then

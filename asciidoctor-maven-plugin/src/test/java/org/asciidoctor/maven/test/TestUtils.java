@@ -1,89 +1,49 @@
-package org.asciidoctor.maven;
+package org.asciidoctor.maven.test;
 
-import lombok.SneakyThrows;
-import org.apache.commons.io.IOUtils;
-import org.apache.maven.plugin.logging.SystemStreamLog;
-import org.apache.maven.project.MavenProject;
+import org.asciidoctor.maven.AsciidoctorHttpMojo;
+import org.asciidoctor.maven.AsciidoctorMojo;
+import org.asciidoctor.maven.AsciidoctorRefreshMojo;
+import org.asciidoctor.maven.AsciidoctorZipMojo;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.model.Resource;
-import org.mockito.Mockito;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 import static org.asciidoctor.maven.process.SourceDocumentFinder.STANDARD_FILE_EXTENSIONS_PATTERN;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
-import static org.mockito.Mockito.when;
 
 public class TestUtils {
 
-    @SneakyThrows
+    private static final MojoMocker mojoMocker = new MojoMocker();
+
     public static AsciidoctorRefreshMojo newFakeRefreshMojo() {
-        return mockAsciidoctorMojo(AsciidoctorRefreshMojo.class, null, null);
+        return mojoMocker.mock(AsciidoctorRefreshMojo.class, null, null);
     }
 
-    @SneakyThrows
     public static AsciidoctorMojo mockAsciidoctorMojo() {
-        return mockAsciidoctorMojo(AsciidoctorMojo.class, null, null);
+        return mojoMocker.mock(AsciidoctorMojo.class, null, null);
     }
 
-    @SneakyThrows
     public static AsciidoctorHttpMojo mockAsciidoctorHttpMojo() {
-        return mockAsciidoctorMojo(AsciidoctorHttpMojo.class, null, null);
+        return mojoMocker.mock(AsciidoctorHttpMojo.class, null, null);
     }
 
-    @SneakyThrows
     public static AsciidoctorZipMojo mockAsciidoctorZipMojo() {
-        return mockAsciidoctorMojo(AsciidoctorZipMojo.class, null, null);
+        return mojoMocker.mock(AsciidoctorZipMojo.class, null, null);
     }
 
-    @SneakyThrows
     public static AsciidoctorMojo mockAsciidoctorMojo(Map<String, String> mavenProperties) {
-        return mockAsciidoctorMojo(AsciidoctorMojo.class, mavenProperties, null);
+        return mojoMocker.mock(AsciidoctorMojo.class, mavenProperties, null);
     }
 
-    @SneakyThrows
     public static AsciidoctorMojo mockAsciidoctorMojo(LogHandler logHandler) {
-        return mockAsciidoctorMojo(AsciidoctorMojo.class, null, logHandler);
-    }
-
-    @SneakyThrows
-    @SuppressWarnings("unchecked")
-    private static <T> T mockAsciidoctorMojo(Class<T> clazz, Map<String, String> mavenProperties, LogHandler logHandler) {
-        final MavenProject mavenProject = Mockito.mock(MavenProject.class);
-        when(mavenProject.getBasedir()).thenReturn(new File("."));
-        if (mavenProperties != null) {
-            final Properties properties = new Properties();
-            properties.putAll(mavenProperties);
-            when(mavenProject.getProperties()).thenReturn(properties);
-        }
-
-        final AsciidoctorMojo mojo = (AsciidoctorMojo) clazz.getConstructor(new Class[]{}).newInstance();
-        setVariableValueInObject(mojo, "log", new SystemStreamLog());
-        mojo.project = mavenProject;
-        if (logHandler != null)
-            setVariableValueInObject(mojo, "logHandler", logHandler);
-
-        return (T) mojo;
-    }
-
-    @SneakyThrows
-    public static String readAsString(File file) {
-        return IOUtils.toString(new FileReader(file));
-    }
-
-    @SneakyThrows
-    public static void writeToFile(File parent, String filename, String... lines) {
-        FileOutputStream fileOutputStream = new FileOutputStream(new File(parent, filename));
-        for (String line : lines) {
-            IOUtils.write(line, fileOutputStream, StandardCharsets.UTF_8);
-        }
+        return mojoMocker.mock(AsciidoctorMojo.class, null, logHandler);
     }
 
     public static class ResourceBuilder {
@@ -136,7 +96,7 @@ public class TestUtils {
     public static void assertEqualsStructure(File[] expected, File[] actual) {
 
         List<File> sanitizedExpected = Arrays.stream(expected)
-                .filter(TestUtils::isHidden)
+                .filter(TestUtils::isNotHidden)
                 .collect(Collectors.toList());
 
         List<String> expectedNames = sanitizedExpected.stream().map(File::getName).collect(Collectors.toList());
@@ -164,8 +124,8 @@ public class TestUtils {
         }
     }
 
-    private static boolean isHidden(File file) {
-        char firstChar = file.getName().charAt(0);
+    private static boolean isNotHidden(File file) {
+        final char firstChar = file.getName().charAt(0);
         return firstChar != '_' && firstChar != '.';
     }
 }

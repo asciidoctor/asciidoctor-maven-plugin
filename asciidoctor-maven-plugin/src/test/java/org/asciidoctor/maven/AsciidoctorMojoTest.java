@@ -10,17 +10,28 @@ import org.asciidoctor.maven.test.processors.RequireCheckerTreeprocessor;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static java.nio.file.Files.writeString;
 import static java.util.Collections.singletonList;
 import static org.asciidoctor.maven.AsciidoctorAsserter.assertThat;
-import static org.asciidoctor.maven.TestUtils.*;
-import static org.asciidoctor.maven.TestUtils.ResourceBuilder.excludeAll;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
+import static org.asciidoctor.maven.test.TestUtils.ResourceBuilder;
+import static org.asciidoctor.maven.test.TestUtils.ResourceBuilder.excludeAll;
+import static org.asciidoctor.maven.test.TestUtils.assertEqualsStructure;
+import static org.asciidoctor.maven.test.TestUtils.mockAsciidoctorMojo;
 
 
 class AsciidoctorMojoTest {
@@ -156,7 +167,6 @@ class AsciidoctorMojoTest {
         mojo.sourceDocumentName = "sample.asciidoc";
         mojo.resources = excludeAll();
         mojo.outputDirectory = outputDir;
-        mojo.standalone = true;
         mojo.attributes = Map.of("toc", "",
                 "linkcss!", "",
                 "source-highlighter", "coderay");
@@ -283,15 +293,16 @@ class AsciidoctorMojoTest {
     }
 
     @Test
-    void should_set_file_extension() throws MojoFailureException, MojoExecutionException {
+    void should_set_file_extension() throws MojoFailureException, MojoExecutionException, IOException {
         // given
         File outputDir = newOutputTestDirectory();
         Assertions.assertThat(outputDir).doesNotExist();
 
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         outputDir.mkdirs();
-        writeToFile(srcDir, "sample1.foo", "= Document Title\n\nfoo");
-        writeToFile(srcDir, "sample2.bar", "= Document Title\n\nbar");
+
+        writeString(Path.of(DEFAULT_SOURCE_DIRECTORY, "sample1.foo"), "= Document Title\n\nfoo");
+        writeString(Path.of(DEFAULT_SOURCE_DIRECTORY, "sample2.bar"), "= Document Title\n\nbar");
 
         // when
         AsciidoctorMojo mojo = mockAsciidoctorMojo();
@@ -795,7 +806,6 @@ class AsciidoctorMojoTest {
                 .contains("i class=\"fa icon-tip\"");
     }
 
-
     // issue-78
     @Test
     void should_embed_image_in_included_adoc() throws MojoFailureException, MojoExecutionException {
@@ -817,7 +827,7 @@ class AsciidoctorMojoTest {
         assertThat(outputDir, "main.html")
                 .contains("<p>Here&#8217;s an image:</p>")
                 .contains("<img src=\"data:image/jpg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/4gzESUNDX1BST0ZJTEUAAQEAAA");
-        assertThat(new File(outputDir, "halliburton_lab.jpg")).isNotEmpty();
+        Assertions.assertThat(new File(outputDir, "halliburton_lab.jpg")).isNotEmpty();
     }
 
     @Test

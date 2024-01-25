@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 import static org.asciidoctor.log.Severity.ERROR;
 import static org.asciidoctor.log.Severity.WARN;
-import static org.asciidoctor.maven.TestUtils.mockAsciidoctorMojo;
+import static org.asciidoctor.maven.test.TestUtils.mockAsciidoctorMojo;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;

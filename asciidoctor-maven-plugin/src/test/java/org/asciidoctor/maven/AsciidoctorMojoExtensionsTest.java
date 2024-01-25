@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import static java.util.Collections.singletonList;
-import static org.asciidoctor.maven.TestUtils.mockAsciidoctorMojo;
+import static org.asciidoctor.maven.test.TestUtils.mockAsciidoctorMojo;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 import static org.assertj.core.api.Assertions.assertThat;
 
