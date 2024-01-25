@@ -1,4 +1,4 @@
-package org.asciidoctor.maven;
+package org.asciidoctor.maven.test;
 
 import net.bytebuddy.description.annotation.AnnotationDescription;
 import net.bytebuddy.description.annotation.AnnotationValue;
@@ -12,7 +12,7 @@ import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
 
 /**
- *
+ * Initialize values for properties in class using {@link Parameter} annotation.
  */
 class ParametersInitializer {
 
@@ -22,7 +22,7 @@ class ParametersInitializer {
      * Returns instance of input class with fields initialized according to its
      * respective {@link org.apache.maven.plugins.annotations.Parameter}.
      */
-    public <T> T initialize(T instance) {
+    <T> T initialize(T instance) {
         try {
             // Use ByteBuddy because annotations is Class retention, not Runtime
             TypePool typePool = TypePool.Default.of(CLASS_LOADER);
@@ -42,19 +42,25 @@ class ParametersInitializer {
         for (FieldDescription field : declaredFields) {
             String value = getAnnotationByType(field);
             if (value != null) {
-                if (field.getType().getTypeName().equals(String.class.getName())) {
+                final String typeName = field.getType().getTypeName();
+                if (typeName.equals(String.class.getName())) {
                     if (value.length() > 0 && !value.startsWith("$")) {
                         // TODO support Maven variable: pass Map<String, Object> ?
                         setVariableValueInObject(instance, field.getName(), value);
                     }
                 }
-                if (field.getType().getTypeName().equals("boolean")) {
-                    // false is already the default
-                    // TODO for PR, the booleans default should appear in XML plugin descriptor now
+                if (typeName.equals("boolean")) {
                     if (value.equals("true")) {
                         setVariableValueInObject(instance, field.getName(), Boolean.TRUE);
                     } else if (!value.equals("false")) {
-                        throw new RuntimeException("Invalid boolean default: not-a-boolean");
+                        throw new RuntimeException("Invalid boolean default: " + value);
+                    }
+                }
+                if (typeName.equals("int")) {
+                    try {
+                        setVariableValueInObject(instance, field.getName(), Integer.valueOf(value));
+                    } catch (Exception e) {
+                        throw new RuntimeException("Invalid boolean default: " + value);
                     }
                 }
                 // TODO

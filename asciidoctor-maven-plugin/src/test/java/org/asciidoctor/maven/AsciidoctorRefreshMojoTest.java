@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.asciidoctor.maven.TestUtils.ResourceBuilder;
+import org.asciidoctor.maven.test.TestUtils.ResourceBuilder;
 import org.asciidoctor.maven.io.ConsoleHolder;
 import org.asciidoctor.maven.model.Resource;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.asciidoctor.maven.TestUtils.newFakeRefreshMojo;
+import static org.asciidoctor.maven.test.TestUtils.newFakeRefreshMojo;
 import static org.asciidoctor.maven.io.TestFilesHelper.createFileWithContent;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 import static org.assertj.core.api.Assertions.assertThat;

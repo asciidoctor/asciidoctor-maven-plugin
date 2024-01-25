@@ -1,19 +1,22 @@
 package org.asciidoctor.maven;
 
+import lombok.SneakyThrows;
 import org.assertj.core.api.AbstractFileAssert;
 import org.assertj.core.api.AbstractStringAssert;
 import org.assertj.core.api.Assertions;
 
 import java.io.File;
+import java.nio.file.Files;
 
 public class AsciidoctorAsserter {
 
     private final AbstractFileAssert<?> fileAssert;
     private final AbstractStringAssert<?> contentAssert;
 
+    @SneakyThrows
     private AsciidoctorAsserter(File generatedFile) {
         this.fileAssert = Assertions.assertThat(generatedFile);
-        this.contentAssert = Assertions.assertThat(TestUtils.readAsString(generatedFile));
+        this.contentAssert = Assertions.assertThat(Files.readString(generatedFile.toPath()));
     }
 
     public static AsciidoctorAsserter assertThat(File file) {

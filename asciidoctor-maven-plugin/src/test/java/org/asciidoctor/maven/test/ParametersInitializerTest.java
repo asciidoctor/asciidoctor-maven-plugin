@@ -1,4 +1,4 @@
-package org.asciidoctor.maven;
+package org.asciidoctor.maven.test;
 
 import org.apache.maven.plugins.annotations.Parameter;
 import org.junit.jupiter.api.Nested;
@@ -36,6 +36,13 @@ class ParametersInitializerTest {
         }
 
         @Test
+        void int_with_default_value() {
+            final var instance = new IntExampleMojo();
+            var initialized = initializer.initialize(instance);
+            assertThat(initialized.defaultValue).isEqualTo(1243);
+        }
+
+        @Test
         void properties_in_class_and_parent() {
             final var instance = new SubclassExampleMojo();
             var initialized = initializer.initialize(instance);
@@ -61,17 +68,34 @@ class ParametersInitializerTest {
             var initialized = initializer.initialize(instance);
             assertThat(initialized.nonDefaultValue).isFalse();
         }
+
+        @Test
+        void int_without_default_value() {
+            final var instance = new IntExampleMojo();
+            var initialized = initializer.initialize(instance);
+            assertThat(initialized.nonDefaultValue).isEqualTo(0);
+        }
     }
 
     @Nested
     class ShouldFail {
+
         @Test
         void boolean_with_invalid_value() {
-            final var instance = new FailingExampleMojo();
+            final var instance = new FailingBooleanExampleMojo();
             Throwable t = catchThrowable(() -> initializer.initialize(instance));
 
             assertThat(t).isInstanceOf(RuntimeException.class)
                     .hasMessage("Invalid boolean default: not-a-boolean");
+        }
+
+        @Test
+        void int_with_invalid_value() {
+            final var instance = new FailingIntExampleMojo();
+            Throwable t = catchThrowable(() -> initializer.initialize(instance));
+
+            assertThat(t).isInstanceOf(RuntimeException.class)
+                    .hasMessage("Invalid boolean default: not-an-int");
         }
     }
 
@@ -109,10 +133,25 @@ class ParametersInitializerTest {
         private boolean nonDefaultValue;
     }
 
-    class FailingExampleMojo {
+    class IntExampleMojo {
+
+        @Parameter(defaultValue = "1243")
+        private int defaultValue;
+
+        @Parameter
+        private int nonDefaultValue;
+    }
+
+    class FailingBooleanExampleMojo {
 
         @Parameter(defaultValue = "not-a-boolean")
         private boolean invalidValue;
+    }
+
+    class FailingIntExampleMojo {
+
+        @Parameter(defaultValue = "not-an-int")
+        private int invalidValue;
     }
 
     class SubclassExampleMojo extends StringExampleMojo {

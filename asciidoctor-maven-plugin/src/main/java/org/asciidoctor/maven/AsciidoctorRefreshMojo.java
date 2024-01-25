@@ -11,22 +11,32 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.asciidoctor.maven.refresh.*;
+import org.asciidoctor.maven.refresh.AdditionalSourceFileAlterationListenerAdaptor;
+import org.asciidoctor.maven.refresh.AsciidoctorConverterFileAlterationListenerAdaptor;
+import org.asciidoctor.maven.refresh.ResourceCopyFileAlterationListenerAdaptor;
+import org.asciidoctor.maven.refresh.ResourcesPatternBuilder;
+import org.asciidoctor.maven.refresh.TimeCounter;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Scanner;
+import java.util.StringJoiner;
 
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
-import static org.asciidoctor.maven.process.SourceDocumentFinder.*;
+import static org.asciidoctor.maven.process.SourceDocumentFinder.CUSTOM_FILE_EXTENSIONS_PATTERN_PREFIX;
+import static org.asciidoctor.maven.process.SourceDocumentFinder.CUSTOM_FILE_EXTENSIONS_PATTERN_SUFFIX;
+import static org.asciidoctor.maven.process.SourceDocumentFinder.STANDARD_FILE_EXTENSIONS_PATTERN;
 
 @Mojo(name = "auto-refresh")
 public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
 
     public static final String PREFIX = AsciidoctorMaven.PREFIX + "refresher.";
 
-    @Parameter(property = PREFIX + "interval")
-    protected int interval = 2000; // 2s
+    @Parameter(property = PREFIX + "interval", defaultValue = "2000")
+    protected int interval;
 
     @Parameter(property = PREFIX + "refreshOn")
     protected String refreshOn;

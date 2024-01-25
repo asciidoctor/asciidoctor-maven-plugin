@@ -17,7 +17,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.asciidoctor.maven.TestUtils.mockAsciidoctorZipMojo;
+import static org.asciidoctor.maven.test.TestUtils.mockAsciidoctorZipMojo;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
