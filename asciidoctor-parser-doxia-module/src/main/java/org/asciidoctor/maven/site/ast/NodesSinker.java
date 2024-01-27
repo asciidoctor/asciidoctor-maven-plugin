@@ -8,6 +8,7 @@ import org.asciidoctor.maven.site.ast.processors.ListItemNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.ListingNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.LiteralNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.OrderedListNodeProcessor;
+import org.asciidoctor.maven.site.ast.processors.ParagraphNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.PreambleNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.SectionNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.TableNodeProcessor;
@@ -49,6 +50,7 @@ public class NodesSinker {
                 new ImageNodeProcessor(sink),
                 new ListingNodeProcessor(sink),
                 new LiteralNodeProcessor(sink),
+                new ParagraphNodeProcessor(sink),
                 new PreambleNodeProcessor(sink),
                 new SectionNodeProcessor(sink),
                 new TableNodeProcessor(sink),

@@ -32,12 +32,41 @@ new HtmlAsserter(htmlContent).with { asserter ->
     asserter.containsSectionTitle("Code blocks", 3)
 
     asserter.containsSectionTitle("Lists", 3)
+
+    asserter.containsSectionTitle("Unordered list", 4)
     asserter.containsUnorderedList("Apples", "Oranges", "Walnuts", "Almonds")
+
+    asserter.containsSectionTitle("Unordered list with formatting", 4)
+    asserter.containsUnorderedList(strong("Apples"), italics("Oranges"), subscript("Walnuts"), monospace("Almonds"), htmlLink('https://some-link.here', 'link'))
 
     asserter.containsSectionTitle("Ordered list", 4)
     asserter.containsOrderedList("Protons", "Electrons", "Neutrons")
+
 }
 
+String strong(String text) {
+    return htmlElement('strong', text)
+}
+
+String italics(String text) {
+    return htmlElement('em', text)
+}
+
+String subscript(String text) {
+    return htmlElement('sub', text)
+}
+
+String monospace(String text) {
+    return htmlElement('code', text)
+}
+
+String htmlLink(String url, String label) {
+    return "<a href=\"${url}\">${label}</a>"
+}
+
+String htmlElement(String element, String text) {
+    return "<${element}>${text}</${element}>"
+}
 
 for (String unexpectedFile : unexpectedFiles) {
     File candidate = new File(outputDir, unexpectedFile)
