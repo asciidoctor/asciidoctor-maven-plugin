@@ -1,10 +1,10 @@
 package org.asciidoctor.maven.site.ast.processors;
 
+import java.nio.file.FileSystems;
+
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.ast.NodeProcessor;
-
-import java.nio.file.FileSystems;
 
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 

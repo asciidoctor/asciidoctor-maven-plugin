@@ -1,5 +1,14 @@
 package org.asciidoctor.maven.site;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.AttributesBuilder;
 import org.asciidoctor.Options;
@@ -7,11 +16,6 @@ import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.maven.commons.AsciidoctorHelper;
 import org.asciidoctor.maven.commons.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
-
-import java.io.File;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 

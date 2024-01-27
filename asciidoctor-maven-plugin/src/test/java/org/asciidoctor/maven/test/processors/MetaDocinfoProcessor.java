@@ -1,9 +1,9 @@
 package org.asciidoctor.maven.test.processors;
 
+import java.util.Map;
+
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.DocinfoProcessor;
-
-import java.util.Map;
 
 public class MetaDocinfoProcessor extends DocinfoProcessor {
 

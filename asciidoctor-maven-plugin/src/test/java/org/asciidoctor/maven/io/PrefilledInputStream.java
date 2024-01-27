@@ -1,9 +1,9 @@
 package org.asciidoctor.maven.io;
 
-import lombok.SneakyThrows;
-
 import java.io.ByteArrayInputStream;
 import java.util.concurrent.CountDownLatch;
+
+import lombok.SneakyThrows;
 
 public class PrefilledInputStream extends ByteArrayInputStream {
 

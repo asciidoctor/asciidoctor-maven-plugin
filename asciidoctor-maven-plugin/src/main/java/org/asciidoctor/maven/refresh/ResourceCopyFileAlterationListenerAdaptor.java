@@ -1,16 +1,16 @@
 package org.asciidoctor.maven.refresh;
 
-import org.apache.maven.plugin.logging.Log;
-import org.asciidoctor.maven.AsciidoctorRefreshMojo;
-import org.asciidoctor.maven.model.Resource;
-import org.codehaus.plexus.util.DirectoryScanner;
-import org.codehaus.plexus.util.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.apache.maven.plugin.logging.Log;
+import org.asciidoctor.maven.AsciidoctorRefreshMojo;
+import org.asciidoctor.maven.model.Resource;
+import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.FileUtils;
 
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 

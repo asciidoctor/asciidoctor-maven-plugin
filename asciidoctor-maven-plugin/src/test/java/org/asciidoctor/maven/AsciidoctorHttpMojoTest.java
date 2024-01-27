@@ -1,5 +1,13 @@
 package org.asciidoctor.maven;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.ServerSocket;
+import java.net.URL;
+
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -8,14 +16,6 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.asciidoctor.maven.io.TestFilesHelper;
 import org.asciidoctor.maven.io.UserInputSimulator;
 import org.junit.jupiter.api.Test;
-
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.ServerSocket;
-import java.net.URL;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.asciidoctor.maven.test.TestUtils.mockAsciidoctorHttpMojo;

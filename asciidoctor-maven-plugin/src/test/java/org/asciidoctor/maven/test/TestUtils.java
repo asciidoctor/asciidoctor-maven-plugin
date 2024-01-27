@@ -1,18 +1,18 @@
 package org.asciidoctor.maven.test;
 
-import org.asciidoctor.maven.AsciidoctorHttpMojo;
-import org.asciidoctor.maven.AsciidoctorMojo;
-import org.asciidoctor.maven.AsciidoctorRefreshMojo;
-import org.asciidoctor.maven.AsciidoctorZipMojo;
-import org.asciidoctor.maven.log.LogHandler;
-import org.asciidoctor.maven.model.Resource;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.asciidoctor.maven.AsciidoctorHttpMojo;
+import org.asciidoctor.maven.AsciidoctorMojo;
+import org.asciidoctor.maven.AsciidoctorRefreshMojo;
+import org.asciidoctor.maven.AsciidoctorZipMojo;
+import org.asciidoctor.maven.log.LogHandler;
+import org.asciidoctor.maven.model.Resource;
 
 import static java.util.Collections.singletonList;
 import static org.asciidoctor.maven.process.SourceDocumentFinder.STANDARD_FILE_EXTENSIONS_PATTERN;

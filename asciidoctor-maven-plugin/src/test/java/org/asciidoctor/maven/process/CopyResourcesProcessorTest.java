@@ -1,18 +1,18 @@
 package org.asciidoctor.maven.process;
 
-import org.apache.commons.io.FileUtils;
-import org.asciidoctor.maven.AsciidoctorMojo;
-import org.asciidoctor.maven.test.TestUtils.ResourceBuilder;
-import org.asciidoctor.maven.model.Resource;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
+import org.apache.commons.io.FileUtils;
+import org.asciidoctor.maven.AsciidoctorMojo;
+import org.asciidoctor.maven.model.Resource;
+import org.asciidoctor.maven.test.TestUtils.ResourceBuilder;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import static org.asciidoctor.maven.io.TestFilesHelper.createFileWithContent;
 import static org.asciidoctor.maven.process.CopyResourcesProcessor.IGNORED_FILE_NAMES;

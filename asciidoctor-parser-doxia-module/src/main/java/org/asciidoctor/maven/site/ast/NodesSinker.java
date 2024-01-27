@@ -1,5 +1,9 @@
 package org.asciidoctor.maven.site.ast;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.ast.processors.DocumentNodeProcessor;
@@ -13,10 +17,6 @@ import org.asciidoctor.maven.site.ast.processors.PreambleNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.SectionNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.TableNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.UnorderedListNodeProcessor;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Document processor.

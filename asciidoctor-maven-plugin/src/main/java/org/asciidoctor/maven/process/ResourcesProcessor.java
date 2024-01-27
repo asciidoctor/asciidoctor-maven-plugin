@@ -1,8 +1,8 @@
 package org.asciidoctor.maven.process;
 
-import org.asciidoctor.maven.AsciidoctorMojo;
-
 import java.io.File;
+
+import org.asciidoctor.maven.AsciidoctorMojo;
 
 public interface ResourcesProcessor {
 

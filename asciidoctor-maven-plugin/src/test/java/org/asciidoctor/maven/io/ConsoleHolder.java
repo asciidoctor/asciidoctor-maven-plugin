@@ -1,10 +1,10 @@
 package org.asciidoctor.maven.io;
 
-import lombok.SneakyThrows;
-
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
+
+import lombok.SneakyThrows;
 
 
 /**

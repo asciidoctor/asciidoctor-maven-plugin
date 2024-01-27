@@ -1,5 +1,11 @@
 package org.asciidoctor.maven.site.ast.processors;
 
+import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.StructuralNode;
@@ -7,14 +13,11 @@ import org.asciidoctor.maven.site.ast.NodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.test.NodeProcessorTest;
 import org.junit.jupiter.api.Test;
 
-import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static java.util.Collections.emptyList;
-import static org.asciidoctor.maven.site.ast.processors.TableNodeProcessorTest.DocumentBuilder.CaptionOptions.*;
+import static org.asciidoctor.maven.site.ast.processors.TableNodeProcessorTest.DocumentBuilder.CaptionOptions.disableLabelForTable;
+import static org.asciidoctor.maven.site.ast.processors.TableNodeProcessorTest.DocumentBuilder.CaptionOptions.disableLabelsGlobally;
+import static org.asciidoctor.maven.site.ast.processors.TableNodeProcessorTest.DocumentBuilder.CaptionOptions.noCaption;
+import static org.asciidoctor.maven.site.ast.processors.TableNodeProcessorTest.DocumentBuilder.CaptionOptions.simpleCaption;
 import static org.asciidoctor.maven.site.ast.processors.TableNodeProcessorTest.DocumentBuilder.documentWithTable;
 import static org.asciidoctor.maven.site.ast.processors.test.StringTestUtils.clean;
 import static org.assertj.core.api.Assertions.assertThat;

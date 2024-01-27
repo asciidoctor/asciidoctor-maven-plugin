@@ -1,5 +1,13 @@
 package org.asciidoctor.maven;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Scanner;
+import java.util.StringJoiner;
+
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.NameFileFilter;
@@ -16,14 +24,6 @@ import org.asciidoctor.maven.refresh.AsciidoctorConverterFileAlterationListenerA
 import org.asciidoctor.maven.refresh.ResourceCopyFileAlterationListenerAdaptor;
 import org.asciidoctor.maven.refresh.ResourcesPatternBuilder;
 import org.asciidoctor.maven.refresh.TimeCounter;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Scanner;
-import java.util.StringJoiner;
 
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 import static org.asciidoctor.maven.process.SourceDocumentFinder.CUSTOM_FILE_EXTENSIONS_PATTERN_PREFIX;

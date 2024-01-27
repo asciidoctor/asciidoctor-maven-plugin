@@ -1,14 +1,5 @@
 package org.asciidoctor.maven;
 
-import lombok.SneakyThrows;
-import org.apache.commons.io.FileUtils;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.asciidoctor.maven.test.TestUtils.ResourceBuilder;
-import org.asciidoctor.maven.io.ConsoleHolder;
-import org.asciidoctor.maven.model.Resource;
-import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,10 +9,19 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.asciidoctor.maven.io.ConsoleHolder;
+import org.asciidoctor.maven.model.Resource;
+import org.asciidoctor.maven.test.TestUtils.ResourceBuilder;
+import org.junit.jupiter.api.Test;
+
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.asciidoctor.maven.test.TestUtils.newFakeRefreshMojo;
 import static org.asciidoctor.maven.io.TestFilesHelper.createFileWithContent;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
+import static org.asciidoctor.maven.test.TestUtils.newFakeRefreshMojo;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AsciidoctorRefreshMojoTest {
@@ -113,10 +113,10 @@ class AsciidoctorRefreshMojoTest {
         final File target = new File(outputDir, sourceFile.getName().replace(fileExtension, "html"));
         consoleHolder.awaitProcessingAllSources();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .contains("This is test, only a test");
+            .contains("This is test, only a test");
         final File ignoredTarget = new File(outputDir, ignoredFile.getName().replace(fileExtension, "html"));
         assertThat(ignoredTarget)
-                .doesNotExist();
+            .doesNotExist();
 
         // and when
         FileUtils.write(sourceFile, "= Document Title\n\nWow, this will be auto refreshed !", UTF_8);
@@ -124,9 +124,9 @@ class AsciidoctorRefreshMojoTest {
         // then
         consoleHolder.awaitProcessingSource();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .contains("Wow, this will be auto refreshed");
+            .contains("Wow, this will be auto refreshed");
         assertThat(ignoredTarget)
-                .doesNotExist();
+            .doesNotExist();
         assertFilesNotPresentInOutput(docInfoFiles, outputDir);
 
         // cleanup
@@ -160,7 +160,7 @@ class AsciidoctorRefreshMojoTest {
         final File target = new File(outputDir, sourceFile.getName().replace(customFileExtension, "html"));
         consoleHolder.awaitProcessingAllSources();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .contains("This is test, only a test");
+            .contains("This is test, only a test");
 
         // and when
         FileUtils.write(sourceFile, "= Document Title\n\nWow, this will be auto refreshed !", UTF_8);
@@ -168,7 +168,7 @@ class AsciidoctorRefreshMojoTest {
         // then
         consoleHolder.awaitProcessingSource();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .contains("Wow, this will be auto refreshed");
+            .contains("Wow, this will be auto refreshed");
         assertFilesNotPresentInOutput(docInfoFiles, outputDir);
 
         // cleanup
@@ -196,7 +196,7 @@ class AsciidoctorRefreshMojoTest {
         final File target = new File(outputDir, sourceFile.getName().replace(".asciidoc", ".html"));
         consoleHolder.awaitProcessingAllSources();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .contains("This is test, only a test");
+            .contains("This is test, only a test");
 
         // and when
         FileUtils.write(sourceFile, "= Document Title\n\nWow, this will be auto refreshed !", UTF_8);
@@ -204,7 +204,7 @@ class AsciidoctorRefreshMojoTest {
         // then
         consoleHolder.awaitProcessingSource();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .contains("Wow, this will be auto refreshed");
+            .contains("Wow, this will be auto refreshed");
         assertFilesNotPresentInOutput(docInfoFiles, outputDir);
 
         // cleanup
@@ -232,7 +232,7 @@ class AsciidoctorRefreshMojoTest {
         File target = new File(outputDir, sourceFile.getName().replace(".asciidoc", ".html"));
         consoleHolder.awaitProcessingAllSources();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .contains("This is test, only a test");
+            .contains("This is test, only a test");
 
         // and when
         FileUtils.write(sourceFile, "= Document Title\n\nWow, this will be auto refreshed !", UTF_8);
@@ -240,7 +240,7 @@ class AsciidoctorRefreshMojoTest {
         // then
         consoleHolder.awaitProcessingSource();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .contains("Wow, this will be auto refreshed");
+            .contains("Wow, this will be auto refreshed");
         assertFilesNotPresentInOutput(docInfoFiles, outputDir);
 
         // cleanup
@@ -268,7 +268,7 @@ class AsciidoctorRefreshMojoTest {
         File target = new File(outputDir, sourceFile.getName().replace(".asciidoc", ".html"));
         consoleHolder.awaitProcessingAllSources();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .contains("This is test, only a test");
+            .contains("This is test, only a test");
 
         // and when
         final File newSourceFile = new File(new File(srcDir, "sub-dir1/sub_dir2"), "sourceFile-2.asciidoc");
@@ -278,9 +278,9 @@ class AsciidoctorRefreshMojoTest {
         File newTarget = new File(outputDir, newSourceFile.getName().replace(".asciidoc", ".html"));
         consoleHolder.awaitProcessingSource();
         assertThat(FileUtils.readFileToString(newTarget, UTF_8))
-                .contains("Wow, this is NEW!!");
+            .contains("Wow, this is NEW!!");
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .contains("This is test, only a test");
+            .contains("This is test, only a test");
         assertFilesNotPresentInOutput(docInfoFiles, outputDir);
 
         // cleanup
@@ -308,7 +308,7 @@ class AsciidoctorRefreshMojoTest {
         final File target = new File(outputDir, resourceFile.getName());
         consoleHolder.awaitProcessingAllSources();
         assertThat(target)
-                .doesNotExist();
+            .doesNotExist();
 
         // and when
         FileUtils.write(resourceFile, "Supposedly image content UPDATED!", UTF_8);
@@ -316,7 +316,7 @@ class AsciidoctorRefreshMojoTest {
         // then
         consoleHolder.awaitProcessingResource();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .isEqualTo("Supposedly image content UPDATED!");
+            .isEqualTo("Supposedly image content UPDATED!");
         assertFilesNotPresentInOutput(docInfoFiles, outputDir);
 
         // cleanup
@@ -336,17 +336,17 @@ class AsciidoctorRefreshMojoTest {
         // when
         final File sourceFile = new File(srcDir, "sourceFile.adoc");
         String sourceContent = new StringBuilder()
-                .append("= Document Title\n\n")
-                .append("This is test, only a test.\n\n")
-                .append("== Included\n\n")
-                .append("include::included.txt[]")
-                .toString();
+            .append("= Document Title\n\n")
+            .append("This is test, only a test.\n\n")
+            .append("== Included\n\n")
+            .append("include::included.txt[]")
+            .toString();
         FileUtils.write(sourceFile, sourceContent, UTF_8);
 
         final File includedFile = new File(srcDir, "included.txt");
         String includedContent = new StringBuilder()
-                .append("Original included content")
-                .toString();
+            .append("Original included content")
+            .toString();
         FileUtils.write(includedFile, includedContent, UTF_8);
 
         // when
@@ -364,9 +364,9 @@ class AsciidoctorRefreshMojoTest {
         final File target = new File(outputDir, "sourceFile.html");
         consoleHolder.awaitProcessingAllSources();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .contains("Original included content");
+            .contains("Original included content");
         assertThat(includedContent)
-                .isNotEmpty();
+            .isNotEmpty();
 
         // and when
         FileUtils.write(includedFile, "Included content UPDATED!", UTF_8);
@@ -374,9 +374,9 @@ class AsciidoctorRefreshMojoTest {
         // then
         consoleHolder.awaitProcessingResource();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .contains("Included content UPDATED!");
+            .contains("Included content UPDATED!");
         assertThat(includedContent)
-                .isNotEmpty();
+            .isNotEmpty();
 
         // cleanup
         consoleHolder.input("exit");
@@ -394,7 +394,7 @@ class AsciidoctorRefreshMojoTest {
         final List<File> docInfoFiles = createDocInfoFiles(srcDir);
 
         FileUtils.write(new File(srcDir, "sourceFile.asciidoc"),
-                "= Document Title\n\nThis is test, only a test.", UTF_8);
+            "= Document Title\n\nThis is test, only a test.", UTF_8);
         final String resourceFileExtension = "jpg";
         final File resourceFile = new File(srcDir, "fakeImage." + resourceFileExtension);
 
@@ -406,7 +406,7 @@ class AsciidoctorRefreshMojoTest {
         final File target = new File(outputDir, resourceFile.getName());
         consoleHolder.awaitProcessingAllSources();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .isEqualTo("Supposedly image content");
+            .isEqualTo("Supposedly image content");
 
         // and when
         FileUtils.write(resourceFile, "Supposedly image content UPDATED!", UTF_8);
@@ -414,7 +414,7 @@ class AsciidoctorRefreshMojoTest {
         // then
         consoleHolder.awaitProcessingResource();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .isEqualTo("Supposedly image content UPDATED!");
+            .isEqualTo("Supposedly image content UPDATED!");
         assertFilesNotPresentInOutput(docInfoFiles, outputDir);
 
         // cleanup
@@ -433,7 +433,7 @@ class AsciidoctorRefreshMojoTest {
         final List<File> docInfoFiles = createDocInfoFiles(srcDir);
 
         FileUtils.write(new File(srcDir, "sourceFile.asciidoc"),
-                "= Document Title\n\nThis is test, only a test.", UTF_8);
+            "= Document Title\n\nThis is test, only a test.", UTF_8);
         final File subDirectory = new File(srcDir, "sub-dir1/sub_dir2");
         final String resourceFileExtension = "jpg";
         final File resourceFile = new File(subDirectory, "fakeImage." + resourceFileExtension);
@@ -446,7 +446,7 @@ class AsciidoctorRefreshMojoTest {
         final File target = new File(subDirectory, resourceFile.getName());
         consoleHolder.awaitProcessingAllSources();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .isEqualTo("Supposedly image content");
+            .isEqualTo("Supposedly image content");
 
         // and when
         FileUtils.write(resourceFile, "Supposedly image content UPDATED!", UTF_8);
@@ -454,7 +454,7 @@ class AsciidoctorRefreshMojoTest {
         // then
         consoleHolder.awaitProcessingResource();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .isEqualTo("Supposedly image content UPDATED!");
+            .isEqualTo("Supposedly image content UPDATED!");
         assertFilesNotPresentInOutput(docInfoFiles, outputDir);
 
         // cleanup
@@ -473,7 +473,7 @@ class AsciidoctorRefreshMojoTest {
         final List<File> docInfoFiles = createDocInfoFiles(srcDir);
 
         FileUtils.write(new File(srcDir, "sourceFile.asciidoc"),
-                "= Document Title\n\nThis is test, only a test.", UTF_8);
+            "= Document Title\n\nThis is test, only a test.", UTF_8);
         final String subDirPath = "sub-dir1/sub_dir2";
         final File subDirectory = new File(srcDir, subDirPath);
         final String resourceFileExtension = "jpg";
@@ -487,17 +487,17 @@ class AsciidoctorRefreshMojoTest {
             mojo.sourceDirectory = srcDir;
             mojo.outputDirectory = outputDir;
             mojo.resources = Arrays.asList(new ResourceBuilder()
-                    .directory(subDirectory.getAbsolutePath())
-                    .includes("**/*.jpg", "**/*.gif")
-                    .targetPath(String.join(File.separator, subDirPath, customOutput))
-                    .build());
+                .directory(subDirectory.getAbsolutePath())
+                .includes("**/*.jpg", "**/*.gif")
+                .targetPath(String.join(File.separator, subDirPath, customOutput))
+                .build());
         });
 
         // then
         final File target = new File(outputDir, String.join(File.separator, subDirPath, customOutput, resourceFile.getName()));
         consoleHolder.awaitProcessingAllSources();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .isEqualTo("Supposedly image content");
+            .isEqualTo("Supposedly image content");
 
         // and when
         FileUtils.write(resourceFile, "Supposedly image content UPDATED!", UTF_8);
@@ -505,9 +505,9 @@ class AsciidoctorRefreshMojoTest {
         // then
         consoleHolder.awaitProcessingResource();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .isEqualTo("Supposedly image content UPDATED!");
+            .isEqualTo("Supposedly image content UPDATED!");
         assertThat(new File(outputDir, resourceFile.getName()))
-                .doesNotExist();
+            .doesNotExist();
         assertFilesNotPresentInOutput(docInfoFiles, outputDir);
 
         // cleanup
@@ -526,7 +526,7 @@ class AsciidoctorRefreshMojoTest {
         final List<File> docInfoFiles = createDocInfoFiles(srcDir);
 
         FileUtils.write(new File(srcDir, "sourceFile.asciidoc"),
-                "= Document Title\n\nThis is test, only a test.", UTF_8);
+            "= Document Title\n\nThis is test, only a test.", UTF_8);
         final String subDirPath = "sub-dir1/sub_dir2";
         final File subDirectory = new File(srcDir, subDirPath);
         final String resourceFileExtension = "jpg";
@@ -551,7 +551,7 @@ class AsciidoctorRefreshMojoTest {
         final File target = new File(outputDir, resourceFile.getName());
         consoleHolder.awaitProcessingAllSources();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .isEqualTo("Supposedly image content");
+            .isEqualTo("Supposedly image content");
 
         // and when
         FileUtils.write(resourceFile, "Supposedly image content UPDATED!", UTF_8);
@@ -559,7 +559,7 @@ class AsciidoctorRefreshMojoTest {
         // then
         consoleHolder.awaitProcessingResource();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .isEqualTo("Supposedly image content UPDATED!");
+            .isEqualTo("Supposedly image content UPDATED!");
         assertFilesNotPresentInOutput(docInfoFiles, outputDir);
 
         // cleanup
@@ -593,15 +593,15 @@ class AsciidoctorRefreshMojoTest {
         consoleHolder.awaitProcessingAllSources();
         final File targetSource = new File(outputDir, sourceFile.getName().replace("adoc", "html"));
         assertThat(targetSource)
-                .doesNotExist();
+            .doesNotExist();
         final File targetResource1 = new File(outputDir, resourceFile1.getName().replace("jpg", "html"));
         assertThat(FileUtils.readFileToString(targetResource1, UTF_8))
-                .contains("This is reality a Adoc source with jpg extension");
+            .contains("This is reality a Adoc source with jpg extension");
         assertThat(new File(outputDir, resourceFile1.getName()))
-                .doesNotExist();
+            .doesNotExist();
         final File targetResource2 = new File(outputDir, resourceFile2.getName());
         assertThat(targetResource2)
-                .exists();
+            .exists();
 
         // and when
         FileUtils.write(resourceFile1, "= Not an image\n\nWow, this will be auto refreshed !", UTF_8);
@@ -609,13 +609,13 @@ class AsciidoctorRefreshMojoTest {
         // then: custom file extensions is processed as source
         consoleHolder.awaitProcessingSource();
         assertThat(FileUtils.readFileToString(targetResource1, UTF_8))
-                .contains("Wow, this will be auto refreshed");
+            .contains("Wow, this will be auto refreshed");
         assertThat(new File(outputDir, resourceFile1.getName()))
-                .doesNotExist();
+            .doesNotExist();
         assertThat(targetResource2)
-                .exists();
+            .exists();
         assertThat(targetSource)
-                .doesNotExist();
+            .doesNotExist();
         assertFilesNotPresentInOutput(docInfoFiles, outputDir);
 
         // cleanup
@@ -653,15 +653,15 @@ class AsciidoctorRefreshMojoTest {
         consoleHolder.awaitProcessingAllSources();
         final File targetSource = new File(outputDir, sourceFile.getName().replace("adoc", "html"));
         assertThat(targetSource)
-                .doesNotExist();
+            .doesNotExist();
         final File targetResource1 = new File(outputDir, resourceFile1.getName().replace("jpg", "html"));
         assertThat(FileUtils.readFileToString(targetResource1, UTF_8))
-                .contains("This is reality a Adoc source with jpg extension");
+            .contains("This is reality a Adoc source with jpg extension");
         assertThat(new File(outputDir, resourceFile1.getName()))
-                .doesNotExist();
+            .doesNotExist();
         final File targetResource2 = new File(outputDir, resourceFile2.getName());
         assertThat(targetResource2)
-                .exists();
+            .exists();
 
         // and when
         FileUtils.write(resourceFile1, "= Not an image\n\nWow, this will be auto refreshed !", UTF_8);
@@ -669,13 +669,13 @@ class AsciidoctorRefreshMojoTest {
         // then: custom file extensions is processed as source
         consoleHolder.awaitProcessingSource();
         assertThat(FileUtils.readFileToString(targetResource1, UTF_8))
-                .contains("Wow, this will be auto refreshed");
+            .contains("Wow, this will be auto refreshed");
         assertThat(new File(outputDir, resourceFile1.getName()))
-                .doesNotExist();
+            .doesNotExist();
         assertThat(targetResource2)
-                .exists();
+            .exists();
         assertThat(targetSource)
-                .doesNotExist();
+            .doesNotExist();
         assertFilesNotPresentInOutput(docInfoFiles, outputDir);
 
         // cleanup
@@ -694,7 +694,7 @@ class AsciidoctorRefreshMojoTest {
 
         final List<File> docInfoFiles = createDocInfoFiles(srcDir);
         FileUtils.write(new File(srcDir, "sourceFile.asciidoc"),
-                "= Document Title\n\nThis is test, only a test.", UTF_8);
+            "= Document Title\n\nThis is test, only a test.", UTF_8);
         final File subDirectory = new File(srcDir, "sub-dir1/sub_dir2");
         final File resourceFile = new File(subDirectory, "fakeImage.jpg");
 
@@ -706,7 +706,7 @@ class AsciidoctorRefreshMojoTest {
         final File target = new File(subDirectory, resourceFile.getName());
         consoleHolder.awaitProcessingAllSources();
         assertThat(FileUtils.readFileToString(target, UTF_8))
-                .isEqualTo("Supposedly image content");
+            .isEqualTo("Supposedly image content");
 
         // and when
         final File newResourceFile = new File(subDirectory, "fakeImage-2.jpg");
@@ -715,9 +715,9 @@ class AsciidoctorRefreshMojoTest {
         // then
         consoleHolder.awaitProcessingResource();
         assertThat(FileUtils.readFileToString(newResourceFile, UTF_8))
-                .isEqualTo("Supposedly NEW image content!!");
+            .isEqualTo("Supposedly NEW image content!!");
         assertThat(resourceFile)
-                .exists();
+            .exists();
         assertFilesNotPresentInOutput(docInfoFiles, outputDir);
 
         // cleanup
@@ -791,17 +791,17 @@ class AsciidoctorRefreshMojoTest {
 
     private List<File> createDocInfoFiles(final File srcDir) {
         return Arrays.asList("docinfo.html", "docinfo-header.html", "my-docinfo-header.xml")
-                .stream()
-                .map(filename -> createFileWithContent(srcDir, filename))
-                .collect(Collectors.toList());
+            .stream()
+            .map(filename -> createFileWithContent(srcDir, filename))
+            .collect(Collectors.toList());
     }
 
     private void assertFilesNotPresentInOutput(final List<File> files, final File outputDir) {
         assertThat(files
-                .stream()
-                .map(file -> new File(outputDir, file.getName()))
-                .collect(Collectors.toList()))
-                .allMatch(file -> !file.exists());
+            .stream()
+            .map(file -> new File(outputDir, file.getName()))
+            .collect(Collectors.toList()))
+            .allMatch(file -> !file.exists());
     }
 
 }

@@ -1,10 +1,10 @@
 package org.asciidoctor.maven.test;
 
+import java.util.Map;
+
 import org.asciidoctor.maven.AsciidoctorMojo;
 import org.asciidoctor.maven.log.LogHandler;
 import org.junit.jupiter.api.Test;
-
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -1,14 +1,14 @@
 package org.asciidoctor.maven.site.ast.processors;
 
+import java.io.StringWriter;
+import java.util.Collections;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.ast.NodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.test.NodeProcessorTest;
 import org.junit.jupiter.api.Test;
-
-import java.io.StringWriter;
-import java.util.Collections;
 
 import static org.asciidoctor.maven.site.ast.processors.test.StringTestUtils.clean;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +28,7 @@ class ListingNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo(expectedHtmlCodeBlock());
+            .isEqualTo(expectedHtmlCodeBlock());
     }
 
     @Test
@@ -38,16 +38,16 @@ class ListingNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo(expectedHtmlCodeBlock());
+            .isEqualTo(expectedHtmlCodeBlock());
     }
 
     private static String expectedHtmlCodeBlock() {
         // Actual styling is added in JS by prettify
         return "<div class=\"source\"><pre class=\"prettyprint\"><code>class HelloWorldLanguage {" +
-                "    public static void main(String[] args) {" +
-                "        System.out.println(\"Hello, World!\");" +
-                "    }" +
-                "}</code></pre></div>";
+            "    public static void main(String[] args) {" +
+            "        System.out.println(\"Hello, World!\");" +
+            "    }" +
+            "}</code></pre></div>";
     }
 
     @Test
@@ -57,7 +57,7 @@ class ListingNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .startsWith("<div class=\"source\"><pre class=\"prettyprint linenums\"><code>");
+            .startsWith("<div class=\"source\"><pre class=\"prettyprint linenums\"><code>");
     }
 
     @Test
@@ -67,7 +67,7 @@ class ListingNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .startsWith("<div class=\"source\"><pre class=\"prettyprint linenums\"><code>");
+            .startsWith("<div class=\"source\"><pre class=\"prettyprint linenums\"><code>");
     }
 
     @Test
@@ -77,11 +77,11 @@ class ListingNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<div><pre>class HelloWorldLanguage {" +
-                        "    public static void main(String[] args) {" +
-                        "        System.out.println(\"Hello, World!\");" +
-                        "    }" +
-                        "}</pre></div>");
+            .isEqualTo("<div><pre>class HelloWorldLanguage {" +
+                "    public static void main(String[] args) {" +
+                "        System.out.println(\"Hello, World!\");" +
+                "    }" +
+                "}</pre></div>");
     }
 
     private String documentWithFullSourceBlock() {
@@ -98,21 +98,21 @@ class ListingNodeProcessorTest {
 
     private static String buildDocument(String blockDefinition) {
         return "= Document tile\n\n"
-                + "== Section\n\n"
-                + blockDefinition + "\n" +
-                "----\n" +
-                "class HelloWorldLanguage {\n" +
-                "    public static void main(String[] args) {\n" +
-                "        System.out.println(\"Hello, World!\");\n" +
-                "    }\n" +
-                "}\n" +
-                "----\n";
+            + "== Section\n\n"
+            + blockDefinition + "\n" +
+            "----\n" +
+            "class HelloWorldLanguage {\n" +
+            "    public static void main(String[] args) {\n" +
+            "        System.out.println(\"Hello, World!\");\n" +
+            "    }\n" +
+            "}\n" +
+            "----\n";
     }
 
     private String process(String content) {
         StructuralNode node = asciidoctor.load(content, Options.builder().build())
-                .findBy(Collections.singletonMap("context", ":listing"))
-                .get(0);
+            .findBy(Collections.singletonMap("context", ":listing"))
+            .get(0);
 
         nodeProcessor.process(node);
 

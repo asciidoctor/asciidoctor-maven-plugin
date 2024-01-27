@@ -1,10 +1,10 @@
 package org.asciidoctor.maven.site.ast.processors;
 
+import java.util.List;
+
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.ast.NodeProcessor;
-
-import java.util.List;
 
 /**
  * Unordered list processor.

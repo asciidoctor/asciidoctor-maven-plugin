@@ -1,11 +1,11 @@
 package org.asciidoctor.maven.test.processors;
 
+import java.util.List;
+import java.util.Map;
+
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.BlockMacroProcessor;
-
-import java.util.List;
-import java.util.Map;
 
 public class GistBlockMacroProcessor extends BlockMacroProcessor {
 

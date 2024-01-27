@@ -1,8 +1,8 @@
 package org.asciidoctor.maven.site;
 
-import org.asciidoctor.Options;
-
 import java.util.List;
+
+import org.asciidoctor.Options;
 
 public class SiteConversionConfiguration {
 

@@ -1,13 +1,13 @@
 package org.asciidoctor.maven.site.ast.processors;
 
+import java.util.List;
+
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.Cell;
 import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.ast.impl.TableImpl;
 import org.asciidoctor.maven.site.ast.NodeProcessor;
-
-import java.util.List;
 
 import static org.apache.maven.doxia.sink.Sink.JUSTIFY_LEFT;
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;

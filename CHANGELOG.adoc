@@ -35,6 +35,7 @@ Improvements::
   * Upgrade Asciidoctorj to v2.5.10 and jRuby to v9.4.2.0 (#647)
   * Upgrade Asciidoctorj to v2.5.11 (#688)
   * Improve warning message when destination file is going to be replaced (#728)
+  * Added `.editorconfig` file to facilitate code formatting (#760)
 
 Build / Infrastructure::
 
@@ -65,7 +66,6 @@ Build / Infrastructure::
   * Test artifact's signature with Maven in CI (#736)
   * Automate release using GH Actions (#141)
   * Ensure Mojos use correct default values in unit tests (#609)
-
 
 Maintenance::
   * Replace use of reflection by direct JavaExtensionRegistry calls to register extensions (#596)

@@ -1,10 +1,10 @@
 package org.asciidoctor.maven.io;
 
-import lombok.SneakyThrows;
-
 import java.io.File;
 import java.nio.file.Files;
 import java.util.UUID;
+
+import lombok.SneakyThrows;
 
 public class TestFilesHelper {
 

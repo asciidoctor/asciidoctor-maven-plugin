@@ -1,11 +1,11 @@
 package org.asciidoctor.maven.log;
 
-import org.asciidoctor.log.LogRecord;
-import org.asciidoctor.log.Severity;
-
 import java.io.File;
 import java.util.List;
 import java.util.function.Consumer;
+
+import org.asciidoctor.log.LogRecord;
+import org.asciidoctor.log.Severity;
 
 public class LogRecordsProcessors {
 

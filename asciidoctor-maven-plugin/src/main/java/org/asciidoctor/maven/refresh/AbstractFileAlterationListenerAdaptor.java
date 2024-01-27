@@ -1,10 +1,10 @@
 package org.asciidoctor.maven.refresh;
 
+import java.io.File;
+
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.maven.plugin.logging.Log;
 import org.asciidoctor.maven.AsciidoctorRefreshMojo;
-
-import java.io.File;
 
 public abstract class AbstractFileAlterationListenerAdaptor extends FileAlterationListenerAdaptor {
 

@@ -1,14 +1,14 @@
 package org.asciidoctor.maven.site.ast.processors;
 
+import java.io.StringWriter;
+import java.util.Collections;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.ast.NodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.test.NodeProcessorTest;
 import org.junit.jupiter.api.Test;
-
-import java.io.StringWriter;
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

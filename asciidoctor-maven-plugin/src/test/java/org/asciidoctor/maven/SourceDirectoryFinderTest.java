@@ -1,13 +1,13 @@
 package org.asciidoctor.maven;
 
-import org.asciidoctor.maven.process.SourceDirectoryFinder;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
 import java.io.File;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+
+import org.asciidoctor.maven.process.SourceDirectoryFinder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import static org.asciidoctor.maven.process.SourceDirectoryFinder.ORDERED_CANDIDATE_PATHS;
 import static org.assertj.core.api.Assertions.assertThat;

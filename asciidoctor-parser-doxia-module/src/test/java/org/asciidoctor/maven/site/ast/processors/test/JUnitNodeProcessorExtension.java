@@ -1,5 +1,8 @@
 package org.asciidoctor.maven.site.ast.processors.test;
 
+import java.io.StringWriter;
+import java.lang.reflect.Field;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.Asciidoctor;
@@ -7,10 +10,9 @@ import org.asciidoctor.maven.site.ast.NodeProcessor;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 
-import java.io.StringWriter;
-import java.lang.reflect.Field;
-
-import static org.asciidoctor.maven.site.ast.processors.test.ReflectionUtils.*;
+import static org.asciidoctor.maven.site.ast.processors.test.ReflectionUtils.extractField;
+import static org.asciidoctor.maven.site.ast.processors.test.ReflectionUtils.findField;
+import static org.asciidoctor.maven.site.ast.processors.test.ReflectionUtils.injectField;
 
 public class JUnitNodeProcessorExtension implements TestInstancePostProcessor {
 
