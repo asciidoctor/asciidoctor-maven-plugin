@@ -177,6 +177,7 @@ This module is still under development, here is a summary of supported features:
 * Lists
 ** Unordered, for `*` and `-` markers
 ** Ordered, only arabic numerals
+** Formatted text in list items
 
 * Code blocks with source-highlighting using https://maven.apache.org/skins/maven-fluido-skin/#source-code-line-numbers[Fluido Skin Pretiffy].
 ** Support for numbered lines with `linenums`

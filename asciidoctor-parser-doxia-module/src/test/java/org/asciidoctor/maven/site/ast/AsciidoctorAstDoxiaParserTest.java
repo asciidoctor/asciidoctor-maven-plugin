@@ -44,11 +44,12 @@ class AsciidoctorAstDoxiaParserTest {
         String result = parse(parser, srcAsciidoc);
 
         assertThat(result)
-                .isEqualTo("<h1>Document Title</h1><p>Preamble paragraph.</p>" +
+                .isEqualTo("<h1>Document Title</h1>" +
+                        "<p>Preamble paragraph.</p>" +
                         "<h2><a name=\"Section_A\"></a>Section A</h2>" +
                         "<p><strong>Section A</strong> paragraph.</p>" +
                         "<h3><a name=\"Section_A_Subsection\"></a>Section A Subsection</h3>" +
-                        "<p><strong>Section A</strong> <em>subsection</em> paragraph.</p>" +
+                        "<p><strong>Section A</strong> 'subsection' paragraph.</p>" +
                         "<h2><a name=\"Section_B\"></a>Section B</h2>" +
                         "<p><strong>Section B</strong> paragraph.</p>" +
                         "<ul>" +

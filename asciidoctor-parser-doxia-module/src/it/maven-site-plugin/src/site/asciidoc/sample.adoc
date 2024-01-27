@@ -62,6 +62,14 @@ public class HelloWorld {
 * Walnuts
 * Almonds
 
+==== Unordered list with formatting
+
+* *Apples*
+* _Oranges_
+* ~Walnuts~
+* `Almonds`
+* https://some-link.here[link]
+
 ==== Ordered list
 
 . Protons
