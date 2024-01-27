@@ -50,7 +50,7 @@ public class ListItemNodeProcessor extends AbstractSinkNodeProcessor implements 
         else
             sink.numberedListItem();
 
-        sink.text(item.getText());
+        sink.rawText(item.getText());
 
         for (StructuralNode subNode : node.getBlocks()) {
             for (NodeProcessor np : nodeProcessors) {

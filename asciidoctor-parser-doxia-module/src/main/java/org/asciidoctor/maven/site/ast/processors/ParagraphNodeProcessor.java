@@ -30,6 +30,7 @@ public class ParagraphNodeProcessor extends AbstractSinkNodeProcessor implements
     public void process(StructuralNode node) {
         getSink().paragraph();
         // content returns HTML processed including bold, italics, monospace, etc. attributes resolution
+        // TODO run convert() instead of getContent?
         String content = (String) node.getContent();
         getSink().rawText(content);
         getSink().paragraph_();

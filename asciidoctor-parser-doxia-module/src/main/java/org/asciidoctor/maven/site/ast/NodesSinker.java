@@ -1,9 +1,5 @@
 package org.asciidoctor.maven.site.ast;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.ast.processors.DocumentNodeProcessor;
@@ -12,11 +8,14 @@ import org.asciidoctor.maven.site.ast.processors.ListItemNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.ListingNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.LiteralNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.OrderedListNodeProcessor;
-import org.asciidoctor.maven.site.ast.processors.ParagraphNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.PreambleNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.SectionNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.TableNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.UnorderedListNodeProcessor;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Document processor.
@@ -47,15 +46,14 @@ public class NodesSinker {
 
         nodeProcessors = Arrays.asList(
                 new DocumentNodeProcessor(sink),
-                new PreambleNodeProcessor(sink),
-                new ParagraphNodeProcessor(sink),
-                new SectionNodeProcessor(sink),
-                unorderedListNodeProcessor,
-                orderedListNodeProcessor,
-                new TableNodeProcessor(sink),
-                new ListingNodeProcessor(sink),
                 new ImageNodeProcessor(sink),
-                new LiteralNodeProcessor(sink)
+                new ListingNodeProcessor(sink),
+                new LiteralNodeProcessor(sink),
+                new PreambleNodeProcessor(sink),
+                new SectionNodeProcessor(sink),
+                new TableNodeProcessor(sink),
+                orderedListNodeProcessor,
+                unorderedListNodeProcessor
         );
     }
 

@@ -25,7 +25,9 @@ class ListItemNodeProcessorTest {
     @ParameterizedTest
     @ValueSource(strings = {"*", "-"})
     void should_convert_list_item(String marker) {
-        String content = buildDocument(marker);
+        String content = new DocumentBuilder()
+                .listItem(marker)
+                .toString();
 
         String html = process(content);
 
@@ -35,7 +37,9 @@ class ListItemNodeProcessorTest {
 
     @Test
     void should_convert_ordered_list_item() {
-        String content = buildDocument(".");
+        String content = new DocumentBuilder()
+                .listItem(".")
+                .toString();
 
         String html = process(content);
 
@@ -43,14 +47,72 @@ class ListItemNodeProcessorTest {
                 .isEqualTo(htmlListItem());
     }
 
-    private static String htmlListItem() {
-        return "<li>unordered item</li>";
+    @ParameterizedTest
+    @ValueSource(strings = {"*", "-"})
+    void should_convert_ordered_list_item_with_formatting() {
+        String content = new DocumentBuilder()
+                .formattedListItem("*")
+                .toString();
+
+        String html = process(content);
+
+        assertThat(html)
+                .isEqualTo(htmlListItemWithFormatting());
     }
 
-    private static String buildDocument(String marker) {
-        return "= Document tile\n\n"
-                + "== Section\n\n"
-                + marker + " unordered item\n";
+    @ParameterizedTest
+    @ValueSource(strings = {"*", "-"})
+    void should_convert_ordered_list_item_with_link(String marker) {
+        String content = new DocumentBuilder()
+                .linkListItem(marker)
+                .toString();
+
+        String html = process(content);
+
+        assertThat(html)
+                .isEqualTo(htmlListItemWithLink());
+    }
+
+    private static String htmlListItem() {
+        return "<li>list item</li>";
+    }
+
+    private static String htmlListItemWithFormatting() {
+        return "<li><strong>list</strong> <em>item</em></li>";
+    }
+
+    private static String htmlListItemWithLink() {
+        return "<li>list <a href=\"https://something-random.org/\">item</a></li>";
+    }
+
+    class DocumentBuilder {
+
+        private final StringBuilder sb = new StringBuilder();
+
+        DocumentBuilder() {
+            sb.append("= Document tile\n\n");
+            sb.append("== Section\n\n");
+        }
+
+        DocumentBuilder listItem(String marker) {
+            sb.append(marker + " list item\n");
+            return this;
+        }
+
+        DocumentBuilder formattedListItem(String marker) {
+            sb.append(marker + " *list* _item_\n");
+            return this;
+        }
+
+        DocumentBuilder linkListItem(String marker) {
+            sb.append(marker + " list https://something-random.org/[item]\n");
+            return this;
+        }
+
+        @Override
+        public String toString() {
+            return sb.toString();
+        }
     }
 
     private String process(String content) {
