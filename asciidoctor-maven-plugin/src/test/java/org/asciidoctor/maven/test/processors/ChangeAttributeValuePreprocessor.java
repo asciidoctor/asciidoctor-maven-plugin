@@ -1,10 +1,10 @@
 package org.asciidoctor.maven.test.processors;
 
+import java.util.Map;
+
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.extension.PreprocessorReader;
-
-import java.util.Map;
 
 public class ChangeAttributeValuePreprocessor extends Preprocessor {
 

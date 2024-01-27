@@ -1,10 +1,10 @@
 package org.asciidoctor.maven.test.processors;
 
-import org.asciidoctor.ast.ContentNode;
-import org.asciidoctor.extension.InlineMacroProcessor;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.extension.InlineMacroProcessor;
 
 public class ManpageInlineMacroProcessor extends InlineMacroProcessor {
 

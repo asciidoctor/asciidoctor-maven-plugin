@@ -1,12 +1,12 @@
 package org.asciidoctor.maven;
 
+import java.io.File;
+import java.nio.file.Files;
+
 import lombok.SneakyThrows;
 import org.assertj.core.api.AbstractFileAssert;
 import org.assertj.core.api.AbstractStringAssert;
 import org.assertj.core.api.Assertions;
-
-import java.io.File;
-import java.nio.file.Files;
 
 public class AsciidoctorAsserter {
 

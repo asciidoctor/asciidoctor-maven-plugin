@@ -1,9 +1,9 @@
 package org.asciidoctor.maven.io;
 
-import lombok.SneakyThrows;
-
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+
+import lombok.SneakyThrows;
 
 public class DoubleOutputStream extends ByteArrayOutputStream {
 

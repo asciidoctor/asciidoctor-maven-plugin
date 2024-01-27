@@ -1,10 +1,10 @@
 package org.asciidoctor.maven.test.processors;
 
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.extension.Treeprocessor;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.extension.Treeprocessor;
 
 public class DummyTreeprocessor extends Treeprocessor {
 

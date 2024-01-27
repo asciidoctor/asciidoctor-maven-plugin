@@ -1,12 +1,12 @@
 package org.asciidoctor.maven.refresh;
 
+import java.io.File;
+import java.util.Collections;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.asciidoctor.maven.AsciidoctorRefreshMojo;
 import org.asciidoctor.maven.process.ResourcesProcessor;
-
-import java.io.File;
-import java.util.Collections;
 
 public class AsciidoctorConverterFileAlterationListenerAdaptor extends AbstractFileAlterationListenerAdaptor {
 

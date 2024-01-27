@@ -1,13 +1,13 @@
 package org.asciidoctor.maven.log;
 
-import org.asciidoctor.log.LogHandler;
-import org.asciidoctor.log.LogRecord;
-import org.asciidoctor.log.Severity;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import org.asciidoctor.log.LogHandler;
+import org.asciidoctor.log.LogRecord;
+import org.asciidoctor.log.Severity;
 
 
 /**

@@ -1,5 +1,12 @@
 package org.asciidoctor.maven.site.ast;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.logging.Logger;
+
 import org.apache.maven.doxia.parser.AbstractTextParser;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;
@@ -22,13 +29,6 @@ import org.asciidoctor.maven.site.SiteLogHandlerDeserializer;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
-
-import javax.inject.Inject;
-import javax.inject.Provider;
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.logging.Logger;
 
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 

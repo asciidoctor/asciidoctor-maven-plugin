@@ -1,13 +1,13 @@
 package org.asciidoctor.maven.test.processors;
 
-import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.extension.BlockProcessor;
-import org.asciidoctor.extension.Reader;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.extension.BlockProcessor;
+import org.asciidoctor.extension.Reader;
 
 public class YellBlockProcessor extends BlockProcessor {
 

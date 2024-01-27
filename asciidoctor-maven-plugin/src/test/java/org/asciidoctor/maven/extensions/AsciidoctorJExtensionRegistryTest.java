@@ -1,8 +1,23 @@
 package org.asciidoctor.maven.extensions;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.extension.*;
-import org.asciidoctor.maven.test.processors.*;
+import org.asciidoctor.extension.BlockMacroProcessor;
+import org.asciidoctor.extension.BlockProcessor;
+import org.asciidoctor.extension.DocinfoProcessor;
+import org.asciidoctor.extension.IncludeProcessor;
+import org.asciidoctor.extension.InlineMacroProcessor;
+import org.asciidoctor.extension.JavaExtensionRegistry;
+import org.asciidoctor.extension.Postprocessor;
+import org.asciidoctor.extension.Preprocessor;
+import org.asciidoctor.extension.Treeprocessor;
+import org.asciidoctor.maven.test.processors.ChangeAttributeValuePreprocessor;
+import org.asciidoctor.maven.test.processors.DummyPostprocessor;
+import org.asciidoctor.maven.test.processors.DummyTreeprocessor;
+import org.asciidoctor.maven.test.processors.GistBlockMacroProcessor;
+import org.asciidoctor.maven.test.processors.ManpageInlineMacroProcessor;
+import org.asciidoctor.maven.test.processors.MetaDocinfoProcessor;
+import org.asciidoctor.maven.test.processors.UriIncludeProcessor;
+import org.asciidoctor.maven.test.processors.YellBlockProcessor;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,8 +47,8 @@ class AsciidoctorJExtensionRegistryTest {
         Exception e = Assertions.catchException(() -> pluginExtensionRegistry.register(className, null));
 
         assertThat(e)
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage(String.format("'%s' is not a valid AsciidoctorJ processor class", className));
+            .isInstanceOf(RuntimeException.class)
+            .hasMessage(String.format("'%s' is not a valid AsciidoctorJ processor class", className));
     }
 
     @Test
@@ -43,8 +58,8 @@ class AsciidoctorJExtensionRegistryTest {
         Exception e = Assertions.catchException(() -> pluginExtensionRegistry.register(className, null));
 
         assertThat(e)
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage(String.format("'%s' not found in classpath", className));
+            .isInstanceOf(RuntimeException.class)
+            .hasMessage(String.format("'%s' not found in classpath", className));
     }
 
     @Test

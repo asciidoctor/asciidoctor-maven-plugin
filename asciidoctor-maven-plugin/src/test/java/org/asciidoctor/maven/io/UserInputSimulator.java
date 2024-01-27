@@ -1,10 +1,10 @@
 package org.asciidoctor.maven.io;
 
-import lombok.SneakyThrows;
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.concurrent.CountDownLatch;
+
+import lombok.SneakyThrows;
 
 public class UserInputSimulator {
 

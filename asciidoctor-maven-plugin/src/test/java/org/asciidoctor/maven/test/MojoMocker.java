@@ -1,15 +1,15 @@
 package org.asciidoctor.maven.test;
 
+import java.io.File;
+import java.util.Map;
+import java.util.Properties;
+
 import lombok.SneakyThrows;
 import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.maven.AsciidoctorMojo;
 import org.asciidoctor.maven.log.LogHandler;
 import org.mockito.Mockito;
-
-import java.io.File;
-import java.util.Map;
-import java.util.Properties;
 
 import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
 import static org.mockito.Mockito.when;

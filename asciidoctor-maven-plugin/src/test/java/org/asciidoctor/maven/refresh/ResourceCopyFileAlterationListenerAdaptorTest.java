@@ -1,12 +1,6 @@
 package org.asciidoctor.maven.refresh;
 
 
-import org.apache.maven.plugin.logging.Log;
-import org.asciidoctor.maven.AsciidoctorRefreshMojo;
-import org.asciidoctor.maven.model.Resource;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +8,12 @@ import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.apache.maven.plugin.logging.Log;
+import org.asciidoctor.maven.AsciidoctorRefreshMojo;
+import org.asciidoctor.maven.model.Resource;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.asciidoctor.maven.io.TestFilesHelper.createFileWithContent;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;

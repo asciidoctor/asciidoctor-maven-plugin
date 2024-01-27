@@ -1,18 +1,18 @@
 package org.asciidoctor.maven;
 
+import java.io.File;
+import java.util.Map;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.util.Map;
-
 import static org.asciidoctor.maven.AsciidoctorAsserter.assertThat;
+import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 import static org.asciidoctor.maven.test.TestUtils.ResourceBuilder.excludeAll;
 import static org.asciidoctor.maven.test.TestUtils.mockAsciidoctorMojo;
-import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 
 /**
  * Opinionated tests to validate Asciidoctor behaviours in end-to-end scenarios.

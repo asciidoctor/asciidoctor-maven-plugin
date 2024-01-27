@@ -1,17 +1,17 @@
 package org.asciidoctor.maven.site.ast.processors;
 
+import java.io.StringWriter;
+import java.nio.file.FileSystems;
+import java.util.Collections;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.ast.NodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.test.NodeProcessorTest;
 import org.junit.jupiter.api.Test;
-
-import java.io.StringWriter;
-import java.nio.file.FileSystems;
-import java.util.Collections;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

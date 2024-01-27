@@ -1,13 +1,12 @@
 package org.asciidoctor.maven.io;
 
-import lombok.SneakyThrows;
-
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import lombok.SneakyThrows;
 
 /**
  * Reads from a collection of strings to simulate command line inputs.

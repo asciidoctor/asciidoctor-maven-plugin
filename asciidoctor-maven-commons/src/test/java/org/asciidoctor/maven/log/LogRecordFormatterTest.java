@@ -1,13 +1,13 @@
 package org.asciidoctor.maven.log;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.io.File;
-import java.io.IOException;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;

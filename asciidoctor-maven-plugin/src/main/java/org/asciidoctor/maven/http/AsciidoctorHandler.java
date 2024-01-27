@@ -1,5 +1,10 @@
 package org.asciidoctor.maven.http;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -15,11 +20,6 @@ import io.netty.handler.codec.http.HttpVersion;
 import io.netty.util.CharsetUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.nio.charset.StandardCharsets;
 
 public class AsciidoctorHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 

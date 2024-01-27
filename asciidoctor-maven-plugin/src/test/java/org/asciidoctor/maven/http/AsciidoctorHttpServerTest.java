@@ -1,12 +1,5 @@
 package org.asciidoctor.maven.http;
 
-import lombok.SneakyThrows;
-import lombok.Value;
-import org.apache.commons.io.IOUtils;
-import org.apache.maven.plugin.logging.Log;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import java.io.File;
 import java.io.InputStream;
 import java.net.ConnectException;
@@ -16,7 +9,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import java.util.UUID;
 
-import static io.netty.handler.codec.http.HttpResponseStatus.*;
+import lombok.SneakyThrows;
+import lombok.Value;
+import org.apache.commons.io.IOUtils;
+import org.apache.maven.plugin.logging.Log;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import static io.netty.handler.codec.http.HttpResponseStatus.METHOD_NOT_ALLOWED;
+import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
+import static io.netty.handler.codec.http.HttpResponseStatus.OK;
+import static io.netty.handler.codec.http.HttpResponseStatus.RESET_CONTENT;
 import static org.asciidoctor.maven.io.TestFilesHelper.createFileWithContent;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 import static org.assertj.core.api.Assertions.assertThat;

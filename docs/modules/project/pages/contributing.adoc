@@ -16,12 +16,22 @@ There are multiple ways where you can help:
 Developer setup for hacking on this project isn't very difficult.
 The requirements are very small:
 
-* Java 8 or higher
+* Java 11 or higher
 * Maven 3
 
 Everything else will be brought in by Maven.
 This is a typical Maven Java project, nothing special.
 You should be able to use IntelliJ, Eclipse, or NetBeans without any issue for hacking on the project.
+
+== Code formatting
+
+The project doesn't have a strict policy, but there are some rules provided in using https://editorconfig.org/[.editorconfig] file.
+Check your IDE for `editorconfig` support.
+
+The rules are:
+
+* Use of spaces for indentation.
+* Maven import https://maven.apache.org/developers/conventions/code.html#java-code-convention-import-layouts[policy].
 
 == Testing
 

@@ -1,5 +1,11 @@
 package org.asciidoctor.maven.site;
 
+import java.io.File;
+import java.util.AbstractMap;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.maven.model.Model;
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.Attributes;
@@ -9,13 +15,9 @@ import org.asciidoctor.OptionsBuilder;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.util.AbstractMap;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.asciidoctor.Options.*;
+import static org.asciidoctor.Options.ATTRIBUTES;
+import static org.asciidoctor.Options.BASEDIR;
+import static org.asciidoctor.Options.TEMPLATE_DIRS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SiteConversionConfigurationParserTest {
