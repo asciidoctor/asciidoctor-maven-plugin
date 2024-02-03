@@ -71,7 +71,8 @@ Make sure you add a `menu` item for each page so you can access it from the site
 Given the modules implements a custom converter, the following features are limited:
 
 * `templateDirs` configurations are not supported in this module.
-* Extensions injected with `requires` can only modify the AST. Modifications of output won't be applied.
+* Extensions injected with `requires` can only modify the AST.
+Modifications of output won't be applied.
 ====
 
 As of version 1.5.3 of the plugin, you can configure Asciidoctor by specifying configuration properties in the plugin declaration, just like with the other goals of the plugin.
@@ -171,13 +172,16 @@ This module is still under development, here is a summary of supported features:
 ** Support for `sectnums` and `sectnumlevels`
 
 * Paragraphs
-** Basic formatting (bold, italics, etc.)
+** Basic formatting (bold, italics, monospace, etc.)
 ** Attributes substitutions
 
 * Lists
 ** Unordered, for `*` and `-` markers
 ** Ordered, only arabic numerals
+** Description lists, with nested ordered, unordered and description lists
 ** Formatted text in list items
++
+NOTE: Unlike in Asciidoctor lists, descriptions are not surrounded by `<p>` and list themselves are not surrounded by `<div>` elements.
 
 * Code blocks with source-highlighting using https://maven.apache.org/skins/maven-fluido-skin/#source-code-line-numbers[Fluido Skin Pretiffy].
 ** Support for numbered lines with `linenums`
