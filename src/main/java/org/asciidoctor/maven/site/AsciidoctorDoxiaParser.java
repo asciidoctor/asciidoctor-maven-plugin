@@ -20,6 +20,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import static java.util.regex.Pattern.DOTALL;
 
 /**
  * This class is used by <a href="https://maven.apache.org/doxia/overview.html">the Doxia framework</a>
@@ -32,6 +37,8 @@ import java.util.logging.Logger;
  */
 @Component(role = Parser.class, hint = AsciidoctorDoxiaParser.ROLE_HINT)
 public class AsciidoctorDoxiaParser extends AbstractTextParser {
+
+    private static final Pattern TITLE_PATTERN = Pattern.compile("^.*<h1>([^<]*)</h1>.*$", DOTALL | CASE_INSENSITIVE);
 
     @Inject
     protected Provider<MavenProject> mavenProjectProvider;
@@ -84,6 +91,14 @@ public class AsciidoctorDoxiaParser extends AbstractTextParser {
         } catch (Exception exception) {
             throw new ParseException(exception.getMessage(), exception);
         }
+
+        // Set document title
+        sink.head();
+        sink.title();
+        Matcher titleMatcher = TITLE_PATTERN.matcher(asciidocHtml);
+        sink.text(titleMatcher.matches() ? titleMatcher.group(1) : "[Untitled]");
+        sink.title_();
+        sink.head_();
 
         sink.rawText(asciidocHtml);
     }
