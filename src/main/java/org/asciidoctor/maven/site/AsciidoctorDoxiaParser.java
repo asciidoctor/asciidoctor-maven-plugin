@@ -10,6 +10,7 @@ import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordFormatter;
 import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
+import org.asciidoctor.maven.site.SiteConverter.Result;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -19,12 +20,8 @@ import javax.inject.Provider;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
-import static java.util.regex.Pattern.DOTALL;
 
 /**
  * This class is used by <a href="https://maven.apache.org/doxia/overview.html">the Doxia framework</a>
@@ -37,8 +34,6 @@ import static java.util.regex.Pattern.DOTALL;
  */
 @Component(role = Parser.class, hint = AsciidoctorDoxiaParser.ROLE_HINT)
 public class AsciidoctorDoxiaParser extends AbstractTextParser {
-
-    private static final Pattern TITLE_PATTERN = Pattern.compile("^.*<h1>([^<]*)</h1>.*$", DOTALL | CASE_INSENSITIVE);
 
     @Inject
     protected Provider<MavenProject> mavenProjectProvider;
@@ -83,7 +78,9 @@ public class AsciidoctorDoxiaParser extends AbstractTextParser {
         final MemoryLogHandler memoryLogHandler = asciidoctorLoggingSetup(asciidoctor, logHandler, siteDirectory);
 
         // QUESTION should we keep OptionsBuilder & AttributesBuilder separate for call to convertAsciiDoc?
-        String asciidocHtml = convertAsciiDoc(asciidoctor, source, conversionConfig.getOptions());
+        final SiteConverter readerProcessor = new SiteConverter(asciidoctor);
+        final Result process = readerProcessor.process(source, conversionConfig.getOptions());
+
         try {
             // process log messages according to mojo configuration
             new LogRecordsProcessors(logHandler, siteDirectory, errorMessage -> getLog().error(errorMessage))
@@ -95,12 +92,11 @@ public class AsciidoctorDoxiaParser extends AbstractTextParser {
         // Set document title
         sink.head();
         sink.title();
-        Matcher titleMatcher = TITLE_PATTERN.matcher(asciidocHtml);
-        sink.text(titleMatcher.matches() ? titleMatcher.group(1) : "[Untitled]");
+        sink.text(Optional.ofNullable(process.getTitle()).orElse("[Untitled]"));
         sink.title_();
         sink.head_();
 
-        sink.rawText(asciidocHtml);
+        sink.rawText(process.getHtml());
     }
 
     private MemoryLogHandler asciidoctorLoggingSetup(Asciidoctor asciidoctor, LogHandler logHandler, File siteDirectory) {
@@ -155,9 +151,4 @@ public class AsciidoctorDoxiaParser extends AbstractTextParser {
             }
         }
     }
-
-    protected String convertAsciiDoc(Asciidoctor asciidoctor, String source, Options options) {
-        return asciidoctor.convert(source, options);
-    }
-
 }
