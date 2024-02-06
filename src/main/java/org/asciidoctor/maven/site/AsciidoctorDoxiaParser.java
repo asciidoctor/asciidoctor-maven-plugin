@@ -79,7 +79,7 @@ public class AsciidoctorDoxiaParser extends AbstractTextParser {
 
         // QUESTION should we keep OptionsBuilder & AttributesBuilder separate for call to convertAsciiDoc?
         final SiteConverter readerProcessor = new SiteConverter(asciidoctor);
-        final Result process = readerProcessor.process(source, conversionConfig.getOptions());
+        final Result headerMetadata = readerProcessor.process(source, conversionConfig.getOptions());
 
         try {
             // process log messages according to mojo configuration
@@ -92,11 +92,24 @@ public class AsciidoctorDoxiaParser extends AbstractTextParser {
         // Set document title
         sink.head();
         sink.title();
-        sink.text(Optional.ofNullable(process.getTitle()).orElse("[Untitled]"));
+        sink.text(Optional.ofNullable(headerMetadata.getTitle()).orElse("[Untitled]"));
         sink.title_();
+
+
+        sink.author();
+        sink.text();
+        sink.author_();
+
+        sink.author();
+        sink.text("bbbb");
+        sink.author_();
+
+        sink.date();
+        sink.text(headerMetadata.getDateTime());
+        sink.date_();
         sink.head_();
 
-        sink.rawText(process.getHtml());
+        sink.rawText(headerMetadata.getHtml());
     }
 
     private MemoryLogHandler asciidoctorLoggingSetup(Asciidoctor asciidoctor, LogHandler logHandler, File siteDirectory) {
