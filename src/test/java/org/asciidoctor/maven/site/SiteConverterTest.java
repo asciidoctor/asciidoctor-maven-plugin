@@ -88,12 +88,25 @@ class SiteConverterTest {
         SiteConverter siteConverter = new SiteConverter(asciidoctor);
 
         String content = "= Hello, AsciiDoc!";
-        Options options = optionsWithAttributes(Collections.singletonMap("author", "momo"));
+        Options options = optionsWithAttributes(Collections.singletonMap("author", "From Attr"));
         Result result = siteConverter.process(content + "\n", options);
 
         HeaderMetadata headerMetadata = result.getHeaderMetadata();
         assertThat(headerMetadata.getAuthors())
-                .containsExactly("momo");
+                .containsExactly("From Attr");
+        assertThat(result.getHtml()).isNotBlank();
+    }
+
+    @Test
+    void should_extract_multiple_authors() {
+        SiteConverter siteConverter = new SiteConverter(asciidoctor);
+
+        String content = "= Hello, AsciiDoc!\nfirstname1 lastname2; firstname3 middlename4 lastname5";
+        Result result = siteConverter.process(content + "\n", defaultOptions());
+
+        HeaderMetadata headerMetadata = result.getHeaderMetadata();
+        assertThat(headerMetadata.getAuthors())
+                .containsExactlyInAnyOrder("firstname1 lastname2", "firstname3 middlename4 lastname5");
         assertThat(result.getHtml()).isNotBlank();
     }
 
