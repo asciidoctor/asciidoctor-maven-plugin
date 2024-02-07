@@ -6,10 +6,12 @@ import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.*;
+import org.asciidoctor.ast.Author;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordFormatter;
 import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
+import org.asciidoctor.maven.site.SiteConverter.HeaderMetadata;
 import org.asciidoctor.maven.site.SiteConverter.Result;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
@@ -77,9 +79,8 @@ public class AsciidoctorDoxiaParser extends AbstractTextParser {
         final LogHandler logHandler = getLogHandlerConfig(siteConfig);
         final MemoryLogHandler memoryLogHandler = asciidoctorLoggingSetup(asciidoctor, logHandler, siteDirectory);
 
-        // QUESTION should we keep OptionsBuilder & AttributesBuilder separate for call to convertAsciiDoc?
-        final SiteConverter readerProcessor = new SiteConverter(asciidoctor);
-        final Result headerMetadata = readerProcessor.process(source, conversionConfig.getOptions());
+        final SiteConverter siteConverter = new SiteConverter(asciidoctor);
+        final Result headerMetadata = siteConverter.process(source, conversionConfig.getOptions());
 
         try {
             // process log messages according to mojo configuration
@@ -89,27 +90,27 @@ public class AsciidoctorDoxiaParser extends AbstractTextParser {
             throw new ParseException(exception.getMessage(), exception);
         }
 
-        // Set document title
+        sinkHeader(sink, headerMetadata.getHeaderMetadata());
+
+        sink.rawText(headerMetadata.getHtml());
+    }
+
+    private static void sinkHeader(Sink sink, HeaderMetadata headerMetadata) {
         sink.head();
         sink.title();
         sink.text(Optional.ofNullable(headerMetadata.getTitle()).orElse("[Untitled]"));
         sink.title_();
 
-
-        sink.author();
-        sink.text();
-        sink.author_();
-
-        sink.author();
-        sink.text("bbbb");
-        sink.author_();
+        for (String author : headerMetadata.getAuthors()) {
+            sink.author();
+            sink.text(author.toString());
+            sink.author_();
+        }
 
         sink.date();
         sink.text(headerMetadata.getDateTime());
         sink.date_();
         sink.head_();
-
-        sink.rawText(headerMetadata.getHtml());
     }
 
     private MemoryLogHandler asciidoctorLoggingSetup(Asciidoctor asciidoctor, LogHandler logHandler, File siteDirectory) {

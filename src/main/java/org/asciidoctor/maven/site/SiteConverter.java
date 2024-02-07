@@ -10,18 +10,12 @@ import org.asciidoctor.ast.RevisionInfo;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
-import static java.util.regex.Pattern.DOTALL;
-
 /**
- * Asciidoctor conversion wrapper to extract metadata and
+ * Asciidoctor conversion wrapper to extract metadata and do the HTML conversion.
  */
 class SiteConverter {
-
-    private static final Pattern TITLE_PATTERN = Pattern.compile("^.*<h1>([^<]*)</h1>.*$", DOTALL | CASE_INSENSITIVE);
 
     private final Asciidoctor asciidoctor;
 
@@ -37,7 +31,7 @@ class SiteConverter {
         String documentDateTime = extractDocumentDateTime(document, document.getAttributes());
 
         String html = asciidoctor.convert(content, options);
-        return new Result(title, authors, documentDateTime, html);
+        return new Result(new HeaderMetadata(title, authors, documentDateTime), html);
     }
 
     private static Options headerProcessingMetadata(Options options) {
@@ -65,32 +59,46 @@ class SiteConverter {
     }
 
     final class Result {
-        private final String title;
-        private final List<String> author;
-        private final String dateTime;
+
+        private final HeaderMetadata headerMetadata;
         private final String html;
 
-        Result(String title, List<String> author, String dateTime, String html) {
-            this.title = title;
-            this.author = author;
-            this.dateTime = dateTime;
+        Result(HeaderMetadata headerMetadata, String html) {
+            this.headerMetadata = headerMetadata;
             this.html = html;
+        }
+
+        public HeaderMetadata getHeaderMetadata() {
+            return headerMetadata;
+        }
+
+        public String getHtml() {
+            return html;
+        }
+    }
+
+    final class HeaderMetadata {
+
+        private final String title;
+        private final List<String> authors;
+        private final String dateTime;
+
+        HeaderMetadata(String title, List<String> authors, String dateTime) {
+            this.title = title;
+            this.authors = authors;
+            this.dateTime = dateTime;
         }
 
         public String getTitle() {
             return title;
         }
 
-        public List<String> getAuthor() {
-            return author;
+        public List<String> getAuthors() {
+            return authors;
         }
 
         public String getDateTime() {
             return dateTime;
-        }
-
-        public String getHtml() {
-            return html;
         }
     }
 }
