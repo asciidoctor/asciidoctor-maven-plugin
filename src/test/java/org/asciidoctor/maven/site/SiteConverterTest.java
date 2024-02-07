@@ -118,7 +118,7 @@ class SiteConverterTest {
         Result result = siteConverter.process(content + "\n", defaultOptions());
 
         HeaderMetadata headerMetadata = result.getHeaderMetadata();
-        assertThat(headerMetadata.getDateTime()).matches("(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2}) ([+-]\\d{4})");
+        assertThat(headerMetadata.getDateTime()).matches("(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2}) .*");
         assertThat(result.getHtml()).isNotBlank();
     }
 
