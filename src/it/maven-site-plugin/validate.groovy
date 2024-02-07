@@ -13,8 +13,38 @@ String[] unexpectedFiles = [
         "_include.html"
 ]
 
-Pattern tocEntry = Pattern.compile("<li><a href=\"#(.*?)\">.*")
-Pattern elementIdPattern = Pattern.compile(".* id=\"(.*?)\".*")
+class PatternCapturer {
+    private final Pattern pattern
+    private final List<String> hits
+
+    PatternCapturer(String pattern) {
+        this.pattern = Pattern.compile(pattern)
+        this.hits = new ArrayList()
+    }
+
+
+    String tryMatches(String text) {
+        def matcher = pattern.matcher(text)
+        if (matcher.matches()) {
+            def group = matcher.group(1)
+            hits.add(group)
+            return group
+        }
+        return null
+    }
+
+    void remove(String text) {
+        hits.remove(text)
+    }
+
+    int size() {
+        return hits.size()
+    }
+
+    List<String> getHits() {
+        return hits
+    }
+}
 
 for (String expectedFile : expectedFiles) {
     File file = new File(outputDir, expectedFile)
@@ -26,29 +56,23 @@ for (String expectedFile : expectedFiles) {
     def lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8)
     System.out.println("Ensuring IDs match TOC links")
 
-    List tocEntries = new ArrayList()
+    // == Assert TOC ==
+    def tocEntryCapturer = new PatternCapturer("<li><a href=\"#(.*?)\">.*")
+    def elementIdCapturer = new PatternCapturer(".* id=\"(.*?)\".*")
 
     for (String line : lines) {
-        Matcher matcher = null
+        tocEntryCapturer.tryMatches(line)
 
-        matcher = tocEntry.matcher(line);
-        if (matcher.matches()) {
-            tocEntries.add(matcher.group(1))
-        }
-
-        matcher = elementIdPattern.matcher(line)
-        if (matcher.matches()) {
-            String elementId = matcher.group(1)
-            if (tocEntries.contains(elementId)) {
-                tocEntries.remove(tocEntries.indexOf(elementId))
-            }
+        String match = elementIdCapturer.tryMatches(line)
+        if (match != null) {
+            tocEntryCapturer.remove(match)
         }
     }
-
-    if (tocEntries.size() != 0) {
-        throw new Exception("Couldn't find matching IDs for the following TOC entries: $tocEntries")
+    if (tocEntryCapturer.size() != 0) {
+        throw new Exception("Couldn't find matching IDs for the following TOC entries: ${tocEntryCapturer.getHits()}")
     }
 
+    // == Assert includes ==
     boolean includeResolved = false
     boolean sourceHighlighted = false
 
@@ -59,11 +83,9 @@ for (String expectedFile : expectedFiles) {
             sourceHighlighted = true;
         }
     }
-
     if (!includeResolved) {
         throw new Exception("Include file was not resolved")
     }
-
     if (!sourceHighlighted) {
         throw new Exception("Source code was not highlighted")
     }
@@ -71,7 +93,6 @@ for (String expectedFile : expectedFiles) {
     // validate that maven properties are replaced same as attributes
     boolean foundReplacement = false
     for (String line : lines) {
-        System.out.println(line)
         if (line.contains("v1.2.3")) {
             foundReplacement = true
             break
@@ -80,6 +101,45 @@ for (String expectedFile : expectedFiles) {
     if (!foundReplacement) {
         throw new Exception("Maven properties not replaced")
     }
+
+    // == Assert header metadata ==
+    def metaPattern = Pattern.compile( "<meta name=\"(author|date)\" content=\"(.*)\" />")
+    boolean headFound = false
+    Map<String,String> metaTags = new HashMap<>()
+
+    for (String line : lines) {
+        if (!headFound) {
+            headFound = line.endsWith("<head>")
+            continue
+        }
+        if (line.endsWith("</head>")) break
+        def matcher = metaPattern.matcher(line.trim())
+        if (matcher.matches()) {
+            metaTags.put(matcher.group(1), matcher.group(2))
+        }
+    }
+
+    if (metaTags['author'] != 'The Author')
+        throw new RuntimeException("Author not found in $metaTags")
+    if (metaTags['date'] != '2024-02-07 23:36:29')
+        throw new RuntimeException("docdatetime not found in: $metaTags")
+
+    // assert breadcrumbs
+    boolean breadcrumbTagFound = false
+    boolean breadcrumbFound = false
+    final String docTitle = "File with TOC"
+
+    for (String line : lines) {
+        if (!breadcrumbTagFound) {
+            breadcrumbTagFound = line.endsWith("<div id=\"breadcrumbs\">")
+            continue
+        }
+        if (line.endsWith("</div>")) break
+        breadcrumbFound = line.trim().equals(docTitle)
+    }
+
+    if (!breadcrumbFound)
+        throw new RuntimeException("No breadcrumb found: expected title: $docTitle")
 }
 
 for (String unexpectedFile : unexpectedFiles) {
