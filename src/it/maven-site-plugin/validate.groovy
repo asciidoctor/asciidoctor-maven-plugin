@@ -1,6 +1,5 @@
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
-import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 File outputDir = new File(basedir, "target/site")
@@ -14,6 +13,7 @@ String[] unexpectedFiles = [
 ]
 
 class PatternCapturer {
+
     private final Pattern pattern
     private final List<String> hits
 

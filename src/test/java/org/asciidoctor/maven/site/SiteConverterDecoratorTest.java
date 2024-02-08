@@ -4,8 +4,8 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 import org.asciidoctor.SafeMode;
-import org.asciidoctor.maven.site.SiteConverter.HeaderMetadata;
-import org.asciidoctor.maven.site.SiteConverter.Result;
+import org.asciidoctor.maven.site.SiteConverterDecorator.HeaderMetadata;
+import org.asciidoctor.maven.site.SiteConverterDecorator.Result;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SiteConverterTest {
+class SiteConverterDecoratorTest {
 
     private final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
 
@@ -29,7 +29,7 @@ class SiteConverterTest {
             "Hello, AsciiDoc!\n================"
     })
     void should_extract_title_from_header(String title) {
-        SiteConverter siteConverter = new SiteConverter(asciidoctor);
+        SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
 
         Options options = defaultOptions();
         Result result = siteConverter.process(title + "\n", options);
@@ -41,7 +41,7 @@ class SiteConverterTest {
 
     @Test
     void should_extract_title_from_attribute() {
-        SiteConverter siteConverter = new SiteConverter(asciidoctor);
+        SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
 
         Options options = Options.builder()
                 .safe(SafeMode.UNSAFE)
@@ -63,7 +63,7 @@ class SiteConverterTest {
     @ParameterizedTest
     @MethodSource("authorsProvider")
     void should_extract_author(String content, String expected) {
-        SiteConverter siteConverter = new SiteConverter(asciidoctor);
+        SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
 
         Options options = defaultOptions();
         Result result = siteConverter.process(content + "\n", options);
@@ -85,7 +85,7 @@ class SiteConverterTest {
 
     @Test
     void should_extract_author_from_attribute() {
-        SiteConverter siteConverter = new SiteConverter(asciidoctor);
+        SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
 
         String content = "= Hello, AsciiDoc!";
         Options options = optionsWithAttributes(Collections.singletonMap("author", "From Attr"));
@@ -99,7 +99,7 @@ class SiteConverterTest {
 
     @Test
     void should_extract_multiple_authors() {
-        SiteConverter siteConverter = new SiteConverter(asciidoctor);
+        SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
 
         String content = "= Hello, AsciiDoc!\nfirstname1 lastname2; firstname3 middlename4 lastname5";
         Result result = siteConverter.process(content + "\n", defaultOptions());
@@ -112,7 +112,7 @@ class SiteConverterTest {
 
     @Test
     void should_extract_datetime_generated() {
-        SiteConverter siteConverter = new SiteConverter(asciidoctor);
+        SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
 
         String content = "= Hello, AsciiDoc!";
         Result result = siteConverter.process(content + "\n", defaultOptions());
@@ -124,7 +124,7 @@ class SiteConverterTest {
 
     @Test
     void should_extract_datetime_from_attribute() {
-        SiteConverter siteConverter = new SiteConverter(asciidoctor);
+        SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
 
         String content = "= Hello, AsciiDoc!";
         Options options = optionsWithAttributes(Collections.singletonMap("docdatetime", "2024-11-22"));

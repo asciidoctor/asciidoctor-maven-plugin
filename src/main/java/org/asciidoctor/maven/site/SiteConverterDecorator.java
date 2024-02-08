@@ -13,13 +13,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Asciidoctor conversion wrapper to extract metadata and do the HTML conversion.
+ * Asciidoctor conversion wrapper for maven-site integration.
+ * In addition to conversion, handles header metadata extraction.
  */
-class SiteConverter {
+class SiteConverterDecorator {
 
     private final Asciidoctor asciidoctor;
 
-    SiteConverter(Asciidoctor asciidoctor) {
+    SiteConverterDecorator(Asciidoctor asciidoctor) {
         this.asciidoctor = asciidoctor;
     }
 
@@ -42,8 +43,7 @@ class SiteConverter {
         }
 
         builder.parseHeaderOnly(Boolean.TRUE);
-        Options build = builder.build();
-        return build;
+        return builder.build();
     }
 
     private List<String> extractAuthors(Document document) {
@@ -68,11 +68,11 @@ class SiteConverter {
             this.html = html;
         }
 
-        public HeaderMetadata getHeaderMetadata() {
+        HeaderMetadata getHeaderMetadata() {
             return headerMetadata;
         }
 
-        public String getHtml() {
+        String getHtml() {
             return html;
         }
     }
@@ -89,15 +89,15 @@ class SiteConverter {
             this.dateTime = dateTime;
         }
 
-        public String getTitle() {
+        String getTitle() {
             return title;
         }
 
-        public List<String> getAuthors() {
+        List<String> getAuthors() {
             return authors;
         }
 
-        public String getDateTime() {
+        String getDateTime() {
             return dateTime;
         }
     }

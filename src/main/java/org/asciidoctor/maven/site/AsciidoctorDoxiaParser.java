@@ -5,14 +5,15 @@ import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.project.MavenProject;
-import org.asciidoctor.*;
-import org.asciidoctor.ast.Author;
+import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.SafeMode;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordFormatter;
 import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
-import org.asciidoctor.maven.site.SiteConverter.HeaderMetadata;
-import org.asciidoctor.maven.site.SiteConverter.Result;
+import org.asciidoctor.maven.site.SiteConverterDecorator.Result;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -22,7 +23,6 @@ import javax.inject.Provider;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
@@ -79,7 +79,7 @@ public class AsciidoctorDoxiaParser extends AbstractTextParser {
         final LogHandler logHandler = getLogHandlerConfig(siteConfig);
         final MemoryLogHandler memoryLogHandler = asciidoctorLoggingSetup(asciidoctor, logHandler, siteDirectory);
 
-        final SiteConverter siteConverter = new SiteConverter(asciidoctor);
+        final SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
         final Result headerMetadata = siteConverter.process(source, conversionConfig.getOptions());
 
         try {
@@ -90,28 +90,12 @@ public class AsciidoctorDoxiaParser extends AbstractTextParser {
             throw new ParseException(exception.getMessage(), exception);
         }
 
-        sinkHeader(sink, headerMetadata.getHeaderMetadata());
+        new HeadParser(sink)
+                .parse(headerMetadata.getHeaderMetadata());
 
         sink.rawText(headerMetadata.getHtml());
     }
 
-    private static void sinkHeader(Sink sink, HeaderMetadata headerMetadata) {
-        sink.head();
-        sink.title();
-        sink.text(Optional.ofNullable(headerMetadata.getTitle()).orElse("[Untitled]"));
-        sink.title_();
-
-        for (String author : headerMetadata.getAuthors()) {
-            sink.author();
-            sink.text(author.toString());
-            sink.author_();
-        }
-
-        sink.date();
-        sink.text(headerMetadata.getDateTime());
-        sink.date_();
-        sink.head_();
-    }
 
     private MemoryLogHandler asciidoctorLoggingSetup(Asciidoctor asciidoctor, LogHandler logHandler, File siteDirectory) {
 
