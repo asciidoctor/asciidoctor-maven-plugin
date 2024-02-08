@@ -1,0 +1,16 @@
+= Exposed metadata
+:asciidoctor-docs-url: https://docs.asciidoctor.org/asciidoc/latest
+
+The Asciidoctor Maven Site integration integrates with Doxia to expose some of its information.
+
+== Document Header metadata
+
+The following information from the {asciidoctor-docs-url}/document/header/[header] is extracted:
+
+document title:: used to inform the breadcrumb line when these are enabled.
+
+author(s):: full representation (full name and email) will be present as HTML `<meta name="author" ... >` tags inside the HTML `<head>`.
+In case of multiple authors, each one will appear in a distinct meta element.
+
+revision date:: the header revision date value wll be presented as-is in a `<meta name="date" ... >` element.
+Alternatively, if not set, the generated value of `docdatetime` will be used.
