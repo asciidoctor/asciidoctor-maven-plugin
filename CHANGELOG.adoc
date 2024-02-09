@@ -13,6 +13,8 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+== v2.2.6 (2024-02-09)
+
 Improvements::
 
   * Push Asiidoctor header metadata (author(s), conversion time and title) to maven-site pages (#769)
