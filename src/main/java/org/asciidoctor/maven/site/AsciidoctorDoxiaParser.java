@@ -5,11 +5,15 @@ import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.project.MavenProject;
-import org.asciidoctor.*;
+import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.SafeMode;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordFormatter;
 import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
+import org.asciidoctor.maven.site.SiteConverterDecorator.Result;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -75,8 +79,9 @@ public class AsciidoctorDoxiaParser extends AbstractTextParser {
         final LogHandler logHandler = getLogHandlerConfig(siteConfig);
         final MemoryLogHandler memoryLogHandler = asciidoctorLoggingSetup(asciidoctor, logHandler, siteDirectory);
 
-        // QUESTION should we keep OptionsBuilder & AttributesBuilder separate for call to convertAsciiDoc?
-        String asciidocHtml = convertAsciiDoc(asciidoctor, source, conversionConfig.getOptions());
+        final SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
+        final Result headerMetadata = siteConverter.process(source, conversionConfig.getOptions());
+
         try {
             // process log messages according to mojo configuration
             new LogRecordsProcessors(logHandler, siteDirectory, errorMessage -> getLog().error(errorMessage))
@@ -85,8 +90,12 @@ public class AsciidoctorDoxiaParser extends AbstractTextParser {
             throw new ParseException(exception.getMessage(), exception);
         }
 
-        sink.rawText(asciidocHtml);
+        new HeadParser(sink)
+                .parse(headerMetadata.getHeaderMetadata());
+
+        sink.rawText(headerMetadata.getHtml());
     }
+
 
     private MemoryLogHandler asciidoctorLoggingSetup(Asciidoctor asciidoctor, LogHandler logHandler, File siteDirectory) {
 
@@ -140,9 +149,4 @@ public class AsciidoctorDoxiaParser extends AbstractTextParser {
             }
         }
     }
-
-    protected String convertAsciiDoc(Asciidoctor asciidoctor, String source, Options options) {
-        return asciidoctor.convert(source, options);
-    }
-
 }

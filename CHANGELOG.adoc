@@ -13,6 +13,14 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+Improvements::
+
+  * Push Asiidoctor header metadata (author(s), conversion time and title) to maven-site pages (#769)
+
+Bug Fixes::
+
+  * Fix breadcrumbs not showing the document title in maven-site pages (#763)
+
 == v2.2.5 (2024-01-11)
 
 Bug Fixes::
