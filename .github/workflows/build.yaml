@@ -122,8 +122,7 @@ jobs:
       - name: Collect artifacts
         run: |
           mkdir -p $ARTIFACTS_DIR
-          cp -r $HOME/.m2/repository/org/asciidoctor/asciidoctor-maven-* $ARTIFACTS_DIR
-          cp -r $HOME/.m2/repository/org/asciidoctor/*-doxia-module $ARTIFACTS_DIR
+          cp -r $HOME/.m2/repository/org/asciidoctor/asciidoctor-maven-plugin/ $ARTIFACTS_DIR
       - name: Verify JAR signatures
         run: find $ARTIFACTS_DIR -type f -name "*.jar" -exec gpg --verify "{}.asc" \;
       - name: Upload artifacts
