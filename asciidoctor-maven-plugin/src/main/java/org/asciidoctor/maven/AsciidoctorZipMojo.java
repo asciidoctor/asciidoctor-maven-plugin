@@ -11,6 +11,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProjectHelper;
 import org.asciidoctor.maven.io.Zips;
 
+@Deprecated(since = "3.0.0", forRemoval = true)
 @Mojo(name = "zip")
 public class AsciidoctorZipMojo extends AsciidoctorMojo {
     public static final String PREFIX = AsciidoctorMaven.PREFIX + "zip.";
