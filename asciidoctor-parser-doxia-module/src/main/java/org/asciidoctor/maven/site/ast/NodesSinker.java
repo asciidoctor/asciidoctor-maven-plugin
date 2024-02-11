@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.maven.site.ast.processors.DescriptionListNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.DocumentNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.ImageNodeProcessor;
 import org.asciidoctor.maven.site.ast.processors.ListItemNodeProcessor;
@@ -39,23 +40,26 @@ public class NodesSinker {
 
         UnorderedListNodeProcessor unorderedListNodeProcessor = new UnorderedListNodeProcessor(sink);
         OrderedListNodeProcessor orderedListNodeProcessor = new OrderedListNodeProcessor(sink);
+        DescriptionListNodeProcessor descriptionListNodeProcessor = new DescriptionListNodeProcessor(sink);
 
         ListItemNodeProcessor listItemNodeProcessor = new ListItemNodeProcessor(sink);
-        listItemNodeProcessor.setNodeProcessors(Arrays.asList(unorderedListNodeProcessor, orderedListNodeProcessor));
+        listItemNodeProcessor.setNodeProcessors(Arrays.asList(unorderedListNodeProcessor, orderedListNodeProcessor, descriptionListNodeProcessor));
         unorderedListNodeProcessor.setItemNodeProcessor(listItemNodeProcessor);
         orderedListNodeProcessor.setItemNodeProcessor(listItemNodeProcessor);
+        descriptionListNodeProcessor.setItemNodeProcessor(listItemNodeProcessor);
 
         nodeProcessors = Arrays.asList(
-                new DocumentNodeProcessor(sink),
-                new ImageNodeProcessor(sink),
-                new ListingNodeProcessor(sink),
-                new LiteralNodeProcessor(sink),
-                new ParagraphNodeProcessor(sink),
-                new PreambleNodeProcessor(sink),
-                new SectionNodeProcessor(sink),
-                new TableNodeProcessor(sink),
-                orderedListNodeProcessor,
-                unorderedListNodeProcessor
+            new DocumentNodeProcessor(sink),
+            new ImageNodeProcessor(sink),
+            new ListingNodeProcessor(sink),
+            new LiteralNodeProcessor(sink),
+            new ParagraphNodeProcessor(sink),
+            new PreambleNodeProcessor(sink),
+            new SectionNodeProcessor(sink),
+            new TableNodeProcessor(sink),
+            descriptionListNodeProcessor,
+            orderedListNodeProcessor,
+            unorderedListNodeProcessor
         );
     }
 
@@ -72,8 +76,8 @@ public class NodesSinker {
         try {
             // Only one matches in current NodeProcessors implementation
             Optional<NodeProcessor> nodeProcessor = nodeProcessors.stream()
-                    .filter(np -> np.applies(node))
-                    .findFirst();
+                .filter(np -> np.applies(node))
+                .findFirst();
             if (nodeProcessor.isPresent()) {
                 NodeProcessor processor = nodeProcessor.get();
                 processor.process(node);
@@ -90,6 +94,6 @@ public class NodesSinker {
 
     private void traverse(StructuralNode node, int depth) {
         node.getBlocks()
-                .forEach(b -> processNode(b, depth + 1));
+            .forEach(b -> processNode(b, depth + 1));
     }
 }

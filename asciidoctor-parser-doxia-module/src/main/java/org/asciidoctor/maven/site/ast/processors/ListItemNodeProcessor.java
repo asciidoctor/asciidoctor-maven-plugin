@@ -45,12 +45,19 @@ public class ListItemNodeProcessor extends AbstractSinkNodeProcessor implements 
     public void process(StructuralNode node) {
         final ListItem item = (ListItem) node;
         final Sink sink = getSink();
-        if (isUnorderedListItem(item))
-            sink.listItem();
-        else
-            sink.numberedListItem();
+        final ListType listType = getListType(item);
 
-        String text = item.getText();
+        // description type does not require any action
+        switch (listType) {
+            case ordered:
+                sink.numberedListItem();
+                break;
+            case unordered:
+                sink.listItem();
+                break;
+        }
+
+        final String text = item.getText();
         sink.rawText(text == null ? "" : text);
 
         for (StructuralNode subNode : node.getBlocks()) {
@@ -61,14 +68,28 @@ public class ListItemNodeProcessor extends AbstractSinkNodeProcessor implements 
             }
         }
 
-        if (isUnorderedListItem(item))
-            sink.listItem_();
-        else
-            sink.numberedListItem_();
+        switch (listType) {
+            case ordered:
+                sink.numberedListItem_();
+                break;
+            case unordered:
+                sink.listItem_();
+                break;
+        }
     }
 
-    private static boolean isUnorderedListItem(ListItem item) {
+    private static ListType getListType(ListItem item) {
         final String marker = item.getMarker();
-        return marker.startsWith("*") || marker.startsWith("-");
+        if (marker == null) {
+            return ListType.description;
+        } else if (marker.startsWith("*") || marker.startsWith("-")) {
+            return ListType.ordered;
+        } else {
+            return ListType.unordered;
+        }
+    }
+
+    enum ListType {
+        ordered, unordered, description
     }
 }

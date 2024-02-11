@@ -42,6 +42,15 @@ new HtmlAsserter(htmlContent).with { asserter ->
     asserter.containsSectionTitle("Ordered list", 4)
     asserter.containsOrderedList("Protons", "Electrons", "Neutrons")
 
+    asserter.containsSectionTitle("Description list", 4)
+    asserter.descriptionListTerm("Operating Systems")
+    asserter.descriptionListTerm("Linux")
+    asserter.contains("<li>Fedora")
+    asserter.containsUnorderedList("Desktop")
+    asserter.contains("<li>Ubuntu")
+    asserter.containsUnorderedList("Desktop", "Server")
+    asserter.descriptionListTerm("BSD")
+    asserter.containsOrderedList("FreeBSD", "NetBSD")
 }
 
 String strong(String text) {
@@ -111,6 +120,11 @@ class HtmlAsserter {
         return content.indexOf(value, lastAssertionCursor)
     }
 
+    void contains(String text) {
+        def found = find(text)
+        assertFound("HTML text", text, found)
+    }
+
     void containsDocumentTitle(String value) {
         def found = find("<h1>$value</h1>")
         assertFound("Document Title", value, found)
@@ -158,6 +172,11 @@ class HtmlAsserter {
     void containsOrderedList(String... values) {
         def found = find("<ol style=\"list-style-type: decimal\"><li>${values.join('</li><li>')}</li></ol>")
         assertFound("Ordered list", values.join(','), found)
+    }
+
+    void descriptionListTerm(String term) {
+        def found = find("<dt>${term}</dt>")
+        assertFound("Description list", term, found)
     }
 
     void containsTable(int columns, int rows, List<String> headers, String caption) {
