@@ -1,16 +1,11 @@
 package org.asciidoctor.maven.site;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
-import org.asciidoctor.ast.Author;
 import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.RevisionInfo;
 
 /**
  * Asciidoctor conversion wrapper for maven-site integration.
@@ -25,15 +20,12 @@ class SiteConverterDecorator {
     }
 
     Result process(String content, Options options) {
-        Document document = asciidoctor.load(content, headerProcessingMetadata(options));
+        final Document document = asciidoctor.load(content, headerProcessingMetadata(options));
+        final HeaderMetadata headerMetadata = HeaderMetadata.from(document);
 
-        String title = document.getTitle();
-        List<String> authors = extractAuthors(document);
-        String documentDateTime = extractDocumentDateTime(document, document.getAttributes());
+        final String html = asciidoctor.convert(content, options);
 
-        String html = asciidoctor.convert(content, options);
-
-        return new Result(new HeaderMetadata(title, authors, documentDateTime), html);
+        return new Result(headerMetadata, html);
     }
 
     private static Options headerProcessingMetadata(Options options) {
@@ -45,18 +37,6 @@ class SiteConverterDecorator {
 
         builder.parseHeaderOnly(Boolean.TRUE);
         return builder.build();
-    }
-
-    private List<String> extractAuthors(Document document) {
-        return document.getAuthors().stream()
-            .map(Author::toString)
-            .collect(Collectors.toList());
-    }
-
-    private String extractDocumentDateTime(Document document, Map<String, Object> attributes) {
-        final RevisionInfo revisionInfo = document.getRevisionInfo();
-        return Optional.ofNullable(revisionInfo.getDate())
-            .orElse((String) attributes.get("docdatetime"));
     }
 
     final class Result {
