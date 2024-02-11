@@ -1,5 +1,9 @@
 <project name="Maven Site Plugin IT">
     <body>
+        <breadcrumbs>
+            <item name="Doxia" href="https://maven.apache.org/doxia/index.html"/>
+            <item name="Trunk" href="https://maven.apache.org/doxia/doxia/index.html"/>
+        </breadcrumbs>
         <menu ref="reports" inherit="top"/>
         <menu ref="modules"/>
         <menu name="AsciiDoc Pages">

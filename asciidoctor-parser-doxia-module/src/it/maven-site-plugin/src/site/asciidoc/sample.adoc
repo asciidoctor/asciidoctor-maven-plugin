@@ -1,4 +1,6 @@
 = Sample
+The Author
+:docdatetime: 2024-02-07 23:36:29
 
 This is an example `.adoc` file that was processed by the Doxia Parser module in the Asciidoctor Maven Plugin.
 Version {docs-version}.
