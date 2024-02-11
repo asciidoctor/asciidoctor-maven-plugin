@@ -4,6 +4,12 @@ import java.util.Optional;
 
 import org.apache.maven.doxia.sink.Sink;
 
+/**
+ * Injects Asciidoctor header information into Doxia's {@link Sink}.
+ * This allows Doxia to build:
+ * - breadcrumbs
+ * - HTML head's meta elements
+ */
 public class HeadParser {
 
     private final Sink sink;

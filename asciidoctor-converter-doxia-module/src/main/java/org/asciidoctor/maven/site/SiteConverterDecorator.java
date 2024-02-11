@@ -39,6 +39,9 @@ class SiteConverterDecorator {
         return builder.build();
     }
 
+    /**
+     * Simple tuple to return Asciidoctor extracted metadata and conversion result.
+     */
     final class Result {
 
         private final HeaderMetadata headerMetadata;

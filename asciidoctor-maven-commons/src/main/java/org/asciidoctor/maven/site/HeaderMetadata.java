@@ -9,6 +9,9 @@ import org.asciidoctor.ast.Author;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.RevisionInfo;
 
+/**
+ * Extract required metadata from Asciidoctor to be used for maven-site pages.
+ */
 public class HeaderMetadata {
 
     private final String title;
