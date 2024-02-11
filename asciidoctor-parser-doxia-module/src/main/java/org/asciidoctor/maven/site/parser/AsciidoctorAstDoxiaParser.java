@@ -1,4 +1,4 @@
-package org.asciidoctor.maven.site;
+package org.asciidoctor.maven.site.parser;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -13,35 +13,43 @@ import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Attributes;
 import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordFormatter;
 import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
-import org.asciidoctor.maven.site.SiteConverterDecorator.Result;
+import org.asciidoctor.maven.site.HeaderMetadata;
+import org.asciidoctor.maven.site.HeadParser;
+import org.asciidoctor.maven.site.SiteConversionConfiguration;
+import org.asciidoctor.maven.site.SiteConversionConfigurationParser;
+import org.asciidoctor.maven.site.SiteLogHandlerDeserializer;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
+import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
+
 /**
  * This class is used by <a href="https://maven.apache.org/doxia/overview.html">the Doxia framework</a>
- * to handle the actual parsing of the AsciiDoc input files into HTML to be consumed/wrapped
- * by the Maven site generation process
+ * to handle the actual parsing of the AsciiDoc input files and pass the AST to converters (NodeProcessors).
  * (see <a href="https://maven.apache.org/plugins/maven-site-plugin/">maven-site-plugin</a>).
  *
- * @author jdlee
- * @author mojavelinux
+ * @author abelsromero
+ * @since 3.0.0
  */
-@Component(role = Parser.class, hint = AsciidoctorConverterDoxiaParser.ROLE_HINT)
-public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
+@Component(role = Parser.class, hint = AsciidoctorAstDoxiaParser.ROLE_HINT)
+public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
 
     @Inject
     protected Provider<MavenProject> mavenProjectProvider;
 
     /**
-     * The role hint for the {@link AsciidoctorConverterDoxiaParser} Plexus component.
+     * The role hint for the {@link AsciidoctorAstDoxiaParser} Plexus component.
      */
     public static final String ROLE_HINT = "asciidoc";
 
@@ -71,7 +79,7 @@ public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
         final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
 
         SiteConversionConfiguration conversionConfig = new SiteConversionConfigurationParser(project)
-            .processAsciiDocConfig(siteConfig, defaultOptions(siteDirectory), defaultAttributes());
+                .processAsciiDocConfig(siteConfig, defaultOptions(siteDirectory), defaultAttributes());
         for (String require : conversionConfig.getRequires()) {
             requireLibrary(asciidoctor, require);
         }
@@ -79,28 +87,36 @@ public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
         final LogHandler logHandler = getLogHandlerConfig(siteConfig);
         final MemoryLogHandler memoryLogHandler = asciidoctorLoggingSetup(asciidoctor, logHandler, siteDirectory);
 
-        final SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
-        final Result headerMetadata = siteConverter.process(source, conversionConfig.getOptions());
+        if (isNotBlank(reference))
+            getLog().debug("Document loaded: " + reference);
+
+        Document document = asciidoctor.load(source, conversionConfig.getOptions());
 
         try {
             // process log messages according to mojo configuration
             new LogRecordsProcessors(logHandler, siteDirectory, errorMessage -> getLog().error(errorMessage))
-                .processLogRecords(memoryLogHandler);
+                    .processLogRecords(memoryLogHandler);
+
         } catch (Exception exception) {
             throw new ParseException(exception.getMessage(), exception);
         }
 
+
+        HeaderMetadata headerMetadata = HeaderMetadata.from(document);
+
         new HeadParser(sink)
-            .parse(headerMetadata.getHeaderMetadata());
+            .parse(headerMetadata);
 
-        sink.rawText(headerMetadata.getHtml());
+        sink.body();
+        final NodesSinker nodesSinker = new NodesSinker(sink);
+        nodesSinker.processNode(document);
+        sink.body_();
     }
-
 
     private MemoryLogHandler asciidoctorLoggingSetup(Asciidoctor asciidoctor, LogHandler logHandler, File siteDirectory) {
 
         final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(logHandler.getOutputToConsole(),
-            logRecord -> getLog().info(LogRecordFormatter.format(logRecord, siteDirectory)));
+                logRecord -> getLog().info(LogRecordFormatter.format(logRecord, siteDirectory)));
         asciidoctor.registerLogHandler(memoryLogHandler);
         // disable default console output of AsciidoctorJ
         Logger.getLogger("asciidoctor").setUseParentHandlers(false);
@@ -128,16 +144,16 @@ public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
     }
 
     protected OptionsBuilder defaultOptions(File siteDirectory) {
-        return OptionsBuilder.options()
-            .backend("xhtml")
-            .safe(SafeMode.UNSAFE)
-            .baseDir(new File(siteDirectory, ROLE_HINT));
+        return Options.builder()
+                .backend("xhtml")
+                .safe(SafeMode.UNSAFE)
+                .baseDir(new File(siteDirectory, ROLE_HINT));
     }
 
     protected AttributesBuilder defaultAttributes() {
-        return AttributesBuilder.attributes()
-            .attribute("idprefix", "@")
-            .attribute("showtitle", "@");
+        return Attributes.builder()
+                .attribute("idprefix", "@")
+                .attribute("showtitle", "@");
     }
 
     private void requireLibrary(Asciidoctor asciidoctor, String require) {

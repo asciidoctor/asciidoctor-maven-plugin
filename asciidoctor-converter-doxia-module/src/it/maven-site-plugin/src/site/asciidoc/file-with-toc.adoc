@@ -1,4 +1,6 @@
 = File with TOC
+The Author
+:docdatetime: 2024-02-07 23:36:29
 :toc:
 
 [.lead]

@@ -1,8 +1,17 @@
 <project name="Maven Site Plugin IT">
     <body>
+        <breadcrumbs>
+            <item name="Doxia" href="https://maven.apache.org/doxia/index.html"/>
+            <item name="Trunk" href="https://maven.apache.org/doxia/doxia/index.html"/>
+        </breadcrumbs>
         <menu name="AsciiDoc Pages">
             <item name="Sample" href="sample.html"/>
         </menu>
-      ${reports}
+        ${reports}
     </body>
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.12.0</version>
+    </skin>
 </project>

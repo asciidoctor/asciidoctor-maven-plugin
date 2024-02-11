@@ -12,6 +12,11 @@ new FileAsserter().isNotEmpty(file)
 String htmlContent = file.text
 new HtmlAsserter(htmlContent).with { asserter ->
 
+    asserter.containsMetadata("author", "The Author")
+    asserter.containsMetadata("date", "2024-02-07 23:36:29")
+
+    asserter.containsBreadcrumbs("Sample")
+
     asserter.containsDocumentTitle("Sample")
     asserter.containsPreambleStartingWith("This is an example")
     asserter.containsSectionTitle("First section", 2)
@@ -123,6 +128,16 @@ class HtmlAsserter {
     void contains(String text) {
         def found = find(text)
         assertFound("HTML text", text, found)
+    }
+
+    void containsMetadata(String name, String value) {
+        def found = find("<meta name=\"${name}\" content=\"${value}\" />")
+        assertFound("head/meta", value, found)
+    }
+
+    void containsBreadcrumbs(String value) {
+        def found = find("<li class=\"active \">${value}</li>")
+        assertFound("Breadcrumb", value, found)
     }
 
     void containsDocumentTitle(String value) {
