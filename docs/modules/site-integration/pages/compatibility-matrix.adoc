@@ -11,7 +11,7 @@ Since v3.x.x the Asciidoctor Maven Plugin has been split into independent compon
 |Asciidoctor Doxia Module | Maven Site Plugin | Supported
 
 |v3.x.x
-|v3.1x.x
+|v3.1x.x ~ v4.x.x
 |Yes
 
 |===

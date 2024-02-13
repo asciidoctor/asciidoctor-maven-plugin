@@ -71,7 +71,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.java.version>11</project.java.version>
         <maven.version>3.9.6</maven.version>
-        <doxia.version>1.12.0</doxia.version>
+        <!-- ALL doxia components need to share version, even if some are newer.
+        https://issues.apache.org/jira/browse/DOXIA-725?page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel&focusedCommentId=17806458#comment-17806458
+        -->
+        <doxia.version>2.0.0-M8</doxia.version>
         <plexus-component-metadata.version>2.2.0</plexus-component-metadata.version>
         <asciidoctorj.version>2.5.11</asciidoctorj.version>
         <jruby.version>9.4.5.0</jruby.version>
