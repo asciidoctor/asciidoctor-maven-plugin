@@ -1,6 +1,6 @@
 name: maven-tools
 title: Maven Tools
-version: '2.2'
+version: '3.0'
 asciidoc:
   attributes:
     release-version: 3.0.0
