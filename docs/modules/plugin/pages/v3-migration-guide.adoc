@@ -53,7 +53,7 @@ This simplifies the current plugin code and allows for removal of Java reflectio
 
 === Replace deprecated option 'headerFooter' by 'standalone'
 
-`headerFooter` option in Asciidoctor has been replaced by the easier to understand 'standalone'.
+`headerFooter` option in Asciidoctor has been replaced by the easier to understand `standalone`.
 The plugin aligns with that change replacing the option with `standalone` in the `<configuration>` block.
 The new option works exactly the same with the same semantics.
 
@@ -67,7 +67,7 @@ The new option works exactly the same with the same semantics.
     <artifactId>asciidoctor-maven-plugin</artifactId>
     <version>3.0.0</version>
     <configuration>
-      <standalone>false</standalone>
+      <headerFooter>false</headerFooter>
     </configuration>
 </plugin>
 ----
