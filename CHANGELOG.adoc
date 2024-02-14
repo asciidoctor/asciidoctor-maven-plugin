@@ -13,6 +13,8 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+== v3.0.0 (2024-01-30)
+
 Bug Fixes::
 
   * Fix default value for eruby which caused a fail when using erb templates (#610)
@@ -26,15 +28,9 @@ Improvements::
   * Add 'asciidoc' as valid file extension in AsciidoctorDoxiaParserModule (#595)
   * Fix throwing an exception when registering a non Extension (#596)
   * Reimplement resource copy using 'plexus.util.DirectorScanner' instead of 'maven-filtering' to reduce dependencies and build time (#597)
-  * Set minimal Maven version to v3.8.5 (#629)
   * Replace deprecated 'headerFooter' by 'standalone' in configuration (#649)
-  * Remove internal use of 'destinationDir' AsciidoctorJ method (no changes for users) (#650)
-  * Upgrade Asciidoctorj to v2.5.4 and jRuby to v9.3.4.0 (#584)
-  * Upgrade Asciidoctorj to v2.5.5 (#591)
-  * Upgrade Asciidoctorj to v2.5.6 and jRuby to v9.3.8.0 (#602)
-  * Upgrade Asciidoctorj to v2.5.7 (#604)
-  * Upgrade Asciidoctorj to v2.5.10 and jRuby to v9.4.2.0 (#647)
-  * Upgrade Asciidoctorj to v2.5.11 (#688)
+  * Remove internal use of 'destinationDir' AsciidoctorJ method (#650)
+  * Upgrade Asciidoctorj to v2.5.11 (#688) and jRuby to v9.4.5.0 (#665)
   * Improve warning message when destination file is going to be replaced (#728)
   * Added `.editorconfig` file to facilitate code formatting (#760)
 
@@ -42,17 +38,12 @@ Build / Infrastructure::
 
   * Fix maven-source-plugin configuration for releases (#644)
   * Set Java 11 as minimal version (remove Java8 support) (#652)
-  * Use Maven v3.9.2 in CI and wrapper (#658)
   * Use Maven v3.9.5 in CI and wrapper (#662)
   * Add Java 21 to CI (#664)
   * Bump Doxia to v1.11.1 and maven-site-plugin in IT to 3.12.0 (#579)
-  * Bump netty-codec-http to v4.1.77.Final (fix CVE-2021-21290) (#582)
-  * Bump netty-codec-http to v4.1.87.Final (fix CVE-2022-41915) (#612)
-  * Bump netty-codec-http to v4.1.89.Final (#615)
   * Upgrade build related Maven plugins to the latest versions (#606)
   * Set minimal maven version to 3.8.5 (#607)
   * Bump GH 'checkout' and 'setup-java' to v3 & delete unused TravisCI configuration (#627)
-  * Bump netty-codec-http to v4.1.90.Final (#628)
   * Bump plugins versions & set CI Maven to v3.9.1 (#629)
   * Add Maven matrix testing + define Maven compatibility policy (#632)
   * Bump build related Maven plugins to the latest versions (#635)
@@ -67,114 +58,9 @@ Build / Infrastructure::
   * Test artifact's signature with Maven in CI (#736)
   * Automate release using GH Actions (#141)
   * Ensure Mojos use correct default values in unit tests (#609)
-
-Maintenance::
   * Replace use of reflection by direct JavaExtensionRegistry calls to register extensions (#596)
 
 Documentation::
 
   * Fix absolute path in usage example and AsciiDoc references in docs (https://github.com/MarkusTiede[@MarkusTiede])(#592)
   * Add v3.x.x migration guide (#598)
-
-== v2.2.2 (2022-01-30)
-
-Bug Fixes::
-
-  * Exclude dot files and folders from conversion (#550)
-  * Fix `StringIndexOutOfBoundsException` parsing log records when cursor file is above source directory (#563)
-  * Fix compatibility with maven-site-plugin v3.10.0 (previous versions no longer supported) (https://github.com/michael-o[@michael-o]) (#566)
-
-Documentation::
-
-  * Add ID's for all parameters of process-asciidoc, auto-refresh and http mojo, to be able to generate direct urls (https://github.com/uniqueck[@uniqueck]) (#533)
-  * Clarify where to put the plugin section in `pom.xml` (#558)
-  * Add compatibility matrix (#569)
-
-Build / Infrastructure::
-
-  * Migrate Maven Wrapper to Apache's offical one (#573)
-  * Upgrade Asciidoctorj to v2.5.3 and jRuby to v9.2.20.1 (#572)
-  * Upgrade Asciidoctorj to v2.5.2 (#555)
-  * Support Java 17 (#557)
-  * Bump netty-codec-http to v4.1.71.Final (#561)
-
-== v2.2.1 (2021-07-24)
-
-Bug Fixes::
-
-  * Fix excluding sources when enclosing parent path starts with _ (#546)
-  * Treat dot files and folders same as internal #5505)
-
-== v2.2.0 (2021-07-18)
-
-Improvements::
-
-  * Allow running a refresh build on included sources (for `auto-refresh` & `http` mojos) (#542)
-
-Documentation::
-
-  * Migrate docs (README) to Antora site and publish them in gh-pages (#498)
-  * Remove ambiguity in usage of maven properties docs (#507)
-  * Add ID to 'attributes' description, to be able to generate direct url from other docs (#509)
-  * Fix broken links to extension api documentation (https://github.com/djarnis73[@djarnis73]) (#523)
-  * Remove local antora site generator stuff (https://github.com/uniqueck[@uniqueck]) (#529)
-
-Build / Infrastructure::
-  * Upgrade tests to JUnit5 (#521)
-  * Rename main branch (#524)
-  * Set maven wrapper to use maven v3.8.1 (#525)
-  * Upgrade Asciidoctorj to v2.4.3 and jRuby to v9.2.14.0 (#526)
-  * Upgrade Asciidoctorj to v2.5.0 and jRuby to v9.2.17.0 (#531)
-  * Upgrade Asciidoctorj to v2.5.1 (#534)
-  * Added 'Asciidoctor' organization to pom (#539)
-  * Remove AppVeyor CI build (#540)
-  * Update `distributionManagement` to deploy directly without Bintray (#544)
-
-Maintenance::
-
-  * Upgrade `netty-codec-http` to 4.1.29.Final and refactor `AsciidoctorHttpServer` (#511)
-  * Rewrite `AsciidoctorMojoTest` to Java to make it more approachable (#512)
-  * Rewrite `AsciidoctorMojoLogHandlerTest` to Java to make it more approachable (#514)
-  * Rewrite `AsciidoctorMojoExtensionsTest` to Java to make it more approachable (#515)
-  * Rewrite `AsciidoctorHttpMojoTest` to Java to make it more approachable (#516)
-  * Rewrite `AsciidoctorZipMojoTest` to Java to make it more approachable (#518)
-  * Rewrite `AsciidoctorDoxiaParserTest` to Java + remove Groovy & Spock configurations (#519)
-  * Replace usage of internal Asciidoctorj `DirectoryWalker` with Java NIO API and fix incorrect sources converted when using `sourceDocumentExtension` (https://github.com/stdll[@stdll]) (#532)
-
-== v2.1.0 (2020-09-15)
-
-Improvements::
-
-  * Inject Maven properties as attributes in `process-asciidoc` mojo (#459)
-  * Make `auto-refresh` (and `http` by inheritance) only convert modified and created sources (#474)
-  * Make `auto-refresh` only copy modified and created resources + taking into consideration <resources> options (#478)
-  * Make `auto-refresh` ignore docInfo files to avoid copying them into output (#480)
-  * Add official support for `http` mojo with life preview and refresh of html output (#483)
-
-Bug Fixes::
-
-  * Remove Maven components from plugin descriptor (#450)
-  * Remove unnecessary maven's @Parameter configuration from ExtensionConfiguration, Synchronization and Resources (#461)
-  * Remove unused BuildContext from AsciidoctorMojo (#462)
-  * Remove unnecessary required configuration from mojo parameters (#463)
-  * Prevent sources from being converted twice in http mojo (#469)
-  * Remove synchronization property from mojo (#471)
-
-Documentation::
-
-  * Add reference to v2-migration-guide in README for better findability (#445)
-  * Fix broken link to V2 migration guide (https://github.com/ge0ffrey[@ge0ffrey]) (#446)
-  * Add GitHub's PR and issue templates (#465)
-  * Add `auto-refresh` mojo documentation (#466)
-  * Add copyright notice to README and remove unnecessary license header from sources (#482)
-
-Build / Infrastructure::
-
-  * Updated maven-release-plugin version (3.0.0-M1) and POM scm configuration to simplify release process
-  * Adds GitHub Actions build for Linux, Windows, MacOS and Java 8, 11 (#452, #453)
-  * Simplify TravisCI and AppVeyor to run Java 8 and 11 only (#460)
-  * Upgrade Maven from v3.5.0 to 3.6.3 in AppVeyor (#460)
-  * Updated jacoco-maven-plugin version from v0.8.2 to 0.8.5 (#479)
-  * Use maven-javadoc-plugin version defined in `pluginManagement` + update to v3.2.0 (#481)
-  * Add Maven Wrapper to project and CI builds (#484)
-  * Upgrade Asciidoctorj to 2.4.1 and jRuby to 9.2.13.0 (#486)

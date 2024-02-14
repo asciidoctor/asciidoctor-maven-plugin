@@ -1,7 +1,7 @@
 = Asciidoctor Maven Tools (Plugin & Site Integration)
 // Metadata
-:release-version: 2.2.5
-:docs-version: 2.2
+:release-version: 3.0.0
+:docs-version: 3.0
 :maven-site-plugin-version: 3.12.1
 // Settings
 :idprefix:
@@ -59,26 +59,10 @@ ifeval::['{tag}' == 'main']
 [NOTE]
 ====
 You're viewing the documentation for the upcoming release.
-If you're looking for the documentation for an older release, please refer to one of the following tags: +
-{uri-repo}/tree/asciidoctor-maven-plugin-2.2.3#readme[2.2.3]
+If you're looking for the documentation for an older release, please refer to one of the following tags:
++
+{uri-repo}/tree/asciidoctor-maven-plugin-2.2.6#readme[2.2.6]
 &hybull;
-{uri-repo}/tree/asciidoctor-maven-plugin-2.1.0#readme[2.1.0]
-&hybull;
-{uri-repo}/tree/asciidoctor-maven-plugin-2.0.0#readme[2.0.0]
-&hybull;
-{uri-repo}/tree/asciidoctor-maven-plugin-1.6.0#readme[1.6.0]
-&hybull;
-{uri-repo}/tree/asciidoctor-maven-plugin-1.5.8#readme[1.5.8]
-&hybull;
-{uri-repo}/tree/asciidoctor-maven-plugin-1.5.7.1#readme[1.5.7.1]
-&hybull;
-{uri-repo}/tree/asciidoctor-maven-plugin-1.5.6#readme[1.5.6]
-&hybull;
-{uri-repo}/tree/asciidoctor-maven-plugin-1.5.5#readme[1.5.5]
-&hybull;
-{uri-repo}/tree/asciidoctor-maven-plugin-1.5.3#readme[1.5.3]
-&hybull;
-{uri-repo}/tree/asciidoctor-maven-plugin-1.5.2.1#readme[1.5.2.1]
 ====
 endif::[]
 
@@ -138,7 +122,7 @@ The {uri-docs}/project/contributing.html[Contributor Guide] will help you start 
 
 == Copyright and License
 
-Copyright (C) 2013-2020 Jason Porter, Dan Allen, Abel Salgado Romero and the individual contributors.
+Copyright (C) 2013-2024 Jason Porter, Dan Allen, Abel Salgado Romero and the individual contributors.
 Use of this software is granted under the terms of the Apache License, Version 2.0.
 
 See the {uri-license}[LICENSE] for the full license text.
