@@ -1,6 +1,6 @@
 = Introduction
 :maven-doxia-url: https://maven.apache.org/doxia/
 
-The Asciidoctor Maven Site integration provides a {maven-doxia-url}[Maven Doxia] module to author your content with the {Maven Site Plugin}[maven-site-plugin].
+The Asciidoctor Maven Site integration provides a {maven-doxia-url}[Maven Doxia] module to author your content with the {uri-maven-site-plugin}[maven-site-plugin].
 
 Read the xref:setup-and-configuration.adoc#setup[setup] section to know about how start using it.
