@@ -1,6 +1,5 @@
-= Asciidoctor-maven-plugin 3.x.x migration guide
-:navtitle: v3 migration guide
-:sectnums:
+= Asciidoctor Maven Plugin 3.x.x Migration Guide
+:navtitle: 3.x.x Migration Guide
 
 The `asciidoctor-maven-plugin` and its Doxia Modules 3.0.0 introduces some breaking changes.
 This guide will provide the steps required to update a project currently using 2.x.x version.
