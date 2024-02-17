@@ -1,4 +1,4 @@
-= Asciidoctor Maven Plugin 3.x.x Migration Guide
+= Maven Plugin 3.x.x Migration Guide
 :navtitle: 3.x.x Migration Guide
 
 The `asciidoctor-maven-plugin` 3.0.0 introduces some breaking changes.
@@ -23,6 +23,7 @@ Minimal Java version is 11.
 
 For anyone in need of a Java 8 compatible release, v2.5.x of the plugin will be supported for some time after v3.0.x release.
 Note this also imposes versions on dependencies, for example:
+
 * Only AsciidoctorJ v2.5.x
 * Only asciidoctorj-diagram previous v2.2.8
 

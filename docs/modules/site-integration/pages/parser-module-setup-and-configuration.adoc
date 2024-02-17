@@ -3,13 +3,13 @@
 :fluido-skin-url: https://maven.apache.org/skins/maven-fluido-skin/
 
 WARNING: This module is still considered experimental and early stages.
-Please, consider sharing feedback and report any issue you find or improvement you consider to help us improve.
+Please, consider sharing feedback and reporting any issue you find, or improvement you consider to help us improve.
 
 This module uses Asciidoctor to parse AsciiDoc source files and then uses a custom converter adapted to Maven Site styles.
 Compatibility is being validated with the default skin and specially https://maven.apache.org/skins/maven-fluido-skin/[Fluido skin].
 
-This module should be used by those desiring a simple out-of-the-box experience and willing to sacrifice from AsciiDoc feature.
-Some noteworthy features not yet supported are admonitions or includes.
+This module should be used by those desiring a simple out-of-the-box experience and willing to sacrifice some AsciiDoc features (for now).
+See <<_supported_asciidoc_elements>> below for details on support.
 
 == Setup
 
