@@ -9,7 +9,7 @@ This module uses Asciidoctor to parse AsciiDoc source files and then uses a cust
 Compatibility is being validated with the default skin and specially https://maven.apache.org/skins/maven-fluido-skin/[Fluido skin].
 
 This module should be used by those desiring a simple out-of-the-box experience and willing to sacrifice some AsciiDoc features (for now).
-See <<_supported_asciidoc_elements>> below for details on support.
+See <<supported-asciidoc-elements>> below for details on support.
 
 == Setup
 
@@ -162,6 +162,7 @@ To see all options refer to the main plugin xref:plugin:goals/http.adoc#configur
 IMPORTANT: Due to limitations in how Maven site integration works, it is not possible to provide the filename in the error message.
 We are aware this is not ideal and are tracking any development on the Maven side towards this goal (https://issues.apache.org/jira/browse/DOXIA-555[DOXIA-555]).
 
+[#supported-asciidoc-elements]
 == Supported AsciiDoc elements
 
 This module is still under development, here is a summary of supported features:
