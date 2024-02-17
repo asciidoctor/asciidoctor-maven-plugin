@@ -47,7 +47,7 @@ The conversion can happen in 2 flavors:
 . as a Maven site integration: AsciiDoc files are integrated with Maven reports, which comes with
 a few limitations (see below for details).
 
-Full documentations is available in the {uri-docs}[USER MANUAL].
+Full documentations is available in the {uri-docs}[USER MANUAL], if you have questions, please drop them at the https://asciidoctor.zulipchat.com/#narrow/stream/users[PROJECT CHAT].
 
 ifndef::env-site[]
 .Translations of the document are available in the following languages:
