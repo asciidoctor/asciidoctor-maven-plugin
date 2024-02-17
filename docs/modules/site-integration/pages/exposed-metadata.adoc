@@ -1,10 +1,10 @@
-= Exposed metadata
+= Exposed Metadata
 :asciidoctor-docs-url: https://docs.asciidoctor.org/asciidoc/latest
 :maven-site-plugin-docs-url: https://maven.apache.org/plugins/maven-site-plugin
 
 The Asciidoctor Maven Site integration collaborates with Doxia to expose some of its information.
 
-== Document Header metadata
+== Document Header Metadata
 
 The following elements from the {asciidoctor-docs-url}/document/header/[header] are integrated:
 
