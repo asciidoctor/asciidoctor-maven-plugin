@@ -1,5 +1,5 @@
 = Asciidoctor Parser Doxia Module
-:doxia-module-name: asciidoctor-parser-doxia-module
+:doxia-compatible-module-name: asciidoctor-parser-doxia-module
 :fluido-skin-url: https://maven.apache.org/skins/maven-fluido-skin/
 
 WARNING: This module is still considered experimental and early stages.
