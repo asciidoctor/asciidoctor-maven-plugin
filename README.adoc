@@ -69,18 +69,18 @@ endif::[]
 
 == Quickstart
 
-These are the minimal steps to convert your AsciiDoc documents to HTML with the asciidoctor-maven-plugin.
+These are the minimal steps to convert your AsciiDoc documents to HTML with the `asciidoctor-maven-plugin`.
 
 . Place your AsciiDoc sources in [.path]_src/docs/asciidoc_.
 
 . Add the minimal configuration to your [.path]_pom.xml_.
 +
-[source,xml]
+[source,xml,subs="attributes+"]
 ----
 <plugin>
     <groupId>org.asciidoctor</groupId>
     <artifactId>asciidoctor-maven-plugin</artifactId>
-    <version>${asciidoctor-maven-plugin.version}</version>
+    <version>{release-version}</version>
     <executions>
         <execution>
             <id>asciidoc-to-html</id>
@@ -96,6 +96,37 @@ These are the minimal steps to convert your AsciiDoc documents to HTML with the 
 . Run the plugin's associated phase.
 
  $ mvn generate-resources
+
+If you want to generate your Maven site with Asciidoctor
+
+. Place your AsciiDoc sources in [.path]_src/site/asciidoc_.
+
+. Add the minimal configuration to your [.path]_pom.xml_.
++
+[source,xml,subs=attributes+]
+.Maven site integration
+-----
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>{maven-site-plugin-version}</version>
+            <dependencies>
+                <dependency>
+                    <groupId>org.asciidoctor</groupId>
+                    <artifactId>asciidoctor-parser-doxia-module</artifactId>
+                    <version>{release-version}</version>
+                </dependency>
+            </dependencies>
+        </plugin>
+    </plugins>
+</build>
+-----
+
+. Run the plugin's associated phase.
+
+ $ mvn site:site
 
 == Examples
 
