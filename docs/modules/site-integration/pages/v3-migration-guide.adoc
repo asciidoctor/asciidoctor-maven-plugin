@@ -1,5 +1,7 @@
-= Asciidoctor Maven Plugin 3.x.x Migration Guide
+= Site integration 3.x.x Migration Guide
 :navtitle: 3.x.x Migration Guide
+:doxia-compatible-module-name: asciidoctor-converter-doxia-module
+:doxia-new-module-name: asciidoctor-parser-doxia-module
 
 The `asciidoctor-maven-plugin` and its Doxia Modules 3.0.0 introduces some breaking changes.
 This guide will provide the steps required to update a project currently using 2.x.x version.
@@ -9,18 +11,18 @@ NOTE: New configuration details are highlighted in *bold*.
 
 == Motivations
 
-Changes in this version have been motivated to improve the plugin evolution and maintenance.
+Changes in this version have been motivated to provide a new easier to use asciidoctor to build sites with Maven site plugin.
 With that goal in mind, the single project that contained both the maven plugin and site integration components has been split into different maven submodules.
-The main advantage for most users is that usage of the asciidoctor-maven-plugin will not require downloading Doxia dependencies.
+
+The old Doxia module embedded in `asciidocto-maven-plugin` library it's now an independent JAR called `{doxia-compatible-module-name}`, and a new one has been created `{doxia-new-module-name}`.
 
 == Changes
 
 === Site plugin module renamed
-:doxia-module-name: asciidoctor-converter-doxia-module
 
-The https://maven.apache.org/doxia/[Doxia] module has been extracted into a separated subproject named `{doxia-module-name}`.
+The https://maven.apache.org/doxia/[Doxia] module has been extracted into a separated subproject named `{doxia-compatible-module-name}`.
 
-*Rename the maven-site-plugin dependency from `asciidoctor-maven-plugin` to `{doxia-module-name}`.*
+*Rename the maven-site-plugin dependency from `asciidoctor-maven-plugin` to `{doxia-compatible-module-name}`.*
 
 [source,xml,subs=attributes+]
 .new configuration
@@ -32,7 +34,7 @@ The https://maven.apache.org/doxia/[Doxia] module has been extracted into a sepa
     <dependencies>
         <dependency>
             <groupId>org.asciidoctor</groupId>
-            <artifactId>{doxia-module-name}</artifactId>
+            <artifactId>{doxia-compatible-module-name}</artifactId>
             <version>{release-version}</version>
         </dependency>
     </dependencies>
