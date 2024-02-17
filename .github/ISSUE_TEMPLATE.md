@@ -3,9 +3,9 @@ Thank you for taking your time to talk with us!
 **What is this issue about?**
 <!-- Update "[ ]" to "[x]" to check a box -->
 
-- [ ] Bug report
-- [ ] Feature request
-- [ ] Question
+- [ ] Bug report 🪲
+- [ ] Feature request 🏎
+- [ ] Question ❓ Consider dropping it first in the [Project Chat](https://asciidoctor.zulipchat.com/#narrow/stream/users)
 
 
 **Description**
