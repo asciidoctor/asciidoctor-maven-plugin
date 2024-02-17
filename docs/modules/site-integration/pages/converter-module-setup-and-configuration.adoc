@@ -1,5 +1,5 @@
 = Asciidoctor Converter Doxia Module
-:doxia-compatible-module-name: asciidoctor-converter-doxia-module
+:doxia-module-name: asciidoctor-converter-doxia-module
 
 This module uses Asciidoctor to directly convert sources without additional customizations.
 That means you will get the same HTML as using Asciidoctor but some elements may not be well presented due to incompatibilities with Doxia Skins.
