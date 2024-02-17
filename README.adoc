@@ -1,7 +1,6 @@
 = Asciidoctor Maven Tools (Plugin & Site Integration)
 // Metadata
 :release-version: 3.0.0
-:docs-version: 3.0
 :maven-site-plugin-version: 3.12.1
 // Settings
 :idprefix:
@@ -18,7 +17,7 @@ ifndef::env-github[:icons: font]
 :uri-examples: https://github.com/asciidoctor/asciidoctor-maven-examples
 :uri-maven: http://maven.apache.org
 :uri-license: {uri-repo}/blob/main/LICENSE.txt
-:uri-docs: https://docs.asciidoctor.org/maven-tools//{docs-version}
+:uri-docs: https://docs.asciidoctor.org/maven-tools/latest
 // GitHub customization
 ifdef::env-github[]
 :badges:
@@ -48,7 +47,7 @@ The conversion can happen in 2 flavors:
 . as a Maven site integration: AsciiDoc files are integrated with Maven reports, which comes with
 a few limitations (see below for details).
 
-Full documentations is available in the  {uri-docs}[USER MANUAL].
+Full documentations is available in the {uri-docs}[USER MANUAL].
 
 ifndef::env-site[]
 .Translations of the document are available in the following languages:
@@ -59,8 +58,10 @@ ifeval::['{tag}' == 'main']
 [NOTE]
 ====
 You're viewing the documentation for the upcoming release.
-If you're looking for the documentation for an older release, please refer to one of the following tags:
+If you're looking for the documentation for a stable release, please refer to one of the following tags:
 +
+{uri-repo}/tree/asciidoctor-maven-plugin-3.0.0#readme[3.0.0]
+&hybull;
 {uri-repo}/tree/asciidoctor-maven-plugin-2.2.6#readme[2.2.6]
 &hybull;
 ====
@@ -79,7 +80,7 @@ These are the minimal steps to convert your AsciiDoc documents to HTML with the 
 <plugin>
     <groupId>org.asciidoctor</groupId>
     <artifactId>asciidoctor-maven-plugin</artifactId>
-    <version>${asciidoctor.maven.plugin.version}</version>
+    <version>${asciidoctor-maven-plugin.version}</version>
     <executions>
         <execution>
             <id>asciidoc-to-html</id>
@@ -100,10 +101,15 @@ These are the minimal steps to convert your AsciiDoc documents to HTML with the 
 
 You can find examples ready to copy-paste in the {uri-examples}[Asciidoctor Maven examples] project.
 
-== Maven compatible versions
+== Supported version
 
 // 1-year-old versions + most recent minor
-asciidoctor-maven-plugin supports Maven 3.8.5+ and 3.9.x versions.
+asciidoctor-maven-plugin comes in two versions with support for Maven 3.8.8+ and 3.9.x versions.
+
+* Version 3.x.x: current development branch.
+This is the recommended version, new features and fixes will be added as minor/patch releases.
+* Version 2.2.x: maintenance branch.
+Fixes will be released as patch versions up until 31st January 2025.
 
 == Contributing
 
