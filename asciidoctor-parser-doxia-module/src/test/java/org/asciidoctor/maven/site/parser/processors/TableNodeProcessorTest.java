@@ -45,16 +45,16 @@ class TableNodeProcessorTest {
 
         // Header for now is just first row with class=a
         assertThat(html)
-                .isEqualTo("<table border=\"0\" class=\"bodyTable\">" +
-                        "<tr class=\"a\">" +
-                        "<th>Name</th>" +
-                        "<th>Language</th></tr>" +
-                        "<tr class=\"b\">" +
-                        "<td align=\"left\">JRuby</td>" +
-                        "<td>Java</td></tr>" +
-                        "<tr class=\"a\">" +
-                        "<td align=\"left\">Rubinius</td>" +
-                        "<td>Ruby</td></tr></table>");
+            .isEqualTo("<table class=\"bodyTable\">" +
+                "<tr class=\"a\">" +
+                "<th>Name</th>" +
+                "<th>Language</th></tr>" +
+                "<tr class=\"b\">" +
+                "<td style=\"text-align: left;\">JRuby</td>" +
+                "<td>Java</td></tr>" +
+                "<tr class=\"a\">" +
+                "<td style=\"text-align: left;\">Rubinius</td>" +
+                "<td>Ruby</td></tr></table>");
     }
 
     @Test
@@ -64,13 +64,13 @@ class TableNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo(clean("<table border=\"0\" class=\"bodyTable\">" +
-                        "<tr class=\"a\">" +
-                        "<td align=\"left\">JRuby</td>" +
-                        "<td>Java</td></tr>" +
-                        "<tr class=\"b\">" +
-                        "<td align=\"left\">Rubinius</td>" +
-                        "<td>Ruby</td></tr></table>"));
+            .isEqualTo(clean("<table class=\"bodyTable\">" +
+                "<tr class=\"a\">" +
+                "<td style=\"text-align: left;\">JRuby</td>" +
+                "<td>Java</td></tr>" +
+                "<tr class=\"b\">" +
+                "<td style=\"text-align: left;\">Rubinius</td>" +
+                "<td>Ruby</td></tr></table>"));
     }
 
     @Test
@@ -80,7 +80,7 @@ class TableNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo(expectedTableWithoutCaption());
+            .isEqualTo(expectedTableWithoutCaption());
     }
 
     @Test
@@ -90,14 +90,13 @@ class TableNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .startsWith("<table border=\"0\" class=\"bodyTable\"><caption>Table 1. Table caption&#8230;&#8203;or title</caption>")
-                .isEqualTo("<table border=\"0\" class=\"bodyTable\"><caption>Table 1. Table caption&#8230;&#8203;or title</caption>" +
-                        "<tr class=\"a\">" +
-                        "<td align=\"left\">JRuby</td>" +
-                        "<td>Java</td></tr>" +
-                        "<tr class=\"b\">" +
-                        "<td align=\"left\">Rubinius</td>" +
-                        "<td>Ruby</td></tr></table>");
+            .isEqualTo("<table class=\"bodyTable\"><caption>Table 1. Table caption&#8230;&#8203;or title</caption>" +
+                "<tr class=\"a\">" +
+                "<td style=\"text-align: left;\">JRuby</td>" +
+                "<td>Java</td></tr>" +
+                "<tr class=\"b\">" +
+                "<td style=\"text-align: left;\">Rubinius</td>" +
+                "<td>Ruby</td></tr></table>");
     }
 
     @Test
@@ -107,8 +106,8 @@ class TableNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .startsWith(expectedNoLabelBeginning())
-                .isEqualTo(expectedTableWithoutLabel());
+            .startsWith(expectedNoLabelBeginning())
+            .isEqualTo(expectedTableWithoutLabel());
     }
 
     @Test
@@ -118,35 +117,35 @@ class TableNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .startsWith(expectedNoLabelBeginning())
-                .isEqualTo(expectedTableWithoutLabel());
+            .startsWith(expectedNoLabelBeginning())
+            .isEqualTo(expectedTableWithoutLabel());
     }
 
     private static String expectedNoLabelBeginning() {
-        return "<table border=\"0\" class=\"bodyTable\"><caption>Table caption&#8230;&#8203;or title</caption>";
+        return "<table class=\"bodyTable\"><caption>Table caption&#8230;&#8203;or title</caption>";
     }
 
     private static String expectedTableWithoutLabel() {
-        return "<table border=\"0\" class=\"bodyTable\"><caption>Table caption&#8230;&#8203;or title</caption>" +
-                "<tr class=\"a\">" +
-                "<td align=\"left\">JRuby</td>" +
-                "<td>Java</td></tr>" +
-                "<tr class=\"b\">" +
-                "<td align=\"left\">Rubinius</td>" +
-                "<td>Ruby</td></tr></table>";
+        return "<table class=\"bodyTable\"><caption>Table caption&#8230;&#8203;or title</caption>" +
+            "<tr class=\"a\">" +
+            "<td style=\"text-align: left;\">JRuby</td>" +
+            "<td>Java</td></tr>" +
+            "<tr class=\"b\">" +
+            "<td style=\"text-align: left;\">Rubinius</td>" +
+            "<td>Ruby</td></tr></table>";
     }
 
     private static String expectedTableWithoutCaption() {
-        return "<table border=\"0\" class=\"bodyTable\">" +
-                "<tr class=\"a\">" +
-                "<td align=\"left\">JRuby</td>" +
-                "<td>Java</td></tr>" +
-                "<tr class=\"b\">" +
-                "<td align=\"left\">Rubinius</td>" +
-                "<td>Ruby</td></tr>" +
-                "<tr class=\"a\">" +
-                "<td align=\"left\"><strong>Opal</strong></td>" +
-                "<td><em>JavaScript</em></td></tr></table>";
+        return "<table class=\"bodyTable\">" +
+            "<tr class=\"a\">" +
+            "<td style=\"text-align: left;\">JRuby</td>" +
+            "<td>Java</td></tr>" +
+            "<tr class=\"b\">" +
+            "<td style=\"text-align: left;\">Rubinius</td>" +
+            "<td>Ruby</td></tr>" +
+            "<tr class=\"a\">" +
+            "<td style=\"text-align: left;\"><strong>Opal</strong></td>" +
+            "<td><em>JavaScript</em></td></tr></table>";
     }
 
     static class DocumentBuilder {
@@ -172,24 +171,24 @@ class TableNodeProcessorTest {
 
         static String documentWithTable(boolean includeHeaderRow, CaptionOptions captionOptions, List<String> additionalRow) {
             return "= Document tile\n" +
-                    (captionOptions.disableGlobally ? ":table-caption!:\n" : "") +
-                    "\n" +
-                    "== Section\n" +
-                    (captionOptions.disableForTable ? "[caption=]\n" : "") +
-                    (captionOptions.include ? ".Table caption...or title\n" : "") +
-                    "|===\n" +
-                    (includeHeaderRow ? "|Name |Language\n\n" : "") +
-                    "|JRuby |Java\n" +
-                    "|Rubinius |Ruby\n" +
-                    (!additionalRow.isEmpty() ? additionalRow.stream().collect(Collectors.joining("|", " |", "")) : "") +
-                    "|===";
+                (captionOptions.disableGlobally ? ":table-caption!:\n" : "") +
+                "\n" +
+                "== Section\n" +
+                (captionOptions.disableForTable ? "[caption=]\n" : "") +
+                (captionOptions.include ? ".Table caption...or title\n" : "") +
+                "|===\n" +
+                (includeHeaderRow ? "|Name |Language\n\n" : "") +
+                "|JRuby |Java\n" +
+                "|Rubinius |Ruby\n" +
+                (!additionalRow.isEmpty() ? additionalRow.stream().collect(Collectors.joining("|", " |", "")) : "") +
+                "|===";
         }
     }
 
     private String process(String content) {
         StructuralNode node = asciidoctor.load(content, Options.builder().build())
-                .findBy(Collections.singletonMap("context", ":table"))
-                .get(0);
+            .findBy(Collections.singletonMap("context", ":table"))
+            .get(0);
 
         nodeProcessor.process(node);
 

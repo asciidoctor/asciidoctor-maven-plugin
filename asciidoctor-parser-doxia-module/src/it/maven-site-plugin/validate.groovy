@@ -153,13 +153,13 @@ class HtmlAsserter {
     void containsSectionTitle(String value, int level) {
         def found = -1
 
-        def id = value.replaceAll(" ", "_")
+        def id = value.toLowerCase().replaceAll(" ", "_")
         if (level == 2) {
-            found = find("<h2><a name=\"$id\"></a>$value</h2>")
+            found = find("<h2><a id=\"$id\"></a>$value</h2>")
         } else if (level == 3) {
-            found = find("<h3><a name=\"$id\"></a>$value</h3>")
+            found = find("<h3><a id=\"$id\"></a>$value</h3>")
         } else if (level == 4) {
-            found = find("<h4><a name=\"$id\"></a>$value</h4>")
+            found = find("<h4><a id=\"$id\"></a>$value</h4>")
         }
         assertFound("Section Title (level:$level)", value, found)
     }
@@ -185,7 +185,7 @@ class HtmlAsserter {
     }
 
     void containsOrderedList(String... values) {
-        def found = find("<ol style=\"list-style-type: decimal\"><li>${values.join('</li><li>')}</li></ol>")
+        def found = find("<ol style=\"list-style-type: decimal;\"><li>${values.join('</li><li>')}</li></ol>")
         assertFound("Ordered list", values.join(','), found)
     }
 
