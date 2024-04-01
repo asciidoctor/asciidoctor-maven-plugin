@@ -63,8 +63,8 @@ jobs:
           java-distribution: 'temurin'
           java-version: ${{ matrix.java }}
           maven-version: ${{ matrix.maven }}
-      - name: Build & Test
-        run: mvn -B clean javadoc:jar
+      - name: Build javadoc
+        run: mvn clean install -DskipTests && mvn clean javadoc:javadoc
   signature:
     name: Sign artifacts
     environment: test

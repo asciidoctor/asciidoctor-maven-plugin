@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+Build / Infrastructure::
+
+  * Fix javadoc check flake in CI (#814)
+
 == v3.0.0 (2024-01-30)
 
 Bug Fixes::
