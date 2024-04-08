@@ -78,7 +78,7 @@
         <jruby.version>9.4.6.0</jruby.version>
         <maven.coveralls.plugin.version>4.3.0</maven.coveralls.plugin.version>
         <maven.jacoco.plugin.version>0.8.11</maven.jacoco.plugin.version>
-        <maven.plugin.plugin.version>3.9.0</maven.plugin.plugin.version>
+        <maven.plugin.plugin.version>3.12.0</maven.plugin.plugin.version>
         <maven.project.version>3.8.5</maven.project.version>
         <maven.filtering.version>3.3.2</maven.filtering.version>
         <plexus.utils.version>3.5.1</plexus.utils.version>
