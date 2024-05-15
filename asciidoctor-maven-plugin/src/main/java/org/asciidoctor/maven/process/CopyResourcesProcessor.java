@@ -60,13 +60,13 @@ public class CopyResourcesProcessor implements ResourcesProcessor {
     @Override
     public void process(File sourceRootDirectory, File outputRootDirectory, AsciidoctorMojo configuration) {
         final List<Resource> finalResources = prepareResources(sourceRootDirectory, configuration);
-        copyResources(finalResources, outputRootDirectory);
+        copyResources(finalResources, outputRootDirectory, configuration);
     }
 
     /**
      * Initializes resources attribute excluding AsciiDoc documents, internal directories/files (those prefixed with
      * underscore), and docinfo files.
-     * By default everything in the sources directories is copied.
+     * By default, everything in the sources directories is copied.
      *
      * @return Collection of resources with properly configured includes and excludes conditions.
      */
@@ -116,14 +116,15 @@ public class CopyResourcesProcessor implements ResourcesProcessor {
      *
      * @param resources       Collection of {@link Resource} defining what resources to {@code outputDirectory}.
      * @param outputDirectory Directory where to copy resources.
+     * @param configuration   Project configuration
      */
-    private void copyResources(List<Resource> resources, File outputDirectory) {
+    private void copyResources(List<Resource> resources, File outputDirectory, AsciidoctorMojo configuration) {
 
         resources.stream()
-            .filter(resource -> new File(resource.getDirectory()).exists())
+            .filter(resource -> configuration.getBaseDir().exists())
             .forEach(resource -> {
                 DirectoryScanner directoryScanner = new DirectoryScanner();
-                directoryScanner.setBasedir(resource.getDirectory());
+                directoryScanner.setBasedir(configuration.getBaseDir());
 
                 if (resource.getIncludes().isEmpty())
                     directoryScanner.setIncludes(new String[]{"**/*.*", "**/*"});
