@@ -25,6 +25,7 @@ Bug Fixes::
   * Fix maven properties not being injected as attributes during site conversion (#656)
   * Remove Java 'requires open access' module warning in modern Java versions with JRuby v9.4.5.0 (#553)
   * Fix breadcrumbs not showing the document title in maven-site pages (#763)
+  * Fix resource copy in multi-module project (#838)
 
 Improvements::
 
