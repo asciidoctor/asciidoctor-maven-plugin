@@ -32,7 +32,6 @@ public class CopyResourcesProcessorTest {
     void should_not_fail_when_source_does_not_exist() {
         File nonExistentDir = new File(sourceDir, UUID.randomUUID().toString());
         AsciidoctorMojo config = new AsciidoctorMojo();
-        config.setBaseDir(sourceDir);
 
         resourceProcessor.process(nonExistentDir, outputDir, config);
 
@@ -45,7 +44,6 @@ public class CopyResourcesProcessorTest {
     void should_not_fail_when_output_does_not_exist() {
         File nonExistentDir = new File(sourceDir, UUID.randomUUID().toString());
         AsciidoctorMojo config = new AsciidoctorMojo();
-        config.setBaseDir(sourceDir);
 
         resourceProcessor.process(sourceDir, nonExistentDir, config);
 
@@ -59,10 +57,8 @@ public class CopyResourcesProcessorTest {
         final String[] fileExtensions = {"adoc", "ad", "asc", "asciidoc"};
         for (String fileExtension : fileExtensions)
             createFileWithContent(sourceDir, "source." + fileExtension);
-        AsciidoctorMojo config = new AsciidoctorMojo();
-        config.setBaseDir(sourceDir);
 
-        resourceProcessor.process(sourceDir, outputDir, config);
+        resourceProcessor.process(sourceDir, outputDir, new AsciidoctorMojo());
 
         assertThat(sourceDir.listFiles()).hasSize(fileExtensions.length);
         assertThat(outputDir.listFiles()).hasSize(0);
@@ -76,10 +72,8 @@ public class CopyResourcesProcessorTest {
             else
                 createFileWithContent(sourceDir, filename);
         }
-        AsciidoctorMojo config = new AsciidoctorMojo();
-        config.setBaseDir(sourceDir);
 
-        resourceProcessor.process(sourceDir, outputDir, config);
+        resourceProcessor.process(sourceDir, outputDir, new AsciidoctorMojo());
 
         assertThat(sourceDir.listFiles()).hasSize(IGNORED_FILE_NAMES.length);
         assertThat(outputDir.listFiles()).hasSize(0);
@@ -90,7 +84,6 @@ public class CopyResourcesProcessorTest {
         final String sourceDocumentName = "my-file.special";
         AsciidoctorMojo config = new AsciidoctorMojo();
         config.setSourceDocumentName(sourceDocumentName);
-        config.setBaseDir(sourceDir);
 
         createFileWithContent(sourceDir, sourceDocumentName);
 
@@ -104,7 +97,6 @@ public class CopyResourcesProcessorTest {
         final List<String> fileExtensions = Arrays.asList("ext1", "ext2", "exta", "extb");
         AsciidoctorMojo config = new AsciidoctorMojo();
         config.setSourceDocumentExtensions(fileExtensions);
-        config.setBaseDir(sourceDir);
 
         for (String fileExtension : fileExtensions)
             createFileWithContent(sourceDir, "source." + fileExtension);
@@ -118,10 +110,8 @@ public class CopyResourcesProcessorTest {
     void should_copy_resources_in_root_source_directory() {
         createFileWithContent(sourceDir, "image.jpg");
         createFileWithContent(sourceDir, "image.gif");
-        AsciidoctorMojo config = new AsciidoctorMojo();
-        config.setBaseDir(sourceDir);
 
-        resourceProcessor.process(sourceDir, outputDir, config);
+        resourceProcessor.process(sourceDir, outputDir, new AsciidoctorMojo());
 
         assertThat(outputDir.list())
                 .containsExactlyInAnyOrder("image.jpg", "image.gif");
@@ -132,10 +122,8 @@ public class CopyResourcesProcessorTest {
         FileUtils.forceMkdir(new File(sourceDir, "sub_1"));
         FileUtils.forceMkdir(new File(sourceDir, "sub_2"));
         FileUtils.forceMkdir(new File(sourceDir, "sub_1/sub_1_2"));
-        AsciidoctorMojo config = new AsciidoctorMojo();
-        config.setBaseDir(sourceDir);
 
-        resourceProcessor.process(sourceDir, outputDir, config);
+        resourceProcessor.process(sourceDir, outputDir, new AsciidoctorMojo());
 
         assertThat(outputDir.list())
                 .hasSize(0);
@@ -148,10 +136,8 @@ public class CopyResourcesProcessorTest {
         void should_copy_resources_in_root_source_directory() {
             createFileWithContent(sourceDir, "image.jpg");
             createFileWithContent(sourceDir, "image.gif");
-            AsciidoctorMojo config = new AsciidoctorMojo();
-            config.setBaseDir(sourceDir);
 
-            resourceProcessor.process(sourceDir, outputDir, config);
+            resourceProcessor.process(sourceDir, outputDir, new AsciidoctorMojo());
 
             assertThat(outputDir.list())
                     .containsExactlyInAnyOrder("image.jpg", "image.gif");
@@ -162,10 +148,8 @@ public class CopyResourcesProcessorTest {
             createFileWithContent(new File(sourceDir, "sub_1"), "image.jpg");
             createFileWithContent(new File(sourceDir, "sub_2"), "image.gif");
             createFileWithContent(new File(sourceDir, "sub_1/sub_1_2"), "image.bmp");
-            AsciidoctorMojo config = new AsciidoctorMojo();
-            config.setBaseDir(sourceDir);
 
-            resourceProcessor.process(sourceDir, outputDir, config);
+            resourceProcessor.process(sourceDir, outputDir, new AsciidoctorMojo());
 
             assertThat(outputDir.list())
                     .containsExactlyInAnyOrder("sub_1", "sub_2");
@@ -189,7 +173,6 @@ public class CopyResourcesProcessorTest {
                     .build();
             AsciidoctorMojo configuration = new AsciidoctorMojo();
             configuration.setResources(Arrays.asList(resource));
-            configuration.setBaseDir(sourceDir);
 
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.txt");
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.ignore");
@@ -217,7 +200,6 @@ public class CopyResourcesProcessorTest {
                     .build();
             AsciidoctorMojo configuration = new AsciidoctorMojo();
             configuration.setResources(Arrays.asList(resource));
-            configuration.setBaseDir(sourceDir);
 
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.txt");
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.doc");
@@ -255,7 +237,6 @@ public class CopyResourcesProcessorTest {
                     .build();
             AsciidoctorMojo configuration = new AsciidoctorMojo();
             configuration.setResources(Arrays.asList(resource1, resource2));
-            configuration.setBaseDir(sourceDir);
 
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.txt");
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.doc");
@@ -289,7 +270,6 @@ public class CopyResourcesProcessorTest {
                     .build();
             AsciidoctorMojo configuration = new AsciidoctorMojo();
             configuration.setResources(Arrays.asList(resource));
-            configuration.setBaseDir(sourceDir);
 
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.img");
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.txt");
@@ -320,7 +300,6 @@ public class CopyResourcesProcessorTest {
                     .build();
             AsciidoctorMojo configuration = new AsciidoctorMojo();
             configuration.setResources(Arrays.asList(resource));
-            configuration.setBaseDir(sourceDir);
 
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.txt");
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.doc");
@@ -357,7 +336,6 @@ public class CopyResourcesProcessorTest {
                     .build();
             AsciidoctorMojo configuration = new AsciidoctorMojo();
             configuration.setResources(Arrays.asList(resource));
-            configuration.setBaseDir(sourceDir);
 
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.txt");
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.doc");
@@ -389,7 +367,6 @@ public class CopyResourcesProcessorTest {
             List<Resource> resources = ResourceBuilder.excludeAll();
             AsciidoctorMojo configuration = new AsciidoctorMojo();
             configuration.setResources(resources);
-            configuration.setBaseDir(sourceDir);
 
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.txt");
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.doc");

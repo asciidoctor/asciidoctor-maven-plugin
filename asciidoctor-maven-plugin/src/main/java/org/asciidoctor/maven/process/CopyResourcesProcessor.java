@@ -121,10 +121,21 @@ public class CopyResourcesProcessor implements ResourcesProcessor {
     private void copyResources(List<Resource> resources, File outputDirectory, AsciidoctorMojo configuration) {
 
         resources.stream()
-            .filter(resource -> configuration.getBaseDir().exists())
+            .map(resource -> {
+                final File candidate = new File(resource.getDirectory());
+                final File sourceDir = candidate.isAbsolute() ? candidate : new File(configuration.getProjectDirectory(), resource.getDirectory());
+
+                final Resource sanitizedResource = new Resource();
+                sanitizedResource.setDirectory(sourceDir.getAbsolutePath());
+                sanitizedResource.setTargetPath(resource.getTargetPath());
+                sanitizedResource.setIncludes(resource.getIncludes());
+                sanitizedResource.setExcludes(resource.getExcludes());
+                return sanitizedResource;
+            })
+            .filter(resource -> new File(resource.getDirectory()).exists())
             .forEach(resource -> {
                 DirectoryScanner directoryScanner = new DirectoryScanner();
-                directoryScanner.setBasedir(configuration.getBaseDir());
+                directoryScanner.setBasedir(resource.getDirectory());
 
                 if (resource.getIncludes().isEmpty())
                     directoryScanner.setIncludes(new String[]{"**/*.*", "**/*"});
