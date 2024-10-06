@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import static java.util.Collections.singletonList;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
+import static org.asciidoctor.maven.test.TestUtils.ResourceBuilder.excludeAll;
 import static org.asciidoctor.maven.test.TestUtils.mockAsciidoctorMojo;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -167,6 +168,7 @@ class AsciidoctorMojoExtensionsTest {
         mojo.backend = "html";
         mojo.sourceDirectory = srcDir;
         mojo.sourceDocumentName = "processors-sample.adoc";
+        mojo.resources = excludeAll();
         mojo.outputDirectory = outputDir;
         mojo.standalone = true;
         mojo.extensions = Arrays.asList(extensionConfiguration(ChangeAttributeValuePreprocessor.class));

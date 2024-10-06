@@ -13,7 +13,9 @@ import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.project.MavenProject;
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Attributes;
 import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.maven.log.LogHandler;
@@ -128,14 +130,14 @@ public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
     }
 
     protected OptionsBuilder defaultOptions(File siteDirectory) {
-        return OptionsBuilder.options()
+        return Options.builder()
             .backend("xhtml")
             .safe(SafeMode.UNSAFE)
-            .baseDir(new File(siteDirectory, ROLE_HINT));
+            .baseDir(new File(siteDirectory, ROLE_HINT).getAbsoluteFile());
     }
 
     protected AttributesBuilder defaultAttributes() {
-        return AttributesBuilder.attributes()
+        return Attributes.builder()
             .attribute("idprefix", "@")
             .attribute("showtitle", "@");
     }

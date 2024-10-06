@@ -20,11 +20,11 @@ Versions not listed below are not supported, please consider upgrading.
 |Asciidoctor Maven Plugin | AsciidoctorJ | Supported
 
 |v3.x.x
-|v2.x.x
+|v2.x.x, v3.x.x
 |Yes
 
 |v2.2.x
 |v2.x.x
-|Yes
+|Yes (EOL Dec, 2015)
 
 |===
