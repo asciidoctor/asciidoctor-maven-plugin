@@ -175,7 +175,7 @@ class HtmlAsserter {
     }
 
     void containsImage(String value) {
-        def found = find("<img src=\"$value\" alt=\"Asciidoctor is awesome\">")
+        def found = find("<img src=\"$value\" alt=\"Asciidoctor is awesome\" />")
         assertFound("Image", value, found)
     }
 

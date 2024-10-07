@@ -1,8 +1,10 @@
 package org.asciidoctor.maven.site.parser.processors;
 
+import javax.swing.text.html.HTML.Attribute;
 import java.nio.file.FileSystems;
 
 import org.apache.maven.doxia.sink.Sink;
+import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 
@@ -37,7 +39,9 @@ public class ImageNodeProcessor extends AbstractSinkNodeProcessor implements Nod
 
         final String imagesdir = (String) node.getAttribute("imagesdir");
         String imagePath = isBlank(imagesdir) ? target : formatPath(imagesdir, target);
-        getSink().rawText(String.format("<img src=\"%s\" alt=\"%s\">", imagePath, alt));
+        final SinkEventAttributeSet attributes = new SinkEventAttributeSet();
+        attributes.addAttribute(Attribute.ALT, alt);
+        getSink().figureGraphics(imagePath, attributes);
     }
 
     private String formatPath(String imagesdir, String target) {
