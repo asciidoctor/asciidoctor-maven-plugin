@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+Bug Fixes::
+
+  * Fix open IMG tags in parser-doxia-module (#930)
+
 Build / Infrastructure::
 
   * Fix javadoc check flake in CI (#814)

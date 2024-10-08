@@ -30,7 +30,7 @@ class ImageNodeProcessorTest {
         String html = process(content, 0);
 
         assertThat(html)
-                .isEqualTo("<img src=\"images/tiger.png\" alt=\"Kitty\">");
+                .isEqualTo("<img src=\"images/tiger.png\" alt=\"Kitty\" />");
     }
 
     @Test
@@ -41,7 +41,7 @@ class ImageNodeProcessorTest {
 
         final String separator = FileSystems.getDefault().getSeparator();
         assertThat(html)
-                .isEqualTo("<img src=\"prefix-path" + separator + "images/tiger.png\" alt=\"Kitty\">");
+                .isEqualTo("<img src=\"prefix-path" + separator + "images/tiger.png\" alt=\"Kitty\" />");
     }
 
     private String documentWithImage() {
