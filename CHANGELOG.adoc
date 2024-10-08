@@ -17,6 +17,10 @@ Bug Fixes::
 
   * Fix open IMG tags in parser-doxia-module (#930)
 
+Improvements::
+
+  * Added support for AsciidoctorJ v3.0.0 (#651)
+
 Build / Infrastructure::
 
   * Fix javadoc check flake in CI (#814)
