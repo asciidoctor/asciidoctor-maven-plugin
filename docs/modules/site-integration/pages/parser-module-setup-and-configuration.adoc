@@ -81,7 +81,7 @@ There are two important differences, however.
 . All the configuration for Asciidoctor in the site integration must be nested inside an `<asciidoc>` element.
 This is necessary since the `<configuration>` element is used to configure more than just the Asciidoctor integration.
 +
-Here's an example that shows how to set options, attributes and ignore partial AsciiDoc files (i.e., files that begin with an underscore).
+Here's an example that shows how to set options, attributes and ignore internal AsciiDoc files (i.e., files and folders that begin with an underscore).
 +
 [source,xml,subs=attributes+]
 .Maven site integration with Asciidoctor configuration
@@ -101,7 +101,7 @@ Here's an example that shows how to set options, attributes and ignore partial A
             </attributes>
         </asciidoc>
         <moduleExcludes>
-            <asciidoc>**/_*.adoc</asciidoc>
+            <asciidoc>**/_*.adoc,**/_*/</asciidoc>
         </moduleExcludes>
     </configuration>
     <dependencies>
