@@ -20,6 +20,7 @@ Bug Fixes::
 Improvements::
 
   * Added support for AsciidoctorJ v3.0.0 (#651)
+  * Add compatibility with maven-site-plugin v3.20.0 (#934)
 
 Build / Infrastructure::
 
