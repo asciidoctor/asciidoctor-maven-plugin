@@ -32,7 +32,7 @@
                         </attributes>
                     </asciidoc>
                     <moduleExcludes>
-                        <asciidoc>**/_*.adoc</asciidoc>
+                        <asciidoc>**/_*.adoc,**/_*/</asciidoc>
                     </moduleExcludes>
                 </configuration>
                 <dependencies>

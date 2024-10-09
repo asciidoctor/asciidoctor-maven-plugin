@@ -395,7 +395,7 @@ Asciidoctor 基础目录默认配置为 `src/site/asciidoc`，这可以被覆盖
             </attributes>
         </asciidoc>
         <moduleExcludes>
-            <asciidoc>**/_*.adoc</asciidoc>
+            <asciidoc>**/_*.adoc,**/_*/</asciidoc>
         </moduleExcludes>
     </configuration>
     <dependencies>
