@@ -1,5 +1,8 @@
 package org.asciidoctor.maven.site.parser;
 
+import java.io.StringWriter;
+import java.util.Arrays;
+
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
@@ -11,9 +14,6 @@ import org.asciidoctor.jruby.ast.impl.TableImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.io.StringWriter;
-import java.util.Arrays;
 
 import static org.asciidoctor.maven.site.parser.processors.test.ReflectionUtils.extractField;
 import static org.asciidoctor.maven.site.parser.processors.test.TestNodeProcessorFactory.createSink;
@@ -122,6 +122,7 @@ class NodeSinkerTest {
     @Test
     void should_process_image_node() {
         StructuralNode mockNode = mockNode("image", BlockImpl.class);
+        Mockito.when(mockNode.getAttribute(Mockito.eq("target"))).thenReturn("image.png");
 
         nodesSinker.processNode(mockNode);
 
