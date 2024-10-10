@@ -45,15 +45,15 @@ class TableNodeProcessorTest {
 
         // Header for now is just first row with class=a
         assertThat(html)
-                .isEqualTo("<table border=\"0\" class=\"bodyTable\">" +
+                .isEqualTo("<table class=\"bodyTable\">" +
                         "<tr class=\"a\">" +
                         "<th>Name</th>" +
                         "<th>Language</th></tr>" +
                         "<tr class=\"b\">" +
-                        "<td align=\"left\">JRuby</td>" +
+                        "<td style=\"text-align: left;\">JRuby</td>" +
                         "<td>Java</td></tr>" +
                         "<tr class=\"a\">" +
-                        "<td align=\"left\">Rubinius</td>" +
+                        "<td style=\"text-align: left;\">Rubinius</td>" +
                         "<td>Ruby</td></tr></table>");
     }
 
@@ -64,12 +64,12 @@ class TableNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo(clean("<table border=\"0\" class=\"bodyTable\">" +
+                .isEqualTo(clean("<table class=\"bodyTable\">" +
                         "<tr class=\"a\">" +
-                        "<td align=\"left\">JRuby</td>" +
+                        "<td style=\"text-align: left;\">JRuby</td>" +
                         "<td>Java</td></tr>" +
                         "<tr class=\"b\">" +
-                        "<td align=\"left\">Rubinius</td>" +
+                        "<td style=\"text-align: left;\">Rubinius</td>" +
                         "<td>Ruby</td></tr></table>"));
     }
 
@@ -90,13 +90,12 @@ class TableNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .startsWith("<table border=\"0\" class=\"bodyTable\"><caption>Table 1. Table caption&#8230;&#8203;or title</caption>")
-                .isEqualTo("<table border=\"0\" class=\"bodyTable\"><caption>Table 1. Table caption&#8230;&#8203;or title</caption>" +
+                .isEqualTo("<table class=\"bodyTable\"><caption>Table 1. Table caption&#8230;&#8203;or title</caption>" +
                         "<tr class=\"a\">" +
-                        "<td align=\"left\">JRuby</td>" +
+                        "<td style=\"text-align: left;\">JRuby</td>" +
                         "<td>Java</td></tr>" +
                         "<tr class=\"b\">" +
-                        "<td align=\"left\">Rubinius</td>" +
+                        "<td style=\"text-align: left;\">Rubinius</td>" +
                         "<td>Ruby</td></tr></table>");
     }
 
@@ -123,29 +122,29 @@ class TableNodeProcessorTest {
     }
 
     private static String expectedNoLabelBeginning() {
-        return "<table border=\"0\" class=\"bodyTable\"><caption>Table caption&#8230;&#8203;or title</caption>";
+        return "<table class=\"bodyTable\"><caption>Table caption&#8230;&#8203;or title</caption>";
     }
 
     private static String expectedTableWithoutLabel() {
-        return "<table border=\"0\" class=\"bodyTable\"><caption>Table caption&#8230;&#8203;or title</caption>" +
+        return "<table class=\"bodyTable\"><caption>Table caption&#8230;&#8203;or title</caption>" +
                 "<tr class=\"a\">" +
-                "<td align=\"left\">JRuby</td>" +
+                "<td style=\"text-align: left;\">JRuby</td>" +
                 "<td>Java</td></tr>" +
                 "<tr class=\"b\">" +
-                "<td align=\"left\">Rubinius</td>" +
+                "<td style=\"text-align: left;\">Rubinius</td>" +
                 "<td>Ruby</td></tr></table>";
     }
 
     private static String expectedTableWithoutCaption() {
-        return "<table border=\"0\" class=\"bodyTable\">" +
+        return "<table class=\"bodyTable\">" +
                 "<tr class=\"a\">" +
-                "<td align=\"left\">JRuby</td>" +
+                "<td style=\"text-align: left;\">JRuby</td>" +
                 "<td>Java</td></tr>" +
                 "<tr class=\"b\">" +
-                "<td align=\"left\">Rubinius</td>" +
+                "<td style=\"text-align: left;\">Rubinius</td>" +
                 "<td>Ruby</td></tr>" +
                 "<tr class=\"a\">" +
-                "<td align=\"left\"><strong>Opal</strong></td>" +
+                "<td style=\"text-align: left;\"><strong>Opal</strong></td>" +
                 "<td><em>JavaScript</em></td></tr></table>";
     }
 
