@@ -44,18 +44,18 @@ class AsciidoctorAstDoxiaParserTest {
         String result = parse(parser, srcAsciidoc);
 
         assertThat(result)
-                .isEqualTo("<h1>Document Title</h1>" +
-                        "<p>Preamble paragraph.</p>" +
-                        "<h2><a name=\"Section_A\"></a>Section A</h2>" +
+                .isEqualTo("<h1>Document Title</h1><p>Preamble paragraph.</p>" +
+                        "<h2><a id=\"id_section_a\"></a>Section A</h2>" +
                         "<p><strong>Section A</strong> paragraph.</p>" +
-                        "<h3><a name=\"Section_A_Subsection\"></a>Section A Subsection</h3>" +
+                        "<h3><a id=\"id_section_a_subsection\"></a>Section A Subsection</h3>" +
                         "<p><strong>Section A</strong> 'subsection' paragraph.</p>" +
-                        "<h2><a name=\"Section_B\"></a>Section B</h2>" +
+                        "<h2><a id=\"id_section_b\"></a>Section B</h2>" +
                         "<p><strong>Section B</strong> paragraph.</p>" +
                         "<ul>" +
                         "<li>Item 1</li>" +
                         "<li>Item 2</li>" +
-                        "<li>Item 3</li></ul><div class=\"source\"><pre class=\"prettyprint\"><code>require 'asciidoctor'</code></pre></div>");
+                        "<li>Item 3</li></ul>" +
+                        "<div class=\"source\"><pre class=\"prettyprint\"><code>require 'asciidoctor'</code></pre></div>");
     }
 
     @Test
