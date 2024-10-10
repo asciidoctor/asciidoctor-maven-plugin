@@ -39,7 +39,7 @@ class OrderedListNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<ol style=\"list-style-type: decimal\">" +
+                .isEqualTo("<ol style=\"list-style-type: decimal;\">" +
                         "<li>ordered item 1</li>" +
                         "<li>ordered item 2</li></ol>");
     }
@@ -51,15 +51,15 @@ class OrderedListNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<ol style=\"list-style-type: decimal\">" +
+                .isEqualTo("<ol style=\"list-style-type: decimal;\">" +
                         "<li>ordered item 1" +
-                        "<ol style=\"list-style-type: decimal\">" +
+                        "<ol style=\"list-style-type: decimal;\">" +
                         "<li>ordered item 1 1</li></ol></li>" +
                         "<li>ordered item 1 2</li>" +
                         "<li>ordered item 2" +
-                        "<ol style=\"list-style-type: decimal\">" +
+                        "<ol style=\"list-style-type: decimal;\">" +
                         "<li>ordered item 2 1" +
-                        "<ol style=\"list-style-type: decimal\">" +
+                        "<ol style=\"list-style-type: decimal;\">" +
                         "<li>ordered item 2 1 1</li></ol></li></ol></li></ol>");
     }
 

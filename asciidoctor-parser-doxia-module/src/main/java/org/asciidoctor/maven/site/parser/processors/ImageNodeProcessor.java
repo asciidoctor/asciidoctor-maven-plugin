@@ -40,7 +40,9 @@ public class ImageNodeProcessor extends AbstractSinkNodeProcessor implements Nod
         final String imagesdir = (String) node.getAttribute("imagesdir");
         String imagePath = isBlank(imagesdir) ? target : formatPath(imagesdir, target);
         final SinkEventAttributeSet attributes = new SinkEventAttributeSet();
-        attributes.addAttribute(Attribute.ALT, alt);
+        if (!isBlank(alt))
+            attributes.addAttribute(Attribute.ALT, alt);
+
         getSink().figureGraphics(imagePath, attributes);
     }
 

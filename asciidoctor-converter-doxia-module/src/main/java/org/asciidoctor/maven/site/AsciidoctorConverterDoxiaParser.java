@@ -5,7 +5,6 @@ import javax.inject.Provider;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.logging.Logger;
 
 import org.apache.maven.doxia.parser.AbstractTextParser;
 import org.apache.maven.doxia.parser.ParseException;
@@ -26,6 +25,8 @@ import org.asciidoctor.maven.site.SiteConverterDecorator.Result;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is used by <a href="https://maven.apache.org/doxia/overview.html">the Doxia framework</a>
@@ -38,6 +39,8 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
  */
 @Component(role = Parser.class, hint = AsciidoctorConverterDoxiaParser.ROLE_HINT)
 public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
+
+    private final Logger logger = LoggerFactory.getLogger(AsciidoctorConverterDoxiaParser.class);
 
     @Inject
     protected Provider<MavenProject> mavenProjectProvider;
@@ -58,7 +61,7 @@ public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
                 source = "";
             }
         } catch (IOException ex) {
-            getLog().error("Could not read AsciiDoc source: " + ex.getLocalizedMessage());
+            logger.error("Could not read AsciiDoc source: {}", ex.getLocalizedMessage());
             return;
         }
 
@@ -86,7 +89,7 @@ public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
 
         try {
             // process log messages according to mojo configuration
-            new LogRecordsProcessors(logHandler, siteDirectory, errorMessage -> getLog().error(errorMessage))
+            new LogRecordsProcessors(logHandler, siteDirectory, errorMessage -> logger.error(errorMessage))
                 .processLogRecords(memoryLogHandler);
         } catch (Exception exception) {
             throw new ParseException(exception.getMessage(), exception);
@@ -102,10 +105,11 @@ public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
     private MemoryLogHandler asciidoctorLoggingSetup(Asciidoctor asciidoctor, LogHandler logHandler, File siteDirectory) {
 
         final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(logHandler.getOutputToConsole(),
-            logRecord -> getLog().info(LogRecordFormatter.format(logRecord, siteDirectory)));
+            logRecord -> logger.info(LogRecordFormatter.format(logRecord, siteDirectory)));
         asciidoctor.registerLogHandler(memoryLogHandler);
         // disable default console output of AsciidoctorJ
-        Logger.getLogger("asciidoctor").setUseParentHandlers(false);
+        // TODO validate if still needed
+        java.util.logging.Logger.getLogger("asciidoctor").setUseParentHandlers(false);
         return memoryLogHandler;
     }
 
@@ -147,7 +151,7 @@ public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
             try {
                 asciidoctor.requireLibrary(require);
             } catch (Exception ex) {
-                getLog().error(ex.getLocalizedMessage());
+                logger.error(ex.getLocalizedMessage());
             }
         }
     }

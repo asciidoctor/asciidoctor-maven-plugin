@@ -2,7 +2,7 @@ package org.asciidoctor.maven.site.parser.processors.test;
 
 public class Html {
 
-    public static final String LIST_STYLE_TYPE_DECIMAL = "list-style-type: decimal";
+    public static final String LIST_STYLE_TYPE_DECIMAL = "list-style-type: decimal;";
 
     public static String strong(String text) {
         return htmlElement("strong", text);
