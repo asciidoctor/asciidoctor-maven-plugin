@@ -5,6 +5,8 @@ import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.ast.impl.SectionImpl;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Section title processor.
@@ -14,6 +16,8 @@ import org.asciidoctor.maven.site.parser.NodeProcessor;
  * @since 3.0.0
  */
 public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
+
+    private final Logger logger = LoggerFactory.getLogger(SectionNodeProcessor.class);
 
     /**
      * Constructor.
@@ -36,43 +40,30 @@ public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements N
 
     private void sectionTitle(Sink sink, int level, String title, Section node) {
         final String formattedTitle = formatTitle(title, node);
-        switch (level) {
-            case 0:
-                // Kept for completeness, real document title is treated in
-                // DocumentNodeProcessor
-                sink.rawText("<h1>" + formattedTitle + "</h1>");
-                break;
-            case 1:
-                sink.sectionTitle1();
-                sink.text(formattedTitle);
-                sink.sectionTitle1_();
-                break;
-            case 2:
-                sink.sectionTitle2();
-                sink.text(formattedTitle);
-                sink.sectionTitle2_();
-                break;
-            case 3:
-                sink.sectionTitle3();
-                sink.text(formattedTitle);
-                sink.sectionTitle3_();
-                break;
-            case 4:
-                sink.sectionTitle4();
-                sink.text(formattedTitle);
-                sink.sectionTitle4_();
-                break;
-            case 5:
-                sink.sectionTitle5();
-                sink.text(formattedTitle);
-                sink.sectionTitle5_();
-                break;
-            case 6:
-                sink.sectionTitle6();
-                sink.text(formattedTitle);
-                sink.sectionTitle6_();
-                break;
+        if (level == 0) {
+            // Kept for completeness, real document title is treated in
+            // DocumentNodeProcessor
+            sink.sectionTitle1();
+            sink.text(formattedTitle);
+            sink.sectionTitle1_();
+        } else {
+            // Asciidoctor supports up o 6 levels, but Xhtml5BaseSink only up to 5
+            int siteLevel = level + 1;
+            if (level >= 5) {
+                // TODO generate code manually or request change
+                logger.warn("Site module does not support level 6 sections. Re-writing as 5");
+                siteLevel = 5;
+            }
+            sink.sectionTitle(siteLevel, null);
+            anchor(sink, node);
+            sink.text(formattedTitle);
+            sink.sectionTitle_(siteLevel);
         }
+    }
+
+    private void anchor(Sink sink, Section node) {
+        sink.anchor(node.getId());
+        sink.anchor_();
     }
 
     private String formatTitle(String title, Section node) {
