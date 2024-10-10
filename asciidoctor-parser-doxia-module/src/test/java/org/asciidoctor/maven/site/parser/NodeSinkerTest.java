@@ -2,6 +2,7 @@ package org.asciidoctor.maven.site.parser;
 
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.Document;
@@ -72,7 +73,7 @@ class NodeSinkerTest {
     void should_process_preamble_node() {
         StructuralNode mockNode = mockNode("preamble");
         StructuralNode literalBlock = mockNode("literal", BlockImpl.class);
-        Mockito.when(mockNode.getBlocks()).thenReturn(Arrays.asList(literalBlock));
+        Mockito.when(mockNode.getBlocks()).thenReturn(List.of(literalBlock));
 
         nodesSinker.processNode(mockNode);
 
@@ -143,7 +144,7 @@ class NodeSinkerTest {
         StructuralNode mockNode = mockNode("ulist", BlockImpl.class);
         ListItem mockListItem = mockNode("list_item", ListItem.class);
         Mockito.when(mockListItem.getMarker()).thenReturn("*");
-        Mockito.when(mockNode.getBlocks()).thenReturn(Arrays.asList(mockListItem));
+        Mockito.when(mockNode.getBlocks()).thenReturn(List.of(mockListItem));
 
         nodesSinker.processNode(mockNode);
 
@@ -155,7 +156,7 @@ class NodeSinkerTest {
         StructuralNode mockNode = mockNode("olist", BlockImpl.class);
         ListItem mockListItem = mockNode("list_item", ListItem.class);
         Mockito.when(mockListItem.getMarker()).thenReturn(".");
-        Mockito.when(mockNode.getBlocks()).thenReturn(Arrays.asList(mockListItem));
+        Mockito.when(mockNode.getBlocks()).thenReturn(List.of(mockListItem));
 
         nodesSinker.processNode(mockNode);
 
