@@ -23,14 +23,15 @@ import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordFormatter;
 import org.asciidoctor.maven.log.LogRecordsProcessors;
 import org.asciidoctor.maven.log.MemoryLogHandler;
-import org.asciidoctor.maven.site.HeaderMetadata;
 import org.asciidoctor.maven.site.HeadParser;
+import org.asciidoctor.maven.site.HeaderMetadata;
 import org.asciidoctor.maven.site.SiteConversionConfiguration;
 import org.asciidoctor.maven.site.SiteConversionConfigurationParser;
 import org.asciidoctor.maven.site.SiteLogHandlerDeserializer;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.slf4j.LoggerFactory;
 
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
@@ -44,6 +45,8 @@ import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
  */
 @Component(role = Parser.class, hint = AsciidoctorAstDoxiaParser.ROLE_HINT)
 public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
+
+    private final org.slf4j.Logger logger = LoggerFactory.getLogger(AsciidoctorAstDoxiaParser.class);
 
     @Inject
     protected Provider<MavenProject> mavenProjectProvider;
@@ -64,7 +67,7 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
                 source = "";
             }
         } catch (IOException ex) {
-            getLog().error("Could not read AsciiDoc source: " + ex.getLocalizedMessage());
+            logger.error("Could not read AsciiDoc source: {}", ex.getLocalizedMessage());
             return;
         }
 
@@ -88,13 +91,13 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
         final MemoryLogHandler memoryLogHandler = asciidoctorLoggingSetup(asciidoctor, logHandler, siteDirectory);
 
         if (isNotBlank(reference))
-            getLog().debug("Document loaded: " + reference);
+            logger.debug("Document loaded: {}", reference);
 
         Document document = asciidoctor.load(source, conversionConfig.getOptions());
 
         try {
             // process log messages according to mojo configuration
-            new LogRecordsProcessors(logHandler, siteDirectory, errorMessage -> getLog().error(errorMessage))
+            new LogRecordsProcessors(logHandler, siteDirectory, errorMessage -> logger.error(errorMessage))
                     .processLogRecords(memoryLogHandler);
 
         } catch (Exception exception) {
@@ -116,7 +119,7 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
     private MemoryLogHandler asciidoctorLoggingSetup(Asciidoctor asciidoctor, LogHandler logHandler, File siteDirectory) {
 
         final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(logHandler.getOutputToConsole(),
-                logRecord -> getLog().info(LogRecordFormatter.format(logRecord, siteDirectory)));
+            logRecord -> logger.info(LogRecordFormatter.format(logRecord, siteDirectory)));
         asciidoctor.registerLogHandler(memoryLogHandler);
         // disable default console output of AsciidoctorJ
         Logger.getLogger("asciidoctor").setUseParentHandlers(false);
@@ -161,7 +164,7 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
             try {
                 asciidoctor.requireLibrary(require);
             } catch (Exception ex) {
-                getLog().error(ex.getLocalizedMessage());
+                logger.error(ex.getLocalizedMessage());
             }
         }
     }

@@ -23,7 +23,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.12.1</version>
+                <version>3.20.0</version>
                 <configuration>
                     <asciidoc>
                         <baseDir>${project.basedir}/src/site/asciidoc</baseDir>
@@ -31,6 +31,7 @@
                             <toclevels>2</toclevels>
                         </attributes>
                     </asciidoc>
+                    <relativizeSiteLinks>false</relativizeSiteLinks>
                     <moduleExcludes>
                         <asciidoc>**/_*.adoc,**/_*/</asciidoc>
                     </moduleExcludes>

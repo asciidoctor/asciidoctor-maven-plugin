@@ -16,10 +16,12 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 Bug Fixes::
 
   * Fix open IMG tags in parser-doxia-module (#930)
+  * Fix naming in Asciidoctor Converter Doxia Module pom (#934)
 
 Improvements::
 
   * Added support for AsciidoctorJ v3.0.0 (#651)
+  * Add compatibility with maven-site-plugin v3.20.0 and Doxia v2.0.0 (#933)
 
 Build / Infrastructure::
 

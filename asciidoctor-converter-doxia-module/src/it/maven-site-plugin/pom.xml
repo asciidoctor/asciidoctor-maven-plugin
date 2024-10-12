@@ -28,8 +28,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <!-- v2.2.2 of the plugin require Maven Site Plugin 3.1x.0 alongside Doxia 1.11.1 -->
-                <version>3.12.1</version>
+                <version>3.20.0</version>
                 <configuration>
                     <asciidoc>
                         <baseDir>${project.basedir}/src/site/asciidoc</baseDir>
@@ -52,6 +51,7 @@
                             <toclevels>2</toclevels>
                         </attributes>
                     </asciidoc>
+                    <relativizeSiteLinks>false</relativizeSiteLinks>
                     <moduleExcludes>
                         <asciidoc>**/_*.adoc,**/_*/</asciidoc>
                     </moduleExcludes>
