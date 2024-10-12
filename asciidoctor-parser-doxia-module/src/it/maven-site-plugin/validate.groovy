@@ -136,7 +136,7 @@ class HtmlAsserter {
     }
 
     void containsBreadcrumbs(String value) {
-        def found = find("<li class=\"active \">${value}</li>")
+        def found = find("<li class=\"active\">${value}</li>")
         assertFound("Breadcrumb", value, found)
     }
 
