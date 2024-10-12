@@ -31,6 +31,7 @@
                             <toclevels>2</toclevels>
                         </attributes>
                     </asciidoc>
+                    <relativizeSiteLinks>false</relativizeSiteLinks>
                     <moduleExcludes>
                         <asciidoc>**/_*.adoc,**/_*/</asciidoc>
                     </moduleExcludes>

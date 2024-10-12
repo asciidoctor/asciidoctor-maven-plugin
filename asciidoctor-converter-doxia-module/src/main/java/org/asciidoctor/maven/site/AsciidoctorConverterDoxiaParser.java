@@ -108,7 +108,6 @@ public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
             logRecord -> logger.info(LogRecordFormatter.format(logRecord, siteDirectory)));
         asciidoctor.registerLogHandler(memoryLogHandler);
         // disable default console output of AsciidoctorJ
-        // TODO validate if still needed
         java.util.logging.Logger.getLogger("asciidoctor").setUseParentHandlers(false);
         return memoryLogHandler;
     }

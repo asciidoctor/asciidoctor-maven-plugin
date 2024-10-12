@@ -11,7 +11,7 @@ Versions not listed below are not supported, please consider upgrading.
 |Asciidoctor Doxia Module | Maven Site Plugin | Supported
 
 |v3.0.x
-|v3.12.x
+|v3.1x.x ~ v3.12.x
 |Yes
 
 |v3.1.x
