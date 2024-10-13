@@ -39,6 +39,7 @@ image::images/asciidoctor-logo.png[Asciidoctor is awesome]
 === Code blocks
 
 [source,ruby]
+.Ruby example
 ----
 puts "Hello, World!"
 ----

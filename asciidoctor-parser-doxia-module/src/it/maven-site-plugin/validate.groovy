@@ -35,6 +35,8 @@ new HtmlAsserter(htmlContent).with { asserter ->
     asserter.containsLiteral("This is a literal.")
 
     asserter.containsSectionTitle("Code blocks", 3)
+    asserter.containsCodeBlock("Ruby example")
+    asserter.containsCodeBlock(null) // Java example without title
 
     asserter.containsSectionTitle("Lists", 3)
 
@@ -208,6 +210,18 @@ class HtmlAsserter {
         assertTableRows(table, rows)
 
         lastAssertionCursor = end
+    }
+
+    void containsCodeBlock(String title) {
+        def blockKey = "<div class=\"source\">"
+        def found = find(blockKey)
+        assertFound("Code blockKey", blockKey, found)
+
+        if (title != null) {
+            def titleKey = "<div style=\"color:"
+            def foundTitle = find(titleKey)
+            assertFound("Code blockKey title", title, foundTitle)
+        }
     }
 
     void assertTableCaption(String htmlBlock, String caption) {

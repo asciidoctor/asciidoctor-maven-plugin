@@ -3,6 +3,7 @@ package org.asciidoctor.maven.site.parser.processors;
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.ast.impl.BlockImpl;
+import org.asciidoctor.maven.commons.StringUtils;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
@@ -41,13 +42,18 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
     public void process(StructuralNode node) {
         final StringBuilder contentBuilder = new StringBuilder();
         String language = (String) node.getAttribute("language");
-        String style = (String) node.getAttribute("style");
+        String style = node.getStyle();
 
         boolean isSourceBlock = isSourceBlock(language, style);
 
         if (isSourceBlock) {
             // source class triggers prettify auto-detection
             contentBuilder.append("<div class=\"source\">");
+
+            final String title = node.getTitle();
+            if (StringUtils.isNotBlank(title)) {
+                contentBuilder.append("<div style=\"color: #7a2518; margin-bottom: .25em;\" >" + title + "</div>");
+            }
 
             contentBuilder.append("<pre class=\"")
                     .append(FLUIDO_SKIN_SOURCE_HIGHLIGHTER);

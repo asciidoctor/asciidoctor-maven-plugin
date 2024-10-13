@@ -10,6 +10,7 @@ import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
 import org.junit.jupiter.api.Test;
 
+import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.clean;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,6 +33,17 @@ class ListingNodeProcessorTest {
     }
 
     @Test
+    void should_convert_full_source_block_with_caption() {
+        final String title = "Java example";
+        String content = buildDocument(title, "[source,java]");
+
+        String html = process(content);
+
+        assertThat(html)
+            .isEqualTo(expectedHtmlCodeBlock(title));
+    }
+
+    @Test
     void should_convert_shorthand_source_block() {
         String content = documentWithShorthandSourceBlock();
 
@@ -39,15 +51,6 @@ class ListingNodeProcessorTest {
 
         assertThat(html)
             .isEqualTo(expectedHtmlCodeBlock());
-    }
-
-    private static String expectedHtmlCodeBlock() {
-        // Actual styling is added in JS by prettify
-        return "<div class=\"source\"><pre class=\"prettyprint\"><code>class HelloWorldLanguage {" +
-            "    public static void main(String[] args) {" +
-            "        System.out.println(\"Hello, World!\");" +
-            "    }" +
-            "}</code></pre></div>";
     }
 
     @Test
@@ -97,8 +100,13 @@ class ListingNodeProcessorTest {
     }
 
     private static String buildDocument(String blockDefinition) {
+        return buildDocument(null, blockDefinition);
+    }
+
+    private static String buildDocument(String title, String blockDefinition) {
         return "= Document tile\n\n"
             + "== Section\n\n"
+            + buildTitle(title)
             + blockDefinition + "\n" +
             "----\n" +
             "class HelloWorldLanguage {\n" +
@@ -107,6 +115,31 @@ class ListingNodeProcessorTest {
             "    }\n" +
             "}\n" +
             "----\n";
+    }
+
+    private static String buildTitle(String title) {
+        if (isNotBlank(title))
+            return "." + title + "\n";
+        return "";
+    }
+
+    private static String expectedHtmlCodeBlock() {
+        return expectedHtmlCodeBlock(null);
+    }
+
+    private static String expectedHtmlCodeBlock(String title) {
+        // Actual styling is added in JS by prettify
+        return "<div class=\"source\">" +
+            (isNotBlank(title) ? expectedTitle(title) : "") +
+            "<pre class=\"prettyprint\"><code>class HelloWorldLanguage {" +
+            "    public static void main(String[] args) {" +
+            "        System.out.println(\"Hello, World!\");" +
+            "    }" +
+            "}</code></pre></div>";
+    }
+
+    private static String expectedTitle(String title) {
+        return "<div style=\"color: #7a2518; margin-bottom: .25em;\" >" + title + "</div>";
     }
 
     private String process(String content) {
