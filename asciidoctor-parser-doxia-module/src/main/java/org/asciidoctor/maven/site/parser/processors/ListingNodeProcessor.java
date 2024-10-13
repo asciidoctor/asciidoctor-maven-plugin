@@ -3,6 +3,7 @@ package org.asciidoctor.maven.site.parser.processors;
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.commons.StringUtils;
+import org.asciidoctor.jruby.ast.impl.BlockImpl;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.NodeSinker;
 
@@ -39,20 +40,15 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
     @Override
     public void process(StructuralNode node) {
         final StringBuilder contentBuilder = new StringBuilder();
-        String language = (String) node.getAttribute("language");
-        String style = node.getStyle();
+        final String language = (String) node.getAttribute("language");
+        final String style = node.getStyle();
 
         boolean isSourceBlock = isSourceBlock(language, style);
 
         if (isSourceBlock) {
             // source class triggers prettify auto-detection
             contentBuilder.append("<div class=\"source\">");
-
-            final String title = node.getTitle();
-            if (StringUtils.isNotBlank(title)) {
-                contentBuilder.append("<div style=\"color: #7a2518; margin-bottom: .25em;\" >" + title + "</div>");
-            }
-
+            processTitle(node, contentBuilder);
             contentBuilder.append("<pre class=\"")
                 .append(FLUIDO_SKIN_SOURCE_HIGHLIGHTER);
             if (isLinenumsEnabled(node))
@@ -75,6 +71,13 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
         contentBuilder.append("</pre></div>");
 
         getSink().rawText(contentBuilder.toString());
+    }
+
+    private static void processTitle(StructuralNode node, StringBuilder contentBuilder) {
+        final String title = TitleExtractor.getText(node);
+        if (isNotBlank(title)) {
+            contentBuilder.append("<div style=\"" + Styles.CAPTION + "\" >" + title + "</div>");
+        }
     }
 
     private boolean isLinenumsEnabled(StructuralNode node) {
