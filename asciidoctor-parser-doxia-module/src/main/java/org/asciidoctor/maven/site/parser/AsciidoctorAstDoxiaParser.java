@@ -110,10 +110,9 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
         new HeadParser(sink)
             .parse(headerMetadata);
 
-        sink.body();
-        final NodesSinker nodesSinker = new NodesSinker(sink);
-        nodesSinker.processNode(document);
-        sink.body_();
+        // TODO do body inside the DocumentNodeProcessor
+        new NodeProcessorProvider(sink)
+            .sink(document);
     }
 
     private MemoryLogHandler asciidoctorLoggingSetup(Asciidoctor asciidoctor, LogHandler logHandler, File siteDirectory) {

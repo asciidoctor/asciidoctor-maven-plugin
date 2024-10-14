@@ -5,6 +5,7 @@ import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.ast.impl.BlockImpl;
 import org.asciidoctor.maven.commons.StringUtils;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
+import org.asciidoctor.maven.site.parser.NodeProcessorProvider;
 
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
@@ -21,16 +22,14 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
     private static final String LINENUMS_ATTRIBUTE = "linenums";
     private static final String LINENUMS_OPTION_ATTRIBUTE = LINENUMS_ATTRIBUTE + "-option";
 
-    private final ListItemNodeProcessor itemNodeProcessor;
-
     /**
      * Constructor.
      *
-     * @param sink Doxia {@link Sink}
+     * @param sink                  Doxia {@link Sink}
+     * @param nodeProcessorProvider
      */
-    public ListingNodeProcessor(Sink sink) {
-        super(sink);
-        this.itemNodeProcessor = new ListItemNodeProcessor(sink);
+    public ListingNodeProcessor(Sink sink, NodeProcessorProvider nodeProcessorProvider) {
+        super(sink, nodeProcessorProvider);
     }
 
     @Override
@@ -38,6 +37,7 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
         return "listing".equals(node.getNodeName());
     }
 
+    // TODO test with a table or other elements inside: I assume they don't create notes because it's verbatim
     @Override
     public void process(StructuralNode node) {
         final StringBuilder contentBuilder = new StringBuilder();
@@ -67,13 +67,16 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
             contentBuilder.append("<pre>");
         }
 
-        contentBuilder.append(((BlockImpl) node).getSource());
+        // TODO validate delegation works
+        node.getBlocks().forEach(this::next);
+        //contentBuilder.append(((BlockImpl) node).getSource());
 
         if (isSourceBlock) {
             contentBuilder.append("</code>");
         }
 
         contentBuilder.append("</pre></div>");
+
         getSink().rawText(contentBuilder.toString());
     }
 

@@ -8,6 +8,7 @@ import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.ast.impl.TableImpl;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
+import org.asciidoctor.maven.site.parser.NodeProcessorProvider;
 
 import static org.apache.maven.doxia.sink.Sink.JUSTIFY_LEFT;
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
@@ -24,10 +25,11 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
     /**
      * Constructor.
      *
-     * @param sink Doxia {@link Sink}
+     * @param sink                  Doxia {@link Sink}
+     * @param nodeProcessorProvider
      */
-    public TableNodeProcessor(Sink sink) {
-        super(sink);
+    public TableNodeProcessor(Sink sink, NodeProcessorProvider nodeProcessorProvider) {
+        super(sink, nodeProcessorProvider);
     }
 
     @Override
@@ -49,7 +51,9 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
             for (Row headerRow : header) {
                 for (Cell cell : headerRow.getCells()) {
                     sink.tableHeaderCell();
-                    sink.rawText(cell.getText());
+                    // TODO validate
+                    // sink.rawText(cell.getText());
+                    node.getBlocks().forEach(this::next);
                     sink.tableHeaderCell_();
                 }
             }
@@ -60,7 +64,9 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
             sink.tableRow();
             for (Cell cell : row.getCells()) {
                 sink.tableCell();
-                sink.rawText(cell.getText());
+                // TODO validate
+                // sink.rawText(cell.getText());
+                node.getBlocks().forEach(this::next);
                 sink.tableCell_();
             }
             sink.tableRow_();
@@ -79,7 +85,8 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
 
         final String title = node.getTitle();
         if (isNotBlank(title)) {
-            node.getContentModel();
+            // TODO why do we do this next line?
+            // node.getContentModel();
             sink.tableCaption();
             // It's safe: getCaption returns "" when '[caption=]' is set
             if (isBlank(node.getCaption()))

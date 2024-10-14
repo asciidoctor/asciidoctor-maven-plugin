@@ -3,8 +3,8 @@ package org.asciidoctor.maven.site.parser.processors;
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.jruby.ast.impl.SectionImpl;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
+import org.asciidoctor.maven.site.parser.NodeProcessorProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,10 +22,11 @@ public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements N
     /**
      * Constructor.
      *
-     * @param sink Doxia {@link Sink}
+     * @param sink                  Doxia {@link Sink}
+     * @param nodeProcessorProvider
      */
-    public SectionNodeProcessor(Sink sink) {
-        super(sink);
+    public SectionNodeProcessor(Sink sink, NodeProcessorProvider nodeProcessorProvider) {
+        super(sink, nodeProcessorProvider);
     }
 
     @Override
@@ -35,11 +36,12 @@ public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements N
 
     @Override
     public void process(StructuralNode node) {
-        sectionTitle(getSink(), node.getLevel(), node.getTitle(), (Section) node);
-    }
+        final Sink sink = getSink();
 
-    private void sectionTitle(Sink sink, int level, String title, Section node) {
-        final String formattedTitle = formatTitle(title, node);
+        final String title = node.getTitle();
+        final String formattedTitle = formatTitle(title, (Section) node);
+
+        int level = node.getLevel();
         if (level == 0) {
             // Kept for completeness, real document title is treated in
             // DocumentNodeProcessor
@@ -55,10 +57,12 @@ public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements N
                 siteLevel = 5;
             }
             sink.sectionTitle(siteLevel, null);
-            anchor(sink, node);
+            anchor(sink, (Section) node);
             sink.text(formattedTitle);
             sink.sectionTitle_(siteLevel);
         }
+
+        node.getBlocks().forEach(this::next);
     }
 
     private void anchor(Sink sink, Section node) {
@@ -67,18 +71,17 @@ public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements N
     }
 
     private String formatTitle(String title, Section node) {
-        final Boolean numbered = node.isNumbered();
+        final boolean numbered = node.isNumbered();
         final Long sectnumlevels = getSectnumlevels(node);
         final int level = node.getLevel();
         if (numbered && level <= sectnumlevels) {
-            String sectnum = ((SectionImpl) node).getString("sectnum");
-            return String.format("%s %s", sectnum, title);
+            return String.format("%s %s", node.getSectnum(), title);
         }
         return title;
     }
 
     private Long getSectnumlevels(Section node) {
-        Object sectnumlevels = node.getDocument().getAttribute("sectnumlevels");
+        final Object sectnumlevels = node.getDocument().getAttribute("sectnumlevels");
 
         if (sectnumlevels != null) {
             // Injecting from Maven configuration

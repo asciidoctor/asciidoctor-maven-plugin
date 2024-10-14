@@ -3,6 +3,7 @@ package org.asciidoctor.maven.site.parser.processors;
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
+import org.asciidoctor.maven.site.parser.NodeProcessorProvider;
 
 /**
  * Document preamble processor.
@@ -15,10 +16,11 @@ public class PreambleNodeProcessor extends AbstractSinkNodeProcessor implements 
     /**
      * Constructor.
      *
-     * @param sink Doxia {@link Sink}
+     * @param sink                  Doxia {@link Sink}
+     * @param nodeProcessorProvider
      */
-    public PreambleNodeProcessor(Sink sink) {
-        super(sink);
+    public PreambleNodeProcessor(Sink sink, NodeProcessorProvider nodeProcessorProvider) {
+        super(sink, nodeProcessorProvider);
     }
 
     @Override
@@ -31,5 +33,6 @@ public class PreambleNodeProcessor extends AbstractSinkNodeProcessor implements 
      **/
     @Override
     public void process(StructuralNode node) {
+        node.getBlocks().forEach(this::next);
     }
 }

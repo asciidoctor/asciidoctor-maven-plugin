@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
+import org.asciidoctor.maven.site.parser.NodeProcessorProvider;
 
 /**
  * Ordered list processor.
@@ -14,24 +15,14 @@ import org.asciidoctor.maven.site.parser.NodeProcessor;
  */
 public class OrderedListNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
 
-    private ListItemNodeProcessor itemNodeProcessor;
-
     /**
      * Constructor.
      *
-     * @param sink Doxia {@link Sink}
+     * @param sink                  Doxia {@link Sink}
+     * @param nodeProcessorProvider
      */
-    public OrderedListNodeProcessor(Sink sink) {
-        super(sink);
-    }
-
-    /**
-     * Inject a {@link ListItemNodeProcessor}.
-     *
-     * @param nodeProcessor {@link ListItemNodeProcessor}
-     */
-    public void setItemNodeProcessor(ListItemNodeProcessor nodeProcessor) {
-        this.itemNodeProcessor = nodeProcessor;
+    public OrderedListNodeProcessor(Sink sink, NodeProcessorProvider nodeProcessorProvider) {
+        super(sink, nodeProcessorProvider);
     }
 
     @Override
@@ -46,23 +37,19 @@ public class OrderedListNodeProcessor extends AbstractSinkNodeProcessor implemen
 
     @Override
     public void process(StructuralNode node) {
-        final List<StructuralNode> items = node.getBlocks();
+        final List<StructuralNode> subNodes = node.getBlocks();
         final Sink sink = getSink();
 
-        /**
+        /*
          * doxia numberingStyle 0: 1. 2.
          *                      1: a. b.
          *                      2: A. B.
          *                      3: i. ii.
          *                      >: 1. 2.
          */
-        if (!items.isEmpty()) {
+        if (!subNodes.isEmpty()) {
             sink.numberedList(0);
-            for (StructuralNode item : items) {
-                if (itemNodeProcessor.applies(item)) {
-                    itemNodeProcessor.process(item);
-                }
-            }
+            subNodes.forEach(this::next);
             sink.numberedList_();
         }
     }

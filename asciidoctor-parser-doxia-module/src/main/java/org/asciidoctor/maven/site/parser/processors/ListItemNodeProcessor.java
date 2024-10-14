@@ -1,11 +1,10 @@
 package org.asciidoctor.maven.site.parser.processors;
 
-import java.util.List;
-
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
+import org.asciidoctor.maven.site.parser.NodeProcessorProvider;
 
 /**
  * List items processor, including numbered and unnumbered.
@@ -15,25 +14,14 @@ import org.asciidoctor.maven.site.parser.NodeProcessor;
  */
 public class ListItemNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
 
-    private List<NodeProcessor> nodeProcessors;
-
     /**
      * Constructor.
      *
-     * @param sink Doxia {@link Sink}
+     * @param sink                  Doxia {@link Sink}
+     * @param nodeProcessorProvider
      */
-    public ListItemNodeProcessor(Sink sink) {
-        super(sink);
-
-    }
-
-    /**
-     * Inject a list of {@link NodeProcessor}.
-     *
-     * @param nodeProcessors {@link List} of {@link NodeProcessor}
-     */
-    public void setNodeProcessors(List<NodeProcessor> nodeProcessors) {
-        this.nodeProcessors = nodeProcessors;
+    public ListItemNodeProcessor(Sink sink, NodeProcessorProvider nodeProcessorProvider) {
+        super(sink, nodeProcessorProvider);
     }
 
     @Override
@@ -60,13 +48,7 @@ public class ListItemNodeProcessor extends AbstractSinkNodeProcessor implements 
         final String text = item.getText();
         sink.rawText(text == null ? "" : text);
 
-        for (StructuralNode subNode : node.getBlocks()) {
-            for (NodeProcessor np : nodeProcessors) {
-                if (np.applies(subNode)) {
-                    np.process(subNode);
-                }
-            }
-        }
+        node.getBlocks().forEach(this::next);
 
         switch (listType) {
             case ordered:

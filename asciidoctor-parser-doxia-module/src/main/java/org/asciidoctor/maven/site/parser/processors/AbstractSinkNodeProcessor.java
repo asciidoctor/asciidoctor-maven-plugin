@@ -2,6 +2,8 @@ package org.asciidoctor.maven.site.parser.processors;
 
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.maven.site.parser.NodeProcessorProvider;
 
 /**
  * Recommended base case to build a {@link org.asciidoctor.maven.site.parser.NodeProcessor}.
@@ -13,13 +15,16 @@ public class AbstractSinkNodeProcessor {
 
     private final Sink sink;
 
+    private final NodeProcessorProvider nodeProcessorProvider;
+
     /**
      * Constructor.
      *
      * @param sink Doxia {@link Sink}
      */
-    public AbstractSinkNodeProcessor(Sink sink) {
+    public AbstractSinkNodeProcessor(Sink sink, NodeProcessorProvider nodeProcessorProvider) {
         this.sink = sink;
+        this.nodeProcessorProvider = nodeProcessorProvider;
     }
 
     /**
@@ -31,6 +36,10 @@ public class AbstractSinkNodeProcessor {
         return sink;
     }
 
+    // TODO rethink names
+    protected void next(StructuralNode node) {
+        nodeProcessorProvider.sink(node);
+    }
 
     /**
      * Tests for the presence of an attribute in current and parent nodes.
