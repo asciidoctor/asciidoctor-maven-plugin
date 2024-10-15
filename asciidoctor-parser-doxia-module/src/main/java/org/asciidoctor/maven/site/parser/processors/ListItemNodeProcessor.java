@@ -4,7 +4,7 @@ import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
-import org.asciidoctor.maven.site.parser.NodeProcessorProvider;
+import org.asciidoctor.maven.site.parser.NodeSinker;
 
 /**
  * List items processor, including numbered and unnumbered.
@@ -17,11 +17,11 @@ public class ListItemNodeProcessor extends AbstractSinkNodeProcessor implements 
     /**
      * Constructor.
      *
-     * @param sink                  Doxia {@link Sink}
-     * @param nodeProcessorProvider
+     * @param sink       Doxia {@link Sink}
+     * @param nodeSinker
      */
-    public ListItemNodeProcessor(Sink sink, NodeProcessorProvider nodeProcessorProvider) {
-        super(sink, nodeProcessorProvider);
+    public ListItemNodeProcessor(Sink sink, NodeSinker nodeSinker) {
+        super(sink, nodeSinker);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ListItemNodeProcessor extends AbstractSinkNodeProcessor implements 
         final String text = item.getText();
         sink.rawText(text == null ? "" : text);
 
-        node.getBlocks().forEach(this::next);
+        node.getBlocks().forEach(this::sink);
 
         switch (listType) {
             case ordered:

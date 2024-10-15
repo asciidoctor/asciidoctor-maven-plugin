@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
-import org.asciidoctor.maven.site.parser.NodeProcessorProvider;
+import org.asciidoctor.maven.site.parser.NodeSinker;
 
 /**
  * Unordered list processor.
@@ -20,11 +20,11 @@ public class UnorderedListNodeProcessor extends AbstractSinkNodeProcessor implem
     /**
      * Constructor.
      *
-     * @param sink                  Doxia {@link Sink}
-     * @param nodeProcessorProvider
+     * @param sink       Doxia {@link Sink}
+     * @param nodeSinker
      */
-    public UnorderedListNodeProcessor(Sink sink, NodeProcessorProvider nodeProcessorProvider) {
-        super(sink, nodeProcessorProvider);
+    public UnorderedListNodeProcessor(Sink sink, NodeSinker nodeSinker) {
+        super(sink, nodeSinker);
     }
 
     /**
@@ -53,7 +53,7 @@ public class UnorderedListNodeProcessor extends AbstractSinkNodeProcessor implem
 
         if (!items.isEmpty()) {
             sink.list();
-            node.getBlocks().forEach(this::next);
+            node.getBlocks().forEach(this::sink);
             sink.list_();
         }
     }

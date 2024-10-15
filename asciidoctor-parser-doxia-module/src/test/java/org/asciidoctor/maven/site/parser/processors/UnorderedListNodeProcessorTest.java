@@ -1,17 +1,15 @@
 package org.asciidoctor.maven.site.parser.processors;
 
+import java.io.StringWriter;
+import java.util.Collections;
+
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.Collections;
 
 import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.clean;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,14 +21,6 @@ class UnorderedListNodeProcessorTest {
     private NodeProcessor nodeProcessor;
     private Sink sink;
     private StringWriter sinkWriter;
-
-
-    @BeforeEach
-    void setup() {
-        ListItemNodeProcessor listItemNodeProcessor = new ListItemNodeProcessor(sink);
-        ((UnorderedListNodeProcessor) nodeProcessor).setItemNodeProcessor(listItemNodeProcessor);
-        listItemNodeProcessor.setNodeProcessors(Arrays.asList(nodeProcessor));
-    }
 
     @Test
     void should_convert_simple_list() {

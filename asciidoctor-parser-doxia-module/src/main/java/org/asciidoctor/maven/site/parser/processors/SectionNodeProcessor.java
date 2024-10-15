@@ -4,7 +4,7 @@ import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
-import org.asciidoctor.maven.site.parser.NodeProcessorProvider;
+import org.asciidoctor.maven.site.parser.NodeSinker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,11 +22,11 @@ public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements N
     /**
      * Constructor.
      *
-     * @param sink                  Doxia {@link Sink}
-     * @param nodeProcessorProvider
+     * @param sink       Doxia {@link Sink}
+     * @param nodeSinker
      */
-    public SectionNodeProcessor(Sink sink, NodeProcessorProvider nodeProcessorProvider) {
-        super(sink, nodeProcessorProvider);
+    public SectionNodeProcessor(Sink sink, NodeSinker nodeSinker) {
+        super(sink, nodeSinker);
     }
 
     @Override
@@ -41,6 +41,7 @@ public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements N
         final String title = node.getTitle();
         final String formattedTitle = formatTitle(title, (Section) node);
 
+        sink.division();
         int level = node.getLevel();
         if (level == 0) {
             // Kept for completeness, real document title is treated in
@@ -62,7 +63,8 @@ public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements N
             sink.sectionTitle_(siteLevel);
         }
 
-        node.getBlocks().forEach(this::next);
+        node.getBlocks().forEach(this::sink);
+        sink.division_();
     }
 
     private void anchor(Sink sink, Section node) {

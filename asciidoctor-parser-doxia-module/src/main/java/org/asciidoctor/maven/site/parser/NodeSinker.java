@@ -21,11 +21,12 @@ import org.asciidoctor.maven.site.parser.processors.UnorderedListNodeProcessor;
  * @author abelsromero
  * @since 3.1.0
  */
-public class NodeProcessorProvider {
+public class NodeSinker {
 
     private final List<NodeProcessor> nodeProcessors;
 
-    NodeProcessorProvider(Sink sink) {
+    // TODO this should not be public
+    public NodeSinker(Sink sink) {
         nodeProcessors = Arrays.asList(
             new DocumentNodeProcessor(sink, this),
             new ImageNodeProcessor(sink, this),

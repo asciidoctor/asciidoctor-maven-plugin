@@ -21,7 +21,6 @@ class ListItemNodeProcessorTest {
     private NodeProcessor nodeProcessor;
     private StringWriter sinkWriter;
 
-
     @ParameterizedTest
     @ValueSource(strings = {"*", "-"})
     void should_convert_list_item(String marker) {

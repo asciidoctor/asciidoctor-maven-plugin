@@ -5,7 +5,7 @@ import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.ast.impl.BlockImpl;
 import org.asciidoctor.maven.commons.StringUtils;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
-import org.asciidoctor.maven.site.parser.NodeProcessorProvider;
+import org.asciidoctor.maven.site.parser.NodeSinker;
 
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
@@ -25,11 +25,11 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
     /**
      * Constructor.
      *
-     * @param sink                  Doxia {@link Sink}
-     * @param nodeProcessorProvider
+     * @param sink       Doxia {@link Sink}
+     * @param nodeSinker
      */
-    public ListingNodeProcessor(Sink sink, NodeProcessorProvider nodeProcessorProvider) {
-        super(sink, nodeProcessorProvider);
+    public ListingNodeProcessor(Sink sink, NodeSinker nodeSinker) {
+        super(sink, nodeSinker);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
             }
 
             contentBuilder.append("<pre class=\"")
-                    .append(FLUIDO_SKIN_SOURCE_HIGHLIGHTER);
+                .append(FLUIDO_SKIN_SOURCE_HIGHLIGHTER);
             if (isLinenumsEnabled(node))
                 contentBuilder.append(" linenums");
 
@@ -67,9 +67,7 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
             contentBuilder.append("<pre>");
         }
 
-        // TODO validate delegation works
-        node.getBlocks().forEach(this::next);
-        //contentBuilder.append(((BlockImpl) node).getSource());
+        contentBuilder.append(((BlockImpl) node).getSource());
 
         if (isSourceBlock) {
             contentBuilder.append("</code>");
@@ -83,7 +81,7 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
     private boolean isLinenumsEnabled(StructuralNode node) {
         // linenums attribute can be set with empty string value
         return LINENUMS_ATTRIBUTE.equals(node.getAttribute("linenums"))
-                || node.getAttribute(LINENUMS_OPTION_ATTRIBUTE) != null;
+            || node.getAttribute(LINENUMS_OPTION_ATTRIBUTE) != null;
     }
 
     private boolean isSourceBlock(String language, String style) {

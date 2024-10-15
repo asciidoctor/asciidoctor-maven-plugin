@@ -1,7 +1,6 @@
 package org.asciidoctor.maven.site.parser.processors;
 
 import java.io.StringWriter;
-import java.util.Arrays;
 import java.util.Collections;
 
 import org.apache.maven.doxia.sink.Sink;
@@ -10,18 +9,9 @@ import org.asciidoctor.Options;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.asciidoctor.maven.site.parser.processors.test.Html.LIST_STYLE_TYPE_DECIMAL;
-import static org.asciidoctor.maven.site.parser.processors.test.Html.dd;
-import static org.asciidoctor.maven.site.parser.processors.test.Html.dt;
-import static org.asciidoctor.maven.site.parser.processors.test.Html.italics;
-import static org.asciidoctor.maven.site.parser.processors.test.Html.li;
-import static org.asciidoctor.maven.site.parser.processors.test.Html.monospace;
-import static org.asciidoctor.maven.site.parser.processors.test.Html.ol;
-import static org.asciidoctor.maven.site.parser.processors.test.Html.strong;
-import static org.asciidoctor.maven.site.parser.processors.test.Html.ul;
+import static org.asciidoctor.maven.site.parser.processors.test.Html.*;
 import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.clean;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,21 +22,6 @@ class DescriptionListNodeProcessorTest {
     private NodeProcessor nodeProcessor;
     private Sink sink;
     private StringWriter sinkWriter;
-
-
-    @BeforeEach
-    void setup() {
-        ListItemNodeProcessor listItemNodeProcessor = new ListItemNodeProcessor(sink);
-        ((DescriptionListNodeProcessor) nodeProcessor).setItemNodeProcessor(listItemNodeProcessor);
-
-        OrderedListNodeProcessor oListNodeProcessor = new OrderedListNodeProcessor(sink);
-        oListNodeProcessor.setItemNodeProcessor(listItemNodeProcessor);
-
-        UnorderedListNodeProcessor uListNodeProcessor = new UnorderedListNodeProcessor(sink);
-        uListNodeProcessor.setItemNodeProcessor(listItemNodeProcessor);
-
-        listItemNodeProcessor.setNodeProcessors(Arrays.asList(nodeProcessor, oListNodeProcessor, uListNodeProcessor));
-    }
 
     @Test
     void should_convert_simple_list() {

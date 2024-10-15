@@ -110,8 +110,7 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
         new HeadParser(sink)
             .parse(headerMetadata);
 
-        // TODO do body inside the DocumentNodeProcessor
-        new NodeProcessorProvider(sink)
+        new NodeSinker(sink)
             .sink(document);
     }
 

@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
-import org.asciidoctor.maven.site.parser.NodeProcessorProvider;
+import org.asciidoctor.maven.site.parser.NodeSinker;
 
 /**
  * Ordered list processor.
@@ -18,11 +18,11 @@ public class OrderedListNodeProcessor extends AbstractSinkNodeProcessor implemen
     /**
      * Constructor.
      *
-     * @param sink                  Doxia {@link Sink}
-     * @param nodeProcessorProvider
+     * @param sink       Doxia {@link Sink}
+     * @param nodeSinker
      */
-    public OrderedListNodeProcessor(Sink sink, NodeProcessorProvider nodeProcessorProvider) {
-        super(sink, nodeProcessorProvider);
+    public OrderedListNodeProcessor(Sink sink, NodeSinker nodeSinker) {
+        super(sink, nodeSinker);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class OrderedListNodeProcessor extends AbstractSinkNodeProcessor implemen
          */
         if (!subNodes.isEmpty()) {
             sink.numberedList(0);
-            subNodes.forEach(this::next);
+            subNodes.forEach(this::sink);
             sink.numberedList_();
         }
     }

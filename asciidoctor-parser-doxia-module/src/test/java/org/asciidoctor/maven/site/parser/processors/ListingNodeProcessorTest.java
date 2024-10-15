@@ -21,7 +21,6 @@ class ListingNodeProcessorTest {
     private NodeProcessor nodeProcessor;
     private StringWriter sinkWriter;
 
-
     @Test
     void should_convert_full_source_block() {
         String content = documentWithFullSourceBlock();
