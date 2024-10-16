@@ -3,6 +3,7 @@ package org.asciidoctor.maven.site.parser.processors;
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
+import org.asciidoctor.maven.site.parser.NodeSinker;
 
 /**
  * Root document processor.
@@ -17,8 +18,8 @@ public class DocumentNodeProcessor extends AbstractSinkNodeProcessor implements 
      *
      * @param sink Doxia {@link Sink}
      */
-    public DocumentNodeProcessor(Sink sink) {
-        super(sink);
+    public DocumentNodeProcessor(Sink sink, NodeSinker nodeSinker) {
+        super(sink, nodeSinker);
     }
 
     @Override
@@ -28,7 +29,17 @@ public class DocumentNodeProcessor extends AbstractSinkNodeProcessor implements 
 
     @Override
     public void process(StructuralNode node) {
-        // NOTE: H1 generation fixed in doxia 2.0.0-MX
-        getSink().rawText(String.format("<h1>%s</h1>", node.getTitle()));
+        final Sink sink = getSink();
+
+        sink.body();
+        // TODO review how this fits with Section titles also being 1
+        sink.sectionTitle1();
+        sink.rawText(node.getTitle());
+        sink.sectionTitle1_();
+
+        node.getBlocks()
+            .forEach(this::sink);
+
+        sink.body_();
     }
 }

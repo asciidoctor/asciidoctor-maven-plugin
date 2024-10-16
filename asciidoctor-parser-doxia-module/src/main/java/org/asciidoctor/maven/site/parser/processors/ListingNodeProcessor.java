@@ -5,6 +5,7 @@ import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.ast.impl.BlockImpl;
 import org.asciidoctor.maven.commons.StringUtils;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
+import org.asciidoctor.maven.site.parser.NodeSinker;
 
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
@@ -21,16 +22,14 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
     private static final String LINENUMS_ATTRIBUTE = "linenums";
     private static final String LINENUMS_OPTION_ATTRIBUTE = LINENUMS_ATTRIBUTE + "-option";
 
-    private final ListItemNodeProcessor itemNodeProcessor;
-
     /**
      * Constructor.
      *
-     * @param sink Doxia {@link Sink}
+     * @param sink       Doxia {@link Sink}
+     * @param nodeSinker
      */
-    public ListingNodeProcessor(Sink sink) {
-        super(sink);
-        this.itemNodeProcessor = new ListItemNodeProcessor(sink);
+    public ListingNodeProcessor(Sink sink, NodeSinker nodeSinker) {
+        super(sink, nodeSinker);
     }
 
     @Override
@@ -38,6 +37,7 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
         return "listing".equals(node.getNodeName());
     }
 
+    // TODO test with a table or other elements inside: I assume they don't create notes because it's verbatim
     @Override
     public void process(StructuralNode node) {
         final StringBuilder contentBuilder = new StringBuilder();
@@ -56,7 +56,7 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
             }
 
             contentBuilder.append("<pre class=\"")
-                    .append(FLUIDO_SKIN_SOURCE_HIGHLIGHTER);
+                .append(FLUIDO_SKIN_SOURCE_HIGHLIGHTER);
             if (isLinenumsEnabled(node))
                 contentBuilder.append(" linenums");
 
@@ -74,13 +74,14 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
         }
 
         contentBuilder.append("</pre></div>");
+
         getSink().rawText(contentBuilder.toString());
     }
 
     private boolean isLinenumsEnabled(StructuralNode node) {
         // linenums attribute can be set with empty string value
         return LINENUMS_ATTRIBUTE.equals(node.getAttribute("linenums"))
-                || node.getAttribute(LINENUMS_OPTION_ATTRIBUTE) != null;
+            || node.getAttribute(LINENUMS_OPTION_ATTRIBUTE) != null;
     }
 
     private boolean isSourceBlock(String language, String style) {

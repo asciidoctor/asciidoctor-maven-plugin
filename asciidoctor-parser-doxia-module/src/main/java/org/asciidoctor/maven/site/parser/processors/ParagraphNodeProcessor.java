@@ -3,6 +3,7 @@ package org.asciidoctor.maven.site.parser.processors;
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
+import org.asciidoctor.maven.site.parser.NodeSinker;
 
 /**
  * Paragraph processor.
@@ -15,10 +16,11 @@ public class ParagraphNodeProcessor extends AbstractSinkNodeProcessor implements
     /**
      * Constructor.
      *
-     * @param sink Doxia {@link Sink}
+     * @param sink       Doxia {@link Sink}
+     * @param nodeSinker
      */
-    public ParagraphNodeProcessor(Sink sink) {
-        super(sink);
+    public ParagraphNodeProcessor(Sink sink, NodeSinker nodeSinker) {
+        super(sink, nodeSinker);
     }
 
     @Override
@@ -28,11 +30,10 @@ public class ParagraphNodeProcessor extends AbstractSinkNodeProcessor implements
 
     @Override
     public void process(StructuralNode node) {
-        getSink().paragraph();
+        final Sink sink = getSink();
+        sink.paragraph();
         // content returns HTML processed including bold, italics, monospace, etc. attributes resolution
-        // TODO run convert() instead of getContent?
-        String content = (String) node.getContent();
-        getSink().rawText(content);
-        getSink().paragraph_();
+        sink.rawText((String) node.getContent());
+        sink.paragraph_();
     }
 }

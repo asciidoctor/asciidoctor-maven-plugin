@@ -1,5 +1,8 @@
 package org.asciidoctor.maven.site.parser.processors;
 
+import java.io.StringWriter;
+import java.util.Collections;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.StructuralNode;
@@ -7,15 +10,8 @@ import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
 import org.junit.jupiter.api.Test;
 
-import java.io.StringWriter;
-import java.util.Collections;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * PreambleNodeProcessor does nothing, contents are blocks processed
- * by their respective processors.
- */
 @NodeProcessorTest(PreambleNodeProcessor.class)
 class PreambleNodeProcessorTest {
 
@@ -30,7 +26,7 @@ class PreambleNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("");
+            .isEqualTo("<p>This is a preamble.\nWith two lines.</p>");
     }
 
     @Test
@@ -40,7 +36,7 @@ class PreambleNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("");
+            .isEqualTo("<p>This <strong>is</strong> <em>a</em> simple <code>preamble</code>.</p>");
     }
 
     private String documentWithPreamble() {
@@ -49,14 +45,14 @@ class PreambleNodeProcessorTest {
 
     private String documentWithPreamble(String text) {
         return "= Document tile\n\n"
-                + text + "\n\n"
-                + "== Section\n\nSection body\n\n";
+            + text + "\n\n"
+            + "== Section\n\nSection body\n\n";
     }
 
     private String process(String content) {
         StructuralNode node = asciidoctor.load(content, Options.builder().build())
-                .findBy(Collections.singletonMap("context", ":preamble"))
-                .get(0);
+            .findBy(Collections.singletonMap("context", ":preamble"))
+            .get(0);
 
         nodeProcessor.process(node);
 

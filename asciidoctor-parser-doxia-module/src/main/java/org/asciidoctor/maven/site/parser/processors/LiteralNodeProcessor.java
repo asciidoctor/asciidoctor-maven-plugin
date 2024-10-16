@@ -4,6 +4,7 @@ import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.ast.impl.BlockImpl;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
+import org.asciidoctor.maven.site.parser.NodeSinker;
 
 /**
  * Literal (aka. monospace) text processor.
@@ -13,16 +14,14 @@ import org.asciidoctor.maven.site.parser.NodeProcessor;
  */
 public class LiteralNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
 
-    private final ListItemNodeProcessor itemNodeProcessor;
-
     /**
      * Constructor.
      *
-     * @param sink Doxia {@link Sink}
+     * @param sink       Doxia {@link Sink}
+     * @param nodeSinker
      */
-    public LiteralNodeProcessor(Sink sink) {
-        super(sink);
-        this.itemNodeProcessor = new ListItemNodeProcessor(sink);
+    public LiteralNodeProcessor(Sink sink, NodeSinker nodeSinker) {
+        super(sink, nodeSinker);
     }
 
     @Override
@@ -32,12 +31,12 @@ public class LiteralNodeProcessor extends AbstractSinkNodeProcessor implements N
 
     @Override
     public void process(StructuralNode node) {
-        final StringBuilder contentBuilder = new StringBuilder();
-        contentBuilder.append("<div><pre>");
+        final Sink sink = getSink();
 
-        contentBuilder.append(((BlockImpl) node).getSource());
-
-        contentBuilder.append("</pre></div>");
-        getSink().rawText(contentBuilder.toString());
+        sink.division();
+        sink.rawText("<pre>");
+        sink.rawText(((BlockImpl) node).getSource());
+        sink.rawText("</pre>");
+        sink.division_();
     }
 }

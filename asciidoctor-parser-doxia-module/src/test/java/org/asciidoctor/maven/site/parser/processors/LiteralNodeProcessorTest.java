@@ -19,12 +19,11 @@ class LiteralNodeProcessorTest {
     private NodeProcessor nodeProcessor;
     private StringWriter sinkWriter;
 
-
     @Test
     void should_convert_simple_literal() {
         String content = documentWithLiteralBlock();
 
-        String html = process(content, 0);
+        String html = process(content);
 
         assertThat(html)
                 .isEqualTo("<div><pre>This is a literal line.</pre></div>");
@@ -35,7 +34,7 @@ class LiteralNodeProcessorTest {
                 + "== Section\n\n This is a literal line.\n";
     }
 
-    private String process(String content, int level) {
+    private String process(String content) {
         StructuralNode node = asciidoctor.load(content, Options.builder().build())
                 .findBy(Collections.singletonMap("context", ":literal"))
                 .get(0);

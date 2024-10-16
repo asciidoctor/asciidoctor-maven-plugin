@@ -1,7 +1,6 @@
 package org.asciidoctor.maven.site.parser;
 
 import java.io.StringWriter;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.maven.doxia.sink.Sink;
@@ -25,20 +24,20 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class NodeSinkerTest {
 
-    private NodesSinker nodesSinker;
+    private NodeSinker nodeSinker;
     private StringWriter sinkWriter;
 
 
     @BeforeEach
     void setup() throws NoSuchFieldException, IllegalAccessException {
         Sink sink = createSink();
-        nodesSinker = new NodesSinker(sink);
+        nodeSinker = new NodeSinker(sink);
         sinkWriter = extractField(sink, "writer");
     }
 
     @Test
     void should_init() {
-        assertThat(nodesSinker).isNotNull();
+        assertThat(nodeSinker).isNotNull();
     }
 
 
@@ -46,7 +45,7 @@ class NodeSinkerTest {
     void should_not_fail_when_processing_invalid_node() {
         StructuralNode mockNode = mockNode("this-is-not-a-node");
 
-        nodesSinker.processNode(mockNode);
+        nodeSinker.sink(mockNode);
 
         assertThat(sinkWriter.toString()).isEmpty();
     }
@@ -55,7 +54,7 @@ class NodeSinkerTest {
     void should_process_document_node() {
         StructuralNode mockNode = mockNode("document");
 
-        nodesSinker.processNode(mockNode);
+        nodeSinker.sink(mockNode);
 
         assertThat(sinkWriter.toString()).isNotBlank();
     }
@@ -64,7 +63,7 @@ class NodeSinkerTest {
     void should_process_preamble_literal() {
         StructuralNode mockNode = mockNode("literal", BlockImpl.class);
 
-        nodesSinker.processNode(mockNode);
+        nodeSinker.sink(mockNode);
 
         assertThat(sinkWriter.toString()).isNotBlank();
     }
@@ -75,7 +74,7 @@ class NodeSinkerTest {
         StructuralNode literalBlock = mockNode("literal", BlockImpl.class);
         Mockito.when(mockNode.getBlocks()).thenReturn(List.of(literalBlock));
 
-        nodesSinker.processNode(mockNode);
+        nodeSinker.sink(mockNode);
 
         assertThat(sinkWriter.toString()).isNotBlank();
     }
@@ -85,7 +84,7 @@ class NodeSinkerTest {
         StructuralNode mockNode = mockNode("paragraph");
         Mockito.when(mockNode.getContent()).thenReturn("something");
 
-        nodesSinker.processNode(mockNode);
+        nodeSinker.sink(mockNode);
 
         assertThat(sinkWriter.toString()).isNotBlank();
     }
@@ -97,7 +96,7 @@ class NodeSinkerTest {
         Mockito.when(mockDocument.getAttribute(Mockito.anyString())).thenReturn(null);
         Mockito.when(mockNode.getDocument()).thenReturn(mockDocument);
 
-        nodesSinker.processNode(mockNode);
+        nodeSinker.sink(mockNode);
 
         assertThat(sinkWriter.toString()).isNotBlank();
     }
@@ -106,7 +105,7 @@ class NodeSinkerTest {
     void should_process_table_node() {
         StructuralNode mockNode = mockNode("table", TableImpl.class);
 
-        nodesSinker.processNode(mockNode);
+        nodeSinker.sink(mockNode);
 
         assertThat(sinkWriter.toString()).isNotBlank();
     }
@@ -115,7 +114,7 @@ class NodeSinkerTest {
     void should_process_listing_node() {
         StructuralNode mockNode = mockNode("listing", BlockImpl.class);
 
-        nodesSinker.processNode(mockNode);
+        nodeSinker.sink(mockNode);
 
         assertThat(sinkWriter.toString()).isNotBlank();
     }
@@ -125,7 +124,7 @@ class NodeSinkerTest {
         StructuralNode mockNode = mockNode("image", BlockImpl.class);
         Mockito.when(mockNode.getAttribute(Mockito.eq("target"))).thenReturn("image.png");
 
-        nodesSinker.processNode(mockNode);
+        nodeSinker.sink(mockNode);
 
         assertThat(sinkWriter.toString()).isNotBlank();
     }
@@ -134,7 +133,7 @@ class NodeSinkerTest {
     void should_process_literal_node() {
         StructuralNode mockNode = mockNode("literal", BlockImpl.class);
 
-        nodesSinker.processNode(mockNode);
+        nodeSinker.sink(mockNode);
 
         assertThat(sinkWriter.toString()).isNotBlank();
     }
@@ -146,7 +145,7 @@ class NodeSinkerTest {
         Mockito.when(mockListItem.getMarker()).thenReturn("*");
         Mockito.when(mockNode.getBlocks()).thenReturn(List.of(mockListItem));
 
-        nodesSinker.processNode(mockNode);
+        nodeSinker.sink(mockNode);
 
         assertThat(sinkWriter.toString()).isNotBlank();
     }
@@ -158,7 +157,7 @@ class NodeSinkerTest {
         Mockito.when(mockListItem.getMarker()).thenReturn(".");
         Mockito.when(mockNode.getBlocks()).thenReturn(List.of(mockListItem));
 
-        nodesSinker.processNode(mockNode);
+        nodeSinker.sink(mockNode);
 
         assertThat(sinkWriter.toString()).isNotBlank();
     }
