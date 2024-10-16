@@ -20,7 +20,6 @@ class SectionNodeProcessorTest {
     private NodeProcessor nodeProcessor;
     private StringWriter sinkWriter;
 
-
     @Test
     void should_convert_document_title() {
         String content = documentWithSections();

@@ -58,7 +58,7 @@ public class DescriptionListNodeProcessor extends AbstractSinkNodeProcessor impl
                 if (description.getBlocks().isEmpty()) {
                     sink.rawText(description.getText());
                 } else {
-                    sink(node);
+                    super.sink(description);
                 }
                 sink.definition_();
             }

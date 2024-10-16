@@ -8,8 +8,10 @@ import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.processors.DescriptionListNodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.DocumentNodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.ImageNodeProcessor;
+import org.asciidoctor.maven.site.parser.processors.ListItemNodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.ListingNodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.LiteralNodeProcessor;
+import org.asciidoctor.maven.site.parser.processors.NoOpNodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.OrderedListNodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.ParagraphNodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.PreambleNodeProcessor;
@@ -25,21 +27,26 @@ public class NodeSinker {
 
     private final List<NodeProcessor> nodeProcessors;
 
+    private final NodeProcessor noOpProcessor;
+
     // TODO this should not be public
     public NodeSinker(Sink sink) {
         nodeProcessors = Arrays.asList(
+            new DescriptionListNodeProcessor(sink, this),
             new DocumentNodeProcessor(sink, this),
             new ImageNodeProcessor(sink, this),
+            new ListItemNodeProcessor(sink, this),
+            new ListingNodeProcessor(sink, this),
             new ListingNodeProcessor(sink, this),
             new LiteralNodeProcessor(sink, this),
+            new OrderedListNodeProcessor(sink, this),
             new ParagraphNodeProcessor(sink, this),
             new PreambleNodeProcessor(sink, this),
             new SectionNodeProcessor(sink, this),
             new TableNodeProcessor(sink, this),
-            new UnorderedListNodeProcessor(sink, this),
-            new OrderedListNodeProcessor(sink, this),
-            new DescriptionListNodeProcessor(sink, this)
+            new UnorderedListNodeProcessor(sink, this)
         );
+        noOpProcessor = new NoOpNodeProcessor(sink, this);
     }
 
     /**
@@ -49,7 +56,7 @@ public class NodeSinker {
         return nodeProcessors.stream()
             .filter(nodeProcessor -> nodeProcessor.applies(node))
             .findFirst()
-            .get();
+            .orElse(noOpProcessor);
     }
 
     public void sink(StructuralNode node) {
