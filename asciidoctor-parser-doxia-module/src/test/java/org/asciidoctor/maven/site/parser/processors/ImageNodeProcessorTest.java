@@ -22,7 +22,6 @@ class ImageNodeProcessorTest {
     private NodeProcessor nodeProcessor;
     private StringWriter sinkWriter;
 
-
     @Test
     void should_convert_document_with_image() {
         String content = documentWithImage();

@@ -24,14 +24,6 @@ class OrderedListNodeProcessorTest {
     private Sink sink;
     private StringWriter sinkWriter;
 
-
-    @BeforeEach
-    void setup() {
-        ListItemNodeProcessor listItemNodeProcessor = new ListItemNodeProcessor(sink);
-        ((OrderedListNodeProcessor) nodeProcessor).setItemNodeProcessor(listItemNodeProcessor);
-        listItemNodeProcessor.setNodeProcessors(Arrays.asList(nodeProcessor));
-    }
-
     @Test
     void should_convert_simple_list() {
         String content = buildDocumentWithSimpleList();

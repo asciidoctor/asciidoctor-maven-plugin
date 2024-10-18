@@ -5,6 +5,7 @@ import javax.inject.Provider;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.apache.maven.doxia.parser.AbstractTextParser;
@@ -28,6 +29,7 @@ import org.asciidoctor.maven.site.HeaderMetadata;
 import org.asciidoctor.maven.site.SiteConversionConfiguration;
 import org.asciidoctor.maven.site.SiteConversionConfigurationParser;
 import org.asciidoctor.maven.site.SiteLogHandlerDeserializer;
+import org.asciidoctor.maven.site.parser.processors.DescriptionListNodeProcessor;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -82,7 +84,7 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
         final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
 
         SiteConversionConfiguration conversionConfig = new SiteConversionConfigurationParser(project)
-                .processAsciiDocConfig(siteConfig, defaultOptions(siteDirectory), defaultAttributes());
+            .processAsciiDocConfig(siteConfig, defaultOptions(siteDirectory), defaultAttributes());
         for (String require : conversionConfig.getRequires()) {
             requireLibrary(asciidoctor, require);
         }
@@ -98,7 +100,7 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
         try {
             // process log messages according to mojo configuration
             new LogRecordsProcessors(logHandler, siteDirectory, errorMessage -> logger.error(errorMessage))
-                    .processLogRecords(memoryLogHandler);
+                .processLogRecords(memoryLogHandler);
 
         } catch (Exception exception) {
             throw new ParseException(exception.getMessage(), exception);
@@ -110,10 +112,8 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
         new HeadParser(sink)
             .parse(headerMetadata);
 
-        sink.body();
-        final NodesSinker nodesSinker = new NodesSinker(sink);
-        nodesSinker.processNode(document);
-        sink.body_();
+        new NodeSinker(sink)
+            .sink(document);
     }
 
     private MemoryLogHandler asciidoctorLoggingSetup(Asciidoctor asciidoctor, LogHandler logHandler, File siteDirectory) {
@@ -148,15 +148,15 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
 
     protected OptionsBuilder defaultOptions(File siteDirectory) {
         return Options.builder()
-                .backend("xhtml")
-                .safe(SafeMode.UNSAFE)
-                .baseDir(new File(siteDirectory, ROLE_HINT));
+            .backend("xhtml")
+            .safe(SafeMode.UNSAFE)
+            .baseDir(new File(siteDirectory, ROLE_HINT));
     }
 
     protected AttributesBuilder defaultAttributes() {
         return Attributes.builder()
-                .attribute("idprefix", "@")
-                .attribute("showtitle", "@");
+            .attribute("idprefix", "@")
+            .attribute("showtitle", "@");
     }
 
     private void requireLibrary(Asciidoctor asciidoctor, String require) {
