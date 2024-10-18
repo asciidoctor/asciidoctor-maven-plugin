@@ -26,18 +26,18 @@ class LiteralNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<div><pre>This is a literal line.</pre></div>");
+            .isEqualTo("<div><pre>This is a literal line.</pre></div>");
     }
 
     private String documentWithLiteralBlock() {
         return "= Document tile\n\n"
-                + "== Section\n\n This is a literal line.\n";
+            + "== Section\n\n This is a literal line.\n";
     }
 
     private String process(String content) {
         StructuralNode node = asciidoctor.load(content, Options.builder().build())
-                .findBy(Collections.singletonMap("context", ":literal"))
-                .get(0);
+            .findBy(Collections.singletonMap("context", ":literal"))
+            .get(0);
 
         nodeProcessor.process(node);
 

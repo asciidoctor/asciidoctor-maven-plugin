@@ -29,10 +29,10 @@ class UnorderedListNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<ul>" +
-                        "<li>unordered item 1</li>" +
-                        "<li>unordered item 2</li>" +
-                        "</ul>");
+            .isEqualTo("<ul>" +
+                "<li>unordered item 1</li>" +
+                "<li>unordered item 2</li>" +
+                "</ul>");
     }
 
     @Test
@@ -42,44 +42,44 @@ class UnorderedListNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<ul>" +
-                        "<li>unordered item 1" +
-                        "<ul>" +
-                        "<li>unordered item 1 1</li>" +
-                        "<li>unordered item 1 2</li>" +
-                        "</ul>" +
-                        "</li>" +
-                        "<li>unordered item 2" +
-                        "<ul>" +
-                        "<li>unordered item 2 1" +
-                        "<ul>" +
-                        "<li>unordered item 2 1 1</li></ul></li></ul>" +
-                        "</li>" +
-                        "</ul>");
+            .isEqualTo("<ul>" +
+                "<li>unordered item 1" +
+                "<ul>" +
+                "<li>unordered item 1 1</li>" +
+                "<li>unordered item 1 2</li>" +
+                "</ul>" +
+                "</li>" +
+                "<li>unordered item 2" +
+                "<ul>" +
+                "<li>unordered item 2 1" +
+                "<ul>" +
+                "<li>unordered item 2 1 1</li></ul></li></ul>" +
+                "</li>" +
+                "</ul>");
     }
 
     private static String buildDocumentWithSimpleList() {
         return "= Document tile\n\n"
-                + "== Section\n\n"
-                + "* unordered item 1\n"
-                + "* unordered item 2\n";
+            + "== Section\n\n"
+            + "* unordered item 1\n"
+            + "* unordered item 2\n";
     }
 
     private static String buildDocumentWithNestedLists() {
         return "= Document tile\n\n"
-                + "== Section\n\n"
-                + "* unordered item 1\n"
-                + "** unordered item 1 1\n"
-                + "** unordered item 1 2\n"
-                + "* unordered item 2\n"
-                + "** unordered item 2 1\n"
-                + "*** unordered item 2 1 1\n";
+            + "== Section\n\n"
+            + "* unordered item 1\n"
+            + "** unordered item 1 1\n"
+            + "** unordered item 1 2\n"
+            + "* unordered item 2\n"
+            + "** unordered item 2 1\n"
+            + "*** unordered item 2 1 1\n";
     }
 
     private String process(String content) {
         StructuralNode node = asciidoctor.load(content, Options.builder().build())
-                .findBy(Collections.singletonMap("context", ":ulist"))
-                .get(0);
+            .findBy(Collections.singletonMap("context", ":ulist"))
+            .get(0);
 
         nodeProcessor.process(node);
 

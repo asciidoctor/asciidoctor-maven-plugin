@@ -2,7 +2,6 @@ package org.asciidoctor.maven.site.parser.processors;
 
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.jruby.ast.impl.BlockImpl;
 import org.asciidoctor.maven.commons.StringUtils;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.NodeSinker;
@@ -37,7 +36,6 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
         return "listing".equals(node.getNodeName());
     }
 
-    // TODO test with a table or other elements inside: I assume they don't create notes because it's verbatim
     @Override
     public void process(StructuralNode node) {
         final StringBuilder contentBuilder = new StringBuilder();
@@ -67,7 +65,8 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
             contentBuilder.append("<pre>");
         }
 
-        contentBuilder.append(((BlockImpl) node).getSource());
+        // Use 'content' (not 'source') to apply substitutions of special characters
+        contentBuilder.append((String) node.getContent());
 
         if (isSourceBlock) {
             contentBuilder.append("</code>");

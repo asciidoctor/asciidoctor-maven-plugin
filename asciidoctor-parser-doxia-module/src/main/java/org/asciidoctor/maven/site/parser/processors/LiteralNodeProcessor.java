@@ -3,6 +3,7 @@ package org.asciidoctor.maven.site.parser.processors;
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.ast.impl.BlockImpl;
+import org.asciidoctor.maven.commons.StringUtils;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.NodeSinker;
 
@@ -33,10 +34,13 @@ public class LiteralNodeProcessor extends AbstractSinkNodeProcessor implements N
     public void process(StructuralNode node) {
         final Sink sink = getSink();
 
-        sink.division();
-        sink.rawText("<pre>");
-        sink.rawText(((BlockImpl) node).getSource());
-        sink.rawText("</pre>");
-        sink.division_();
+        String source = ((BlockImpl) node).getSource();
+        if (StringUtils.isNotBlank(source)) {
+            sink.division();
+            sink.rawText("<pre>");
+            sink.rawText(source);
+            sink.rawText("</pre>");
+            sink.division_();
+        }
     }
 }

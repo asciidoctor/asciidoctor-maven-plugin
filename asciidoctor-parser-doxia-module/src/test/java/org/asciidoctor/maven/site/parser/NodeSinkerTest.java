@@ -4,6 +4,7 @@ import java.io.StringWriter;
 import java.util.List;
 
 import org.apache.maven.doxia.sink.Sink;
+import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.StructuralNode;
@@ -26,7 +27,6 @@ class NodeSinkerTest {
 
     private NodeSinker nodeSinker;
     private StringWriter sinkWriter;
-
 
     @BeforeEach
     void setup() throws NoSuchFieldException, IllegalAccessException {
@@ -53,6 +53,7 @@ class NodeSinkerTest {
     @Test
     void should_process_document_node() {
         StructuralNode mockNode = mockNode("document");
+        Mockito.when(mockNode.getTitle()).thenReturn("Something");
 
         nodeSinker.sink(mockNode);
 
@@ -171,6 +172,9 @@ class NodeSinkerTest {
     private static <T> T mockNode(String nodeName, Class<? extends StructuralNode> clazz) {
         StructuralNode mockNode = Mockito.mock(clazz);
         Mockito.when(mockNode.getNodeName()).thenReturn(nodeName);
+        if (Block.class.isAssignableFrom(clazz)) {
+            Mockito.when(((Block) mockNode).getSource()).thenReturn("Something");
+        }
         return (T) mockNode;
     }
 }

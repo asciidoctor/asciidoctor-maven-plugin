@@ -26,7 +26,9 @@ class PreambleNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-            .isEqualTo("<p>This is a preamble.\nWith two lines.</p>");
+            .isEqualTo("<p>This is a preamble." +
+                System.lineSeparator() +
+                "With two lines.</p>");
     }
 
     @Test
@@ -40,7 +42,9 @@ class PreambleNodeProcessorTest {
     }
 
     private String documentWithPreamble() {
-        return documentWithPreamble("This is a preamble.\nWith two lines.");
+        return documentWithPreamble("This is a preamble." +
+            System.lineSeparator() +
+            "With two lines.");
     }
 
     private String documentWithPreamble(String text) {
