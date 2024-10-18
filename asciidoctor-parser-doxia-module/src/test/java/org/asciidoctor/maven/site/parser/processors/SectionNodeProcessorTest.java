@@ -27,7 +27,7 @@ class SectionNodeProcessorTest {
         String html = process(content, 0);
 
         assertThat(html)
-            .isEqualTo("<div>\n<h1>Document tile</h1></div>");
+            .isEqualTo("<div><h1>Document tile</h1></div>");
     }
 
     @Test
@@ -37,20 +37,20 @@ class SectionNodeProcessorTest {
         String html = process(content, 1);
 
         assertThat(html)
-            .isEqualTo("<div>\n" +
-                "<h2><a id=\"_first_section_title\"></a>First section title</h2>\n" +
-                "<p>First section body</p>\n" +
-                "<div>\n" +
-                "<h3><a id=\"_second_section_title\"></a>Second section title</h3>\n" +
-                "<p>Second section body</p>\n" +
-                "<div>\n" +
-                "<h4><a id=\"_third_section_title\"></a>Third section title</h4>\n" +
-                "<p>Third section body</p>\n" +
-                "<div>\n" +
-                "<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>\n" +
-                "<p>Fourth section body</p>\n" +
-                "<div>\n" +
-                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>\n" +
+            .isEqualTo("<div>" +
+                "<h2><a id=\"_first_section_title\"></a>First section title</h2>" +
+                "<p>First section body</p>" +
+                "<div>" +
+                "<h3><a id=\"_second_section_title\"></a>Second section title</h3>" +
+                "<p>Second section body</p>" +
+                "<div>" +
+                "<h4><a id=\"_third_section_title\"></a>Third section title</h4>" +
+                "<p>Third section body</p>" +
+                "<div>" +
+                "<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>" +
+                "<p>Fourth section body</p>" +
+                "<div>" +
+                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
                 "<p>Fifth section body</p></div></div></div></div></div>");
     }
 
@@ -61,17 +61,17 @@ class SectionNodeProcessorTest {
         String html = process(content, 2);
 
         assertThat(html)
-            .isEqualTo("<div>\n" +
-                "<h3><a id=\"_second_section_title\"></a>Second section title</h3>\n" +
-                "<p>Second section body</p>\n" +
-                "<div>\n" +
-                "<h4><a id=\"_third_section_title\"></a>Third section title</h4>\n" +
-                "<p>Third section body</p>\n" +
-                "<div>\n" +
-                "<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>\n" +
-                "<p>Fourth section body</p>\n" +
-                "<div>\n" +
-                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>\n" +
+            .isEqualTo("<div>" +
+                "<h3><a id=\"_second_section_title\"></a>Second section title</h3>" +
+                "<p>Second section body</p>" +
+                "<div>" +
+                "<h4><a id=\"_third_section_title\"></a>Third section title</h4>" +
+                "<p>Third section body</p>" +
+                "<div>" +
+                "<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>" +
+                "<p>Fourth section body</p>" +
+                "<div>" +
+                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
                 "<p>Fifth section body</p></div></div></div></div>");
     }
 
@@ -82,14 +82,14 @@ class SectionNodeProcessorTest {
         String html = process(content, 3);
 
         assertThat(html)
-            .isEqualTo("<div>\n" +
-                "<h4><a id=\"_third_section_title\"></a>Third section title</h4>\n" +
-                "<p>Third section body</p>\n" +
-                "<div>\n" +
-                "<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>\n" +
-                "<p>Fourth section body</p>\n" +
-                "<div>\n" +
-                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>\n" +
+            .isEqualTo("<div>" +
+                "<h4><a id=\"_third_section_title\"></a>Third section title</h4>" +
+                "<p>Third section body</p>" +
+                "<div>" +
+                "<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>" +
+                "<p>Fourth section body</p>" +
+                "<div>" +
+                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
                 "<p>Fifth section body</p></div></div></div>");
     }
 
@@ -100,11 +100,11 @@ class SectionNodeProcessorTest {
         String html = process(content, 4);
 
         assertThat(html)
-            .isEqualTo("<div>\n" +
-                "<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>\n" +
-                "<p>Fourth section body</p>\n" +
-                "<div>\n" +
-                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>\n" +
+            .isEqualTo("<div>" +
+                "<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>" +
+                "<p>Fourth section body</p>" +
+                "<div>" +
+                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
                 "<p>Fifth section body</p></div></div>");
     }
 
@@ -115,8 +115,8 @@ class SectionNodeProcessorTest {
         String html = process(content, 5);
 
         assertThat(html)
-            .isEqualTo("<div>\n" +
-                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>\n" +
+            .isEqualTo("<div>" +
+                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
                 "<p>Fifth section body</p></div>");
     }
 
@@ -129,20 +129,20 @@ class SectionNodeProcessorTest {
 
         // With numbering
         assertThat(process(content, 1, attributes))
-            .isEqualTo("<div>\n" +
-                "<h2><a id=\"_first_section_title\"></a>1. First section title</h2>\n" +
-                "<p>First section body</p>\n" +
-                "<div>\n" +
-                "<h3><a id=\"_second_section_title\"></a>1.1. Second section title</h3>\n" +
-                "<p>Second section body</p>\n" +
-                "<div>\n" +
-                "<h4><a id=\"_third_section_title\"></a>1.1.1. Third section title</h4>\n" +
-                "<p>Third section body</p>\n" +
-                "<div>\n" +
-                "<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>\n" +
-                "<p>Fourth section body</p>\n" +
-                "<div>\n" +
-                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>\n" +
+            .isEqualTo("<div>" +
+                "<h2><a id=\"_first_section_title\"></a>1. First section title</h2>" +
+                "<p>First section body</p>" +
+                "<div>" +
+                "<h3><a id=\"_second_section_title\"></a>1.1. Second section title</h3>" +
+                "<p>Second section body</p>" +
+                "<div>" +
+                "<h4><a id=\"_third_section_title\"></a>1.1.1. Third section title</h4>" +
+                "<p>Third section body</p>" +
+                "<div>" +
+                "<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>" +
+                "<p>Fourth section body</p>" +
+                "<div>" +
+                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
                 "<p>Fifth section body</p></div></div></div></div></div>");
     }
 
@@ -156,20 +156,20 @@ class SectionNodeProcessorTest {
 
         // With numbering
         assertThat(process(content, 1, attributes))
-            .isEqualTo("<div>\n" +
-                "<h2><a id=\"_first_section_title\"></a>1. First section title</h2>\n" +
-                "<p>First section body</p>\n" +
-                "<div>\n" +
-                "<h3><a id=\"_second_section_title\"></a>1.1. Second section title</h3>\n" +
-                "<p>Second section body</p>\n" +
-                "<div>\n" +
-                "<h4><a id=\"_third_section_title\"></a>1.1.1. Third section title</h4>\n" +
-                "<p>Third section body</p>\n" +
-                "<div>\n" +
-                "<h5><a id=\"_fourth_section_title\"></a>1.1.1.1. Fourth section title</h5>\n" +
-                "<p>Fourth section body</p>\n" +
-                "<div>\n" +
-                "<h5><a id=\"_fifth_section_title\"></a>1.1.1.1.1. Fifth section title</h5>\n" +
+            .isEqualTo("<div>" +
+                "<h2><a id=\"_first_section_title\"></a>1. First section title</h2>" +
+                "<p>First section body</p>" +
+                "<div>" +
+                "<h3><a id=\"_second_section_title\"></a>1.1. Second section title</h3>" +
+                "<p>Second section body</p>" +
+                "<div>" +
+                "<h4><a id=\"_third_section_title\"></a>1.1.1. Third section title</h4>" +
+                "<p>Third section body</p>" +
+                "<div>" +
+                "<h5><a id=\"_fourth_section_title\"></a>1.1.1.1. Fourth section title</h5>" +
+                "<p>Fourth section body</p>" +
+                "<div>" +
+                "<h5><a id=\"_fifth_section_title\"></a>1.1.1.1.1. Fifth section title</h5>" +
                 "<p>Fifth section body</p></div></div></div></div></div>");
     }
 
@@ -199,7 +199,11 @@ class SectionNodeProcessorTest {
 
         reset(sinkWriter);
         nodeProcessor.process(node);
-        return sinkWriter.toString().trim();
+        return removeLineBreaks(sinkWriter.toString().trim());
+    }
+
+    private static String removeLineBreaks(String html) {
+        return html.replaceAll("(\r)?\n", "");
     }
 
     private void reset(StringWriter sinkWriter) {

@@ -23,6 +23,9 @@ Improvements::
   * Added support for AsciidoctorJ v3.0.0 (#651)
   * Add compatibility with maven-site-plugin v3.20.0 and Doxia v2.0.0 (#933)
   * Add support for code blocks titles in asciidoctor-parser-doxia-module (#935)
+  * Refactor AST traversal method in asciidoctor-parser-doxia-module (#944)
+  * Empty titles in document or empty literals no longer generate <h1> or <pre> in asciidoctor-parser-doxia-module (#944)
+  * Sections are now wrapped in <div> in asciidoctor-parser-doxia-module (#944)
 
 Build / Infrastructure::
 

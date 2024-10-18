@@ -20,6 +20,8 @@ import org.asciidoctor.maven.site.parser.processors.TableNodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.UnorderedListNodeProcessor;
 
 /**
+ * Factory and repository for NodeProcessors.
+ *
  * @author abelsromero
  * @since 3.1.0
  */
@@ -29,7 +31,6 @@ public class NodeSinker {
 
     private final NodeProcessor noOpProcessor;
 
-    // TODO this should not be public
     public NodeSinker(Sink sink) {
         nodeProcessors = Arrays.asList(
             new DescriptionListNodeProcessor(sink, this),

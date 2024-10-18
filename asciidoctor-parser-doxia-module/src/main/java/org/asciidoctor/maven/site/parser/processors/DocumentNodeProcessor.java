@@ -5,6 +5,8 @@ import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.NodeSinker;
 
+import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
+
 /**
  * Root document processor.
  *
@@ -32,11 +34,12 @@ public class DocumentNodeProcessor extends AbstractSinkNodeProcessor implements 
         final Sink sink = getSink();
 
         sink.body();
-        // TODO review how this fits with Section titles also being 1
-        sink.sectionTitle1();
-        sink.rawText(node.getTitle());
-        sink.sectionTitle1_();
-
+        String title = node.getTitle();
+        if (isNotBlank(title)) {
+            sink.sectionTitle1();
+            sink.rawText(title);
+            sink.sectionTitle1_();
+        }
         node.getBlocks()
             .forEach(this::sink);
 
