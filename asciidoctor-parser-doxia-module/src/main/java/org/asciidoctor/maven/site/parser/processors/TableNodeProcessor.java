@@ -75,13 +75,20 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
     private void processCaption(StructuralNode node, Sink sink) {
         // 'null' when not set or '[caption=]'
         final String tableCaption = (String) node.getAttribute("table-caption");
+        final String caption = node.getCaption();
         // disable single caption
+
+        // if "[caption=]" -> remove caption
+        // disable too, when ":table-caption!:"
 
         final String title = node.getTitle();
         if (isNotBlank(title)) {
-            node.getContentModel();
+//            node.getContentModel();
             sink.tableCaption();
-            // It's safe: getCaption returns "" when '[caption=]' is set
+            sink.figureCaption();
+            // getCaption returns
+            // - "" when '[caption=]'
+            // - null when ':table-caption!:
             if (isBlank(node.getCaption()))
                 sink.text(node.getTitle());
             else
