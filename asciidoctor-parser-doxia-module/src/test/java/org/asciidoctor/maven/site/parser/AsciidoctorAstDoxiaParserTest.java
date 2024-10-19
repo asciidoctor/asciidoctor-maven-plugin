@@ -18,7 +18,7 @@ import org.mockito.Mockito;
 
 import static org.asciidoctor.maven.site.parser.AsciidoctorAstDoxiaParserTest.TestMocks.mockAsciidoctorDoxiaParser;
 import static org.asciidoctor.maven.site.parser.processors.test.ReflectionUtils.extractField;
-import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.clean;
+import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.removeLineBreaks;
 import static org.asciidoctor.maven.site.parser.processors.test.TestNodeProcessorFactory.createSink;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -195,12 +195,12 @@ class AsciidoctorAstDoxiaParserTest {
 
     private String parse(AbstractTextParser parser, File source) throws FileNotFoundException, ParseException {
         parser.parse(new FileReader(source), sink);
-        return clean(sinkWriter.toString());
+        return removeLineBreaks(sinkWriter.toString());
     }
 
     private String parse(AbstractTextParser parser, String source) throws ParseException {
         parser.parse(new StringReader(source), sink);
-        return clean(sinkWriter.toString());
+        return removeLineBreaks(sinkWriter.toString());
     }
 
     static class TestMocks {

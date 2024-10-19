@@ -54,8 +54,4 @@ public class Html {
         }
         return String.format("<%1$s style=\"%3$s\">%2$s</%1$s>", element, text, style).trim();
     }
-
-    public static String removeLineBreaks(String html) {
-        return html.replaceAll("(\r)?\n", "");
-    }
 }

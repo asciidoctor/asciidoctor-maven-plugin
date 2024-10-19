@@ -6,14 +6,12 @@ import org.asciidoctor.Options;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringWriter;
-import java.util.Arrays;
 import java.util.Collections;
 
-import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.clean;
+import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.removeLineBreaks;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(OrderedListNodeProcessor.class)
@@ -80,6 +78,6 @@ class OrderedListNodeProcessorTest {
 
         nodeProcessor.process(node);
 
-        return clean(sinkWriter.toString());
+        return removeLineBreaks(sinkWriter.toString());
     }
 }

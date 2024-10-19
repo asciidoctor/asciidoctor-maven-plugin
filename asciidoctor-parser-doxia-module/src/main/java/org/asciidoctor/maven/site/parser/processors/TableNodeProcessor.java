@@ -11,7 +11,6 @@ import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.NodeSinker;
 
 import static org.apache.maven.doxia.sink.Sink.JUSTIFY_LEFT;
-import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
 /**
@@ -82,18 +81,14 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
 
         // if "[caption=]" -> remove caption
         // disable too, when ":table-caption!:"
-
-        final String title = node.getTitle();
+        // final String title = node.getTitle();
+        final String title = TitleExtractor.getText(node);
         if (isNotBlank(title)) {
             sink.tableCaption();
-            sink.figureCaption();
             // getCaption returns
             // - "" when '[caption=]'
             // - null when ':table-caption!:
-            if (isBlank(node.getCaption()))
-                sink.text(node.getTitle());
-            else
-                sink.text(node.getCaption() + node.getTitle());
+            sink.text(title);
             sink.tableCaption_();
         }
     }

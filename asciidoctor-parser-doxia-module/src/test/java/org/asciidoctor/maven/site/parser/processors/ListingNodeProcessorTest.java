@@ -11,7 +11,7 @@ import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
 import org.junit.jupiter.api.Test;
 
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
-import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.clean;
+import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.removeLineBreaks;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(ListingNodeProcessor.class)
@@ -138,7 +138,7 @@ class ListingNodeProcessorTest {
     }
 
     private static String expectedTitle(String title) {
-        return "<div style=\"color: #7a2518; margin-bottom: .25em;\" >" + title + "</div>";
+        return "<div style=\"color: #7a2518; margin-bottom: .25em\" >" + title + "</div>";
     }
 
     private String process(String content) {
@@ -148,6 +148,6 @@ class ListingNodeProcessorTest {
 
         nodeProcessor.process(node);
 
-        return clean(sinkWriter.toString());
+        return removeLineBreaks(sinkWriter.toString());
     }
 }

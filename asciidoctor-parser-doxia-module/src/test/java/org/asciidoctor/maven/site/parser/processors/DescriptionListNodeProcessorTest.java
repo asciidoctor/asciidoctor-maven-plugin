@@ -12,7 +12,7 @@ import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
 import org.junit.jupiter.api.Test;
 
 import static org.asciidoctor.maven.site.parser.processors.test.Html.*;
-import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.clean;
+import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.removeLineBreaks;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(DescriptionListNodeProcessor.class)
@@ -146,6 +146,6 @@ class DescriptionListNodeProcessorTest {
 
         nodeProcessor.process(node);
 
-        return clean(sinkWriter.toString());
+        return removeLineBreaks(sinkWriter.toString());
     }
 }

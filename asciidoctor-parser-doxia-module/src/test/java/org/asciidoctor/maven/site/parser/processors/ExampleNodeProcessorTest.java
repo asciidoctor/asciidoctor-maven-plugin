@@ -13,13 +13,14 @@ import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
 import org.junit.jupiter.api.Test;
 
 import static org.asciidoctor.maven.site.parser.processors.test.Html.*;
+import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.removeLineBreaks;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(ExampleNodeProcessor.class)
 class ExampleNodeProcessorTest {
 
-    public static final String EXAMPLE_TITLE_OPENING = "<div style=\"color: #7a2518;margin-bottom: .25em;\">";
-    public static final String EXAMPLE_CONTENT_OPENING = "<div style=\"background: #fffef7;border: 1px solid #e6e6e6;border-color: #e0e0dc;box-shadow: 0 1px 4px #e0e0dc;padding: 1.25em;\">";
+    public static final String EXAMPLE_TITLE_OPENING = "<div style=\"color: #7a2518; margin-bottom: .25em\">";
+    public static final String EXAMPLE_CONTENT_OPENING = "<div style=\"background: #fffef7; border-color: #e0e0dc; border: 1px solid #e6e6e6; box-shadow: 0 1px 4px #e0e0dc; padding: 1.25em\">";
 
     private Asciidoctor asciidoctor;
     private NodeProcessor nodeProcessor;

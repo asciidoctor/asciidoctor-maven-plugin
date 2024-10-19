@@ -85,7 +85,7 @@ public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements N
             if (StringUtils.isBlank(caption)) {
                 return String.format("%s %s", sectnum, title);
             } else {
-                return String.format("%s %s", caption, title);
+                return String.format("%s %s", caption.trim(), title);
             }
         }
         return title;
