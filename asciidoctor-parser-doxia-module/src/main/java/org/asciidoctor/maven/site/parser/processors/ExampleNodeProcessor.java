@@ -1,6 +1,5 @@
 package org.asciidoctor.maven.site.parser.processors;
 
-import java.nio.file.FileSystems;
 import java.util.List;
 
 import org.apache.maven.doxia.sink.Sink;
@@ -58,13 +57,5 @@ public class ExampleNodeProcessor extends AbstractSinkNodeProcessor implements N
 
         sink.division_();
 
-    }
-
-    private String formatPath(String imagesdir, String target) {
-        if (imagesdir.endsWith("/") || imagesdir.endsWith("\\")) {
-            return imagesdir + target;
-        } else {
-            return imagesdir + FileSystems.getDefault().getSeparator() + target;
-        }
     }
 }

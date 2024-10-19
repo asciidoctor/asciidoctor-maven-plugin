@@ -11,7 +11,7 @@ import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
 import org.junit.jupiter.api.Test;
 
-import static org.asciidoctor.maven.site.parser.processors.test.Html.removeLineBreaks;
+import static org.asciidoctor.maven.site.parser.processors.test.Html.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(SectionNodeProcessor.class)
@@ -28,7 +28,7 @@ class SectionNodeProcessorTest {
         String html = process(content, 0);
 
         assertThat(html)
-            .isEqualTo("<div><h1>Document tile</h1></div>");
+            .isEqualTo(div("<h1>Document tile</h1>"));
     }
 
     @Test
@@ -38,21 +38,16 @@ class SectionNodeProcessorTest {
         String html = process(content, 1);
 
         assertThat(html)
-            .isEqualTo("<div>" +
-                "<h2><a id=\"_first_section_title\"></a>First section title</h2>" +
-                "<p>First section body</p>" +
-                "<div>" +
-                "<h3><a id=\"_second_section_title\"></a>Second section title</h3>" +
-                "<p>Second section body</p>" +
-                "<div>" +
-                "<h4><a id=\"_third_section_title\"></a>Third section title</h4>" +
-                "<p>Third section body</p>" +
-                "<div>" +
-                "<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>" +
-                "<p>Fourth section body</p>" +
-                "<div>" +
-                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
-                "<p>Fifth section body</p></div></div></div></div></div>");
+            .isEqualTo(div("<h2><a id=\"_first_section_title\"></a>First section title</h2>" +
+                p("First section body") +
+                div("<h3><a id=\"_second_section_title\"></a>Second section title</h3>" +
+                    p("Second section body") +
+                    div("<h4><a id=\"_third_section_title\"></a>Third section title</h4>" +
+                        p("Third section body") +
+                        div("<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>" +
+                            p("Fourth section body") +
+                            div("<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
+                                p("Fifth section body")))))));
     }
 
     @Test
@@ -62,18 +57,15 @@ class SectionNodeProcessorTest {
         String html = process(content, 2);
 
         assertThat(html)
-            .isEqualTo("<div>" +
+            .isEqualTo(div(
                 "<h3><a id=\"_second_section_title\"></a>Second section title</h3>" +
-                "<p>Second section body</p>" +
-                "<div>" +
-                "<h4><a id=\"_third_section_title\"></a>Third section title</h4>" +
-                "<p>Third section body</p>" +
-                "<div>" +
-                "<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>" +
-                "<p>Fourth section body</p>" +
-                "<div>" +
-                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
-                "<p>Fifth section body</p></div></div></div></div>");
+                    p("Second section body") +
+                    div("<h4><a id=\"_third_section_title\"></a>Third section title</h4>" +
+                        p("Third section body") +
+                        div("<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>" +
+                            "<p>Fourth section body</p>" +
+                            div("<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
+                                p("Fifth section body"))))));
     }
 
     @Test
@@ -83,15 +75,13 @@ class SectionNodeProcessorTest {
         String html = process(content, 3);
 
         assertThat(html)
-            .isEqualTo("<div>" +
+            .isEqualTo(div(
                 "<h4><a id=\"_third_section_title\"></a>Third section title</h4>" +
-                "<p>Third section body</p>" +
-                "<div>" +
-                "<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>" +
-                "<p>Fourth section body</p>" +
-                "<div>" +
-                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
-                "<p>Fifth section body</p></div></div></div>");
+                    p("Third section body") +
+                    div("<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>" +
+                        p("Fourth section body") +
+                        div("<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
+                            p("Fifth section body")))));
     }
 
     @Test
@@ -101,12 +91,10 @@ class SectionNodeProcessorTest {
         String html = process(content, 4);
 
         assertThat(html)
-            .isEqualTo("<div>" +
-                "<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>" +
-                "<p>Fourth section body</p>" +
-                "<div>" +
-                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
-                "<p>Fifth section body</p></div></div>");
+            .isEqualTo(div("<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>" +
+                p("Fourth section body") +
+                div("<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
+                    p("Fifth section body"))));
     }
 
     @Test
@@ -116,9 +104,8 @@ class SectionNodeProcessorTest {
         String html = process(content, 5);
 
         assertThat(html)
-            .isEqualTo("<div>" +
-                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
-                "<p>Fifth section body</p></div>");
+            .isEqualTo(div("<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
+                p("Fifth section body")));
     }
 
     @Test
@@ -128,23 +115,17 @@ class SectionNodeProcessorTest {
             .build();
         String content = documentWithSections();
 
-        // With numbering
         assertThat(process(content, 1, attributes))
-            .isEqualTo("<div>" +
-                "<h2><a id=\"_first_section_title\"></a>1. First section title</h2>" +
-                "<p>First section body</p>" +
-                "<div>" +
-                "<h3><a id=\"_second_section_title\"></a>1.1. Second section title</h3>" +
-                "<p>Second section body</p>" +
-                "<div>" +
-                "<h4><a id=\"_third_section_title\"></a>1.1.1. Third section title</h4>" +
-                "<p>Third section body</p>" +
-                "<div>" +
-                "<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>" +
-                "<p>Fourth section body</p>" +
-                "<div>" +
-                "<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
-                "<p>Fifth section body</p></div></div></div></div></div>");
+            .isEqualTo(div("<h2><a id=\"_first_section_title\"></a>1. First section title</h2>" +
+                p("First section body") +
+                div("<h3><a id=\"_second_section_title\"></a>1.1. Second section title</h3>" +
+                    p("Second section body") +
+                    div("<h4><a id=\"_third_section_title\"></a>1.1.1. Third section title</h4>" +
+                        p("Third section body") +
+                        div("<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>" +
+                            p("Fourth section body") +
+                            div("<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
+                                p("Fifth section body")))))));
     }
 
     @Test
@@ -155,23 +136,46 @@ class SectionNodeProcessorTest {
             .build();
         String content = documentWithSections();
 
-        // With numbering
         assertThat(process(content, 1, attributes))
-            .isEqualTo("<div>" +
-                "<h2><a id=\"_first_section_title\"></a>1. First section title</h2>" +
-                "<p>First section body</p>" +
-                "<div>" +
-                "<h3><a id=\"_second_section_title\"></a>1.1. Second section title</h3>" +
-                "<p>Second section body</p>" +
-                "<div>" +
-                "<h4><a id=\"_third_section_title\"></a>1.1.1. Third section title</h4>" +
-                "<p>Third section body</p>" +
-                "<div>" +
-                "<h5><a id=\"_fourth_section_title\"></a>1.1.1.1. Fourth section title</h5>" +
-                "<p>Fourth section body</p>" +
-                "<div>" +
-                "<h5><a id=\"_fifth_section_title\"></a>1.1.1.1.1. Fifth section title</h5>" +
-                "<p>Fifth section body</p></div></div></div></div></div>");
+            .isEqualTo(div("<h2><a id=\"_first_section_title\"></a>1. First section title</h2>" +
+                p("First section body") +
+                div("<h3><a id=\"_second_section_title\"></a>1.1. Second section title</h3>" +
+                    p("Second section body") +
+                    div("<h4><a id=\"_third_section_title\"></a>1.1.1. Third section title</h4>" +
+                        p("Third section body") +
+                        div("<h5><a id=\"_fourth_section_title\"></a>1.1.1.1. Fourth section title</h5>" +
+                            p("Fourth section body") +
+                            div("<h5><a id=\"_fifth_section_title\"></a>1.1.1.1.1. Fifth section title</h5>" +
+                                p("Fifth section body")))))));
+    }
+
+    @Test
+    void should_convert_sections_with_appendices() {
+        String content = "= Document tile\n\n" +
+            "== Section title\n\nSection body\n\n" +
+            "[appendix]\n" +
+            "== Appendix title 1\n\nSection body\n\n" +
+            "[appendix]\n" +
+            "== Appendix title 2\n\nSection body\n\n";
+
+        String html = process(content, 1);
+
+        assertThat(html)
+            .isEqualTo(div("<h2><a id=\"_section_title\"></a>Section title</h2>" +
+                p("Section body") +
+                div("<h3><a id=\"_second_section_title\"></a>Second section title</h3>" +
+                    p("Second section body") +
+                    div("<h4><a id=\"_third_section_title\"></a>Third section title</h4>" +
+                        p("Third section body") +
+                        div("<h5><a id=\"_fourth_section_title\"></a>Fourth section title</h5>" +
+                            p("Fourth section body") +
+                            div("<h5><a id=\"_fifth_section_title\"></a>Fifth section title</h5>" +
+                                p("Fifth section body")))))));
+    }
+
+    @Test
+    void should_convert_sections_with_appendices_and_custom_caption() {
+
     }
 
     private String documentWithSections() {
