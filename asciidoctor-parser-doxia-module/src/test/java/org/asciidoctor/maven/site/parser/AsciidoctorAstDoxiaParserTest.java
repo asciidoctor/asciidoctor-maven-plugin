@@ -1,5 +1,11 @@
 package org.asciidoctor.maven.site.parser;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.StringReader;
+import java.io.StringWriter;
+
 import lombok.SneakyThrows;
 import org.apache.maven.doxia.parser.AbstractTextParser;
 import org.apache.maven.doxia.parser.ParseException;
@@ -9,8 +15,6 @@ import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.io.*;
 
 import static org.asciidoctor.maven.site.parser.AsciidoctorAstDoxiaParserTest.TestMocks.mockAsciidoctorDoxiaParser;
 import static org.asciidoctor.maven.site.parser.processors.test.ReflectionUtils.extractField;
@@ -45,17 +49,23 @@ class AsciidoctorAstDoxiaParserTest {
 
         assertThat(result)
                 .isEqualTo("<h1>Document Title</h1><p>Preamble paragraph.</p>" +
+                        "<div>"+
                         "<h2><a id=\"id_section_a\"></a>Section A</h2>" +
                         "<p><strong>Section A</strong> paragraph.</p>" +
+                        "<div>"+
                         "<h3><a id=\"id_section_a_subsection\"></a>Section A Subsection</h3>" +
                         "<p><strong>Section A</strong> 'subsection' paragraph.</p>" +
+                        "</div>"+
+                        "</div>"+
+                        "<div>"+
                         "<h2><a id=\"id_section_b\"></a>Section B</h2>" +
                         "<p><strong>Section B</strong> paragraph.</p>" +
                         "<ul>" +
                         "<li>Item 1</li>" +
                         "<li>Item 2</li>" +
                         "<li>Item 3</li></ul>" +
-                        "<div class=\"source\"><pre class=\"prettyprint\"><code>require 'asciidoctor'</code></pre></div>");
+                        "<div class=\"source\"><pre class=\"prettyprint\"><code>require 'asciidoctor'</code></pre></div>" +
+                        "</div>");
     }
 
     @Test

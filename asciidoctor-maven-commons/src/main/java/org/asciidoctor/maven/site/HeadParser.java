@@ -9,6 +9,8 @@ import org.apache.maven.doxia.sink.Sink;
  * This allows Doxia to build:
  * - breadcrumbs
  * - HTML head's meta elements
+ *
+ * @since 3.0.0
  */
 public class HeadParser {
 

@@ -8,6 +8,7 @@ import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.jruby.ast.impl.TableImpl;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
+import org.asciidoctor.maven.site.parser.NodeSinker;
 
 import static org.apache.maven.doxia.sink.Sink.JUSTIFY_LEFT;
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
@@ -24,10 +25,11 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
     /**
      * Constructor.
      *
-     * @param sink Doxia {@link Sink}
+     * @param sink       Doxia {@link Sink}
+     * @param nodeSinker
      */
-    public TableNodeProcessor(Sink sink) {
-        super(sink);
+    public TableNodeProcessor(Sink sink, NodeSinker nodeSinker) {
+        super(sink, nodeSinker);
     }
 
     @Override
@@ -43,6 +45,7 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
         sink.table();
         sink.tableRows(new int[]{JUSTIFY_LEFT}, false);
         List<Row> header = tableNode.getHeader();
+        List<StructuralNode> blocks = node.getBlocks();
         if (!header.isEmpty()) {
             sink.tableRow();
 
@@ -79,7 +82,8 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
 
         final String title = node.getTitle();
         if (isNotBlank(title)) {
-            node.getContentModel();
+            // TODO why do we do this next line?
+            // node.getContentModel();
             sink.tableCaption();
             // It's safe: getCaption returns "" when '[caption=]' is set
             if (isBlank(node.getCaption()))

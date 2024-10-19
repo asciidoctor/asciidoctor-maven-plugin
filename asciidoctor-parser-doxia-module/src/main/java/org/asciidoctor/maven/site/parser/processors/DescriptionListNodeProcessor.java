@@ -8,6 +8,7 @@ import org.asciidoctor.ast.DescriptionListEntry;
 import org.asciidoctor.ast.ListItem;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
+import org.asciidoctor.maven.site.parser.NodeSinker;
 
 /**
  * Description list processor.
@@ -17,24 +18,14 @@ import org.asciidoctor.maven.site.parser.NodeProcessor;
  */
 public class DescriptionListNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
 
-    private ListItemNodeProcessor itemNodeProcessor;
-
     /**
      * Constructor.
      *
-     * @param sink Doxia {@link Sink}
+     * @param sink       Doxia {@link Sink}
+     * @param nodeSinker
      */
-    public DescriptionListNodeProcessor(Sink sink) {
-        super(sink);
-    }
-
-    /**
-     * Inject a {@link ListItemNodeProcessor}.
-     *
-     * @param nodeProcessor {@link ListItemNodeProcessor}
-     */
-    public void setItemNodeProcessor(ListItemNodeProcessor nodeProcessor) {
-        this.itemNodeProcessor = nodeProcessor;
+    public DescriptionListNodeProcessor(Sink sink, NodeSinker nodeSinker) {
+        super(sink, nodeSinker);
     }
 
     @Override
@@ -67,7 +58,7 @@ public class DescriptionListNodeProcessor extends AbstractSinkNodeProcessor impl
                 if (description.getBlocks().isEmpty()) {
                     sink.rawText(description.getText());
                 } else {
-                    itemNodeProcessor.process(description);
+                    super.sink(description);
                 }
                 sink.definition_();
             }

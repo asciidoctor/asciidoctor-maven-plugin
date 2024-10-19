@@ -1,5 +1,8 @@
 package org.asciidoctor.maven.site.parser.processors;
 
+import java.io.StringWriter;
+import java.util.Collections;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.StructuralNode;
@@ -8,9 +11,6 @@ import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import java.io.StringWriter;
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,56 +21,55 @@ class ListItemNodeProcessorTest {
     private NodeProcessor nodeProcessor;
     private StringWriter sinkWriter;
 
-
     @ParameterizedTest
     @ValueSource(strings = {"*", "-"})
     void should_convert_list_item(String marker) {
         String content = new DocumentBuilder()
-                .listItem(marker)
-                .toString();
+            .listItem(marker)
+            .toString();
 
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo(htmlListItem());
+            .isEqualTo(htmlListItem());
     }
 
     @Test
     void should_convert_ordered_list_item() {
         String content = new DocumentBuilder()
-                .listItem(".")
-                .toString();
+            .listItem(".")
+            .toString();
 
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo(htmlListItem());
+            .isEqualTo(htmlListItem());
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"*", "-"})
     void should_convert_ordered_list_item_with_formatting() {
         String content = new DocumentBuilder()
-                .formattedListItem("*")
-                .toString();
+            .formattedListItem("*")
+            .toString();
 
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo(htmlListItemWithFormatting());
+            .isEqualTo(htmlListItemWithFormatting());
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"*", "-"})
     void should_convert_ordered_list_item_with_link(String marker) {
         String content = new DocumentBuilder()
-                .linkListItem(marker)
-                .toString();
+            .linkListItem(marker)
+            .toString();
 
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo(htmlListItemWithLink());
+            .isEqualTo(htmlListItemWithLink());
     }
 
     private static String htmlListItem() {
@@ -117,8 +116,8 @@ class ListItemNodeProcessorTest {
 
     private String process(String content) {
         StructuralNode node = asciidoctor.load(content, Options.builder().build())
-                .findBy(Collections.singletonMap("context", ":list_item"))
-                .get(0);
+            .findBy(Collections.singletonMap("context", ":list_item"))
+            .get(0);
 
         nodeProcessor.process(node);
 

@@ -36,7 +36,6 @@ class TableNodeProcessorTest {
     private NodeProcessor nodeProcessor;
     private StringWriter sinkWriter;
 
-
     @Test
     void should_convert_table_with_header() {
         String content = documentWithTable(true, noCaption, emptyList());
