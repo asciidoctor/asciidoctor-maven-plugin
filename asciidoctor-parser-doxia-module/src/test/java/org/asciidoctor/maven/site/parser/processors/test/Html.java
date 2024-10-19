@@ -16,6 +16,10 @@ public class Html {
         return htmlElement("code", text);
     }
 
+    public static String div(String text) {
+        return htmlElement("div", text);
+    }
+
     public static String ul(String... elements) {
         return htmlElement("ul", String.join("", elements));
     }
@@ -36,6 +40,10 @@ public class Html {
         return htmlElement("dd", text);
     }
 
+    public static String p(String text) {
+        return htmlElement("p", text);
+    }
+
     static String htmlElement(String element, String text) {
         return htmlElement(element, null, text);
     }
@@ -45,5 +53,9 @@ public class Html {
             return String.format("<%1$s>%2$s</%1$s>", element, text).trim();
         }
         return String.format("<%1$s style=\"%3$s\">%2$s</%1$s>", element, text, style).trim();
+    }
+
+    public static String removeLineBreaks(String html) {
+        return html.replaceAll("(\r)?\n", "");
     }
 }

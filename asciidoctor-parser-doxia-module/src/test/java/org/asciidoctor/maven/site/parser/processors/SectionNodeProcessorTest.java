@@ -11,6 +11,7 @@ import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
 import org.junit.jupiter.api.Test;
 
+import static org.asciidoctor.maven.site.parser.processors.test.Html.removeLineBreaks;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(SectionNodeProcessor.class)
@@ -200,10 +201,6 @@ class SectionNodeProcessorTest {
         reset(sinkWriter);
         nodeProcessor.process(node);
         return removeLineBreaks(sinkWriter.toString().trim());
-    }
-
-    private static String removeLineBreaks(String html) {
-        return html.replaceAll("(\r)?\n", "");
     }
 
     private void reset(StringWriter sinkWriter) {

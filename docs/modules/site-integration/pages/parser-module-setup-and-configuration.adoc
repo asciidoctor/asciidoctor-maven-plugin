@@ -189,6 +189,8 @@ NOTE: Unlike in Asciidoctor lists, descriptions are not surrounded by `<p>` and 
 ** Support for numbered lines with `linenums`
 ** Support for AsciiDoc titles
 
+* Examples
+
 * Literal blocks
 * Quotes
 

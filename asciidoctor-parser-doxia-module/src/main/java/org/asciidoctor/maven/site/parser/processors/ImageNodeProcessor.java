@@ -1,6 +1,5 @@
 package org.asciidoctor.maven.site.parser.processors;
 
-import javax.swing.text.html.HTML.Attribute;
 import java.nio.file.FileSystems;
 
 import org.apache.maven.doxia.sink.Sink;
@@ -9,6 +8,7 @@ import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.NodeSinker;
 
 import static javax.swing.text.html.HTML.Attribute.ALT;
+import static javax.swing.text.html.HTML.Attribute.STYLE;
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
@@ -51,7 +51,7 @@ public class ImageNodeProcessor extends AbstractSinkNodeProcessor implements Nod
         sink.figureGraphics(imagePath, !isBlank(alt) ? SinkAttributes.of(ALT, alt) : null);
         final String title = TitleExtractor.getText(node);
         if (isNotBlank(title)) {
-            sink.division(SinkAttributes.of(Attribute.STYLE, Styles.CAPTION));
+            sink.division(SinkAttributes.of(STYLE, Styles.CAPTION));
             sink.text(title);
             sink.division_();
         }
