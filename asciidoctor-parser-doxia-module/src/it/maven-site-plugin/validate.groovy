@@ -58,6 +58,10 @@ new HtmlAsserter(htmlContent).with { asserter ->
     asserter.containsUnorderedList("Desktop", "Server")
     asserter.descriptionListTerm("BSD")
     asserter.containsOrderedList("FreeBSD", "NetBSD")
+
+    asserter.containsSectionTitle("Examples", 3)
+    asserter.containsExampleDiv()
+    asserter.containsExampleDiv()
 }
 
 String strong(String text) {
@@ -224,8 +228,15 @@ class HtmlAsserter {
         }
     }
 
+    void containsExampleDiv() {
+        final def key = "<div style=\"background: #fffef7;"
+        def found = find(key)
+        assertFound("Example <div>", key, found)
+    }
+
     void assertTableCaption(String htmlBlock, String caption) {
-        def start = htmlBlock.indexOf("<caption>") + "<caption>".length()
+        def start = htmlBlock.indexOf("<caption") + "<caption".length()
+        start = htmlBlock.indexOf(">", start) + 1
         def end = htmlBlock.indexOf("</caption>")
         if (start < 0 || end < 0)
             fail("Caption not found ($start, $end)")
@@ -239,11 +250,11 @@ class HtmlAsserter {
 
     void assertTableHeaders(String htmlBlock, List<String> headers) {
         def actualHeaders = Arrays.stream(htmlBlock.split("<"))
-                .filter(line -> line.startsWith("th>"))
-                .map(line -> {
-                    return line.substring("th>".length())
-                })
-                .collect(Collectors.toList())
+            .filter(line -> line.startsWith("th>"))
+            .map(line -> {
+                return line.substring("th>".length())
+            })
+            .collect(Collectors.toList())
 
         if (actualHeaders != headers)
             fail("Table headers not valid. Found: $actualHeaders, expected: $headers")
@@ -266,8 +277,8 @@ class HtmlAsserter {
     // Removes linebreaks to validate to avoid OS dependant issues.
     private String clean(String value) {
         return value.replaceAll("\r\n", "")
-                .replaceAll("\n", "")
-                .trim();
+            .replaceAll("\n", "")
+            .trim();
     }
 }
 
