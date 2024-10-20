@@ -10,8 +10,8 @@ import org.asciidoctor.jruby.ast.impl.TableImpl;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.NodeSinker;
 
+import static javax.swing.text.html.HTML.Attribute.STYLE;
 import static org.apache.maven.doxia.sink.Sink.JUSTIFY_LEFT;
-import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
 /**
@@ -44,8 +44,13 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
         final Sink sink = getSink();
         sink.table();
         sink.tableRows(new int[]{JUSTIFY_LEFT}, false);
-        List<Row> header = tableNode.getHeader();
-        List<StructuralNode> blocks = node.getBlocks();
+        final List<Row> header = tableNode.getHeader();
+        final List<Row> rows = tableNode.getBody();
+
+        if (header.isEmpty() && rows.isEmpty()) {
+            return;
+        }
+
         if (!header.isEmpty()) {
             sink.tableRow();
 
@@ -59,7 +64,7 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
             sink.tableRow_();
         }
 
-        for (Row row : tableNode.getBody()) {
+        for (Row row : rows) {
             sink.tableRow();
             for (Cell cell : row.getCells()) {
                 sink.tableCell();
@@ -78,18 +83,21 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
     private void processCaption(StructuralNode node, Sink sink) {
         // 'null' when not set or '[caption=]'
         final String tableCaption = (String) node.getAttribute("table-caption");
+        final String caption = node.getCaption();
         // disable single caption
 
-        final String title = node.getTitle();
+        // if "[caption=]" -> remove caption
+        // disable too, when ":table-caption!:"
+        // final String title = node.getTitle();
+        final String title = TitleCaptionExtractor.getText(node);
         if (isNotBlank(title)) {
-            // TODO why do we do this next line?
-            // node.getContentModel();
-            sink.tableCaption();
-            // It's safe: getCaption returns "" when '[caption=]' is set
-            if (isBlank(node.getCaption()))
-                sink.text(node.getTitle());
-            else
-                sink.text(node.getCaption() + node.getTitle());
+            // Contrary to other cases where we use <div>, we use <caption>: same as Fluido and Asciidoctor
+            // TODO Have a proper CSS stylesheet injected
+            sink.tableCaption(SinkAttributes.of(STYLE, Styles.CAPTION + "; text-align: left"));
+            // getCaption returns
+            // - "" when '[caption=]'
+            // - null when ':table-caption!:
+            sink.text(title);
             sink.tableCaption_();
         }
     }

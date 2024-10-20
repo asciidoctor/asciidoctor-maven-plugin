@@ -11,7 +11,7 @@ import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
 import org.junit.jupiter.api.Test;
 
-import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.clean;
+import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.removeLineBreaks;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(UnorderedListNodeProcessor.class)
@@ -83,6 +83,6 @@ class UnorderedListNodeProcessorTest {
 
         nodeProcessor.process(node);
 
-        return clean(sinkWriter.toString());
+        return removeLineBreaks(sinkWriter.toString());
     }
 }

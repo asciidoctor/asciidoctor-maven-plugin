@@ -91,3 +91,16 @@ Linux:::
 BSD:::
 . FreeBSD
 . NetBSD
+
+=== Examples
+
+.Optional title (1)
+====
+This is an example of an example block (1).
+====
+
+.Optional title (2)
+[example]
+This is an example of an example block (2).
+*dadsas* https://dasd.com
+

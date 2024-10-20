@@ -3,6 +3,8 @@ package org.asciidoctor.maven.site.parser.processors;
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.jruby.ast.impl.SectionImpl;
+import org.asciidoctor.maven.commons.StringUtils;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.NodeSinker;
 import org.slf4j.Logger;
@@ -77,7 +79,14 @@ public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements N
         final Long sectnumlevels = getSectnumlevels(node);
         final int level = node.getLevel();
         if (numbered && level <= sectnumlevels) {
-            return String.format("%s %s", node.getSectnum(), title);
+            // Use 'getString' instead of method to support pre-3.0.0 AsciidoctorJ
+            final String caption = node.getCaption();
+            final String sectnum = ((SectionImpl) node).getString("sectnum");
+            if (StringUtils.isBlank(caption)) {
+                return String.format("%s %s", sectnum, title);
+            } else {
+                return String.format("%s %s", caption.trim(), title);
+            }
         }
         return title;
     }

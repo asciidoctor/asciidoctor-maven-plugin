@@ -16,6 +16,10 @@ public class Html {
         return htmlElement("code", text);
     }
 
+    public static String div(String text) {
+        return htmlElement("div", text);
+    }
+
     public static String ul(String... elements) {
         return htmlElement("ul", String.join("", elements));
     }
@@ -34,6 +38,10 @@ public class Html {
 
     public static String dd(String text) {
         return htmlElement("dd", text);
+    }
+
+    public static String p(String text) {
+        return htmlElement("p", text);
     }
 
     static String htmlElement(String element, String text) {

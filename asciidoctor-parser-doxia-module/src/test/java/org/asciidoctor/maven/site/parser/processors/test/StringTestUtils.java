@@ -7,9 +7,8 @@ public class StringTestUtils {
      *
      * @param value string to clean
      */
-    public static String clean(String value) {
-        return value.replaceAll("\r\n", "")
-                .replaceAll("\n", "")
+    public static String removeLineBreaks(String value) {
+        return value.replaceAll("(\r)?\n", "")
                 .trim();
     }
 }

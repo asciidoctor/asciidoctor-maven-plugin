@@ -5,9 +5,12 @@ import java.util.List;
 
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.Block;
+import org.asciidoctor.ast.Cell;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.ListItem;
+import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.ast.Table;
 import org.asciidoctor.jruby.ast.impl.BlockImpl;
 import org.asciidoctor.jruby.ast.impl.DocumentImpl;
 import org.asciidoctor.jruby.ast.impl.SectionImpl;
@@ -105,6 +108,11 @@ class NodeSinkerTest {
     @Test
     void should_process_table_node() {
         StructuralNode mockNode = mockNode("table", TableImpl.class);
+        Cell mockCell = Mockito.mock(Cell.class);
+        Mockito.when(mockCell.getText()).thenReturn("Cell text");
+        Row mockRow = Mockito.mock(Row.class);
+        Mockito.when(mockRow.getCells()).thenReturn(List.of(mockCell));
+        Mockito.when(((Table) mockNode).getBody()).thenReturn(List.of(mockRow));
 
         nodeSinker.sink(mockNode);
 

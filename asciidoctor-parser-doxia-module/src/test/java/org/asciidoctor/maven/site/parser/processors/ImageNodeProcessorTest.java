@@ -10,9 +10,11 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
+import org.asciidoctor.maven.site.parser.processors.test.Html;
 import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
 import org.junit.jupiter.api.Test;
 
+import static org.asciidoctor.maven.site.parser.processors.test.Html.div;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(ImageNodeProcessor.class)
@@ -29,7 +31,7 @@ class ImageNodeProcessorTest {
         String html = process(content, 0);
 
         assertThat(html)
-                .isEqualTo("<img src=\"images/tiger.png\" alt=\"Kitty\" />");
+                .isEqualTo(div("<img src=\"images/tiger.png\" alt=\"Kitty\" />"));
     }
 
     @Test
@@ -40,7 +42,7 @@ class ImageNodeProcessorTest {
 
         final String separator = FileSystems.getDefault().getSeparator();
         assertThat(html)
-                .isEqualTo("<img src=\"prefix-path" + separator + "images/tiger.png\" alt=\"Kitty\" />");
+                .isEqualTo(div("<img src=\"prefix-path" + separator + "images/tiger.png\" alt=\"Kitty\" />"));
     }
 
     private String documentWithImage() {

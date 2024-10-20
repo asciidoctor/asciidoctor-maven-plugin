@@ -18,7 +18,8 @@ public class DocumentNodeProcessor extends AbstractSinkNodeProcessor implements 
     /**
      * Constructor.
      *
-     * @param sink Doxia {@link Sink}
+     * @param sink       Doxia {@link Sink}
+     * @param nodeSinker
      */
     public DocumentNodeProcessor(Sink sink, NodeSinker nodeSinker) {
         super(sink, nodeSinker);

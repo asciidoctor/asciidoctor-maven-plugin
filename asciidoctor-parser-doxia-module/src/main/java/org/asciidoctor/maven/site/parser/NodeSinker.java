@@ -7,6 +7,7 @@ import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.processors.DescriptionListNodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.DocumentNodeProcessor;
+import org.asciidoctor.maven.site.parser.processors.ExampleNodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.ImageNodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.ListItemNodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.ListingNodeProcessor;
@@ -35,6 +36,7 @@ public class NodeSinker {
         nodeProcessors = Arrays.asList(
             new DescriptionListNodeProcessor(sink, this),
             new DocumentNodeProcessor(sink, this),
+            new ExampleNodeProcessor(sink, this),
             new ImageNodeProcessor(sink, this),
             new ListItemNodeProcessor(sink, this),
             new ListingNodeProcessor(sink, this),
