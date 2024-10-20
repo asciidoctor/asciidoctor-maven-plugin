@@ -4,6 +4,7 @@ import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.asciidoctor.Asciidoctor;
@@ -11,11 +12,15 @@ import org.asciidoctor.Options;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static java.util.Collections.emptyList;
 import static org.asciidoctor.maven.site.parser.processors.TableNodeProcessorTest.DocumentBuilder.CaptionOptions.*;
 import static org.asciidoctor.maven.site.parser.processors.TableNodeProcessorTest.DocumentBuilder.documentWithTable;
+import static org.asciidoctor.maven.site.parser.processors.test.Html.Attributes.STYLE;
+import static org.asciidoctor.maven.site.parser.processors.test.Html.td;
+import static org.asciidoctor.maven.site.parser.processors.test.Html.tr;
 import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.removeLineBreaks;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -133,6 +138,65 @@ class TableNodeProcessorTest {
         assertThat(html)
             .startsWith(expectedNoLabelBeginning())
             .isEqualTo(expectedTableWithoutLabel());
+    }
+
+    @Nested
+    class WhenCellContains {
+
+        @Test
+        void formatted_text() {
+            final String formattedContent = "This *is* _a_ simple `cell`";
+            String content = documentWithTable(false, noCaption, List.of(formattedContent, "Something else"));
+
+            String html = process(content);
+
+            assertThat(html)
+                .isEqualTo("<table class=\"bodyTable\">" +
+                    tr("a", td("JRuby", textAlignLeft()) + td("Java")) +
+                    tr("b", td("Rubinius", textAlignLeft()) + td("Ruby")) +
+                    tr("a",
+                        td("This <strong>is</strong> <em>a</em> simple <code>cell</code>", textAlignLeft()) +
+                            td("Something else")) +
+                    "</table>");
+        }
+
+        @Test
+        void links() {
+            final String link = "https://docs.asciidoctor.org/";
+            String content = documentWithTable(false, noCaption, List.of("With links " + link + ".", "Something else"));
+
+            String html = process(content);
+
+            assertThat(html)
+                .isEqualTo("<table class=\"bodyTable\">" +
+                    tr("a", td("JRuby", textAlignLeft()) + td("Java")) +
+                    tr("b", td("Rubinius", textAlignLeft()) + td("Ruby")) +
+                    tr("a",
+                        td("With links <a href=\"https://docs.asciidoctor.org/\" class=\"bare\">https://docs.asciidoctor.org/</a>.", textAlignLeft()) +
+                            td("Something else")) +
+                    "</table>");
+        }
+
+        @Test
+        void inline_images() {
+            final String inlineImage = "image:images/tiger.png[Kitty]";
+            String content = documentWithTable(false, noCaption, List.of("Something first", "With inline (" + inlineImage + ") images."));
+
+            String html = process(content);
+
+            assertThat(html)
+                .isEqualTo("<table class=\"bodyTable\">" +
+                    tr("a", td("JRuby", textAlignLeft()) + td("Java")) +
+                    tr("b", td("Rubinius", textAlignLeft()) + td("Ruby")) +
+                    tr("a",
+                        td("Something first", textAlignLeft()) +
+                            td("With inline (<span class=\"image\"><img src=\"images/tiger.png\" alt=\"Kitty\"></span>) images.")) +
+                    "</table>");
+        }
+
+        private Map<String, String> textAlignLeft() {
+            return Map.of(STYLE, "text-align: left;");
+        }
     }
 
     private static String expectedNoLabelBeginning() {

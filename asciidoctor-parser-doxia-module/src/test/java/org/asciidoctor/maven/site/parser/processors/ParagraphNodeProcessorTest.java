@@ -1,5 +1,8 @@
 package org.asciidoctor.maven.site.parser.processors;
 
+import java.io.StringWriter;
+import java.util.Collections;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.StructuralNode;
@@ -7,9 +10,7 @@ import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
 import org.junit.jupiter.api.Test;
 
-import java.io.StringWriter;
-import java.util.Collections;
-
+import static org.asciidoctor.maven.site.parser.processors.test.Html.p;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(ParagraphNodeProcessor.class)
@@ -26,7 +27,7 @@ class ParagraphNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<p>SomeText</p>");
+            .isEqualTo(p("SomeText"));
     }
 
     @Test
@@ -36,7 +37,7 @@ class ParagraphNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<p>Some <strong>text</strong></p>");
+            .isEqualTo(p("Some <strong>text</strong>"));
     }
 
     @Test
@@ -46,7 +47,7 @@ class ParagraphNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<p>Some <em>text</em></p>");
+            .isEqualTo(p("Some <em>text</em>"));
     }
 
     @Test
@@ -56,17 +57,17 @@ class ParagraphNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<p>Some <code>text</code></p>");
+            .isEqualTo(p("Some <code>text</code>"));
     }
 
     @Test
     void should_convert_paragraph_with_inline_image() {
-        String content = documentWithParagraph("image:images/tiger.png[Kitty]");
+        String content = documentWithParagraph("An inline image image:images/tiger.png[Kitty] here!");
 
         String html = process(content);
 
         assertThat(html)
-                .isEqualTo("<p><span class=\"image\"><img src=\"images/tiger.png\" alt=\"Kitty\"></span></p>");
+            .isEqualTo(p("An inline image <span class=\"image\"><img src=\"images/tiger.png\" alt=\"Kitty\"></span> here!"));
     }
 
     private String documentWithParagraph(String text) {
@@ -75,8 +76,8 @@ class ParagraphNodeProcessorTest {
 
     private String process(String content) {
         StructuralNode node = asciidoctor.load(content, Options.builder().build())
-                .findBy(Collections.singletonMap("context", ":paragraph"))
-                .get(0);
+            .findBy(Collections.singletonMap("context", ":paragraph"))
+            .get(0);
 
         nodeProcessor.process(node);
 

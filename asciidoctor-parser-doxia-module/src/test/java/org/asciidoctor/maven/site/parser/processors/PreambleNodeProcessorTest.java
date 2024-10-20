@@ -10,6 +10,7 @@ import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
 import org.junit.jupiter.api.Test;
 
+import static org.asciidoctor.maven.site.parser.processors.test.Html.p;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(PreambleNodeProcessor.class)
@@ -26,9 +27,7 @@ class PreambleNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-            .isEqualTo("<p>This is a preamble." +
-                System.lineSeparator() +
-                "With two lines.</p>");
+            .isEqualTo(p("This is a preamble." + System.lineSeparator() + "With two lines."));
     }
 
     @Test
@@ -38,7 +37,29 @@ class PreambleNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-            .isEqualTo("<p>This <strong>is</strong> <em>a</em> simple <code>preamble</code>.</p>");
+            .isEqualTo(p("This <strong>is</strong> <em>a</em> simple <code>preamble</code>."));
+    }
+
+    @Test
+    void should_convert_preamble_with_link() {
+        final String link = "https://docs.asciidoctor.org/";
+        String content = documentWithPreamble("There's link " + link + " in the preamble.");
+
+        String html = process(content);
+
+        assertThat(html)
+            .isEqualTo(p("There&#8217;s link <a href=\"https://docs.asciidoctor.org/\" class=\"bare\">https://docs.asciidoctor.org/</a> in the preamble."));
+    }
+
+    @Test
+    void should_convert_preamble_with_inline_image() {
+        final String inlineImage = "image:images/tiger.png[Kitty]";
+        String content = documentWithPreamble("An inline image " + inlineImage + " here!");
+
+        String html = process(content);
+
+        assertThat(html)
+            .isEqualTo(p("An inline image <span class=\"image\"><img src=\"images/tiger.png\" alt=\"Kitty\"></span> here!"));
     }
 
     private String documentWithPreamble() {

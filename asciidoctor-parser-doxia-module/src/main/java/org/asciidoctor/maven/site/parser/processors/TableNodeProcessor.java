@@ -97,7 +97,7 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
             // getCaption returns
             // - "" when '[caption=]'
             // - null when ':table-caption!:
-            sink.text(title);
+            sink.rawText(title);
             sink.tableCaption_();
         }
     }

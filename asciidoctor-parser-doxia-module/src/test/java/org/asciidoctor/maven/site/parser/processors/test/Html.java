@@ -1,5 +1,11 @@
 package org.asciidoctor.maven.site.parser.processors.test;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static org.asciidoctor.maven.site.parser.processors.test.Html.Attributes.CLASS;
+import static org.asciidoctor.maven.site.parser.processors.test.Html.Attributes.STYLE;
+
 public class Html {
 
     public static final String LIST_STYLE_TYPE_DECIMAL = "list-style-type: decimal;";
@@ -25,7 +31,7 @@ public class Html {
     }
 
     public static String ol(String style, String... elements) {
-        return htmlElement("ol", style, String.join("", elements));
+        return htmlElement("ol", String.join("", elements), Map.of(STYLE, style));
     }
 
     public static String li(String text) {
@@ -44,14 +50,36 @@ public class Html {
         return htmlElement("p", text);
     }
 
-    static String htmlElement(String element, String text) {
-        return htmlElement(element, null, text);
+    public static String tr(String className, String text) {
+        return htmlElement("tr", text, Map.of(CLASS, className));
     }
 
-    static String htmlElement(String element, String style, String text) {
-        if (style == null) {
-            return String.format("<%1$s>%2$s</%1$s>", element, text).trim();
+    public static String td(String text) {
+        return htmlElement("td", text, Map.of());
+    }
+
+    public static String td(String text, Map<String, String> attributes) {
+        return htmlElement("td", text, attributes);
+    }
+
+    static String htmlElement(String element, String text) {
+        return htmlElement(element, text, Map.of());
+    }
+
+    static String htmlElement(String element, String text, Map<String, String> attributes) {
+        if (!attributes.isEmpty()) {
+            String formattedAttributes = attributes.entrySet()
+                .stream()
+                .map(entry -> String.format("%s=\"%s\"", entry.getKey(), entry.getValue()))
+                .collect(Collectors.joining(" "));
+            return String.format("<%1$s %3$s>%2$s</%1$s>", element, text, formattedAttributes).trim();
         }
-        return String.format("<%1$s style=\"%3$s\">%2$s</%1$s>", element, text, style).trim();
+
+        return String.format("<%1$s>%2$s</%1$s>", element, text).trim();
+    }
+
+    public final class Attributes {
+        public static final String STYLE = "style";
+        public static final String CLASS = "class";
     }
 }
