@@ -29,6 +29,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @NodeProcessorTest(TableNodeProcessor.class)
 class TableNodeProcessorTest {
 
+    private static final String CAPTION_STYLE = "color: #7a2518; margin-bottom: .25em; text-align: left";
+
     private Asciidoctor asciidoctor;
     private NodeProcessor nodeProcessor;
     private StringWriter sinkWriter;
@@ -86,7 +88,7 @@ class TableNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-            .isEqualTo("<table class=\"bodyTable\"><caption>Table 1. Table caption&#8230;&#8203;or title</caption>" +
+            .isEqualTo("<table class=\"bodyTable\"><caption style=\"" + CAPTION_STYLE + "\">Table 1. Table caption&#8230;&#8203;or title</caption>" +
                 "<tr class=\"a\">" +
                 "<td style=\"text-align: left;\">JRuby</td>" +
                 "<td>Java</td></tr>" +
@@ -119,12 +121,12 @@ class TableNodeProcessorTest {
 
     private static String expectedNoLabelBeginning() {
         return "<table class=\"bodyTable\">" +
-            "<caption>Table caption&#8230;&#8203;or title</caption>";
+            "<caption style=\"" + CAPTION_STYLE + "\">Table caption&#8230;&#8203;or title</caption>";
     }
 
     private static String expectedTableWithoutLabel() {
         return "<table class=\"bodyTable\">" +
-            "<caption>Table caption&#8230;&#8203;or title</caption>" +
+            "<caption style=\"" + CAPTION_STYLE + "\">Table caption&#8230;&#8203;or title</caption>" +
             "<tr class=\"a\">" +
             "<td style=\"text-align: left;\">JRuby</td>" +
             "<td>Java</td></tr>" +

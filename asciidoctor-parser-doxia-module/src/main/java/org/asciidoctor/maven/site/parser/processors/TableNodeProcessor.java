@@ -10,6 +10,7 @@ import org.asciidoctor.jruby.ast.impl.TableImpl;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.NodeSinker;
 
+import static javax.swing.text.html.HTML.Attribute.STYLE;
 import static org.apache.maven.doxia.sink.Sink.JUSTIFY_LEFT;
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
@@ -84,7 +85,9 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
         // final String title = node.getTitle();
         final String title = TitleExtractor.getText(node);
         if (isNotBlank(title)) {
-            sink.tableCaption();
+            // Contrary to other cases where we use <div>, we use <caption>: same as Fluido and Asciidoctor
+            // TODO Have a proper CSS stylesheet injected
+            sink.tableCaption(SinkAttributes.of(STYLE, Styles.CAPTION + "; text-align: left"));
             // getCaption returns
             // - "" when '[caption=]'
             // - null when ':table-caption!:

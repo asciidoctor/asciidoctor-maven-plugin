@@ -51,8 +51,6 @@ public class ImageNodeProcessor extends AbstractSinkNodeProcessor implements Nod
         sink.figureGraphics(imagePath, !isBlank(alt) ? SinkAttributes.of(ALT, alt) : null);
         final String title = TitleExtractor.getText(node);
         if (isNotBlank(title)) {
-            // TODO use figcaption? or use div for tables for consistency?
-            // I think use div...if it looks better and now that we have the infrastructure set
             sink.division(SinkAttributes.of(STYLE, Styles.CAPTION));
             sink.text(title);
             sink.division_();
