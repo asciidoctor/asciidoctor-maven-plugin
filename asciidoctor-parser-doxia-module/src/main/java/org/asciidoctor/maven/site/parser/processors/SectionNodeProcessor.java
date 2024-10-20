@@ -10,6 +10,8 @@ import org.asciidoctor.maven.site.parser.NodeSinker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
+
 /**
  * Section title processor.
  * Supports 'sectnum' and 'sectnum' attributes.
@@ -48,9 +50,11 @@ public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements N
         if (level == 0) {
             // Kept for completeness, real document title is treated in
             // DocumentNodeProcessor
-            sink.sectionTitle1();
-            sink.text(formattedTitle);
-            sink.sectionTitle1_();
+            if (isNotBlank(formattedTitle)) {
+                sink.sectionTitle1();
+                sink.rawText(formattedTitle);
+                sink.sectionTitle1_();
+            }
         } else {
             // Asciidoctor supports up o 6 levels, but Xhtml5BaseSink only up to 5
             int siteLevel = level + 1;
@@ -61,7 +65,7 @@ public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements N
             }
             sink.sectionTitle(siteLevel, null);
             anchor(sink, (Section) node);
-            sink.text(formattedTitle);
+            sink.rawText(formattedTitle);
             sink.sectionTitle_(siteLevel);
         }
 

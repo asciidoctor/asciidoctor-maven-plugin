@@ -44,7 +44,7 @@ public class ExampleNodeProcessor extends AbstractSinkNodeProcessor implements N
         final String title = TitleCaptionExtractor.getText(node);
         if (isNotBlank(title)) {
             sink.division(SinkAttributes.of(STYLE, Styles.CAPTION));
-            sink.text(title);
+            sink.rawText(title);
             sink.division_();
         }
 
