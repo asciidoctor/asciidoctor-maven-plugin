@@ -16,6 +16,7 @@ class Styles {
         "border-color: #e0e0dc",
         "border: 1px solid #e6e6e6",
         "box-shadow: 0 1px 4px #e0e0dc",
+        "margin-bottom: 1.25em",
         "padding: 1.25em"
     ).collect(Collectors.joining("; "));
 }

@@ -50,12 +50,22 @@ public class ExampleNodeProcessor extends AbstractSinkNodeProcessor implements N
 
         final List<StructuralNode> blocks = node.getBlocks();
         if (!blocks.isEmpty()) {
-            sink.division(SinkAttributes.of(STYLE, Styles.EXAMPLE));
-            blocks.forEach(this::sink);
-            sink.division_();
+            divWrap(sink, node, () -> blocks.forEach(this::sink));
+        } else {
+            // For :content_model: simple (inline)
+            // https://docs.asciidoctor.org/asciidoc/latest/blocks/example-blocks/#example-style-syntax
+            final String content = (String) node.getContent();
+            if (isNotBlank(content)) {
+                divWrap(sink, node, () -> sink.rawText(content));
+            }
         }
 
         sink.division_();
+    }
 
+    void divWrap(Sink sink, StructuralNode node, Runnable consumer) {
+        sink.division(SinkAttributes.of(STYLE, Styles.EXAMPLE));
+        consumer.run();
+        sink.division_();
     }
 }

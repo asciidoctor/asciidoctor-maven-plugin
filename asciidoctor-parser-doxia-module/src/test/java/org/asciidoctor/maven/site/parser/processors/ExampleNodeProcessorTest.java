@@ -10,6 +10,7 @@ import org.asciidoctor.Options;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.processors.test.NodeProcessorTest;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.asciidoctor.maven.site.parser.processors.test.Html.*;
@@ -20,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ExampleNodeProcessorTest {
 
     public static final String EXAMPLE_TITLE_OPENING = "<div style=\"color: #7a2518; margin-bottom: .25em\">";
-    public static final String EXAMPLE_CONTENT_OPENING = "<div style=\"background: #fffef7; border-color: #e0e0dc; border: 1px solid #e6e6e6; box-shadow: 0 1px 4px #e0e0dc; padding: 1.25em\">";
+    public static final String EXAMPLE_CONTENT_OPENING = "<div style=\"background: #fffef7; border-color: #e0e0dc; border: 1px solid #e6e6e6; box-shadow: 0 1px 4px #e0e0dc; margin-bottom: 1.25em; padding: 1.25em\">";
 
     private Asciidoctor asciidoctor;
     private NodeProcessor nodeProcessor;
@@ -171,5 +172,58 @@ class ExampleNodeProcessorTest {
         nodeProcessor.process(node);
 
         return removeLineBreaks(sinkWriter.toString());
+    }
+
+    @Nested
+    class WithSimpleContentModel {
+
+        @Test
+        void should_convert_minimal_example() {
+            String content = "= Tile\n\n" + "== Section\n\n" +
+                "[example]\n" +
+                "SomeText";
+
+            String html = process(content);
+
+            // Content is directly embedded instead of delegated to paragraph processor
+            assertThat(html)
+                .isEqualTo(div(
+                    EXAMPLE_CONTENT_OPENING +
+                        "SomeText" +
+                        "</div>"));
+        }
+
+        @Test
+        void should_convert_minimal_example_with_title() {
+            String content = "= Tile\n\n" + "== Section\n\n" +
+                ".Optional title\n" +
+                "[example]\n" +
+                "SomeText";
+
+            String html = process(content);
+
+            assertThat(html)
+                .isEqualTo(div(
+                    EXAMPLE_TITLE_OPENING + "Example 1. Optional title</div>" +
+                        EXAMPLE_CONTENT_OPENING +
+                        "SomeText" +
+                        "</div>"));
+        }
+
+        @Test
+        void should_convert_minimal_example_with_link() {
+            final String link = "https://docs.asciidoctor.org/";
+            String content = "= Tile\n\n" + "== Section\n\n" +
+                "[example]\n" +
+                "SomeText, " + link;
+
+            String html = process(content);
+
+            assertThat(html)
+                .isEqualTo(div(
+                        EXAMPLE_CONTENT_OPENING +
+                        "SomeText, <a href=\"https://docs.asciidoctor.org/\" class=\"bare\">https://docs.asciidoctor.org/</a>" +
+                        "</div>"));
+        }
     }
 }
