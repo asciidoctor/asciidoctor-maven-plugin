@@ -49,7 +49,7 @@ public class ImageNodeProcessor extends AbstractSinkNodeProcessor implements Nod
         final Sink sink = getSink();
         sink.division();
         sink.figureGraphics(imagePath, !isBlank(alt) ? SinkAttributes.of(ALT, alt) : null);
-        final String title = TitleExtractor.getText(node);
+        final String title = TitleCaptionExtractor.getText(node);
         if (isNotBlank(title)) {
             sink.division(SinkAttributes.of(STYLE, Styles.CAPTION));
             sink.text(title);

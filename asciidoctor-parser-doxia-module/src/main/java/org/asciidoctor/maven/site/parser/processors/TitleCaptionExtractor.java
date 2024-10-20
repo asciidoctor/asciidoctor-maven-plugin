@@ -4,9 +4,15 @@ import org.asciidoctor.ast.StructuralNode;
 
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 
-class TitleExtractor {
+/**
+ * Utility to extract composed title and caption text.
+ *
+ * @author abelsromero
+ * @since 3.1.0
+ */
+class TitleCaptionExtractor {
 
-    // TODO is this being re-used properly: examples? tables?
+    // Not used in SectionNodeProcessor to avoid extra node processing
     static String getText(StructuralNode node) {
         // Caption is returned when a title is set in:
         // - Image blocks
@@ -14,5 +20,4 @@ class TitleExtractor {
         final String caption = node.getCaption();
         return isBlank(caption) ? node.getTitle() : String.format("%s %s", caption.trim(), node.getTitle());
     }
-
 }

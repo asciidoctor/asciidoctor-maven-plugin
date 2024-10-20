@@ -83,7 +83,7 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
         // if "[caption=]" -> remove caption
         // disable too, when ":table-caption!:"
         // final String title = node.getTitle();
-        final String title = TitleExtractor.getText(node);
+        final String title = TitleCaptionExtractor.getText(node);
         if (isNotBlank(title)) {
             // Contrary to other cases where we use <div>, we use <caption>: same as Fluido and Asciidoctor
             // TODO Have a proper CSS stylesheet injected

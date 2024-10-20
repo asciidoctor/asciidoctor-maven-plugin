@@ -2,8 +2,6 @@ package org.asciidoctor.maven.site.parser.processors;
 
 import org.apache.maven.doxia.sink.Sink;
 import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.maven.commons.StringUtils;
-import org.asciidoctor.jruby.ast.impl.BlockImpl;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.NodeSinker;
 
@@ -74,7 +72,7 @@ public class ListingNodeProcessor extends AbstractSinkNodeProcessor implements N
     }
 
     private static void processTitle(StructuralNode node, StringBuilder contentBuilder) {
-        final String title = TitleExtractor.getText(node);
+        final String title = TitleCaptionExtractor.getText(node);
         if (isNotBlank(title)) {
             contentBuilder.append("<div style=\"" + Styles.CAPTION + "\" >" + title + "</div>");
         }
