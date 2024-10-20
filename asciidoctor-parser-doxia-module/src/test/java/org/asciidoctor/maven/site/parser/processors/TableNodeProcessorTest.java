@@ -36,6 +36,22 @@ class TableNodeProcessorTest {
     private StringWriter sinkWriter;
 
     @Test
+    void should_convert_empty_table() {
+        String content = "= Document tile\n" +
+            "\n" +
+            "\n" +
+            "== Section\n" +
+            "|===\n" +
+            "|===";
+
+        String html = process(content);
+
+        // Header for now is just first row with class=a
+        assertThat(html)
+            .isEmpty();
+    }
+
+    @Test
     void should_convert_table_with_header() {
         String content = documentWithTable(true, noCaption, emptyList());
 

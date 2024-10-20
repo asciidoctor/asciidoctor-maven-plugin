@@ -44,7 +44,13 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
         final Sink sink = getSink();
         sink.table();
         sink.tableRows(new int[]{JUSTIFY_LEFT}, false);
-        List<Row> header = tableNode.getHeader();
+        final List<Row> header = tableNode.getHeader();
+        final List<Row> rows = tableNode.getBody();
+
+        if (header.isEmpty() && rows.isEmpty()) {
+            return;
+        }
+
         if (!header.isEmpty()) {
             sink.tableRow();
 
@@ -58,7 +64,7 @@ public class TableNodeProcessor extends AbstractSinkNodeProcessor implements Nod
             sink.tableRow_();
         }
 
-        for (Row row : tableNode.getBody()) {
+        for (Row row : rows) {
             sink.tableRow();
             for (Cell cell : row.getCells()) {
                 sink.tableCell();
