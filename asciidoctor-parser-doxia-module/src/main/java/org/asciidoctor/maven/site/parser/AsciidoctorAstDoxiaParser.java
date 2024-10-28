@@ -20,6 +20,7 @@ import org.asciidoctor.Options;
 import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.ast.Document;
+import org.asciidoctor.maven.commons.StringUtils;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordFormatter;
 import org.asciidoctor.maven.log.LogRecordsProcessors;
@@ -90,7 +91,7 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
         }
 
         final LogHandler logHandler = getLogHandlerConfig(siteConfig);
-        final MemoryLogHandler memoryLogHandler = asciidoctorLoggingSetup(asciidoctor, logHandler, siteDirectory);
+        final MemoryLogHandler memoryLogHandler = asciidoctorLoggingSetup(asciidoctor, siteDirectory);
 
         if (isNotBlank(reference))
             logger.debug("Document loaded: {}", reference);
@@ -99,13 +100,17 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
 
         try {
             // process log messages according to mojo configuration
-            new LogRecordsProcessors(logHandler, siteDirectory, errorMessage -> logger.error(errorMessage))
-                .processLogRecords(memoryLogHandler);
-
+            if (!memoryLogHandler.isEmpty()) {
+                logger.info("Issues found in: {}", reference);
+                if (logHandler.getOutputToConsole() && StringUtils.isNotBlank(reference)) {
+                    memoryLogHandler.processAll();
+                }
+                new LogRecordsProcessors(logHandler, siteDirectory, errorMessage -> logger.error(errorMessage))
+                    .processLogRecords(memoryLogHandler);
+            }
         } catch (Exception exception) {
             throw new ParseException(exception.getMessage(), exception);
         }
-
 
         HeaderMetadata headerMetadata = HeaderMetadata.from(document);
 
@@ -116,9 +121,9 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
             .sink(document);
     }
 
-    private MemoryLogHandler asciidoctorLoggingSetup(Asciidoctor asciidoctor, LogHandler logHandler, File siteDirectory) {
+    private MemoryLogHandler asciidoctorLoggingSetup(Asciidoctor asciidoctor, File siteDirectory) {
 
-        final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(logHandler.getOutputToConsole(),
+        final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(false,
             logRecord -> logger.info(LogRecordFormatter.format(logRecord, siteDirectory)));
         asciidoctor.registerLogHandler(memoryLogHandler);
         // disable default console output of AsciidoctorJ

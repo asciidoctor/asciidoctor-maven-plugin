@@ -29,7 +29,7 @@ Improvements::
   * Sections are now wrapped in <div> in (asciidoctor-parser-doxia-module) (#944)
   * Add support for inline and Example blocks (asciidoctor-parser-doxia-module) (#938)
   * Add support for captioned titles in appendixes, tables, listing, figure, and examples (asciidoctor-parser-doxia-module) (#938)
-
+  * Add INFO message to site modules showing the filename in case of issues (#323)
 
 Build / Infrastructure::
 
