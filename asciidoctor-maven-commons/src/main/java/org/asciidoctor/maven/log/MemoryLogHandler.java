@@ -14,10 +14,11 @@ import org.asciidoctor.log.Severity;
  * AsciidoctorJ LogHandler that stores records in memory.
  *
  * @author abelsromero
+ * @since 1.5.7
  */
 public class MemoryLogHandler implements LogHandler {
 
-    final List<LogRecord> records = new ArrayList<>();
+    private final List<LogRecord> records = new ArrayList<>();
 
     private final Boolean outputToConsole;
     private final Consumer<LogRecord> recordConsumer;
@@ -46,8 +47,8 @@ public class MemoryLogHandler implements LogHandler {
      */
     public List<LogRecord> filter(Severity severity) {
         return this.records.stream()
-                .filter(record -> severityIsHigher(record, severity))
-                .collect(Collectors.toList());
+            .filter(record -> severityIsHigher(record, severity))
+            .collect(Collectors.toList());
     }
 
     /**
@@ -58,8 +59,8 @@ public class MemoryLogHandler implements LogHandler {
      */
     public List<LogRecord> filter(String text) {
         return this.records.stream()
-                .filter(record -> messageContains(record, text))
-                .collect(Collectors.toList());
+            .filter(record -> messageContains(record, text))
+            .collect(Collectors.toList());
     }
 
     /**
@@ -71,8 +72,27 @@ public class MemoryLogHandler implements LogHandler {
      */
     public List<LogRecord> filter(Severity severity, String text) {
         return this.records.stream()
-                .filter(record -> severityIsHigher(record, severity) && messageContains(record, text))
-                .collect(Collectors.toList());
+            .filter(record -> severityIsHigher(record, severity) && messageContains(record, text))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Returns whether error messages have been captured or no.
+     *
+     * @return true if no error messages are present
+     * @since 3.1.0
+     */
+    public boolean isEmpty() {
+        return records.isEmpty();
+    }
+
+    /**
+     * Processes all stored log records.
+     *
+     * @since 3.1.0
+     */
+    public void processAll() {
+        records.forEach(recordConsumer::accept);
     }
 
     private static boolean severityIsHigher(LogRecord record, Severity severity) {
@@ -82,4 +102,5 @@ public class MemoryLogHandler implements LogHandler {
     private static boolean messageContains(LogRecord record, String text) {
         return record.getMessage().contains(text);
     }
+
 }
