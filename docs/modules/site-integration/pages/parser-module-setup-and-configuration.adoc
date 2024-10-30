@@ -2,7 +2,7 @@
 :doxia-module-name: asciidoctor-parser-doxia-module
 :fluido-skin-url: https://maven.apache.org/skins/maven-fluido-skin/
 
-WARNING: This module is still considered experimental and early stages.
+WARNING: This module is considered in _Beta_, available for general use covering most AsciiDoc features.
 Please, consider sharing feedback and reporting any issue you find, or improvement you consider to help us improve.
 
 This module uses Asciidoctor to parse AsciiDoc source files and then uses a custom converter adapted to Maven Site styles.
@@ -43,6 +43,9 @@ The Asciidoctor Doxia module follows the maven-site-plugin conventions for file 
 First, all of your AsciiDoc-based files should be placed in [.path]_src/site/asciidoc_ with an extension of `.adoc`.
 These files will be converted into the [.path]_target/site_ directory.
 For example, the file [.path]_src/site/asciidoc/usage.adoc_ will be converted into [.path]_target/site/usage.html_.
+
+NOTE: Since `maven-site-plugin` v3.20.0, paths apply a default locale configuration.
+If locale is not set, sources must be places in [.path]_src/site/*en*/asciidoc/_.
 
 Then, all resources (images, css, etc.) should be placed in [.path]_src/site/resources_.
 These will be automatically copied into [.path]_target/site_.
