@@ -109,7 +109,7 @@ jobs:
           echo "${{ env.GPG_PRIVATE_KEY }}"
       - name: Prepare key
         run: echo -e "${{ env.GPG_PRIVATE_KEY }}" | gpg --import --batch
-      - name: List kys
+      - name: List keys
         run: gpg --list-keys
       - uses: s4u/setup-maven-action@v1.15.0
         with:

@@ -35,9 +35,9 @@ jobs:
       - name: Configure GPG key
         run: echo -e "${{ env.GPG_PRIVATE_KEY }}" | gpg --import --batch
       - name: Build artifacts
-        run: ./mvnw clean verify -B -Prelease -Dmaven.test.skip
+        run: ./mvnw clean verify -e -B -Prelease -Dmaven.test.skip
       - name: Publish artifacts
-        run: ./mvnw release:prepare release:perform -B -Darguments="-Prelease -Dmaven.test.skip"
+        run: ./mvnw release:prepare release:perform -e -B -Darguments="-Prelease -Dmaven.test.skip"
       - name: Close release
         run: |
           echo "Release completed 🎉"
