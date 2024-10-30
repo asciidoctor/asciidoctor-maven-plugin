@@ -16,7 +16,6 @@ updates:
       prefix: "(main)"
     target-branch: "main"
     ignore:
-      - dependency-name: org.jruby:jruby
       - dependency-name: org.codehaus.plexus:plexus-utils
         update-types:
           - "version-update:semver-major"
@@ -38,7 +37,6 @@ updates:
       prefix: "(v2.2.x)"
     target-branch: "v2.2.x"
     ignore:
-      - dependency-name: org.jruby:jruby
       - dependency-name: org.apache.maven:*
       - dependency-name: org.apache.maven.plugin-tools:*
       - dependency-name: org.apache.maven.doxia:*
