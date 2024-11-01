@@ -29,6 +29,8 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.asciidoctor.maven.site.SiteBaseDirResolver.resolveBaseDir;
+
 /**
  * This class is used by <a href="https://maven.apache.org/doxia/overview.html">the Doxia framework</a>
  * to handle the actual parsing of the AsciiDoc input files into HTML to be consumed/wrapped
@@ -68,7 +70,7 @@ public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
 
         final MavenProject project = mavenProjectProvider.get();
         final Xpp3Dom siteConfig = getSiteConfig(project);
-        final File siteDirectory = resolveSiteDirectory(project, siteConfig);
+        final File siteDirectory = resolveBaseDir(project.getBasedir(), siteConfig);
 
         // Doxia handles a single instance of this class and invokes it multiple times.
         // We need to ensure certain elements are initialized only once to avoid errors.
@@ -127,17 +129,13 @@ public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
         return project.getGoalConfiguration("org.apache.maven.plugins", "maven-site-plugin", "site", "site");
     }
 
-    protected File resolveSiteDirectory(MavenProject project, Xpp3Dom siteConfig) {
-        File siteDirectory = new File(project.getBasedir(), "src/site");
-        if (siteConfig != null) {
-            Xpp3Dom siteDirectoryNode = siteConfig.getChild("siteDirectory");
-            if (siteDirectoryNode != null) {
-                siteDirectory = new File(siteDirectoryNode.getValue());
-            }
-        }
-        return siteDirectory;
-    }
 
+    // The possible baseDir based on configuration are:
+    //
+    // with nothing                : src/site + /asciidoc
+    // with locale                 : src/site + {locale} +  /asciidoc
+    // with siteDirectory          : {siteDirectory} + /asciidoc
+    // with siteDirectory + locale : {siteDirectory} + {locale} + /asciidoc
     protected OptionsBuilder defaultOptions(File siteDirectory) {
         return Options.builder()
             .backend("xhtml")

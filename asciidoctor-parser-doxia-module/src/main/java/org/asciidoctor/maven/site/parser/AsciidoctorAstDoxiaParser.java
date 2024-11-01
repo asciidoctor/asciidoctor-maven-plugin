@@ -5,7 +5,6 @@ import javax.inject.Provider;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.apache.maven.doxia.parser.AbstractTextParser;
@@ -30,13 +29,13 @@ import org.asciidoctor.maven.site.HeaderMetadata;
 import org.asciidoctor.maven.site.SiteConversionConfiguration;
 import org.asciidoctor.maven.site.SiteConversionConfigurationParser;
 import org.asciidoctor.maven.site.SiteLogHandlerDeserializer;
-import org.asciidoctor.maven.site.parser.processors.DescriptionListNodeProcessor;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.slf4j.LoggerFactory;
 
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
+import static org.asciidoctor.maven.site.SiteBaseDirResolver.resolveBaseDir;
 
 /**
  * This class is used by <a href="https://maven.apache.org/doxia/overview.html">the Doxia framework</a>
@@ -76,7 +75,7 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
 
         final MavenProject project = mavenProjectProvider.get();
         final Xpp3Dom siteConfig = getSiteConfig(project);
-        final File siteDirectory = resolveSiteDirectory(project, siteConfig);
+        final File siteDirectory = resolveBaseDir(project.getBasedir(), siteConfig);
 
         // Doxia handles a single instance of this class and invokes it multiple times.
         // We need to ensure certain elements are initialized only once to avoid errors.
@@ -138,17 +137,6 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
 
     protected Xpp3Dom getSiteConfig(MavenProject project) {
         return project.getGoalConfiguration("org.apache.maven.plugins", "maven-site-plugin", "site", "site");
-    }
-
-    protected File resolveSiteDirectory(MavenProject project, Xpp3Dom siteConfig) {
-        File siteDirectory = new File(project.getBasedir(), "src/site");
-        if (siteConfig != null) {
-            Xpp3Dom siteDirectoryNode = siteConfig.getChild("siteDirectory");
-            if (siteDirectoryNode != null) {
-                siteDirectory = new File(siteDirectoryNode.getValue());
-            }
-        }
-        return siteDirectory;
     }
 
     protected OptionsBuilder defaultOptions(File siteDirectory) {
