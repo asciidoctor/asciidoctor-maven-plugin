@@ -43,7 +43,7 @@ import static org.asciidoctor.maven.site.SiteBaseDirResolver.resolveBaseDir;
 @Component(role = Parser.class, hint = AsciidoctorConverterDoxiaParser.ROLE_HINT)
 public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
 
-    private final Logger logger = LoggerFactory.getLogger(AsciidoctorConverterDoxiaParser.class);
+    private static final Logger logger = LoggerFactory.getLogger(AsciidoctorConverterDoxiaParser.class);
 
     @Inject
     protected Provider<MavenProject> mavenProjectProvider;
