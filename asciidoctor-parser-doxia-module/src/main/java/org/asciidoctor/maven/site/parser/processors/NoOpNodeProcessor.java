@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  */
 public class NoOpNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
 
-    private final org.slf4j.Logger logger = LoggerFactory.getLogger(AsciidoctorAstDoxiaParser.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(NoOpNodeProcessor.class);
 
     /**
      * Constructor.

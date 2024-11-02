@@ -15,7 +15,11 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 Bug Fixes (Site Modules)::
 
-* Fix resolution of baseDir for Doxia modules (#968)
+  * Fix resolution of baseDir for Doxia modules (#968)
+
+Improvements (Site Modules)::
+
+  * Unify loggers initialization to be static (#)
 
 == v3.1.0 (2024-10-30)
 

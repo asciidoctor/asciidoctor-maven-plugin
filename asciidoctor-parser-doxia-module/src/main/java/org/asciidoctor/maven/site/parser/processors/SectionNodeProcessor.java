@@ -21,7 +21,7 @@ import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
  */
 public class SectionNodeProcessor extends AbstractSinkNodeProcessor implements NodeProcessor {
 
-    private final Logger logger = LoggerFactory.getLogger(SectionNodeProcessor.class);
+    private static final Logger logger = LoggerFactory.getLogger(SectionNodeProcessor.class);
 
     /**
      * Constructor.
