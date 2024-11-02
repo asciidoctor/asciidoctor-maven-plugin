@@ -22,8 +22,12 @@ public class Html {
         return htmlElement("code", text);
     }
 
-    public static String div(String text) {
-        return htmlElement("div", text);
+    public static String div(String... elements) {
+        return htmlElement("div", String.join("", elements));
+    }
+
+    public static String div(String style, String text) {
+        return htmlElement("div", text, Map.of(STYLE, style));
     }
 
     public static String ul(String... elements) {

@@ -7,8 +7,8 @@ import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.NodeSinker;
 
-import static javax.swing.text.html.HTML.Attribute.ALT;
-import static javax.swing.text.html.HTML.Attribute.STYLE;
+import static org.apache.maven.doxia.sink.SinkEventAttributes.ALT;
+import static org.apache.maven.doxia.sink.SinkEventAttributes.STYLE;
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 

@@ -7,7 +7,7 @@ import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.maven.site.parser.NodeProcessor;
 import org.asciidoctor.maven.site.parser.NodeSinker;
 
-import static javax.swing.text.html.HTML.Attribute.STYLE;
+import static org.apache.maven.doxia.sink.SinkEventAttributes.STYLE;
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
 /**
@@ -50,20 +50,20 @@ public class ExampleNodeProcessor extends AbstractSinkNodeProcessor implements N
 
         final List<StructuralNode> blocks = node.getBlocks();
         if (!blocks.isEmpty()) {
-            divWrap(sink, node, () -> blocks.forEach(this::sink));
+            divWrap(sink, () -> blocks.forEach(this::sink));
         } else {
             // For :content_model: simple (inline)
             // https://docs.asciidoctor.org/asciidoc/latest/blocks/example-blocks/#example-style-syntax
             final String content = (String) node.getContent();
             if (isNotBlank(content)) {
-                divWrap(sink, node, () -> sink.rawText(content));
+                divWrap(sink, () -> sink.rawText(content));
             }
         }
 
         sink.division_();
     }
 
-    void divWrap(Sink sink, StructuralNode node, Runnable consumer) {
+    void divWrap(Sink sink, Runnable consumer) {
         sink.division(SinkAttributes.of(STYLE, Styles.EXAMPLE));
         consumer.run();
         sink.division_();

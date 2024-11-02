@@ -64,13 +64,13 @@ class TableNodeProcessorTest {
 
         // Header for now is just first row with class=a
         assertThat(html)
-            .isEqualTo("<table class=\"bodyTable\">" +
+            .isEqualTo("<table class=\"bodyTable\" style=\"background: #FFFFFF\">" +
                 "<tr class=\"a\">" +
                 "<th>Name</th>" +
                 "<th>Language</th></tr>" +
                 "<tr class=\"b\">" +
-                "<td style=\"text-align: left;\">JRuby</td>" +
-                "<td>Java</td></tr>" +
+                td("JRuby", Map.of("style", "text-align: left;")) +
+                td("Java") + "</tr>" +
                 "<tr class=\"a\">" +
                 "<td style=\"text-align: left;\">Rubinius</td>" +
                 "<td>Ruby</td></tr></table>");
@@ -83,7 +83,7 @@ class TableNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-            .isEqualTo(removeLineBreaks("<table class=\"bodyTable\">" +
+            .isEqualTo(removeLineBreaks("<table class=\"bodyTable\" style=\"background: #FFFFFF\">" +
                 "<tr class=\"a\">" +
                 "<td style=\"text-align: left;\">JRuby</td>" +
                 "<td>Java</td></tr>" +
@@ -109,7 +109,8 @@ class TableNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-            .isEqualTo("<table class=\"bodyTable\"><caption style=\"" + CAPTION_STYLE + "\">Table 1. Table caption&#8230;&#8203;or title</caption>" +
+            .isEqualTo("<table class=\"bodyTable\" style=\"background: #FFFFFF\">" +
+                "<caption style=\"" + CAPTION_STYLE + "\">Table 1. Table caption&#8230;&#8203;or title</caption>" +
                 "<tr class=\"a\">" +
                 "<td style=\"text-align: left;\">JRuby</td>" +
                 "<td>Java</td></tr>" +
@@ -151,7 +152,7 @@ class TableNodeProcessorTest {
             String html = process(content);
 
             assertThat(html)
-                .isEqualTo("<table class=\"bodyTable\">" +
+                .isEqualTo("<table class=\"bodyTable\" style=\"background: #FFFFFF\">" +
                     tr("a", td("JRuby", textAlignLeft()) + td("Java")) +
                     tr("b", td("Rubinius", textAlignLeft()) + td("Ruby")) +
                     tr("a",
@@ -168,7 +169,7 @@ class TableNodeProcessorTest {
             String html = process(content);
 
             assertThat(html)
-                .isEqualTo("<table class=\"bodyTable\">" +
+                .isEqualTo("<table class=\"bodyTable\" style=\"background: #FFFFFF\">" +
                     tr("a", td("JRuby", textAlignLeft()) + td("Java")) +
                     tr("b", td("Rubinius", textAlignLeft()) + td("Ruby")) +
                     tr("a",
@@ -185,7 +186,7 @@ class TableNodeProcessorTest {
             String html = process(content);
 
             assertThat(html)
-                .isEqualTo("<table class=\"bodyTable\">" +
+                .isEqualTo("<table class=\"bodyTable\" style=\"background: #FFFFFF\">" +
                     tr("a", td("JRuby", textAlignLeft()) + td("Java")) +
                     tr("b", td("Rubinius", textAlignLeft()) + td("Ruby")) +
                     tr("a",
@@ -200,12 +201,12 @@ class TableNodeProcessorTest {
     }
 
     private static String expectedNoLabelBeginning() {
-        return "<table class=\"bodyTable\">" +
+        return "<table class=\"bodyTable\" style=\"background: #FFFFFF\">" +
             "<caption style=\"" + CAPTION_STYLE + "\">Table caption&#8230;&#8203;or title</caption>";
     }
 
     private static String expectedTableWithoutLabel() {
-        return "<table class=\"bodyTable\">" +
+        return "<table class=\"bodyTable\" style=\"background: #FFFFFF\">" +
             "<caption style=\"" + CAPTION_STYLE + "\">Table caption&#8230;&#8203;or title</caption>" +
             "<tr class=\"a\">" +
             "<td style=\"text-align: left;\">JRuby</td>" +
@@ -216,7 +217,7 @@ class TableNodeProcessorTest {
     }
 
     private static String expectedTableWithoutCaption() {
-        return "<table class=\"bodyTable\">" +
+        return "<table class=\"bodyTable\" style=\"background: #FFFFFF\">" +
             "<tr class=\"a\">" +
             "<td style=\"text-align: left;\">JRuby</td>" +
             "<td>Java</td></tr>" +
