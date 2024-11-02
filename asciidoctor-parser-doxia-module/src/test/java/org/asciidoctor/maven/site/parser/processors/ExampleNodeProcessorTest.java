@@ -3,6 +3,7 @@ package org.asciidoctor.maven.site.parser.processors;
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.asciidoctor.Asciidoctor;
@@ -19,9 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @NodeProcessorTest(ExampleNodeProcessor.class)
 class ExampleNodeProcessorTest {
-
-    public static final String EXAMPLE_TITLE_OPENING = "<div style=\"color: #7a2518; margin-bottom: .25em\">";
-    public static final String EXAMPLE_CONTENT_OPENING = "<div style=\"background: #fffef7; border-color: #e0e0dc; border: 1px solid #e6e6e6; box-shadow: 0 1px 4px #e0e0dc; margin-bottom: 1.25em; padding: 1.25em\">";
 
     private Asciidoctor asciidoctor;
     private NodeProcessor nodeProcessor;
@@ -45,9 +43,7 @@ class ExampleNodeProcessorTest {
 
         assertThat(html)
             .isEqualTo(div(
-                EXAMPLE_CONTENT_OPENING +
-                    p("SomeText") +
-                    "</div>"));
+                exampleContentDiv(p("SomeText"))));
     }
 
     @Test
@@ -57,11 +53,7 @@ class ExampleNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-            .isEqualTo(div(
-                EXAMPLE_TITLE_OPENING + "Example 1. The title</div>" +
-                    EXAMPLE_CONTENT_OPENING +
-                    p("SomeText") +
-                    "</div>"));
+            .isEqualTo(div(exampleTitleDiv("Example 1. The title") + exampleContentDiv(p("SomeText"))));
     }
 
     @Test
@@ -71,11 +63,7 @@ class ExampleNodeProcessorTest {
         String html = process(content);
 
         assertThat(html)
-            .isEqualTo(div(
-                EXAMPLE_TITLE_OPENING + "The title</div>" +
-                    EXAMPLE_CONTENT_OPENING +
-                    p("SomeText") +
-                    "</div>"));
+            .isEqualTo(div(exampleTitleDiv("The title") + exampleContentDiv(p("SomeText"))));
     }
 
     @Test
@@ -87,9 +75,9 @@ class ExampleNodeProcessorTest {
 
         assertThat(html)
             .isEqualTo(div(
-                EXAMPLE_CONTENT_OPENING +
-                    p("<a href=\"https://docs.asciidoctor.org/\" class=\"bare\">https://docs.asciidoctor.org/</a>") +
-                    "</div>"));
+                exampleContentDiv(
+                    p("<a href=\"https://docs.asciidoctor.org/\" class=\"bare\">https://docs.asciidoctor.org/</a>")
+                )));
     }
 
     @Test
@@ -105,12 +93,12 @@ class ExampleNodeProcessorTest {
 
         assertThat(html)
             .isEqualTo(div(
-                EXAMPLE_CONTENT_OPENING +
-                    "<table class=\"bodyTable\">" +
-                    "<tr class=\"a\"><td style=\"text-align: left;\">Header 1</td><td>Header 2</td></tr>" +
-                    "<tr class=\"b\"><td style=\"text-align: left;\">Column 1, row 1</td><td>Column 2, row 1</td></tr>" +
-                    "</table>" +
-                    "</div>"));
+                exampleContentDiv(
+                    "<table class=\"bodyTable\" style=\"background: #FFFFFF\">" +
+                        tr("a", td("Header 1", Map.of("style", "text-align: left;")) + td("Header 2")) +
+                        tr("b", td("Column 1, row 1", Map.of("style", "text-align: left;")) + td("Column 2, row 1")) +
+                        "</table>"
+                )));
     }
 
     @Test
@@ -125,12 +113,10 @@ class ExampleNodeProcessorTest {
 
         assertThat(html)
             .isEqualTo(div(
-                EXAMPLE_CONTENT_OPENING +
-                    ul(
-                        li("Un" + ul(li("Dos"))) +
-                            li("Tres" + ul(li("Quatre")))
-                    ) +
-                    "</div>"));
+                exampleContentDiv(ul(
+                    li("Un" + ul(li("Dos"))),
+                    li("Tres" + ul(li("Quatre")))
+                ))));
     }
 
     @Test
@@ -146,13 +132,13 @@ class ExampleNodeProcessorTest {
 
         assertThat(html)
             .isEqualTo(div(
-                EXAMPLE_CONTENT_OPENING +
+                exampleContentDiv(
                     ul(
-                        li("Un" + ul(li("Dos"))) +
-                            li("Tres" + ul(li("Quatre")))
+                        li("Un" + ul(li("Dos"))),
+                        li("Tres" + ul(li("Quatre")))
                     ) +
-                    p("<a href=\"https://docs.asciidoctor.org/\" class=\"bare\">https://docs.asciidoctor.org/</a>") +
-                    "</div>"));
+                        p("<a href=\"https://docs.asciidoctor.org/\" class=\"bare\">https://docs.asciidoctor.org/</a>")
+                )));
     }
 
     private String documentWithExample(String text, String title, List<String> attributes) {
@@ -187,10 +173,7 @@ class ExampleNodeProcessorTest {
 
             // Content is directly embedded instead of delegated to paragraph processor
             assertThat(html)
-                .isEqualTo(div(
-                    EXAMPLE_CONTENT_OPENING +
-                        "SomeText" +
-                        "</div>"));
+                .isEqualTo(div(exampleContentDiv("SomeText")));
         }
 
         @Test
@@ -203,11 +186,7 @@ class ExampleNodeProcessorTest {
             String html = process(content);
 
             assertThat(html)
-                .isEqualTo(div(
-                    EXAMPLE_TITLE_OPENING + "Example 1. Optional title</div>" +
-                        EXAMPLE_CONTENT_OPENING +
-                        "SomeText" +
-                        "</div>"));
+                .isEqualTo(div(exampleTitleDiv("Example 1. Optional title") + exampleContentDiv("SomeText")));
         }
 
         @Test
@@ -220,10 +199,15 @@ class ExampleNodeProcessorTest {
             String html = process(content);
 
             assertThat(html)
-                .isEqualTo(div(
-                        EXAMPLE_CONTENT_OPENING +
-                        "SomeText, <a href=\"https://docs.asciidoctor.org/\" class=\"bare\">https://docs.asciidoctor.org/</a>" +
-                        "</div>"));
+                .isEqualTo(div(exampleContentDiv("SomeText, <a href=\"https://docs.asciidoctor.org/\" class=\"bare\">https://docs.asciidoctor.org/</a>")));
         }
+    }
+
+    private static String exampleTitleDiv(String text) {
+        return div("color: #7a2518; margin-bottom: .25em", text);
+    }
+
+    private static String exampleContentDiv(String text) {
+        return div("background: #fffef7; border-color: #e0e0dc; border: 1px solid #e6e6e6; box-shadow: 0 1px 4px #e0e0dc; margin-bottom: 1.25em; padding: 1.25em", text);
     }
 }

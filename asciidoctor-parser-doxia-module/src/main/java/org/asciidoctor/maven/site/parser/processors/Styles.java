@@ -19,4 +19,7 @@ class Styles {
         "margin-bottom: 1.25em",
         "padding: 1.25em"
     ).collect(Collectors.joining("; "));
+
+    public static final String TABLE = "background: #FFFFFF";
+
 }
