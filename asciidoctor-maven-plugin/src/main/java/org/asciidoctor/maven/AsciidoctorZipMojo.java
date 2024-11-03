@@ -11,6 +11,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProjectHelper;
 import org.asciidoctor.maven.io.Zips;
+import org.asciidoctor.maven.process.ResourcesProcessor;
 import org.asciidoctor.maven.process.SourceDocumentFinder;
 
 import javax.inject.Inject;
@@ -18,6 +19,7 @@ import javax.inject.Inject;
 @Deprecated(since = "3.0.0", forRemoval = true)
 @Mojo(name = "zip")
 public class AsciidoctorZipMojo extends AsciidoctorMojo {
+
     public static final String PREFIX = AsciidoctorMaven.PREFIX + "zip.";
 
     @Component
@@ -35,6 +37,11 @@ public class AsciidoctorZipMojo extends AsciidoctorMojo {
 
     @Parameter(property = PREFIX + "zipClassifier", defaultValue = "asciidoctor")
     protected String zipClassifier;
+
+    @Inject
+    public AsciidoctorZipMojo(AsciidoctorJFactory asciidoctorJFactory, AsciidoctorOptionsFactory asciidoctorOptionsFactory, SourceDocumentFinder finder, ResourcesProcessor defaultResourcesProcessor) {
+        super(asciidoctorJFactory, asciidoctorOptionsFactory, finder, defaultResourcesProcessor);
+    }
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {

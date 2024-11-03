@@ -134,14 +134,22 @@ public class AsciidoctorMojo extends AbstractMojo {
 
     @Inject
     protected MavenProject project;
+
+    private final AsciidoctorJFactory asciidoctorJFactory;
+
+    private final AsciidoctorOptionsFactory asciidoctorOptionsFactory;
+
+    private final SourceDocumentFinder finder;
+
+    protected final ResourcesProcessor defaultResourcesProcessor;
+
     @Inject
-    private AsciidoctorJFactory asciidoctorJFactory;
-    @Inject
-    private SourceDocumentFinder finder;
-    @Inject
-    protected ResourcesProcessor defaultResourcesProcessor;
-    @Inject
-    private AsciidoctorOptionsFactory asciidoctorOptionsFactory;
+    public AsciidoctorMojo(AsciidoctorJFactory asciidoctorJFactory, AsciidoctorOptionsFactory asciidoctorOptionsFactory, SourceDocumentFinder finder, ResourcesProcessor defaultResourcesProcessor) {
+        this.asciidoctorJFactory = asciidoctorJFactory;
+        this.asciidoctorOptionsFactory = asciidoctorOptionsFactory;
+        this.finder = finder;
+        this.defaultResourcesProcessor = defaultResourcesProcessor;
+    }
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {

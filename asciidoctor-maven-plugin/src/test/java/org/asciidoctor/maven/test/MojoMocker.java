@@ -26,7 +26,7 @@ class MojoMocker {
     @SuppressWarnings("unchecked")
     <T> T mock(Class<T> clazz, Map<String, String> mavenProperties, LogHandler logHandler) {
 
-        final AsciidoctorMojo mojo = (AsciidoctorMojo) clazz.getConstructor(new Class[]{}).newInstance();
+        final AsciidoctorMojo mojo = (AsciidoctorMojo) clazz.getConstructors()[0].newInstance(new Object[]{null, null, null, null});
 
         parametersInitializer.initialize(mojo);
         setVariableValueInObject(mojo, "log", new SystemStreamLog());

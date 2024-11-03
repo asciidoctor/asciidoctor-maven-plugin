@@ -1,5 +1,6 @@
 package org.asciidoctor.maven;
 
+import javax.inject.Inject;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Collection;
@@ -19,6 +20,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.asciidoctor.maven.process.ResourcesProcessor;
+import org.asciidoctor.maven.process.SourceDocumentFinder;
 import org.asciidoctor.maven.refresh.AdditionalSourceFileAlterationListenerAdaptor;
 import org.asciidoctor.maven.refresh.AsciidoctorConverterFileAlterationListenerAdaptor;
 import org.asciidoctor.maven.refresh.ResourceCopyFileAlterationListenerAdaptor;
@@ -26,9 +29,7 @@ import org.asciidoctor.maven.refresh.ResourcesPatternBuilder;
 import org.asciidoctor.maven.refresh.TimeCounter;
 
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
-import static org.asciidoctor.maven.process.SourceDocumentFinder.CUSTOM_FILE_EXTENSIONS_PATTERN_PREFIX;
-import static org.asciidoctor.maven.process.SourceDocumentFinder.CUSTOM_FILE_EXTENSIONS_PATTERN_SUFFIX;
-import static org.asciidoctor.maven.process.SourceDocumentFinder.STANDARD_FILE_EXTENSIONS_PATTERN;
+import static org.asciidoctor.maven.process.SourceDocumentFinder.*;
 
 @Mojo(name = "auto-refresh")
 public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
@@ -43,6 +44,10 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
 
     private Collection<FileAlterationMonitor> monitors = null;
 
+    @Inject
+    public AsciidoctorRefreshMojo(AsciidoctorJFactory asciidoctorJFactory, AsciidoctorOptionsFactory asciidoctorOptionsFactory, SourceDocumentFinder finder, ResourcesProcessor defaultResourcesProcessor) {
+        super(asciidoctorJFactory, asciidoctorOptionsFactory, finder, defaultResourcesProcessor);
+    }
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {

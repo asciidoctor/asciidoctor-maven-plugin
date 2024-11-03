@@ -31,7 +31,7 @@ public class CopyResourcesProcessorTest {
     @Test
     void should_not_fail_when_source_does_not_exist() {
         File nonExistentDir = new File(sourceDir, UUID.randomUUID().toString());
-        AsciidoctorMojo config = new AsciidoctorMojo();
+        AsciidoctorMojo config = createMojo();
 
         resourceProcessor.process(nonExistentDir, outputDir, config);
 
@@ -43,7 +43,7 @@ public class CopyResourcesProcessorTest {
     @Test
     void should_not_fail_when_output_does_not_exist() {
         File nonExistentDir = new File(sourceDir, UUID.randomUUID().toString());
-        AsciidoctorMojo config = new AsciidoctorMojo();
+        AsciidoctorMojo config = createMojo();
 
         resourceProcessor.process(sourceDir, nonExistentDir, config);
 
@@ -58,7 +58,7 @@ public class CopyResourcesProcessorTest {
         for (String fileExtension : fileExtensions)
             createFileWithContent(sourceDir, "source." + fileExtension);
 
-        resourceProcessor.process(sourceDir, outputDir, new AsciidoctorMojo());
+        resourceProcessor.process(sourceDir, outputDir, createMojo());
 
         assertThat(sourceDir.listFiles()).hasSize(fileExtensions.length);
         assertThat(outputDir.listFiles()).hasSize(0);
@@ -73,7 +73,7 @@ public class CopyResourcesProcessorTest {
                 createFileWithContent(sourceDir, filename);
         }
 
-        resourceProcessor.process(sourceDir, outputDir, new AsciidoctorMojo());
+        resourceProcessor.process(sourceDir, outputDir, createMojo());
 
         assertThat(sourceDir.listFiles()).hasSize(IGNORED_FILE_NAMES.length);
         assertThat(outputDir.listFiles()).hasSize(0);
@@ -82,7 +82,7 @@ public class CopyResourcesProcessorTest {
     @Test
     void should_ignore_sourceDocumentName() {
         final String sourceDocumentName = "my-file.special";
-        AsciidoctorMojo config = new AsciidoctorMojo();
+        AsciidoctorMojo config = createMojo();
         config.setSourceDocumentName(sourceDocumentName);
 
         createFileWithContent(sourceDir, sourceDocumentName);
@@ -95,7 +95,7 @@ public class CopyResourcesProcessorTest {
     @Test
     void should_ignore_sourceDocumentExtensions() {
         final List<String> fileExtensions = Arrays.asList("ext1", "ext2", "exta", "extb");
-        AsciidoctorMojo config = new AsciidoctorMojo();
+        AsciidoctorMojo config = createMojo();
         config.setSourceDocumentExtensions(fileExtensions);
 
         for (String fileExtension : fileExtensions)
@@ -111,7 +111,7 @@ public class CopyResourcesProcessorTest {
         createFileWithContent(sourceDir, "image.jpg");
         createFileWithContent(sourceDir, "image.gif");
 
-        resourceProcessor.process(sourceDir, outputDir, new AsciidoctorMojo());
+        resourceProcessor.process(sourceDir, outputDir, createMojo());
 
         assertThat(outputDir.list())
                 .containsExactlyInAnyOrder("image.jpg", "image.gif");
@@ -123,7 +123,7 @@ public class CopyResourcesProcessorTest {
         FileUtils.forceMkdir(new File(sourceDir, "sub_2"));
         FileUtils.forceMkdir(new File(sourceDir, "sub_1/sub_1_2"));
 
-        resourceProcessor.process(sourceDir, outputDir, new AsciidoctorMojo());
+        resourceProcessor.process(sourceDir, outputDir, createMojo());
 
         assertThat(outputDir.list())
                 .hasSize(0);
@@ -137,7 +137,7 @@ public class CopyResourcesProcessorTest {
             createFileWithContent(sourceDir, "image.jpg");
             createFileWithContent(sourceDir, "image.gif");
 
-            resourceProcessor.process(sourceDir, outputDir, new AsciidoctorMojo());
+            resourceProcessor.process(sourceDir, outputDir, createMojo());
 
             assertThat(outputDir.list())
                     .containsExactlyInAnyOrder("image.jpg", "image.gif");
@@ -149,7 +149,7 @@ public class CopyResourcesProcessorTest {
             createFileWithContent(new File(sourceDir, "sub_2"), "image.gif");
             createFileWithContent(new File(sourceDir, "sub_1/sub_1_2"), "image.bmp");
 
-            resourceProcessor.process(sourceDir, outputDir, new AsciidoctorMojo());
+            resourceProcessor.process(sourceDir, outputDir, createMojo());
 
             assertThat(outputDir.list())
                     .containsExactlyInAnyOrder("sub_1", "sub_2");
@@ -171,7 +171,7 @@ public class CopyResourcesProcessorTest {
                     .directory(sourceDir.getAbsolutePath())
                     .includes("**/*.txt")
                     .build();
-            AsciidoctorMojo configuration = new AsciidoctorMojo();
+            AsciidoctorMojo configuration = createMojo();
             configuration.setResources(Arrays.asList(resource));
 
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.txt");
@@ -198,7 +198,7 @@ public class CopyResourcesProcessorTest {
                     .directory(sourceDir.getAbsolutePath())
                     .includes("**/*.txt", "**/*.doc")
                     .build();
-            AsciidoctorMojo configuration = new AsciidoctorMojo();
+            AsciidoctorMojo configuration = createMojo();
             configuration.setResources(Arrays.asList(resource));
 
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.txt");
@@ -235,7 +235,7 @@ public class CopyResourcesProcessorTest {
                     .directory(sourceDir.getAbsolutePath())
                     .includes("**/*.img")
                     .build();
-            AsciidoctorMojo configuration = new AsciidoctorMojo();
+            AsciidoctorMojo configuration = createMojo();
             configuration.setResources(Arrays.asList(resource1, resource2));
 
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.txt");
@@ -268,7 +268,7 @@ public class CopyResourcesProcessorTest {
                     .directory(sourceDir.getAbsolutePath())
                     .excludes("**/*.img")
                     .build();
-            AsciidoctorMojo configuration = new AsciidoctorMojo();
+            AsciidoctorMojo configuration = createMojo();
             configuration.setResources(Arrays.asList(resource));
 
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.img");
@@ -298,7 +298,7 @@ public class CopyResourcesProcessorTest {
                     .targetPath(targetPath)
                     .excludes("**/*.img")
                     .build();
-            AsciidoctorMojo configuration = new AsciidoctorMojo();
+            AsciidoctorMojo configuration = createMojo();
             configuration.setResources(Arrays.asList(resource));
 
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.txt");
@@ -334,7 +334,7 @@ public class CopyResourcesProcessorTest {
                     .targetPath(targetPath)
                     .excludes("**/*.img")
                     .build();
-            AsciidoctorMojo configuration = new AsciidoctorMojo();
+            AsciidoctorMojo configuration = createMojo();
             configuration.setResources(Arrays.asList(resource));
 
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.txt");
@@ -365,7 +365,7 @@ public class CopyResourcesProcessorTest {
         @Test
         void should_not_copy_any_resource() {
             List<Resource> resources = ResourceBuilder.excludeAll();
-            AsciidoctorMojo configuration = new AsciidoctorMojo();
+            AsciidoctorMojo configuration = createMojo();
             configuration.setResources(resources);
 
             createFileWithContent(new File(sourceDir, "sub_1"), "image-1.txt");
@@ -382,5 +382,9 @@ public class CopyResourcesProcessorTest {
 
             assertThat(outputDir.list()).hasSize(0);
         }
+    }
+
+    private static AsciidoctorMojo createMojo() {
+        return new AsciidoctorMojo(null, null, null,null);
     }
 }
