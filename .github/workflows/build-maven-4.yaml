@@ -1,4 +1,4 @@
-name: Build
+name: Maven 4
 on:
   push:
     branches:
@@ -15,7 +15,7 @@ on:
 
 jobs:
   build:
-    name: Build Maven 4
+    name: Build
     strategy:
       fail-fast: false
       max-parallel: 12
@@ -39,5 +39,5 @@ jobs:
       - name: Maven version
         run: mvn -version
       - name: Build & Test
-        run: mvn -B -Prun-its clean verify -Dmaven.version=${{ matrix.maven }} -Dplexus-utils.version=4.0.2
+        run: mvn -B -Prun-its clean verify -D"maven.version=${{ matrix.maven }}" -D"plexus-utils.version=4.0.2"
 
