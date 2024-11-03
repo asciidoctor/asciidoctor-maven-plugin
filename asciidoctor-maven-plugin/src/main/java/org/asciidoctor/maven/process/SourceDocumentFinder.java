@@ -1,5 +1,6 @@
 package org.asciidoctor.maven.process;
 
+import javax.inject.Singleton;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,6 +19,7 @@ import java.util.stream.Stream;
  *
  * @author stdll
  */
+@Singleton
 public class SourceDocumentFinder {
 
     // copied from org.asciidoctor.AsciiDocDirectoryWalker.ASCIIDOC_REG_EXP_EXTENSION

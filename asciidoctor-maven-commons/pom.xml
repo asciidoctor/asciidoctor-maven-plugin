@@ -37,6 +37,7 @@
             <version>${maven.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Required: see https://issues.apache.org/jira/browse/MNG-6965 -->
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>

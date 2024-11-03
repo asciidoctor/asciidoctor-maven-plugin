@@ -1,5 +1,6 @@
 package org.asciidoctor.maven.process;
 
+import javax.inject.Named;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -23,6 +24,7 @@ import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
  * - Asciidoctor Docinfo files.
  * - Internal files and folders: those not starting with underscore '_'.
  */
+@Named
 public class CopyResourcesProcessor implements ResourcesProcessor {
 
     // docinfo snippets should not be copied

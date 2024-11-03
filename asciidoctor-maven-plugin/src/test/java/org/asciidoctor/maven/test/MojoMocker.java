@@ -7,8 +7,12 @@ import java.util.Properties;
 import lombok.SneakyThrows;
 import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.project.MavenProject;
+import org.asciidoctor.maven.AsciidoctorJFactory;
 import org.asciidoctor.maven.AsciidoctorMojo;
+import org.asciidoctor.maven.AsciidoctorOptionsFactory;
 import org.asciidoctor.maven.log.LogHandler;
+import org.asciidoctor.maven.process.CopyResourcesProcessor;
+import org.asciidoctor.maven.process.SourceDocumentFinder;
 import org.mockito.Mockito;
 
 import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
@@ -27,6 +31,11 @@ class MojoMocker {
         parametersInitializer.initialize(mojo);
         setVariableValueInObject(mojo, "log", new SystemStreamLog());
         setVariableValueInObject(mojo, "project", mockMavenProject(mavenProperties));
+        setVariableValueInObject(mojo, "asciidoctorJFactory", new AsciidoctorJFactory());
+        setVariableValueInObject(mojo, "asciidoctorOptionsFactory", new AsciidoctorOptionsFactory());
+        setVariableValueInObject(mojo, "defaultResourcesProcessor", new CopyResourcesProcessor());
+        setVariableValueInObject(mojo, "finder", new SourceDocumentFinder());
+
         if (logHandler != null)
             setVariableValueInObject(mojo, "logHandler", logHandler);
 
