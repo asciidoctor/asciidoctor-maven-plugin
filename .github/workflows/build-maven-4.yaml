@@ -1,0 +1,43 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '*.adoc'
+      - docs/**
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '*.adoc'
+      - docs/**
+
+jobs:
+  build:
+    name: Build Maven 4
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+        java:
+          - 17
+          - 21
+        maven:
+          - 4.0.0-beta-5
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: s4u/setup-maven-action@v1.15.0
+        with:
+          java-distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+          maven-version: ${{ matrix.maven }}
+      - name: Maven version
+        run: mvn -version
+      - name: Build & Test
+        run: mvn -B -Prun-its clean verify -Dmaven.version=${{ matrix.maven }} -Dplexus-utils.version=4.0.2
+
