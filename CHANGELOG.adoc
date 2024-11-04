@@ -21,6 +21,10 @@ Improvements (Site Modules)::
 
   * Unify loggers initialization to be static (#971)
 
+Build / Infrastructure::
+
+  * Bump Maven Wrapper to v3.9.9 (#978)
+
 == v3.1.0 (2024-10-30)
 
 Bug Fixes::
