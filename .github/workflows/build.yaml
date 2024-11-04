@@ -36,7 +36,7 @@ jobs:
           - 3.9.9
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: s4u/setup-maven-action@v1.15.0
+      - uses: s4u/setup-maven-action@v1.16.0
         with:
           java-distribution: 'temurin'
           java-version: ${{ matrix.java }}
@@ -58,7 +58,7 @@ jobs:
           - 3.9.9
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: s4u/setup-maven-action@v1.15.0
+      - uses: s4u/setup-maven-action@v1.16.0
         with:
           java-distribution: 'temurin'
           java-version: ${{ matrix.java }}
@@ -111,7 +111,7 @@ jobs:
         run: echo -e "${{ env.GPG_PRIVATE_KEY }}" | gpg --import --batch
       - name: List keys
         run: gpg --list-keys
-      - uses: s4u/setup-maven-action@v1.15.0
+      - uses: s4u/setup-maven-action@v1.16.0
         with:
           java-distribution: 'temurin'
           java-version: ${{ matrix.java }}
