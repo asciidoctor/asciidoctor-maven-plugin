@@ -77,7 +77,7 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
         }
 
         final SiteConversionConfiguration conversionConfig = siteConfigParser.processAsciiDocConfig(mavenProject, ROLE_HINT);
-        final Xpp3Dom siteConfig = conversionConfig.getSiteConfig();
+        final Xpp3Dom siteConfig = conversionConfig.getAsciidocConfig();
         final File siteDirectory = conversionConfig.getSiteBaseDir();
 
         // Doxia handles a single instance of this class and invokes it multiple times.

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,10 +41,6 @@ public class SiteConversionConfigurationParser {
         this.siteBaseDirResolver = siteBaseDirResolver;
     }
 
-    Xpp3Dom getSiteConfig(MavenProject project) {
-        return project.getGoalConfiguration("org.apache.maven.plugins", "maven-site-plugin", "site", "site");
-    }
-
     public SiteConversionConfiguration processAsciiDocConfig(MavenProject mavenProject, String roleHint) {
 
         final AttributesBuilder presetAttributes = defaultAttributes();
@@ -53,17 +50,13 @@ public class SiteConversionConfigurationParser {
         final File siteDir = siteBaseDirResolver.resolveBaseDir(mavenProject.getBasedir(), getSiteConfig(mavenProject));
         final OptionsBuilder presetOptions = defaultOptions(siteDir, roleHint);
 
-        final Xpp3Dom siteConfig = getSiteConfig(mavenProject);
-        if (siteConfig == null) {
-            final Options options = presetOptions.attributes(attributes).build();
-            // TODO refactor this "always null"
-            return new SiteConversionConfiguration(siteConfig, siteDir, options, Collections.emptyList());
-        }
+        final Xpp3Dom asciidocConfig = Optional.ofNullable(getSiteConfig(mavenProject))
+            .map(node -> node.getChild("asciidoc"))
+            .orElse(null);
 
-        final Xpp3Dom asciidocConfig = siteConfig.getChild("asciidoc");
         if (asciidocConfig == null) {
             final Options options = presetOptions.attributes(attributes).build();
-            return new SiteConversionConfiguration(siteConfig, siteDir, options, Collections.emptyList());
+            return new SiteConversionConfiguration(null, siteDir, options, Collections.emptyList());
         }
 
         final List<String> gemsToRequire = new ArrayList<>();
@@ -108,7 +101,11 @@ public class SiteConversionConfigurationParser {
         }
 
         final Options options = presetOptions.attributes(attributes).build();
-        return new SiteConversionConfiguration(siteConfig, siteDir, options, gemsToRequire);
+        return new SiteConversionConfiguration(asciidocConfig, siteDir, options, gemsToRequire);
+    }
+
+    private Xpp3Dom getSiteConfig(MavenProject project) {
+        return project.getGoalConfiguration("org.apache.maven.plugins", "maven-site-plugin", "site", "site");
     }
 
     private File resolveProjectDir(MavenProject project, String path) {

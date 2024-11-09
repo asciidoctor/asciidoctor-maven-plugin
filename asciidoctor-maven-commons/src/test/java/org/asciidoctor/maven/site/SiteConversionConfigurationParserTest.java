@@ -38,7 +38,7 @@ class SiteConversionConfigurationParserTest {
 
         // then
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNull();
+        assertThat(configuration.getAsciidocConfig()).isNull();
         assertContainsDefaultOptions(configuration);
         assertContainsDefaultAttributes(configuration);
         assertThat(configuration.getRequires()).isEmpty();
@@ -55,7 +55,7 @@ class SiteConversionConfigurationParserTest {
 
         // then
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNotNull();
+        assertThat(configuration.getAsciidocConfig()).isNull();
         final Map<String, Object> optionsMap = assertContainsDefaultAttributes(configuration);
         assertThat((String) optionsMap.get(BACKEND)).isEqualTo("xhtml");
         assertThat((String) optionsMap.get(BASEDIR)).endsWith(defaultPluginSources());
@@ -86,7 +86,7 @@ class SiteConversionConfigurationParserTest {
 
         // then
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNotNull();
+        assertThat(configuration.getAsciidocConfig()).isNotNull();
         assertContainsDefaultOptions(configuration);
         assertContainsDefaultAttributes(configuration);
         assertThat(configuration.getRequires())
@@ -107,7 +107,7 @@ class SiteConversionConfigurationParserTest {
 
         // then
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNotNull();
+        assertThat(configuration.getAsciidocConfig()).isNotNull();
         assertContainsDefaultOptions(configuration);
         assertContainsDefaultAttributes(configuration);
         assertThat(configuration.getRequires())
@@ -128,7 +128,7 @@ class SiteConversionConfigurationParserTest {
 
         // then
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNotNull();
+        assertThat(configuration.getAsciidocConfig()).isNotNull();
         assertContainsDefaultOptions(configuration);
         assertContainsDefaultAttributes(configuration);
         assertThat(configuration.getRequires())
@@ -149,7 +149,7 @@ class SiteConversionConfigurationParserTest {
 
         // then
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNotNull();
+        assertThat(configuration.getAsciidocConfig()).isNotNull();
         assertContainsDefaultOptions(configuration);
         assertContainsDefaultAttributes(configuration);
         assertThat(configuration.getRequires())
@@ -173,7 +173,7 @@ class SiteConversionConfigurationParserTest {
 
         // then
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNotNull();
+        assertThat(configuration.getAsciidocConfig()).isNotNull();
         assertContainsDefaultOptions(configuration);
         assertThat(configuration.getRequires()).isEmpty();
         Map attributes = (Map) configuration.getOptions()
@@ -203,7 +203,7 @@ class SiteConversionConfigurationParserTest {
 
         // then
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNotNull();
+        assertThat(configuration.getAsciidocConfig()).isNotNull();
         assertContainsDefaultOptions(configuration);
         assertThat(configuration.getRequires()).isEmpty();
         Map attributes = (Map) configuration.getOptions()
@@ -231,7 +231,7 @@ class SiteConversionConfigurationParserTest {
 
         // then
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNotNull();
+        assertThat(configuration.getAsciidocConfig()).isNotNull();
         assertContainsDefaultOptions(configuration);
         assertThat(configuration.getRequires()).isEmpty();
         Map attributes = (Map) configuration
@@ -259,7 +259,7 @@ class SiteConversionConfigurationParserTest {
 
         // then
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNotNull();
+        assertThat(configuration.getAsciidocConfig()).isNotNull();
         assertContainsDefaultOptions(configuration);
         assertThat(configuration.getRequires()).isEmpty();
         Map attributes = (Map) configuration
@@ -289,7 +289,7 @@ class SiteConversionConfigurationParserTest {
 
         // then
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNotNull();
+        assertThat(configuration.getAsciidocConfig()).isNotNull();
         assertContainsDefaultAttributes(configuration);
         assertThat(configuration.getRequires()).isEmpty();
 
@@ -318,7 +318,7 @@ class SiteConversionConfigurationParserTest {
 
         // then
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNotNull();
+        assertThat(configuration.getAsciidocConfig()).isNotNull();
         assertContainsDefaultAttributes(configuration);
         assertThat(configuration.getRequires()).isEmpty();
 
@@ -347,7 +347,7 @@ class SiteConversionConfigurationParserTest {
 
         // then: BASE_DIR option is not even added
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNotNull();
+        assertThat(configuration.getAsciidocConfig()).isNotNull();
         assertContainsDefaultOptions(configuration);
         assertContainsDefaultAttributes(configuration);
         assertThat(configuration.getRequires()).isEmpty();
@@ -366,7 +366,7 @@ class SiteConversionConfigurationParserTest {
 
         // then
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNotNull();
+        assertThat(configuration.getAsciidocConfig()).isNotNull();
         assertContainsDefaultAttributes(configuration);
         assertThat(configuration.getRequires()).isEmpty();
 
@@ -395,7 +395,7 @@ class SiteConversionConfigurationParserTest {
 
         // then
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNotNull();
+        assertThat(configuration.getAsciidocConfig()).isNotNull();
         assertContainsDefaultAttributes(configuration);
         assertThat(configuration.getRequires()).isEmpty();
 
@@ -424,7 +424,7 @@ class SiteConversionConfigurationParserTest {
 
         // then
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNull();
+        assertThat(configuration.getAsciidocConfig()).isNull();
         assertContainsDefaultOptions(configuration);
         assertThat(configuration.getRequires()).isEmpty();
 
@@ -455,7 +455,7 @@ class SiteConversionConfigurationParserTest {
 
         // then
         assertThat(configuration.getSiteBaseDir().getPath()).endsWith(defaultSiteSources());
-        assertThat(configuration.getSiteConfig()).isNotNull();
+        assertThat(configuration.getAsciidocConfig()).isNotNull();
         assertContainsDefaultOptions(configuration);
         assertThat(configuration.getRequires()).isEmpty();
 

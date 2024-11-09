@@ -18,9 +18,8 @@ import org.slf4j.Logger;
  */
 public class LogHandlerFactory {
 
-    public LogHandler getConfiguration(Xpp3Dom siteConfig) {
-        Xpp3Dom asciidoc = siteConfig == null ? null : siteConfig.getChild("asciidoc");
-        return new SiteLogHandlerDeserializer().deserialize(asciidoc);
+    public LogHandler getConfiguration(Xpp3Dom asciidocConfig) {
+        return new SiteLogHandlerDeserializer().deserialize(asciidocConfig);
     }
 
     public MemoryLogHandler create(Asciidoctor asciidoctor, File siteDirectory, Logger logger) {

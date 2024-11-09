@@ -73,7 +73,7 @@ public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
         }
 
         final SiteConversionConfiguration conversionConfig = siteConfigParser.processAsciiDocConfig(mavenProject, ROLE_HINT);
-        final Xpp3Dom siteConfig = conversionConfig.getSiteConfig();
+        final Xpp3Dom asciidocConfig = conversionConfig.getAsciidocConfig();
         final File siteDirectory = conversionConfig.getSiteBaseDir();
 
         // Doxia handles a single instance of this class and invokes it multiple times.
@@ -86,7 +86,7 @@ public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
             requireLibrary(asciidoctor, require);
         }
 
-        final LogHandler logHandler = logHandlerFactory.getConfiguration(siteConfig);
+        final LogHandler logHandler = logHandlerFactory.getConfiguration(asciidocConfig);
         final MemoryLogHandler memoryLogHandler = logHandlerFactory.create(asciidoctor, siteDirectory, logger);
 
         final Result headerMetadata = siteConverter.process(asciidoctor, source, conversionConfig.getOptions());
