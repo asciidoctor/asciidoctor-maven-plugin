@@ -39,5 +39,5 @@ jobs:
       - name: Maven version
         run: mvn -version
       - name: Build & Test
-        run: mvn -B -Prun-its clean verify -D"maven.version=${{ matrix.maven }}" -D"plexus-utils.version=4.0.2"
+        run: mvn -B -Prun-its -Pmaven4 clean verify
 

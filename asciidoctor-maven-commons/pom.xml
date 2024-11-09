@@ -21,10 +21,6 @@
     </description>
     <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
 
-    <properties>
-        <plexus-utils.version>3.5.1</plexus-utils.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.asciidoctor</groupId>
