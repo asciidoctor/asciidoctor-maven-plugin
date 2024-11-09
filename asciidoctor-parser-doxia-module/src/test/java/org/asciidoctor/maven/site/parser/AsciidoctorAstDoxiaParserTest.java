@@ -27,7 +27,6 @@ import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.
 import static org.asciidoctor.maven.site.parser.processors.test.TestNodeProcessorFactory.createSink;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -250,11 +249,11 @@ class AsciidoctorAstDoxiaParserTest {
 
         @SneakyThrows
         static AsciidoctorAstDoxiaParser mockAsciidoctorDoxiaParser(String configuration) {
-            AsciidoctorAstDoxiaParser parser = new AsciidoctorAstDoxiaParser();
-            setVariableValueInObject(parser, "mavenProject", createMockMavenProject(configuration));
-            setVariableValueInObject(parser, "siteConfigParser", new SiteConversionConfigurationParser(new SiteBaseDirResolver()));
-            setVariableValueInObject(parser, "logHandlerFactory", new LogHandlerFactory());
-            return parser;
+            return new AsciidoctorAstDoxiaParser(
+                createMockMavenProject(configuration),
+                new SiteConversionConfigurationParser(new SiteBaseDirResolver()),
+                new LogHandlerFactory()
+            );
         }
     }
 }

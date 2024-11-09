@@ -1,5 +1,7 @@
 package org.asciidoctor.maven.site;
 
+import java.io.File;
+
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.maven.log.LogHandler;
 import org.asciidoctor.maven.log.LogRecordFormatter;
@@ -7,8 +9,13 @@ import org.asciidoctor.maven.log.MemoryLogHandler;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.slf4j.Logger;
 
-import java.io.File;
-
+/**
+ * Factory to parse and create {@link MemoryLogHandler} in order to handle
+ * issues during processing.
+ *
+ * @author abelsromero
+ * @since 3.1.1
+ */
 public class LogHandlerFactory {
 
     public LogHandler getConfiguration(Xpp3Dom siteConfig) {

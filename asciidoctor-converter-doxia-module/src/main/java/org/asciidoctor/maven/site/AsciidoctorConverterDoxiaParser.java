@@ -41,14 +41,21 @@ public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
 
     private static final Logger logger = LoggerFactory.getLogger(AsciidoctorConverterDoxiaParser.class);
 
+    private final MavenProject mavenProject;
+    private final SiteConversionConfigurationParser siteConfigParser;
+    private final LogHandlerFactory logHandlerFactory;
+    private final SiteConverterDecorator siteConverter;
+
     @Inject
-    private MavenProject mavenProject;
-    @Inject
-    private SiteConversionConfigurationParser siteConfigParser;
-    @Inject
-    private LogHandlerFactory logHandlerFactory;
-    @Inject
-    private SiteConverterDecorator siteConverter;
+    public AsciidoctorConverterDoxiaParser(MavenProject mavenProject,
+                                           SiteConversionConfigurationParser siteConfigParser,
+                                           LogHandlerFactory logHandlerFactory,
+                                           SiteConverterDecorator siteConverter) {
+        this.mavenProject = mavenProject;
+        this.siteConfigParser = siteConfigParser;
+        this.logHandlerFactory = logHandlerFactory;
+        this.siteConverter = siteConverter;
+    }
 
     /**
      * {@inheritDoc}

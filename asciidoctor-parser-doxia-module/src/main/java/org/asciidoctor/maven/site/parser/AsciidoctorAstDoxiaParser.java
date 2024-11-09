@@ -19,8 +19,8 @@ import org.asciidoctor.maven.log.MemoryLogHandler;
 import org.asciidoctor.maven.site.HeadParser;
 import org.asciidoctor.maven.site.HeaderMetadata;
 import org.asciidoctor.maven.site.LogHandlerFactory;
-import org.asciidoctor.maven.site.SiteConversionConfigurationParser;
 import org.asciidoctor.maven.site.SiteConversionConfiguration;
+import org.asciidoctor.maven.site.SiteConversionConfigurationParser;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -48,12 +48,18 @@ public class AsciidoctorAstDoxiaParser extends AbstractTextParser {
 
     private static final Logger logger = LoggerFactory.getLogger(AsciidoctorAstDoxiaParser.class);
 
+    private final MavenProject mavenProject;
+    private final SiteConversionConfigurationParser siteConfigParser;
+    private final LogHandlerFactory logHandlerFactory;
+
     @Inject
-    private MavenProject mavenProject;
-    @Inject
-    private SiteConversionConfigurationParser siteConfigParser;
-    @Inject
-    private LogHandlerFactory logHandlerFactory;
+    public AsciidoctorAstDoxiaParser(MavenProject mavenProject,
+                                     SiteConversionConfigurationParser siteConfigParser,
+                                     LogHandlerFactory logHandlerFactory) {
+        this.mavenProject = mavenProject;
+        this.siteConfigParser = siteConfigParser;
+        this.logHandlerFactory = logHandlerFactory;
+    }
 
     /**
      * {@inheritDoc}

@@ -19,7 +19,6 @@ import org.mockito.Mockito;
 import static org.asciidoctor.maven.site.AsciidoctorConverterDoxiaParser.ROLE_HINT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -264,19 +263,19 @@ class AsciidoctorConverterDoxiaParserTest {
 
     @SneakyThrows
     private AsciidoctorConverterDoxiaParser mockAsciidoctorDoxiaParser(String configuration) {
-        AsciidoctorConverterDoxiaParser parser = new AsciidoctorConverterDoxiaParser();
-        setVariableValueInObject(parser, "mavenProject", createMockMavenProject(configuration));
-        setVariableValueInObject(parser, "siteConfigParser", new SiteConversionConfigurationParser(new SiteBaseDirResolver()));
-        setVariableValueInObject(parser, "logHandlerFactory", new LogHandlerFactory());
-        setVariableValueInObject(parser, "siteConverter", new SiteConverterDecorator());
-        return parser;
+        return new AsciidoctorConverterDoxiaParser(
+            createMockMavenProject(configuration),
+            new SiteConversionConfigurationParser(new SiteBaseDirResolver()),
+            new LogHandlerFactory(),
+            new SiteConverterDecorator()
+        );
     }
 
     private Sink createSinkMock() {
         return new TextProviderSink();
     }
 
-    class TextProviderSink extends AbstractTextSink {
+    static class TextProviderSink extends AbstractTextSink {
         String text;
 
         @Override
