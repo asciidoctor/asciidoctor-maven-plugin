@@ -1,5 +1,6 @@
 package org.asciidoctor.maven.site;
 
+import javax.inject.Singleton;
 import java.util.Map;
 
 import org.asciidoctor.Asciidoctor;
@@ -10,16 +11,13 @@ import org.asciidoctor.ast.Document;
 /**
  * Asciidoctor conversion wrapper for maven-site integration.
  * In addition to conversion, handles header metadata extraction.
+ *
+ * @since 3.0.0
  */
+@Singleton
 class SiteConverterDecorator {
 
-    private final Asciidoctor asciidoctor;
-
-    SiteConverterDecorator(Asciidoctor asciidoctor) {
-        this.asciidoctor = asciidoctor;
-    }
-
-    Result process(String content, Options options) {
+    Result process(Asciidoctor asciidoctor, String content, Options options) {
         final Document document = asciidoctor.load(content, headerProcessingMetadata(options));
         final HeaderMetadata headerMetadata = HeaderMetadata.from(document);
 
@@ -60,6 +58,5 @@ class SiteConverterDecorator {
             return html;
         }
     }
-
 
 }

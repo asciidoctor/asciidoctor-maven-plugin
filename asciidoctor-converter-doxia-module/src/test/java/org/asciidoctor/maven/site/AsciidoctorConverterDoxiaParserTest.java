@@ -247,14 +247,14 @@ class AsciidoctorConverterDoxiaParserTest {
     }
 
     @SneakyThrows
-    private javax.inject.Provider<MavenProject> createMavenProjectMock(String configuration) {
+    private MavenProject createMockMavenProject(String configuration) {
         MavenProject mockProject = Mockito.mock(MavenProject.class);
         when(mockProject.getBasedir())
             .thenReturn(new File("."));
         when(mockProject.getGoalConfiguration(anyString(), anyString(), anyString(), anyString()))
             .thenReturn(configuration != null ? Xpp3DomBuilder.build(new StringReader(configuration)) : null);
 
-        return () -> mockProject;
+        return mockProject;
     }
 
     @SneakyThrows
@@ -265,7 +265,10 @@ class AsciidoctorConverterDoxiaParserTest {
     @SneakyThrows
     private AsciidoctorConverterDoxiaParser mockAsciidoctorDoxiaParser(String configuration) {
         AsciidoctorConverterDoxiaParser parser = new AsciidoctorConverterDoxiaParser();
-        setVariableValueInObject(parser, "mavenProjectProvider", createMavenProjectMock(configuration));
+        setVariableValueInObject(parser, "mavenProject", createMockMavenProject(configuration));
+        setVariableValueInObject(parser, "siteConfigParser", new SiteConversionConfigurationParser(new SiteBaseDirResolver()));
+        setVariableValueInObject(parser, "logHandlerFactory", new LogHandlerFactory());
+        setVariableValueInObject(parser, "siteConverter", new SiteConverterDecorator());
         return parser;
     }
 
