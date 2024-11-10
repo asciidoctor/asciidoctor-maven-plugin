@@ -23,6 +23,8 @@ import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
  * - AsciiDoc documents: based on file extension.
  * - Asciidoctor Docinfo files.
  * - Internal files and folders: those not starting with underscore '_'.
+ *
+ * @since 3.0.0
  */
 @Named
 public class CopyResourcesProcessor implements ResourcesProcessor {

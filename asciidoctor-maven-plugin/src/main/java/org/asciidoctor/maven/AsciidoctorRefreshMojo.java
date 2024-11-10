@@ -60,7 +60,7 @@ public class AsciidoctorRefreshMojo extends AsciidoctorMojo {
     protected void doWork() {
         long timeInMillis = TimeCounter.timed(() -> {
             try {
-                processAllSources(defaultResourcesProcessor);
+                processAllSources(resourcesProcessor);
             } catch (MojoExecutionException e) {
                 getLog().error(e);
             }

@@ -26,15 +26,16 @@ class MojoMocker {
     @SuppressWarnings("unchecked")
     <T> T mock(Class<T> clazz, Map<String, String> mavenProperties, LogHandler logHandler) {
 
-        final AsciidoctorMojo mojo = (AsciidoctorMojo) clazz.getConstructors()[0].newInstance(new Object[]{null, null, null, null});
+        final AsciidoctorMojo mojo = (AsciidoctorMojo) clazz.getConstructors()[0].newInstance(new Object[]{
+            new AsciidoctorJFactory(),
+            new AsciidoctorOptionsFactory(),
+            new SourceDocumentFinder(),
+            new CopyResourcesProcessor()
+        });
 
         parametersInitializer.initialize(mojo);
         setVariableValueInObject(mojo, "log", new SystemStreamLog());
         setVariableValueInObject(mojo, "project", mockMavenProject(mavenProperties));
-        setVariableValueInObject(mojo, "asciidoctorJFactory", new AsciidoctorJFactory());
-        setVariableValueInObject(mojo, "asciidoctorOptionsFactory", new AsciidoctorOptionsFactory());
-        setVariableValueInObject(mojo, "defaultResourcesProcessor", new CopyResourcesProcessor());
-        setVariableValueInObject(mojo, "finder", new SourceDocumentFinder());
 
         if (logHandler != null)
             setVariableValueInObject(mojo, "logHandler", logHandler);

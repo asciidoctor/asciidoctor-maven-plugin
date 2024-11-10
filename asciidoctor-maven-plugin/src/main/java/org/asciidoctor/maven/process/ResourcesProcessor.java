@@ -4,6 +4,9 @@ import java.io.File;
 
 import org.asciidoctor.maven.AsciidoctorMojo;
 
+/**
+ * @since 2.1.0
+ */
 public interface ResourcesProcessor {
 
     /**

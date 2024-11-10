@@ -10,6 +10,7 @@ import java.util.function.Consumer;
  * In that case, it only checks availability for the value provided as initial.
  *
  * @author abelsromero
+ * @since 2.0.0
  */
 public class SourceDirectoryFinder {
 

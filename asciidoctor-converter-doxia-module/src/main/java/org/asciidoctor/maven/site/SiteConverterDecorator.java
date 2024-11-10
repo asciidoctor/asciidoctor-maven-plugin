@@ -12,6 +12,7 @@ import org.asciidoctor.ast.Document;
  * Asciidoctor conversion wrapper for maven-site integration.
  * In addition to conversion, handles header metadata extraction.
  *
+ * @author abelsromero
  * @since 3.0.0
  */
 @Singleton

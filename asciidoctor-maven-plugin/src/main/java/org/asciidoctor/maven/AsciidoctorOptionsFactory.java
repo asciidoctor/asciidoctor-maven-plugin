@@ -15,6 +15,14 @@ import org.asciidoctor.maven.commons.AsciidoctorHelper;
 import static org.asciidoctor.maven.commons.StringUtils.isBlank;
 import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
 
+/**
+ * Creates an {@link OptionsBuilder} instance taking into consideration the project's
+ * configurations to be used or further customized.
+ * The instance also contains initialized {@link Attributes}.
+ *
+ * @author abelsromero
+ * @since 3.1.1
+ */
 @Singleton
 public class AsciidoctorOptionsFactory {
 
@@ -24,7 +32,7 @@ public class AsciidoctorOptionsFactory {
      * @param configuration AsciidoctorMojo containing conversion configuration.
      * @param mavenProject  Current {@link MavenProject} instance.
      * @param log           The mojo's {@link Log} reference.
-     * @return initialized attributesBuilder.
+     * @return initialized {@link Attributes}.
      */
     private Attributes createAttributes(AsciidoctorMojo configuration, MavenProject mavenProject, Log log) {
 
@@ -50,11 +58,11 @@ public class AsciidoctorOptionsFactory {
      * Creates an OptionsBuilder instance with the options defined in the configuration.
      *
      * @param configuration AsciidoctorMojo containing conversion configuration.
-     * @param project       Current {@link MavenProject} instance.
+     * @param mavenProject  Current {@link MavenProject} instance.
      * @param log           The mojo's {@link Log} reference.
      * @return initialized optionsBuilder.
      */
-    OptionsBuilder create(AsciidoctorMojo configuration, MavenProject project, Log log) {
+    OptionsBuilder create(AsciidoctorMojo configuration, MavenProject mavenProject, Log log) {
 
         final OptionsBuilder optionsBuilder = Options.builder()
             .backend(configuration.getBackend())
@@ -83,7 +91,7 @@ public class AsciidoctorOptionsFactory {
         if (!configuration.getTemplateDirs().isEmpty())
             optionsBuilder.templateDirs(configuration.getTemplateDirs().toArray(new File[]{}));
 
-        final Attributes attributes = createAttributes(configuration, project, log);
+        final Attributes attributes = createAttributes(configuration, mavenProject, log);
         return optionsBuilder.attributes(attributes);
     }
 

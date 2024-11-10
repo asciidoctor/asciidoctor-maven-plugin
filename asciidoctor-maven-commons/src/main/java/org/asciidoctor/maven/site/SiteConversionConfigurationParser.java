@@ -104,13 +104,13 @@ public class SiteConversionConfigurationParser {
         return new SiteConversionConfiguration(asciidocConfig, siteDir, options, gemsToRequire);
     }
 
-    private Xpp3Dom getSiteConfig(MavenProject project) {
-        return project.getGoalConfiguration("org.apache.maven.plugins", "maven-site-plugin", "site", "site");
+    private Xpp3Dom getSiteConfig(MavenProject mavenProject) {
+        return mavenProject.getGoalConfiguration("org.apache.maven.plugins", "maven-site-plugin", "site", "site");
     }
 
-    private File resolveProjectDir(MavenProject project, String path) {
+    private File resolveProjectDir(MavenProject mavenProject, String path) {
         final File filePath = new File(path);
-        return !filePath.isAbsolute() ? new File(project.getBasedir(), filePath.toString()).getAbsoluteFile() : filePath;
+        return !filePath.isAbsolute() ? new File(mavenProject.getBasedir(), filePath.toString()).getAbsoluteFile() : filePath;
     }
 
     // The possible baseDir based on configuration are:

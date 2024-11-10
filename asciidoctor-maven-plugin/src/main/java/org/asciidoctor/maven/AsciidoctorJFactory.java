@@ -1,5 +1,6 @@
 package org.asciidoctor.maven;
 
+import javax.inject.Singleton;
 import java.io.File;
 
 import org.apache.maven.plugin.MojoExecutionException;
@@ -9,8 +10,13 @@ import org.asciidoctor.jruby.AsciidoctorJRuby;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
 import org.jruby.Ruby;
 
-import javax.inject.Singleton;
-
+/**
+ * Creates an {@link Asciidoctor} instance taking into consideration the project's
+ * GEMs configuration.
+ *
+ * @author abelsromero
+ * @since 3.1.1
+ */
 @Singleton
 public class AsciidoctorJFactory {
 
