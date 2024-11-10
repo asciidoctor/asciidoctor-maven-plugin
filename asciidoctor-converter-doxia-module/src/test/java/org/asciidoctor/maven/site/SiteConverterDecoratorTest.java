@@ -28,10 +28,10 @@ class SiteConverterDecoratorTest {
         "Hello, AsciiDoc!\n================"
     })
     void should_extract_title_from_header(String title) {
-        SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
+        SiteConverterDecorator siteConverter = new SiteConverterDecorator();
 
         Options options = defaultOptions();
-        Result result = siteConverter.process(title + "\n", options);
+        Result result = siteConverter.process(asciidoctor, title + "\n", options);
 
         HeaderMetadata headerMetadata = result.getHeaderMetadata();
         assertThat(headerMetadata.getTitle()).isEqualTo("Hello, AsciiDoc!");
@@ -40,7 +40,7 @@ class SiteConverterDecoratorTest {
 
     @Test
     void should_extract_title_from_attribute() {
-        SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
+        SiteConverterDecorator siteConverter = new SiteConverterDecorator();
 
         Options options = Options.builder()
             .safe(SafeMode.UNSAFE)
@@ -51,7 +51,7 @@ class SiteConverterDecoratorTest {
                 .attribute("who", "me")
                 .build())
             .build();
-        Result result = siteConverter.process("= Hello, {who}!\n", options);
+        Result result = siteConverter.process(asciidoctor, "= Hello, {who}!\n", options);
 
         HeaderMetadata headerMetadata = result.getHeaderMetadata();
         assertThat(headerMetadata.getTitle()).isEqualTo("Hello, me!");
@@ -62,10 +62,10 @@ class SiteConverterDecoratorTest {
     @ParameterizedTest
     @MethodSource("authorsProvider")
     void should_extract_author(String content, String expected) {
-        SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
+        SiteConverterDecorator siteConverter = new SiteConverterDecorator();
 
         Options options = defaultOptions();
-        Result result = siteConverter.process(content + "\n", options);
+        Result result = siteConverter.process(asciidoctor, content + "\n", options);
 
         HeaderMetadata headerMetadata = result.getHeaderMetadata();
         assertThat(headerMetadata.getAuthors())
@@ -84,11 +84,11 @@ class SiteConverterDecoratorTest {
 
     @Test
     void should_extract_author_from_attribute() {
-        SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
+        SiteConverterDecorator siteConverter = new SiteConverterDecorator();
 
         String content = "= Hello, AsciiDoc!";
         Options options = optionsWithAttributes(Collections.singletonMap("author", "From Attr"));
-        Result result = siteConverter.process(content + "\n", options);
+        Result result = siteConverter.process(asciidoctor, content + "\n", options);
 
         HeaderMetadata headerMetadata = result.getHeaderMetadata();
         assertThat(headerMetadata.getAuthors())
@@ -98,10 +98,10 @@ class SiteConverterDecoratorTest {
 
     @Test
     void should_extract_multiple_authors() {
-        SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
+        SiteConverterDecorator siteConverter = new SiteConverterDecorator();
 
         String content = "= Hello, AsciiDoc!\nfirstname1 lastname2; firstname3 middlename4 lastname5";
-        Result result = siteConverter.process(content + "\n", defaultOptions());
+        Result result = siteConverter.process(asciidoctor, content + "\n", defaultOptions());
 
         HeaderMetadata headerMetadata = result.getHeaderMetadata();
         assertThat(headerMetadata.getAuthors())
@@ -111,10 +111,10 @@ class SiteConverterDecoratorTest {
 
     @Test
     void should_extract_datetime_generated() {
-        SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
+        SiteConverterDecorator siteConverter = new SiteConverterDecorator();
 
         String content = "= Hello, AsciiDoc!";
-        Result result = siteConverter.process(content + "\n", defaultOptions());
+        Result result = siteConverter.process(asciidoctor, content + "\n", defaultOptions());
 
         HeaderMetadata headerMetadata = result.getHeaderMetadata();
         assertThat(headerMetadata.getDateTime()).matches("(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2}) .*");
@@ -123,11 +123,11 @@ class SiteConverterDecoratorTest {
 
     @Test
     void should_extract_datetime_from_attribute() {
-        SiteConverterDecorator siteConverter = new SiteConverterDecorator(asciidoctor);
+        SiteConverterDecorator siteConverter = new SiteConverterDecorator();
 
         String content = "= Hello, AsciiDoc!";
         Options options = optionsWithAttributes(Collections.singletonMap("docdatetime", "2024-11-22"));
-        Result result = siteConverter.process(content + "\n", options);
+        Result result = siteConverter.process(asciidoctor, content + "\n", options);
 
         HeaderMetadata headerMetadata = result.getHeaderMetadata();
         assertThat(headerMetadata.getDateTime()).isEqualTo("2024-11-22");

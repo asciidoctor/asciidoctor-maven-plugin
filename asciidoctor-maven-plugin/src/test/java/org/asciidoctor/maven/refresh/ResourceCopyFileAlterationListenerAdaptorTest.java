@@ -33,7 +33,7 @@ class ResourceCopyFileAlterationListenerAdaptorTest {
         final File srcDir = newOutputTestDirectory(TEST_DIR);
         final File outputDir = newOutputTestDirectory(TEST_DIR);
 
-        final AsciidoctorRefreshMojo mojo = new AsciidoctorRefreshMojo();
+        final AsciidoctorRefreshMojo mojo = createRefreshMojo();
         final Log logSpy = Mockito.spy(Log.class);
         final ResourceCopyFileAlterationListenerAdaptor listenerAdaptor
                 = new ResourceCopyFileAlterationListenerAdaptor(mojo, EMPTY_RUNNABLE, logSpy);
@@ -72,7 +72,7 @@ class ResourceCopyFileAlterationListenerAdaptorTest {
         final File srcDir = newOutputTestDirectory(TEST_DIR);
         final File outputDir = newOutputTestDirectory(TEST_DIR);
 
-        final AsciidoctorRefreshMojo mojo = new AsciidoctorRefreshMojo();
+        final AsciidoctorRefreshMojo mojo = createRefreshMojo();
         final Log logSpy = Mockito.spy(Log.class);
         final ResourceCopyFileAlterationListenerAdaptor listenerAdaptor
                 = new ResourceCopyFileAlterationListenerAdaptor(mojo, EMPTY_RUNNABLE, logSpy);
@@ -111,7 +111,7 @@ class ResourceCopyFileAlterationListenerAdaptorTest {
         final File srcDir = newOutputTestDirectory(TEST_DIR);
         final File outputDir = newOutputTestDirectory(TEST_DIR);
 
-        final AsciidoctorRefreshMojo mojo = new AsciidoctorRefreshMojo();
+        final AsciidoctorRefreshMojo mojo = createRefreshMojo();
         final Log logSpy = Mockito.spy(Log.class);
         final ResourceCopyFileAlterationListenerAdaptor listenerAdaptor
                 = new ResourceCopyFileAlterationListenerAdaptor(mojo, EMPTY_RUNNABLE, logSpy);
@@ -152,7 +152,7 @@ class ResourceCopyFileAlterationListenerAdaptorTest {
         final File srcDir = newOutputTestDirectory(TEST_DIR);
         final File outputDir = newOutputTestDirectory(TEST_DIR);
 
-        final AsciidoctorRefreshMojo mojo = new AsciidoctorRefreshMojo();
+        final AsciidoctorRefreshMojo mojo = createRefreshMojo();
         final Log logSpy = Mockito.spy(Log.class);
         final ResourceCopyFileAlterationListenerAdaptor listenerAdaptor
                 = new ResourceCopyFileAlterationListenerAdaptor(mojo, EMPTY_RUNNABLE, logSpy);
@@ -185,5 +185,9 @@ class ResourceCopyFileAlterationListenerAdaptorTest {
             File outputCandidate = new File(outputDir, specialFile.getName());
             assertThat(outputCandidate).exists();
         });
+    }
+
+    private static AsciidoctorRefreshMojo createRefreshMojo() {
+        return new AsciidoctorRefreshMojo(null, null, null, null);
     }
 }

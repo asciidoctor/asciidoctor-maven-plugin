@@ -21,7 +21,7 @@ import io.netty.util.CharsetUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-public class AsciidoctorHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
+class AsciidoctorHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
     private static final String HTML_MEDIA_TYPE = "text/html";
     public static final String HTML_EXTENSION = ".html";
@@ -29,7 +29,7 @@ public class AsciidoctorHandler extends SimpleChannelInboundHandler<FullHttpRequ
     private final File directory;
     private final String defaultPage;
 
-    public AsciidoctorHandler(final File workDir, final String defaultPage) {
+    AsciidoctorHandler(final File workDir, final String defaultPage) {
         this.directory = workDir;
 
         if (defaultPage.contains(".")) {
@@ -40,7 +40,7 @@ public class AsciidoctorHandler extends SimpleChannelInboundHandler<FullHttpRequ
     }
 
     @Override
-    public void channelRead0(final ChannelHandlerContext ctx, final FullHttpRequest msg) throws Exception {
+    protected void channelRead0(final ChannelHandlerContext ctx, final FullHttpRequest msg) throws Exception {
 
         if (msg.method() != HttpMethod.GET && msg.method() != HttpMethod.HEAD) {
             send(ctx, new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.METHOD_NOT_ALLOWED));

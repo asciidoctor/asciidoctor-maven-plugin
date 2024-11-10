@@ -12,6 +12,9 @@ import org.apache.maven.doxia.parser.AbstractTextParser;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.project.MavenProject;
+import org.asciidoctor.maven.site.LogHandlerFactory;
+import org.asciidoctor.maven.site.SiteBaseDirResolver;
+import org.asciidoctor.maven.site.SiteConversionConfigurationParser;
 import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +27,6 @@ import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.
 import static org.asciidoctor.maven.site.parser.processors.test.TestNodeProcessorFactory.createSink;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -228,29 +230,30 @@ class AsciidoctorAstDoxiaParserTest {
     }
 
     static class TestMocks {
+
         @SneakyThrows
-        static javax.inject.Provider<MavenProject> createMavenProjectMock(String configuration) {
+        static MavenProject createMockMavenProject(String configuration) {
             MavenProject mockProject = Mockito.mock(MavenProject.class);
             when(mockProject.getBasedir())
                 .thenReturn(new File("."));
             when(mockProject.getGoalConfiguration(anyString(), anyString(), anyString(), anyString()))
                 .thenReturn(configuration != null ? Xpp3DomBuilder.build(new StringReader(configuration)) : null);
 
-            return () -> mockProject;
+            return mockProject;
         }
 
         @SneakyThrows
         static AsciidoctorAstDoxiaParser mockAsciidoctorDoxiaParser() {
-            AsciidoctorAstDoxiaParser parser = new AsciidoctorAstDoxiaParser();
-            setVariableValueInObject(parser, "mavenProjectProvider", createMavenProjectMock(null));
             return mockAsciidoctorDoxiaParser(null);
         }
 
         @SneakyThrows
         static AsciidoctorAstDoxiaParser mockAsciidoctorDoxiaParser(String configuration) {
-            AsciidoctorAstDoxiaParser parser = new AsciidoctorAstDoxiaParser();
-            setVariableValueInObject(parser, "mavenProjectProvider", createMavenProjectMock(configuration));
-            return parser;
+            return new AsciidoctorAstDoxiaParser(
+                createMockMavenProject(configuration),
+                new SiteConversionConfigurationParser(new SiteBaseDirResolver()),
+                new LogHandlerFactory()
+            );
         }
     }
 }

@@ -19,7 +19,6 @@ import org.mockito.Mockito;
 import static org.asciidoctor.maven.site.AsciidoctorConverterDoxiaParser.ROLE_HINT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.codehaus.plexus.util.ReflectionUtils.setVariableValueInObject;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -247,14 +246,14 @@ class AsciidoctorConverterDoxiaParserTest {
     }
 
     @SneakyThrows
-    private javax.inject.Provider<MavenProject> createMavenProjectMock(String configuration) {
+    private MavenProject createMockMavenProject(String configuration) {
         MavenProject mockProject = Mockito.mock(MavenProject.class);
         when(mockProject.getBasedir())
             .thenReturn(new File("."));
         when(mockProject.getGoalConfiguration(anyString(), anyString(), anyString(), anyString()))
             .thenReturn(configuration != null ? Xpp3DomBuilder.build(new StringReader(configuration)) : null);
 
-        return () -> mockProject;
+        return mockProject;
     }
 
     @SneakyThrows
@@ -264,16 +263,19 @@ class AsciidoctorConverterDoxiaParserTest {
 
     @SneakyThrows
     private AsciidoctorConverterDoxiaParser mockAsciidoctorDoxiaParser(String configuration) {
-        AsciidoctorConverterDoxiaParser parser = new AsciidoctorConverterDoxiaParser();
-        setVariableValueInObject(parser, "mavenProjectProvider", createMavenProjectMock(configuration));
-        return parser;
+        return new AsciidoctorConverterDoxiaParser(
+            createMockMavenProject(configuration),
+            new SiteConversionConfigurationParser(new SiteBaseDirResolver()),
+            new LogHandlerFactory(),
+            new SiteConverterDecorator()
+        );
     }
 
     private Sink createSinkMock() {
         return new TextProviderSink();
     }
 
-    class TextProviderSink extends AbstractTextSink {
+    static class TextProviderSink extends AbstractTextSink {
         String text;
 
         @Override

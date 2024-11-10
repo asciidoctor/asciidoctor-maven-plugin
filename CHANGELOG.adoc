@@ -13,6 +13,11 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+Improvements (for all modules)::
+
+  * Use Maven Eclipse Sisu to inject components (allowed refactors to increase code re-use) (#945)
+  * Centralize Maven4 configurations in a profile in the parent (#945)
+
 Bug Fixes (Site Modules)::
 
   * Fix resolution of baseDir for Doxia modules (#968)

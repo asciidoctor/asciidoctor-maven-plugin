@@ -1,5 +1,6 @@
 package org.asciidoctor.maven.site;
 
+import javax.inject.Singleton;
 import java.io.File;
 import java.nio.file.Path;
 
@@ -15,11 +16,14 @@ import org.slf4j.LoggerFactory;
  * @author abelsromero
  * @since 3.1.1
  */
+@Singleton
 public class SiteBaseDirResolver {
 
     private static final Logger logger = LoggerFactory.getLogger(SiteBaseDirResolver.class);
+    private static final String DEFAULT_SOURCE_LOCATION = "src/site";
 
-    public static File resolveBaseDir(File mavenBaseDir, Xpp3Dom siteConfig) {
+
+    File resolveBaseDir(File mavenBaseDir, Xpp3Dom siteConfig) {
         final String siteDirectory = resolveSiteDirectory(siteConfig);
         final String locale = resolveLocale(siteConfig);
 
@@ -32,9 +36,9 @@ public class SiteBaseDirResolver {
             return normalize(path, siteDirectory);
 
         if (locale != null)
-            return normalize(path, "src/site", locale);
+            return normalize(path, DEFAULT_SOURCE_LOCATION, locale);
 
-        return normalize(path, "src/site");
+        return normalize(path, DEFAULT_SOURCE_LOCATION);
     }
 
     private static String resolveSiteDirectory(Xpp3Dom siteConfig) {
