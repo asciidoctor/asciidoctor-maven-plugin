@@ -13,6 +13,9 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+
+== v3.1.1 (2024-11-14)
+
 Improvements (for all modules)::
 
   * Use Maven Eclipse Sisu to inject components (allowed refactors to increase code re-use) (#945)
