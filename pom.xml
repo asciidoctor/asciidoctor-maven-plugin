@@ -252,7 +252,7 @@
         <profile>
             <id>maven4</id>
             <properties>
-                <maven.version>4.0.0-rc-1</maven.version>
+                <maven.version>4.0.0-rc-2</maven.version>
                 <plexus-utils.version>4.0.2</plexus-utils.version>
             </properties>
             <dependencies>
