@@ -28,7 +28,7 @@ jobs:
           - 17
           - 21
         maven:
-          - 4.0.0-rc-1
+          - 4.0.0-rc-2
     runs-on: ${{ matrix.os }}
     steps:
       - uses: s4u/setup-maven-action@v1.17.0
