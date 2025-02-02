@@ -21,7 +21,6 @@ Users of the site module see xref:site-integration:v3-migration-guide.adoc[v3 mi
 
 Minimal Java version is 11.
 
-For anyone in need of a Java 8 compatible release, v2.5.x of the plugin will be supported for some time after v3.0.x release.
 Note this also imposes versions on dependencies, for example:
 
 * Only AsciidoctorJ v2.5.x

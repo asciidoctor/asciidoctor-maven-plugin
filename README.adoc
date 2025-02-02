@@ -141,9 +141,7 @@ You can find examples ready to copy-paste in the {uri-examples}[Asciidoctor Mave
 asciidoctor-maven-plugin comes in two versions with support for Maven 3.8.8+ and 3.9.x versions.
 
 * Version 3.x.x: current development branch.
-This is the recommended version, new features and fixes will be added as minor/patch releases.
-* Version 2.2.x: maintenance branch.
-Fixes will be released as patch versions up until 31st January 2025.
+New features and fixes will be added as minor/patch releases.
 
 == Contributing
 

@@ -18,6 +18,15 @@ The old Doxia module embedded in `asciidocto-maven-plugin` library it's now an i
 
 == Changes
 
+=== Minimal Java version
+
+Minimal Java version is 11.
+
+Note this also imposes versions on dependencies, for example:
+
+* Only AsciidoctorJ v2.5.x
+* Only asciidoctorj-diagram previous v2.2.8
+
 === Site plugin module renamed
 
 The https://maven.apache.org/doxia/[Doxia] module has been extracted into a separated subproject named `{doxia-compatible-module-name}`.
