@@ -3,14 +3,12 @@ on:
   push:
     branches:
       - main
-      - 2.2.x
     paths-ignore:
       - '*.adoc'
       - docs/**
   pull_request:
     branches:
       - main
-      - 2.2.x
     paths-ignore:
       - '*.adoc'
       - docs/**

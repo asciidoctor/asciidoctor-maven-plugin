@@ -23,8 +23,4 @@ Versions not listed below are not supported, please consider upgrading.
 |v2.x.x, v3.x.x
 |Yes
 
-|v2.2.x
-|v2.x.x
-|Yes (EOL Dec, 2015)
-
 |===
