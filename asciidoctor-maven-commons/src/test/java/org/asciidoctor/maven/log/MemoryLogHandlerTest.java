@@ -152,7 +152,6 @@ class MemoryLogHandlerTest {
                 .contains(warningMessage())
                 .hasSize(3);
         }
-
     }
 
     private static MemoryLogHandler testMemoryLogHandler() {
