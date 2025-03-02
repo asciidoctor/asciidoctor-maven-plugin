@@ -234,8 +234,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         resourcesProcessor.process(sourceDir, outputDirectory, this);
 
         // register LogHandler to capture asciidoctor messages
-        final Boolean outputToConsole = Optional.ofNullable(logHandler.getOutputToConsole()).orElse(Boolean.TRUE);
-        final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(outputToConsole,
+        final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(logHandler.getOutputToConsole(),
             logRecord -> getLog().info(LogRecordFormatter.format(logRecord, sourceDir)));
         asciidoctor.registerLogHandler(memoryLogHandler);
         // disable default console output of AsciidoctorJ
@@ -261,7 +260,7 @@ public class AsciidoctorMojo extends AbstractMojo {
             }
         }
 
-        processLogRecords(sourceDir, memoryLogHandler);
+//        processLogRecords(sourceDir, memoryLogHandler);
     }
 
     private void processLogRecords(File sourceDir, MemoryLogHandler memoryLogHandler) throws MojoExecutionException {

@@ -11,9 +11,14 @@ import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
  */
 public class LogHandler {
 
-    private boolean outputToConsole;
+    private Boolean outputToConsole;
     private FailIf failIf;
     private Boolean failFast;
+
+    public LogHandler() {
+        outputToConsole = Boolean.TRUE;
+        failFast = Boolean.TRUE;
+    }
 
     public Boolean getOutputToConsole() {
         return outputToConsole;
