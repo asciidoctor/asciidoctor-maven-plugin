@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
+import org.asciidoctor.maven.commons.StringUtils;
 
 
 /**
@@ -96,11 +97,19 @@ public class MemoryLogHandler implements LogHandler {
     }
 
     private static boolean severityIsHigher(LogRecord record, Severity severity) {
-        return record.getSeverity().ordinal() >= severity.ordinal();
+        if (severity == null) {
+            return false;
+        } else {
+            return record.getSeverity().ordinal() >= severity.ordinal();
+        }
     }
 
     private static boolean messageContains(LogRecord record, String text) {
-        return record.getMessage().contains(text);
+        if (StringUtils.isBlank(text)) {
+            return false;
+        } else {
+            return record.getMessage().contains(text);
+        }
     }
 
 }
