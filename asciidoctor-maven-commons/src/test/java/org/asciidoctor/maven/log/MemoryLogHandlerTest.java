@@ -25,12 +25,12 @@ class MemoryLogHandlerTest {
     }
 
     @Test
-    void should_not_fail_when_filtering_null_values() {
+    void should_return_all_by_default() {
         final var memoryLogHandler = testMemoryLogHandler();
 
-        assertThat(memoryLogHandler.filter((org.asciidoctor.log.Severity) null)).hasSize(0);
-        assertThat(memoryLogHandler.filter((String) null)).hasSize(0);
-        assertThat(memoryLogHandler.filter(null, null)).hasSize(0);
+        assertThat(memoryLogHandler.filter((org.asciidoctor.log.Severity) null)).hasSize(3);
+        assertThat(memoryLogHandler.filter((String) null)).hasSize(3);
+        assertThat(memoryLogHandler.filter(null, null)).hasSize(3);
     }
 
     @Test

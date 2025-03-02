@@ -47,9 +47,7 @@ public class MemoryLogHandler implements LogHandler {
      * @return list of filtered logRecords
      */
     public List<LogRecord> filter(Severity severity) {
-        return this.records.stream()
-            .filter(record -> severityIsHigher(record, severity))
-            .collect(Collectors.toList());
+        return filter(severity, null);
     }
 
     /**
@@ -59,16 +57,14 @@ public class MemoryLogHandler implements LogHandler {
      * @return list of filtered logRecords
      */
     public List<LogRecord> filter(String text) {
-        return this.records.stream()
-            .filter(record -> messageContains(record, text))
-            .collect(Collectors.toList());
+        return filter(null, text);
     }
 
     /**
      * Returns LogRecords that are equal or above the severity level and whose message contains text.
      *
-     * @param severity Asciidoctor's severity level
-     * @param text     text to search for in the LogRecords
+     * @param severity Asciidoctor's severity level (no filter applied when null)
+     * @param text     text to search for in the LogRecords (no filter applied when null)
      * @return list of filtered logRecords
      */
     public List<LogRecord> filter(Severity severity, String text) {
@@ -98,7 +94,7 @@ public class MemoryLogHandler implements LogHandler {
 
     private static boolean severityIsHigher(LogRecord record, Severity severity) {
         if (severity == null) {
-            return false;
+            return true;
         } else {
             return record.getSeverity().ordinal() >= severity.ordinal();
         }
@@ -106,7 +102,7 @@ public class MemoryLogHandler implements LogHandler {
 
     private static boolean messageContains(LogRecord record, String text) {
         if (StringUtils.isBlank(text)) {
-            return false;
+            return true;
         } else {
             return record.getMessage().contains(text);
         }
