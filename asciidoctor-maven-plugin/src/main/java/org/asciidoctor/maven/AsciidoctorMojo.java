@@ -234,7 +234,7 @@ public class AsciidoctorMojo extends AbstractMojo {
         resourcesProcessor.process(sourceDir, outputDirectory, this);
 
         // register LogHandler to capture asciidoctor messages
-        final Boolean outputToConsole = logHandler.getOutputToConsole() == null ? Boolean.TRUE : logHandler.getOutputToConsole();
+        final Boolean outputToConsole = Optional.ofNullable(logHandler.getOutputToConsole()).orElse(Boolean.TRUE);
         final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(outputToConsole,
             logRecord -> getLog().info(LogRecordFormatter.format(logRecord, sourceDir)));
         asciidoctor.registerLogHandler(memoryLogHandler);
@@ -256,13 +256,21 @@ public class AsciidoctorMojo extends AbstractMojo {
 
             convertFile(asciidoctor, optionsBuilder.build(), source);
 
-            try {
-                // process log messages according to mojo configuration
-                new LogRecordsProcessors(logHandler, sourceDir, errorMessage -> getLog().error(errorMessage))
-                    .processLogRecords(memoryLogHandler);
-            } catch (Exception exception) {
-                throw new MojoExecutionException(exception.getMessage());
+            if (logHandler.getFailFast()) {
+                processLogRecords(sourceDir, memoryLogHandler);
             }
+        }
+
+        processLogRecords(sourceDir, memoryLogHandler);
+    }
+
+    private void processLogRecords(File sourceDir, MemoryLogHandler memoryLogHandler) throws MojoExecutionException {
+        try {
+            // process log messages according to mojo configuration
+            new LogRecordsProcessors(logHandler, sourceDir, errorMessage -> getLog().error(errorMessage))
+                .processLogRecords(memoryLogHandler);
+        } catch (Exception exception) {
+            throw new MojoExecutionException(exception.getMessage());
         }
     }
 

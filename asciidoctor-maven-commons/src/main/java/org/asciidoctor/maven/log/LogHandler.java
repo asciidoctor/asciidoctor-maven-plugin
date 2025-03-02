@@ -7,11 +7,13 @@ import static org.asciidoctor.maven.commons.StringUtils.isNotBlank;
  * POJO for Maven XML mapping.
  *
  * @author abelsromero
+ * @since 1.5.7
  */
 public class LogHandler {
 
-    private Boolean outputToConsole;
+    private boolean outputToConsole;
     private FailIf failIf;
+    private Boolean failFast;
 
     public Boolean getOutputToConsole() {
         return outputToConsole;
@@ -37,4 +39,11 @@ public class LogHandler {
         return failIf != null && isNotBlank(failIf.getContainsText());
     }
 
+    public Boolean getFailFast() {
+        return failFast;
+    }
+
+    public void setFailFast(Boolean failFast) {
+        this.failFast = failFast;
+    }
 }
