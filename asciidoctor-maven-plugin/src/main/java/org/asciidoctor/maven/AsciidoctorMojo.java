@@ -13,6 +13,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE_DIR;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -34,8 +36,6 @@ import org.asciidoctor.maven.model.Resource;
 import org.asciidoctor.maven.process.ResourcesProcessor;
 import org.asciidoctor.maven.process.SourceDirectoryFinder;
 import org.asciidoctor.maven.process.SourceDocumentFinder;
-
-import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE_DIR;
 
 
 /**
@@ -241,7 +241,9 @@ public class AsciidoctorMojo extends AbstractMojo {
         Logger.getLogger("asciidoctor").setUseParentHandlers(false);
 
         final Set<File> uniquePaths = new HashSet<>();
-        for (final File source : sourceFiles) {
+        for (int i = 0; i < sourceFiles.size(); i++) {
+//        for (final File source : sourceFiles) {
+            final File source = sourceFiles.get(i);
             final Destination destination = setDestinationPaths(source, optionsBuilder, sourceDir, this);
             final File destinationPath = destination.path;
             if (!uniquePaths.add(destinationPath)) {
@@ -253,14 +255,9 @@ public class AsciidoctorMojo extends AbstractMojo {
                 getLog().warn("Duplicated destination found: overwriting file: " + destinationFile);
             }
 
-            convertFile(asciidoctor, optionsBuilder.build(), source);
-
-            if (logHandler.getFailFast()) {
-                processLogRecords(sourceDir, memoryLogHandler);
-            }
+            boolean lastFile = i == (sourceFiles.size() - 1);
+            convertFile(asciidoctor, optionsBuilder.build(), source, sourceDir, memoryLogHandler, lastFile);
         }
-
-//        processLogRecords(sourceDir, memoryLogHandler);
     }
 
     private void processLogRecords(File sourceDir, MemoryLogHandler memoryLogHandler) throws MojoExecutionException {
@@ -357,9 +354,12 @@ public class AsciidoctorMojo extends AbstractMojo {
             finder.find(sourceDirectoryPath, sourceDocumentExtensions);
     }
 
-    protected void convertFile(Asciidoctor asciidoctor, Options options, File f) {
+    private void convertFile(Asciidoctor asciidoctor, Options options, File f, File sourceDir, MemoryLogHandler memoryLogHandler, boolean lastFile) throws MojoExecutionException {
         asciidoctor.convertFile(f, options);
         logConvertedFile(f);
+        if (logHandler.getFailFast() || lastFile) {
+            processLogRecords(sourceDir, memoryLogHandler);
+        }
     }
 
     protected void logConvertedFile(File f) {

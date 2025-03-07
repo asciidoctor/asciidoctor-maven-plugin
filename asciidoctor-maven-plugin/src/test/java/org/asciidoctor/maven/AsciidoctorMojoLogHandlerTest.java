@@ -12,6 +12,7 @@ import org.asciidoctor.maven.io.ConsoleHolder;
 import org.asciidoctor.maven.log.FailIf;
 import org.asciidoctor.maven.log.LogHandler;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.asciidoctor.log.Severity.ERROR;
@@ -391,6 +392,48 @@ class AsciidoctorMojoLogHandlerTest {
 
         // cleanup
         consoleHolder.release();
+    }
+
+    @Nested
+    class WithFailOn {
+
+        @Test
+        void should_print_messages_for_all_sources_when_failFast_is_false() throws MojoFailureException, MojoExecutionException {
+            // setup
+            final ConsoleHolder consoleHolder = ConsoleHolder.start();
+
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY, "errors");
+            File outputDir = newOutputTestDirectory("logHandler");
+            LogHandler logHandler = new LogHandler();
+            logHandler.setOutputToConsole(true);
+
+            // when
+            AsciidoctorMojo mojo = mockAsciidoctorMojo(logHandler);
+            mojo.backend = "html";
+            mojo.sourceDirectory = srcDir;
+            mojo.outputDirectory = outputDir;
+            mojo.execute();
+
+            // then
+            List<String> asciidoctorMessages = Arrays.stream(consoleHolder.getOutput().split("\n"))
+                .filter(line -> line.contains("asciidoctor:"))
+                .collect(Collectors.toList());
+
+            assertThat(asciidoctorMessages)
+                .hasSize(6);
+            assertThat(asciidoctorMessages.get(0))
+                .contains(fixOsSeparator("[info] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 3: include file not found:"));
+            assertThat(asciidoctorMessages.get(1))
+                .contains(fixOsSeparator("[info] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 5: include file not found:"));
+            assertThat(asciidoctorMessages.get(2))
+                .contains(fixOsSeparator("[info] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 9: include file not found:"));
+            assertThat(asciidoctorMessages.get(3))
+                .contains(fixOsSeparator("[info] asciidoctor: WARN: errors/document-with-missing-include.adoc: line 25: no callout found for <1>"));
+
+            // cleanup
+            consoleHolder.release();
+        }
+
     }
 
     private List<String> getOutputInfoLines(ConsoleHolder consoleHolder) {
