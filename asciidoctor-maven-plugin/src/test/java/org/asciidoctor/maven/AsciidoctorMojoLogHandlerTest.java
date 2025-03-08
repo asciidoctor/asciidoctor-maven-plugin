@@ -6,23 +6,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.asciidoctor.maven.io.ConsoleHolder;
-import org.asciidoctor.maven.log.FailIf;
-import org.asciidoctor.maven.log.LogHandler;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import static org.asciidoctor.log.Severity.ERROR;
-import static org.asciidoctor.log.Severity.WARN;
+import static org.asciidoctor.log.Severity.*;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 import static org.asciidoctor.maven.test.TestUtils.mockAsciidoctorMojo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.asciidoctor.log.Severity;
+import org.asciidoctor.maven.io.ConsoleHolder;
+import org.asciidoctor.maven.log.FailIf;
+import org.asciidoctor.maven.log.LogHandler;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
+
+@Slf4j
 class AsciidoctorMojoLogHandlerTest {
 
     private static final String DEFAULT_SOURCE_DIRECTORY = "target/test-classes/src/asciidoctor";
@@ -212,9 +215,7 @@ class AsciidoctorMojoLogHandlerTest {
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory("logHandler");
         final LogHandler logHandler = new LogHandler();
-        FailIf failIf = new FailIf();
-        failIf.setSeverity(WARN);
-        logHandler.setFailIf(failIf);
+        logHandler.setFailIf(failIf(WARN));
 
         // when
         AsciidoctorMojo mojo = mockAsciidoctorMojo(logHandler);
@@ -238,9 +239,7 @@ class AsciidoctorMojoLogHandlerTest {
         File srcDir = new File(DEFAULT_SOURCE_DIRECTORY);
         File outputDir = newOutputTestDirectory("logHandler");
         final LogHandler logHandler = new LogHandler();
-        FailIf failIf = new FailIf();
-        failIf.setSeverity(ERROR);
-        logHandler.setFailIf(failIf);
+        logHandler.setFailIf(failIf(ERROR));
 
         // when
         AsciidoctorMojo mojo = mockAsciidoctorMojo(logHandler);
@@ -398,42 +397,109 @@ class AsciidoctorMojoLogHandlerTest {
     class WithFailOn {
 
         @Test
-        void should_print_messages_for_all_sources_when_failFast_is_false() throws MojoFailureException, MojoExecutionException {
+        void should_fail_and_print_messages_for_all_sources_when_failFast_is_false() {
             // setup
             final ConsoleHolder consoleHolder = ConsoleHolder.start();
 
             File srcDir = new File(DEFAULT_SOURCE_DIRECTORY, "errors");
             File outputDir = newOutputTestDirectory("logHandler");
             LogHandler logHandler = new LogHandler();
-            logHandler.setOutputToConsole(true);
+            logHandler.setOutputToConsole(false);
+            logHandler.setFailFast(false);
+            logHandler.setFailIf(failIf(DEBUG));
 
             // when
             AsciidoctorMojo mojo = mockAsciidoctorMojo(logHandler);
             mojo.backend = "html";
             mojo.sourceDirectory = srcDir;
             mojo.outputDirectory = outputDir;
-            mojo.execute();
+            Throwable throwable = catchThrowable(mojo::execute);
 
             // then
-            List<String> asciidoctorMessages = Arrays.stream(consoleHolder.getOutput().split("\n"))
+            assertThat(throwable)
+                .isInstanceOf(MojoExecutionException.class)
+                .hasMessageContaining("Found 6 issue(s) of severity DEBUG or higher during conversion");
+
+            long convertedFiles = Arrays.stream(consoleHolder.getOutput().split("\n"))
+                .filter(line -> line.contains("Converted"))
+                .count();
+            assertThat(convertedFiles).isEqualTo(3);
+
+            List<String> errorMessages = Arrays.stream(consoleHolder.getError().split("\n"))
                 .filter(line -> line.contains("asciidoctor:"))
                 .collect(Collectors.toList());
 
-            assertThat(asciidoctorMessages)
+            assertThat(errorMessages)
                 .hasSize(6);
-            assertThat(asciidoctorMessages.get(0))
-                .contains(fixOsSeparator("[info] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 3: include file not found:"));
-            assertThat(asciidoctorMessages.get(1))
-                .contains(fixOsSeparator("[info] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 5: include file not found:"));
-            assertThat(asciidoctorMessages.get(2))
-                .contains(fixOsSeparator("[info] asciidoctor: ERROR: errors/document-with-missing-include.adoc: line 9: include file not found:"));
-            assertThat(asciidoctorMessages.get(3))
-                .contains(fixOsSeparator("[info] asciidoctor: WARN: errors/document-with-missing-include.adoc: line 25: no callout found for <1>"));
-
+            assertThat(errorMessages.get(0))
+                .contains(fixOsSeparator("[error] asciidoctor: ERROR: document-with-missing-include.adoc: line 3: include file not found:"));
+            assertThat(errorMessages.get(1))
+                .contains(fixOsSeparator("[error] asciidoctor: ERROR: document-with-missing-include.adoc: line 5: include file not found:"));
+            assertThat(errorMessages.get(2))
+                .contains(fixOsSeparator("[error] asciidoctor: ERROR: document-with-missing-include.adoc: line 9: include file not found:"));
+            assertThat(errorMessages.get(3))
+                .contains(fixOsSeparator("[error] asciidoctor: WARN: document-with-missing-include.adoc: line 25: no callout found for <1>"));
+            assertThat(errorMessages.get(4))
+                .contains(fixOsSeparator("[error] asciidoctor: INFO: document-with-invalid-reference.adoc: possible invalid reference: ../path/some-file.adoc"));
+            assertThat(errorMessages.get(5))
+                .contains(fixOsSeparator("[error] asciidoctor: INFO: document-with-invalid-reference.adoc: possible invalid reference: section-id"));
             // cleanup
             consoleHolder.release();
         }
 
+        @Test
+        void should_fail_and_print_messages_for_all_sources_when_failFast_is_true() {
+            // setup
+            final ConsoleHolder consoleHolder = ConsoleHolder.start();
+
+            File srcDir = new File(DEFAULT_SOURCE_DIRECTORY, "errors");
+            File outputDir = newOutputTestDirectory("logHandler");
+            LogHandler logHandler = new LogHandler();
+            logHandler.setOutputToConsole(false);
+            logHandler.setFailFast(true);
+            logHandler.setFailIf(failIf(DEBUG));
+
+            // when
+            AsciidoctorMojo mojo = mockAsciidoctorMojo(logHandler);
+            mojo.backend = "html";
+            mojo.sourceDirectory = srcDir;
+            mojo.outputDirectory = outputDir;
+            Throwable throwable = catchThrowable(mojo::execute);
+
+            // then
+            assertThat(throwable)
+                .isInstanceOf(MojoExecutionException.class)
+                .hasMessageContaining("Found 4 issue(s) of severity DEBUG or higher during conversion");
+
+            long convertedFiles = Arrays.stream(consoleHolder.getOutput().split("\n"))
+                .filter(line -> line.contains("Converted"))
+                .count();
+            assertThat(convertedFiles).isEqualTo(1);
+
+            List<String> asciidoctorMessages = Arrays.stream(consoleHolder.getError().split("\n"))
+                .filter(line -> line.contains("asciidoctor:"))
+                .collect(Collectors.toList());
+
+            assertThat(asciidoctorMessages)
+                .hasSize(4);
+            assertThat(asciidoctorMessages.get(0))
+                .contains(fixOsSeparator("[error] asciidoctor: ERROR: document-with-missing-include.adoc: line 3: include file not found:"));
+            assertThat(asciidoctorMessages.get(1))
+                .contains(fixOsSeparator("[error] asciidoctor: ERROR: document-with-missing-include.adoc: line 5: include file not found:"));
+            assertThat(asciidoctorMessages.get(2))
+                .contains(fixOsSeparator("[error] asciidoctor: ERROR: document-with-missing-include.adoc: line 9: include file not found:"));
+            assertThat(asciidoctorMessages.get(3))
+                .contains(fixOsSeparator("[error] asciidoctor: WARN: document-with-missing-include.adoc: line 25: no callout found for <1>"));
+            // cleanup
+            consoleHolder.release();
+        }
+
+    }
+
+    private static FailIf failIf(Severity severity) {
+        FailIf failIf = new FailIf();
+        failIf.setSeverity(severity);
+        return failIf;
     }
 
     private List<String> getOutputInfoLines(ConsoleHolder consoleHolder) {

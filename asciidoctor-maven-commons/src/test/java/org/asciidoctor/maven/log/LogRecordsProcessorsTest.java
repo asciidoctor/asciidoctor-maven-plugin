@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.asciidoctor.log.Severity.*;
+import static org.asciidoctor.maven.log.TestLogRecords.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-import org.asciidoctor.log.LogRecord;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -254,18 +254,6 @@ class LogRecordsProcessorsTest {
             memoryLogHandler.log(warningMessage(i));
         }
         return memoryLogHandler;
-    }
-
-    private static LogRecord errorMessage(int index) {
-        return new LogRecord(ERROR, "error message " + index);
-    }
-
-    private static LogRecord getInfoMessage(int index) {
-        return new LogRecord(INFO, "info message " + index);
-    }
-
-    private static LogRecord warningMessage(int index) {
-        return new LogRecord(WARN, "warning message " + index);
     }
 
 }

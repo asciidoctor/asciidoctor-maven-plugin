@@ -3,6 +3,7 @@ package org.asciidoctor.maven.log;
 import java.util.List;
 
 import static org.asciidoctor.log.Severity.*;
+import static org.asciidoctor.maven.log.TestLogRecords.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.asciidoctor.log.LogRecord;
@@ -162,15 +163,4 @@ class MemoryLogHandlerTest {
         return memoryLogHandler;
     }
 
-    private static LogRecord errorMessage() {
-        return new LogRecord(ERROR, "error message");
-    }
-
-    private static LogRecord getInfoMessage() {
-        return new LogRecord(INFO, "info message");
-    }
-
-    private static LogRecord warningMessage() {
-        return new LogRecord(WARN, "warning message");
-    }
 }

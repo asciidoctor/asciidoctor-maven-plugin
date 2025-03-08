@@ -242,7 +242,6 @@ public class AsciidoctorMojo extends AbstractMojo {
 
         final Set<File> uniquePaths = new HashSet<>();
         for (int i = 0; i < sourceFiles.size(); i++) {
-//        for (final File source : sourceFiles) {
             final File source = sourceFiles.get(i);
             final Destination destination = setDestinationPaths(source, optionsBuilder, sourceDir, this);
             final File destinationPath = destination.path;
@@ -255,8 +254,8 @@ public class AsciidoctorMojo extends AbstractMojo {
                 getLog().warn("Duplicated destination found: overwriting file: " + destinationFile);
             }
 
-            boolean lastFile = i == (sourceFiles.size() - 1);
-            convertFile(asciidoctor, optionsBuilder.build(), source, sourceDir, memoryLogHandler, lastFile);
+            boolean processLogRecords = logHandler.getFailFast() || (i == (sourceFiles.size() - 1));
+            convertFile(asciidoctor, optionsBuilder.build(), source, sourceDir, memoryLogHandler, processLogRecords);
         }
     }
 
@@ -354,10 +353,11 @@ public class AsciidoctorMojo extends AbstractMojo {
             finder.find(sourceDirectoryPath, sourceDocumentExtensions);
     }
 
-    private void convertFile(Asciidoctor asciidoctor, Options options, File f, File sourceDir, MemoryLogHandler memoryLogHandler, boolean lastFile) throws MojoExecutionException {
+    private void convertFile(Asciidoctor asciidoctor, Options options, File f, File sourceDir, MemoryLogHandler memoryLogHandler, boolean processLogRecords) throws MojoExecutionException {
+        memoryLogHandler.setCurrentFile(f);
         asciidoctor.convertFile(f, options);
         logConvertedFile(f);
-        if (logHandler.getFailFast() || lastFile) {
+        if (processLogRecords) {
             processLogRecords(sourceDir, memoryLogHandler);
         }
     }

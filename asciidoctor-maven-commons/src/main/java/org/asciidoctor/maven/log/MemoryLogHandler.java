@@ -1,5 +1,6 @@
 package org.asciidoctor.maven.log;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -24,6 +25,14 @@ public class MemoryLogHandler implements LogHandler {
     private final Boolean outputToConsole;
     private final Consumer<LogRecord> recordConsumer;
 
+    /**
+     * Provides simple way to inject the current file being processes.
+     * Will need re-work in concurrent scenarios.
+     *
+     * @since 3.1.2
+     */
+    private File currentFile;
+
     public MemoryLogHandler(Boolean outputToConsole, Consumer<LogRecord> recordConsumer) {
         this.outputToConsole = outputToConsole == null ? Boolean.FALSE : outputToConsole;
         this.recordConsumer = recordConsumer;
@@ -31,9 +40,11 @@ public class MemoryLogHandler implements LogHandler {
 
     @Override
     public void log(LogRecord logRecord) {
-        records.add(logRecord);
+        final CapturedLogRecord record = new CapturedLogRecord(logRecord, currentFile);
+
+        records.add(record);
         if (outputToConsole)
-            recordConsumer.accept(logRecord);
+            recordConsumer.accept(record);
     }
 
     public void clear() {
@@ -106,6 +117,10 @@ public class MemoryLogHandler implements LogHandler {
         } else {
             return record.getMessage().contains(text);
         }
+    }
+
+    public void setCurrentFile(File currentFile) {
+        this.currentFile = currentFile;
     }
 
 }
