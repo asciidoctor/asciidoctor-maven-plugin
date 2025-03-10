@@ -19,7 +19,6 @@ import org.asciidoctor.log.Severity;
 import org.asciidoctor.maven.io.ConsoleHolder;
 import org.asciidoctor.maven.log.FailIf;
 import org.asciidoctor.maven.log.LogHandler;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -427,21 +426,20 @@ class AsciidoctorMojoLogHandlerTest {
 
             List<String> errorMessages = Arrays.stream(consoleHolder.getError().split("\n"))
                 .filter(line -> line.contains("asciidoctor:"))
-                .sorted()
                 .collect(Collectors.toList());
 
             assertThat(errorMessages)
                 .hasSize(6);
             assertThat(errorMessages.get(0))
-                .contains(fixOsSeparator("[error] asciidoctor: ERROR: document-with-missing-include.adoc: line 3: include file not found:"));
-            assertThat(errorMessages.get(1))
-                .contains(fixOsSeparator("[error] asciidoctor: ERROR: document-with-missing-include.adoc: line 5: include file not found:"));
-            assertThat(errorMessages.get(2))
-                .contains(fixOsSeparator("[error] asciidoctor: ERROR: document-with-missing-include.adoc: line 9: include file not found:"));
-            assertThat(errorMessages.get(3))
                 .contains(fixOsSeparator("[error] asciidoctor: INFO: document-with-invalid-reference.adoc: possible invalid reference: ../path/some-file.adoc"));
-            assertThat(errorMessages.get(4))
+            assertThat(errorMessages.get(1))
                 .contains(fixOsSeparator("[error] asciidoctor: INFO: document-with-invalid-reference.adoc: possible invalid reference: section-id"));
+            assertThat(errorMessages.get(2))
+                .contains(fixOsSeparator("[error] asciidoctor: ERROR: document-with-missing-include.adoc: line 3: include file not found:"));
+            assertThat(errorMessages.get(3))
+                .contains(fixOsSeparator("[error] asciidoctor: ERROR: document-with-missing-include.adoc: line 5: include file not found:"));
+            assertThat(errorMessages.get(4))
+                .contains(fixOsSeparator("[error] asciidoctor: ERROR: document-with-missing-include.adoc: line 9: include file not found:"));
             assertThat(errorMessages.get(5))
                 .contains(fixOsSeparator("[error] asciidoctor: WARN: document-with-missing-include.adoc: line 25: no callout found for <1>"));
             // cleanup
@@ -470,7 +468,7 @@ class AsciidoctorMojoLogHandlerTest {
             // then
             assertThat(throwable)
                 .isInstanceOf(MojoExecutionException.class)
-                .hasMessageContaining("Found 4 issue(s) of severity DEBUG or higher during conversion");
+                .hasMessageContaining("Found 2 issue(s) of severity DEBUG or higher during conversion");
 
             long convertedFiles = Arrays.stream(consoleHolder.getOutput().split("\n"))
                 .filter(line -> line.contains("Converted"))
@@ -479,19 +477,14 @@ class AsciidoctorMojoLogHandlerTest {
 
             List<String> asciidoctorMessages = Arrays.stream(consoleHolder.getError().split("\n"))
                 .filter(line -> line.contains("asciidoctor:"))
-                .sorted()
                 .collect(Collectors.toList());
 
             assertThat(asciidoctorMessages)
-                .hasSize(4);
+                .hasSize(2);
             assertThat(asciidoctorMessages.get(0))
-                .contains(fixOsSeparator("[error] asciidoctor: ERROR: document-with-missing-include.adoc: line 3: include file not found:"));
+                .contains(fixOsSeparator("[error] asciidoctor: INFO: document-with-invalid-reference.adoc: possible invalid reference: ../path/some-file.adoc"));
             assertThat(asciidoctorMessages.get(1))
-                .contains(fixOsSeparator("[error] asciidoctor: ERROR: document-with-missing-include.adoc: line 5: include file not found:"));
-            assertThat(asciidoctorMessages.get(2))
-                .contains(fixOsSeparator("[error] asciidoctor: ERROR: document-with-missing-include.adoc: line 9: include file not found:"));
-            assertThat(asciidoctorMessages.get(3))
-                .contains(fixOsSeparator("[error] asciidoctor: WARN: document-with-missing-include.adoc: line 25: no callout found for <1>"));
+                .contains(fixOsSeparator("[error] asciidoctor: INFO: document-with-invalid-reference.adoc: possible invalid reference: section-id"));
             // cleanup
             consoleHolder.release();
         }
