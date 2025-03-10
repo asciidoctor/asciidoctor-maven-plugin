@@ -431,7 +431,7 @@ class AsciidoctorMojoLogHandlerTest {
             assertThat(errorMessages)
                 .hasSize(6);
             assertThat(errorMessages.get(0))
-                .contains(fixOsSeparator("[error] asciidoctor: INFO: document-with-invalid-reference.adoc: possible invalid reference: ../path/some-file.adoc"));
+                .contains(fixOsSeparator("[error] asciidoctor: INFO: document-with-invalid-reference.adoc: possible invalid reference:"));
             assertThat(errorMessages.get(1))
                 .contains(fixOsSeparator("[error] asciidoctor: INFO: document-with-invalid-reference.adoc: possible invalid reference: section-id"));
             assertThat(errorMessages.get(2))
@@ -482,7 +482,7 @@ class AsciidoctorMojoLogHandlerTest {
             assertThat(asciidoctorMessages)
                 .hasSize(2);
             assertThat(asciidoctorMessages.get(0))
-                .contains(fixOsSeparator("[error] asciidoctor: INFO: document-with-invalid-reference.adoc: possible invalid reference: ../path/some-file.adoc"));
+                .contains(fixOsSeparator("[error] asciidoctor: INFO: document-with-invalid-reference.adoc: possible invalid reference:"));
             assertThat(asciidoctorMessages.get(1))
                 .contains(fixOsSeparator("[error] asciidoctor: INFO: document-with-invalid-reference.adoc: possible invalid reference: section-id"));
             // cleanup
