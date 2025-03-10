@@ -427,6 +427,7 @@ class AsciidoctorMojoLogHandlerTest {
 
             List<String> errorMessages = Arrays.stream(consoleHolder.getError().split("\n"))
                 .filter(line -> line.contains("asciidoctor:"))
+                .sorted()
                 .collect(Collectors.toList());
 
             assertThat(errorMessages)
@@ -438,11 +439,11 @@ class AsciidoctorMojoLogHandlerTest {
             assertThat(errorMessages.get(2))
                 .contains(fixOsSeparator("[error] asciidoctor: ERROR: document-with-missing-include.adoc: line 9: include file not found:"));
             assertThat(errorMessages.get(3))
-                .contains(fixOsSeparator("[error] asciidoctor: WARN: document-with-missing-include.adoc: line 25: no callout found for <1>"));
-            assertThat(errorMessages.get(4))
                 .contains(fixOsSeparator("[error] asciidoctor: INFO: document-with-invalid-reference.adoc: possible invalid reference: ../path/some-file.adoc"));
-            assertThat(errorMessages.get(5))
+            assertThat(errorMessages.get(4))
                 .contains(fixOsSeparator("[error] asciidoctor: INFO: document-with-invalid-reference.adoc: possible invalid reference: section-id"));
+            assertThat(errorMessages.get(5))
+                .contains(fixOsSeparator("[error] asciidoctor: WARN: document-with-missing-include.adoc: line 25: no callout found for <1>"));
             // cleanup
             consoleHolder.release();
         }
@@ -478,6 +479,7 @@ class AsciidoctorMojoLogHandlerTest {
 
             List<String> asciidoctorMessages = Arrays.stream(consoleHolder.getError().split("\n"))
                 .filter(line -> line.contains("asciidoctor:"))
+                .sorted()
                 .collect(Collectors.toList());
 
             assertThat(asciidoctorMessages)
