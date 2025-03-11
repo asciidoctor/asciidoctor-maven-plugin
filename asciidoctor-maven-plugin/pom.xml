@@ -62,12 +62,6 @@
             <artifactId>netty-codec-http</artifactId>
             <version>4.1.118.Final</version>
         </dependency>
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>1.16.1</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
