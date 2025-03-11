@@ -12,7 +12,6 @@ import static org.asciidoctor.maven.test.TestUtils.mockAsciidoctorMojo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.asciidoctor.log.Severity;
@@ -24,7 +23,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 
-@Slf4j
 class AsciidoctorMojoLogHandlerTest {
 
     private static final String DEFAULT_SOURCE_DIRECTORY = "target/test-classes/src/asciidoctor";

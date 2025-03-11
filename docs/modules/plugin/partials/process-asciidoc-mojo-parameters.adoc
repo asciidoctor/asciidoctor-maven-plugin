@@ -207,7 +207,7 @@ Options are:
 Redirects all Asciidoctor messages to Maven's console logger as INFO during conversion.
 * `failFast`: `Boolean`, defaults to `true`.
 Fail the build on the first source with errors found (`true`), or after attempting to convert all sources (`false`).
-When `false`, errors for all sources will be shown matching conditions set in `failIf`.
+When `false`, errors (matching the conditions in `failIf`) from all sources will be shown.
 * `failIf`: build fail conditions, disabled by default.
 Allows setting one or many conditions that when met, abort the Maven build with `BUILD FAILURE` status.
 +
