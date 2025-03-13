@@ -2,6 +2,7 @@ package org.asciidoctor.maven.log;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.asciidoctor.log.LogRecord;
@@ -23,35 +24,27 @@ public class LogRecordsProcessors {
     }
 
     public void processLogRecords(MemoryLogHandler memoryLogHandler) throws Exception {
-        if (logHandler.isSeveritySet() && logHandler.isContainsTextNotBlank()) {
-            final Severity severity = logHandler.getFailIf().getSeverity();
-            final String textToSearch = logHandler.getFailIf().getContainsText();
+        if (logHandler.isSeveritySet() || logHandler.isContainsTextNotBlank()) {
+            final Severity severity = Optional.ofNullable(logHandler.getFailIf()).map(FailIf::getSeverity).orElse(null);
+            final String textToSearch = Optional.ofNullable(logHandler.getFailIf()).map(FailIf::getContainsText).orElse(null);
 
             final List<LogRecord> records = memoryLogHandler.filter(severity, textToSearch);
             if (records.size() > 0) {
                 for (LogRecord record : records) {
                     errorMessageConsumer.accept(LogRecordFormatter.format(record, sourceDirectory));
                 }
-                throw new Exception(String.format("Found %s issue(s) matching severity %s or higher and text '%s'", records.size(), severity, textToSearch));
+                throw new Exception(getMessage(records, severity, textToSearch));
             }
+        }
+    }
+
+    private String getMessage(List<LogRecord> records, Severity severity, String textToSearch) {
+        if (logHandler.isSeveritySet() && logHandler.isContainsTextNotBlank()) {
+            return String.format("Found %s issue(s) matching severity %s or higher and text '%s'", records.size(), severity, textToSearch);
         } else if (logHandler.isSeveritySet()) {
-            final Severity severity = logHandler.getFailIf().getSeverity();
-            final List<LogRecord> records = memoryLogHandler.filter(severity);
-            if (records.size() > 0) {
-                for (LogRecord record : records) {
-                    errorMessageConsumer.accept(LogRecordFormatter.format(record, sourceDirectory));
-                }
-                throw new Exception(String.format("Found %s issue(s) of severity %s or higher during conversion", records.size(), severity));
-            }
-        } else if (logHandler.isContainsTextNotBlank()) {
-            final String textToSearch = logHandler.getFailIf().getContainsText();
-            final List<LogRecord> records = memoryLogHandler.filter(textToSearch);
-            if (records.size() > 0) {
-                for (LogRecord record : records) {
-                    errorMessageConsumer.accept(LogRecordFormatter.format(record, sourceDirectory));
-                }
-                throw new Exception(String.format("Found %s issue(s) containing '%s'", records.size(), textToSearch));
-            }
+            return String.format("Found %s issue(s) of severity %s or higher during conversion", records.size(), severity);
+        } else {
+            return String.format("Found %s issue(s) containing '%s'", records.size(), textToSearch);
         }
     }
 

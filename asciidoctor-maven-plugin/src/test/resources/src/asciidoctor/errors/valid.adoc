@@ -1,0 +1,7 @@
+= Document Title
+
+This a valid document.
+
+== Section A
+
+No errors to be seen.
