@@ -1,7 +1,6 @@
 package org.asciidoctor.maven.log;
 
 import java.io.File;
-import java.util.Optional;
 
 import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.log.LogRecord;
@@ -24,11 +23,13 @@ final class CapturedLogRecord extends LogRecord {
     }
 
     public Cursor getCursor() {
-        if (sourceFile == null)
-            return null;
-
-        return Optional.ofNullable(super.getCursor())
-            .orElse(new FileCursor(sourceFile));
+        if (super.getCursor() != null) {
+            return super.getCursor();
+        }
+        if (sourceFile != null) {
+            return new FileCursor(sourceFile);
+        }
+        return null;
     }
 
     public File getSourceFile() {
