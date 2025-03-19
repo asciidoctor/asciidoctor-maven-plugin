@@ -11,7 +11,7 @@ import org.asciidoctor.log.LogRecord;
  * Important: the {@link #sourceFile} and the actual source where an error is present
  * may not be the same. For example if the source is being included.
  *
- * @since 3.1.2
+ * @since 3.2.0
  */
 final class CapturedLogRecord extends LogRecord {
 

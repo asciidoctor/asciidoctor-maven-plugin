@@ -29,7 +29,7 @@ public class MemoryLogHandler implements LogHandler {
      * Provides simple way to inject the current file being processes.
      * Will need re-work in concurrent scenarios.
      *
-     * @since 3.1.2
+     * @since 3.2.0
      */
     private File currentFile;
 
