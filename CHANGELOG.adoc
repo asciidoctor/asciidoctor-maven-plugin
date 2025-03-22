@@ -13,12 +13,15 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+== v3.2.0 (2025-03-28)
+
 Improvements (for all modules)::
 
  * Add failFast option to logHandler to allow displaying all errors in build (#1032)
 
 Build / Infrastructure::
- * Set minimal maven version to 3.8.8 (#)
+
+ * Set minimal maven version to 3.8.8 (#1039)
 
 == v3.1.1 (2024-11-14)
 
