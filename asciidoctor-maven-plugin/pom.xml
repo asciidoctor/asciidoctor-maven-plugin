@@ -17,7 +17,7 @@
     <url>https://github.com/asciidoctor/asciidoctor-maven-plugin</url>
 
     <prerequisites>
-        <maven>3.8.5</maven>
+        <maven>3.8.8</maven>
     </prerequisites>
 
     <properties>
