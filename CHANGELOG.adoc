@@ -17,6 +17,9 @@ Improvements (for all modules)::
 
  * Add failFast option to logHandler to allow displaying all errors in build (#1032)
 
+Build / Infrastructure::
+ * Set minimal maven version to 3.8.8 (#)
+
 == v3.1.1 (2024-11-14)
 
 Improvements (for all modules)::

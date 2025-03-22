@@ -9,7 +9,7 @@ The current policy for Maven compatibility is to support https://maven.apache.or
 
 That is:
 
-* Maven v3.8.5 and higher
+* Maven v3.8.8 and higher
 * Maven v3.9.x
 
 == AsciidoctorJ compatible versions
