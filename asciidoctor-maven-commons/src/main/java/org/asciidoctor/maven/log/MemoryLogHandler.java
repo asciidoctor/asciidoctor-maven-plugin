@@ -1,5 +1,6 @@
 package org.asciidoctor.maven.log;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 import org.asciidoctor.log.LogHandler;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
+import org.asciidoctor.maven.commons.StringUtils;
 
 
 /**
@@ -23,6 +25,14 @@ public class MemoryLogHandler implements LogHandler {
     private final Boolean outputToConsole;
     private final Consumer<LogRecord> recordConsumer;
 
+    /**
+     * Provides simple way to inject the current file being processes.
+     * Will need re-work in concurrent scenarios.
+     *
+     * @since 3.2.0
+     */
+    private File currentFile;
+
     public MemoryLogHandler(Boolean outputToConsole, Consumer<LogRecord> recordConsumer) {
         this.outputToConsole = outputToConsole == null ? Boolean.FALSE : outputToConsole;
         this.recordConsumer = recordConsumer;
@@ -30,9 +40,11 @@ public class MemoryLogHandler implements LogHandler {
 
     @Override
     public void log(LogRecord logRecord) {
-        records.add(logRecord);
+        final CapturedLogRecord record = new CapturedLogRecord(logRecord, currentFile);
+
+        records.add(record);
         if (outputToConsole)
-            recordConsumer.accept(logRecord);
+            recordConsumer.accept(record);
     }
 
     public void clear() {
@@ -46,9 +58,7 @@ public class MemoryLogHandler implements LogHandler {
      * @return list of filtered logRecords
      */
     public List<LogRecord> filter(Severity severity) {
-        return this.records.stream()
-            .filter(record -> severityIsHigher(record, severity))
-            .collect(Collectors.toList());
+        return filter(severity, null);
     }
 
     /**
@@ -58,16 +68,14 @@ public class MemoryLogHandler implements LogHandler {
      * @return list of filtered logRecords
      */
     public List<LogRecord> filter(String text) {
-        return this.records.stream()
-            .filter(record -> messageContains(record, text))
-            .collect(Collectors.toList());
+        return filter(null, text);
     }
 
     /**
      * Returns LogRecords that are equal or above the severity level and whose message contains text.
      *
-     * @param severity Asciidoctor's severity level
-     * @param text     text to search for in the LogRecords
+     * @param severity Asciidoctor's severity level (no filter applied when null)
+     * @param text     text to search for in the LogRecords (no filter applied when null)
      * @return list of filtered logRecords
      */
     public List<LogRecord> filter(Severity severity, String text) {
@@ -96,11 +104,23 @@ public class MemoryLogHandler implements LogHandler {
     }
 
     private static boolean severityIsHigher(LogRecord record, Severity severity) {
-        return record.getSeverity().ordinal() >= severity.ordinal();
+        if (severity == null) {
+            return true;
+        } else {
+            return record.getSeverity().ordinal() >= severity.ordinal();
+        }
     }
 
     private static boolean messageContains(LogRecord record, String text) {
-        return record.getMessage().contains(text);
+        if (StringUtils.isBlank(text)) {
+            return true;
+        } else {
+            return record.getMessage().contains(text);
+        }
+    }
+
+    public void setCurrentFile(File currentFile) {
+        this.currentFile = currentFile;
     }
 
 }

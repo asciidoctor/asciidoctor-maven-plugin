@@ -1,13 +1,17 @@
 package org.asciidoctor.maven.site;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
 import org.asciidoctor.log.Severity;
 import org.asciidoctor.maven.log.FailIf;
 import org.asciidoctor.maven.log.LogHandler;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class SiteLogHandlerDeserializerTest {
 
@@ -39,17 +43,33 @@ class SiteLogHandlerDeserializerTest {
     }
 
     @Test
-    void should_deserialize_valid_outputToConsole() {
+    void should_deserialize_empty_outputToConsole() {
         // given
         final Xpp3Dom logHandlerConfig = Xpp3DoomBuilder.logHandler()
-                .addChild("outputToConsole", "false")
+            .addChild("outputToConsole")
+            .build();
+        // when
+        LogHandler logHandler = new SiteLogHandlerDeserializer()
+            .deserialize(logHandlerConfig);
+        // then
+        assertThat(logHandler)
+            .usingRecursiveComparison()
+            .isEqualTo(defaultLogHandler());
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void should_deserialize_valid_outputToConsole(Boolean actual) {
+        // given
+        final Xpp3Dom logHandlerConfig = Xpp3DoomBuilder.logHandler()
+                .addChild("outputToConsole", actual.toString())
                 .build();
         // when
         LogHandler logHandler = new SiteLogHandlerDeserializer()
                 .deserialize(logHandlerConfig);
         // then
         LogHandler expected = new LogHandler();
-        expected.setOutputToConsole(Boolean.FALSE);
+        expected.setOutputToConsole(actual);
         assertThat(logHandler)
                 .usingRecursiveComparison()
                 .isEqualTo(expected);
@@ -66,7 +86,7 @@ class SiteLogHandlerDeserializerTest {
                 .deserialize(logHandlerConfig);
         // then: set false as default (same as Maven does for a normal Mojo)
         LogHandler expected = new LogHandler();
-        expected.setOutputToConsole(Boolean.FALSE);
+        expected.setOutputToConsole(FALSE);
         assertThat(logHandler)
                 .usingRecursiveComparison()
                 .isEqualTo(expected);
@@ -201,9 +221,54 @@ class SiteLogHandlerDeserializerTest {
                 .isEqualTo(expected);
     }
 
-    private LogHandler defaultLogHandler() {
+    @Test
+    void should_deserialize_empty_failFast() {
+        final Xpp3Dom logHandlerConfig = Xpp3DoomBuilder.logHandler()
+            .addChild("failFast")
+            .build();
+
+        LogHandler logHandler = new SiteLogHandlerDeserializer()
+            .deserialize(logHandlerConfig);
+
+        assertThat(logHandler)
+            .usingRecursiveComparison()
+            .isEqualTo(defaultLogHandler());
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void should_deserialize_failFast(Boolean actual) {
+        final Xpp3Dom logHandlerConfig = Xpp3DoomBuilder.logHandler()
+            .addChild("failFast", actual.toString())
+            .build();
+
+        LogHandler logHandler = new SiteLogHandlerDeserializer()
+            .deserialize(logHandlerConfig);
+
+        LogHandler expected = defaultLogHandler();
+        expected.setFailFast(actual);
+        assertThat(logHandler)
+            .usingRecursiveComparison()
+            .isEqualTo(expected);
+    }
+
+    @Test
+    void should_deserialize_invalid_failFast() {
+        final Xpp3Dom logHandlerConfig = Xpp3DoomBuilder.logHandler()
+            .addChild("failFast", "not-a-boolean")
+            .build();
+
+        LogHandler logHandler = new SiteLogHandlerDeserializer()
+            .deserialize(logHandlerConfig);
+        // set false as default (same as Maven does for a normal Mojo)
         LogHandler expected = new LogHandler();
-        expected.setOutputToConsole(Boolean.TRUE);
-        return expected;
+        expected.setFailFast(FALSE);
+        assertThat(logHandler)
+            .usingRecursiveComparison()
+            .isEqualTo(expected);
+    }
+
+    private LogHandler defaultLogHandler() {
+        return new LogHandler();
     }
 }

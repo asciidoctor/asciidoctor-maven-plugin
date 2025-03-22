@@ -13,6 +13,9 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+Improvements (for all modules)::
+
+ * Add failFast option to logHandler to allow displaying all errors in build (#1032)
 
 == v3.1.1 (2024-11-14)
 

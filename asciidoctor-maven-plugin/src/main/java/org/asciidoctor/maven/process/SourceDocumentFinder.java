@@ -79,6 +79,7 @@ public class SourceDocumentFinder {
                         return true;
                     })
                     .map(Path::toFile)
+                    .sorted()
                     .collect(Collectors.toList());
         } catch (IOException e) {
             return Collections.emptyList();

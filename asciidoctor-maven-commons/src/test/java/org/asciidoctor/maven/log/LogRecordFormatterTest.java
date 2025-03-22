@@ -3,14 +3,14 @@ package org.asciidoctor.maven.log;
 import java.io.File;
 import java.io.IOException;
 
+import static java.lang.String.format;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.asciidoctor.ast.Cursor;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import static java.lang.String.format;
-import static org.assertj.core.api.Assertions.assertThat;
 
 class LogRecordFormatterTest {
 
@@ -117,38 +117,4 @@ class LogRecordFormatterTest {
         return formattedLogRecord.replaceAll("\\\\", "/");
     }
 
-    class TestCursor implements Cursor {
-
-        private final int lineNumber;
-        private final String file;
-        private final String path;
-        private final String dir;
-
-        TestCursor(String file, int lineNumber, String path, String dir) {
-            this.file = file;
-            this.lineNumber = lineNumber;
-            this.path = path;
-            this.dir = dir;
-        }
-
-        @Override
-        public int getLineNumber() {
-            return lineNumber;
-        }
-
-        @Override
-        public String getPath() {
-            return path;
-        }
-
-        @Override
-        public String getDir() {
-            return dir;
-        }
-
-        @Override
-        public String getFile() {
-            return file;
-        }
-    }
 }

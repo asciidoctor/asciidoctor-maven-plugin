@@ -13,6 +13,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE_DIR;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -34,8 +36,6 @@ import org.asciidoctor.maven.model.Resource;
 import org.asciidoctor.maven.process.ResourcesProcessor;
 import org.asciidoctor.maven.process.SourceDirectoryFinder;
 import org.asciidoctor.maven.process.SourceDocumentFinder;
-
-import static org.asciidoctor.maven.process.SourceDirectoryFinder.DEFAULT_SOURCE_DIR;
 
 
 /**
@@ -234,15 +234,15 @@ public class AsciidoctorMojo extends AbstractMojo {
         resourcesProcessor.process(sourceDir, outputDirectory, this);
 
         // register LogHandler to capture asciidoctor messages
-        final Boolean outputToConsole = logHandler.getOutputToConsole() == null ? Boolean.TRUE : logHandler.getOutputToConsole();
-        final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(outputToConsole,
+        final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(logHandler.getOutputToConsole(),
             logRecord -> getLog().info(LogRecordFormatter.format(logRecord, sourceDir)));
         asciidoctor.registerLogHandler(memoryLogHandler);
         // disable default console output of AsciidoctorJ
         Logger.getLogger("asciidoctor").setUseParentHandlers(false);
 
         final Set<File> uniquePaths = new HashSet<>();
-        for (final File source : sourceFiles) {
+        for (int i = 0; i < sourceFiles.size(); i++) {
+            final File source = sourceFiles.get(i);
             final Destination destination = setDestinationPaths(source, optionsBuilder, sourceDir, this);
             final File destinationPath = destination.path;
             if (!uniquePaths.add(destinationPath)) {
@@ -254,15 +254,18 @@ public class AsciidoctorMojo extends AbstractMojo {
                 getLog().warn("Duplicated destination found: overwriting file: " + destinationFile);
             }
 
-            convertFile(asciidoctor, optionsBuilder.build(), source);
+            boolean processLogRecords = logHandler.getFailFast() || (i == (sourceFiles.size() - 1));
+            convertFile(asciidoctor, optionsBuilder.build(), source, sourceDir, memoryLogHandler, processLogRecords);
+        }
+    }
 
-            try {
-                // process log messages according to mojo configuration
-                new LogRecordsProcessors(logHandler, sourceDir, errorMessage -> getLog().error(errorMessage))
-                    .processLogRecords(memoryLogHandler);
-            } catch (Exception exception) {
-                throw new MojoExecutionException(exception.getMessage());
-            }
+    private void processLogRecords(File sourceDir, MemoryLogHandler memoryLogHandler) throws MojoExecutionException {
+        try {
+            // process log messages according to mojo configuration
+            new LogRecordsProcessors(logHandler, sourceDir, errorMessage -> getLog().error(errorMessage))
+                .processLogRecords(memoryLogHandler);
+        } catch (Exception exception) {
+            throw new MojoExecutionException(exception.getMessage());
         }
     }
 
@@ -350,9 +353,13 @@ public class AsciidoctorMojo extends AbstractMojo {
             finder.find(sourceDirectoryPath, sourceDocumentExtensions);
     }
 
-    protected void convertFile(Asciidoctor asciidoctor, Options options, File f) {
+    private void convertFile(Asciidoctor asciidoctor, Options options, File f, File sourceDir, MemoryLogHandler memoryLogHandler, boolean processLogRecords) throws MojoExecutionException {
+        memoryLogHandler.setCurrentFile(f);
         asciidoctor.convertFile(f, options);
         logConvertedFile(f);
+        if (processLogRecords) {
+            processLogRecords(sourceDir, memoryLogHandler);
+        }
     }
 
     protected void logConvertedFile(File f) {

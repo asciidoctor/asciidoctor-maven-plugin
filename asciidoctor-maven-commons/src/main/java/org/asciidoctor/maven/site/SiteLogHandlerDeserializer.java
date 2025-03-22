@@ -20,16 +20,13 @@ public class SiteLogHandlerDeserializer {
         if (logHandlerNode == null || !logHandlerNode.getName().equals(NODE_NAME))
             return logHandler;
 
-        logHandler.setOutputToConsole(deserializeOutputToConsole(logHandlerNode));
+        logHandler.setOutputToConsole(getBoolean(logHandlerNode, "outputToConsole"));
+        logHandler.setFailFast(getBoolean(logHandlerNode, "failFast"));
 
         deserializeFailIf(logHandlerNode.getChild("failIf"))
-                .ifPresent(logHandler::setFailIf);
+            .ifPresent(logHandler::setFailIf);
 
         return logHandler;
-    }
-
-    private Boolean deserializeOutputToConsole(Xpp3Dom node) {
-        return getBoolean(node, "outputToConsole");
     }
 
     private Optional<FailIf> deserializeFailIf(Xpp3Dom node) {
@@ -58,18 +55,18 @@ public class SiteLogHandlerDeserializer {
         return Optional.ofNullable(failIf);
     }
 
-    private String sanitizeString(Xpp3Dom severity) {
-        String value = severity.getValue();
-        return value == null ? "" : value.trim();
-    }
-
     private LogHandler defaultLogHandler() {
         LogHandler logHandler = new LogHandler();
         logHandler.setOutputToConsole(Boolean.TRUE);
         return logHandler;
     }
 
-    private Boolean getBoolean(Xpp3Dom node, String name) {
+    private static String sanitizeString(Xpp3Dom node) {
+        final String value = node.getValue();
+        return value == null ? "" : value.trim();
+    }
+
+    private static Boolean getBoolean(Xpp3Dom node, String name) {
         final Xpp3Dom child = node.getChild(name);
         if (child == null) {
             return Boolean.TRUE;
