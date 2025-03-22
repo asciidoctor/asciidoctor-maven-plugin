@@ -14,7 +14,7 @@ Versions not listed below are not supported, please consider upgrading.
 |v3.1x.x ~ v3.12.x
 |Yes
 
-|v3.1.x
+|v3.1.x ~ v3.2.x
 |v3.20.x
 |Yes
 
