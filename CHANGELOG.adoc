@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+Build / Infrastructure::
+
+  * Set maven-compiler-plugin 'release' value to Java 11 (#1042)
+
 == v3.2.0 (2025-03-28)
 
 Improvements (for all modules)::
