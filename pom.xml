@@ -76,7 +76,7 @@
         <plexus-component-metadata.version>2.2.0</plexus-component-metadata.version>
         <plexus-utils.version>3.6.0</plexus-utils.version>
         <asciidoctorj.version>3.0.0</asciidoctorj.version>
-        <jruby.version>9.4.12.0</jruby.version>
+        <jruby.version>10.0.0.1</jruby.version>
     </properties>
 
     <dependencies>
