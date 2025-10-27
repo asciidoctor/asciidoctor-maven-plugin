@@ -124,7 +124,7 @@ jobs:
       - name: Verify JAR signatures
         run: find $ARTIFACTS_DIR -type f -name "*.jar" -exec gpg --verify "{}.asc" \;
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: signed-artifacts
           path: ${{ env.ARTIFACTS_DIR }}
