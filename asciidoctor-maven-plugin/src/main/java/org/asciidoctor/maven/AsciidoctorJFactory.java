@@ -22,14 +22,18 @@ public class AsciidoctorJFactory {
 
     Asciidoctor create(String gemPath, Log log) throws MojoExecutionException {
         Asciidoctor asciidoctor;
-        if (gemPath == null) {
-            asciidoctor = AsciidoctorJRuby.Factory.create();
-        } else {
-            // Replace Windows path separator to avoid paths with mixed \ and /.
-            // This happens for instance when setting: <gemPath>${project.build.directory}/gems-provided</gemPath>
-            // because the project's path is converted to string.
-            String normalizedGemPath = (File.separatorChar == '\\') ? gemPath.replaceAll("\\\\", "/") : gemPath;
-            asciidoctor = AsciidoctorJRuby.Factory.create(normalizedGemPath);
+        // Synchronize to prevent concurrent ServiceLoader access during Asciidoctor instance creation
+        // This addresses issue #821: race condition in ServiceLoader when multiple threads create instances
+        synchronized (AsciidoctorJFactory.class) {
+            if (gemPath == null) {
+                asciidoctor = AsciidoctorJRuby.Factory.create();
+            } else {
+                // Replace Windows path separator to avoid paths with mixed \ and /.
+                // This happens for instance when setting: <gemPath>${project.build.directory}/gems-provided</gemPath>
+                // because the project's path is converted to string.
+                String normalizedGemPath = (File.separatorChar == '\\') ? gemPath.replaceAll("\\\\", "/") : gemPath;
+                asciidoctor = AsciidoctorJRuby.Factory.create(normalizedGemPath);
+            }
         }
 
         Ruby rubyInstance = null;

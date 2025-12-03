@@ -13,6 +13,10 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 
 == Unreleased
 
+Bug Fixes::
+
+  * fix concurrency issue (#821)
+
 Build / Infrastructure::
 
   * Set maven-compiler-plugin 'release' value to Java 11 (#1042)
