@@ -14,7 +14,7 @@ A clear and concise description of what the bug is.
 **To Reproduce**
 Adding a small reproducer project helps a lot, or else, describe step-by-step how to reproduce the behavior:
 1. With this pom.xml '...'
-2. Run 'mvn ....'
+2. Run 'mvn ...'
 3. See error
 
 **Expected behavior**
