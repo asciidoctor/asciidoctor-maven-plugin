@@ -61,14 +61,10 @@ class AsciidoctorHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
             return;
         }
 
-        // Keep HEAD validators aligned with the body returned by GET.
+        // live.js polls with HEAD requests and compares Last-Modified across polls to detect changes.
         if (msg.method() == HttpMethod.HEAD) {
             final DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
-
-            final HttpHeaders headers = response.headers();
-            final long contentLength = contentLength(file);
-            setResponseHeaders(headers, file, contentLength);
-            headers.set(HttpHeaderNames.EXPIRES, 0);
+            setResponseHeaders(response.headers(), file);
             send(ctx, response);
             return;
         }
@@ -87,8 +83,7 @@ class AsciidoctorHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
         }
 
         final DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, body);
-        final HttpHeaders headers = response.headers();
-        setResponseHeaders(headers, file, body.readableBytes());
+        setResponseHeaders(response.headers(), file);
         send(ctx, response);
     }
 
@@ -96,26 +91,13 @@ class AsciidoctorHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
         return html.replace("</body>", "<script src=\"http://livejs.com/live.js#html\"></script></body>");
     }
 
-    private long contentLength(final File file) throws Exception {
-        if (file.getName().endsWith("html")) {
-            return addRefreshing(FileUtils.readFileToString(file, StandardCharsets.UTF_8)).getBytes(StandardCharsets.UTF_8).length;
-        }
-        return file.length();
-    }
-
     private String httpDate(final long millis) {
         return DateTimeFormatter.RFC_1123_DATE_TIME.format(ZonedDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneOffset.UTC));
     }
 
-    private String etag(final File file, final long contentLength) {
-        return "W/\"" + file.lastModified() + '-' + contentLength + "\"";
-    }
-
-    private void setResponseHeaders(final HttpHeaders headers, final File file, final long contentLength) {
+    private void setResponseHeaders(final HttpHeaders headers, final File file) {
         headers.set(HttpHeaderNames.CONTENT_TYPE, mediaType(file.getName()));
-        headers.set(HttpHeaderNames.CONTENT_LENGTH, contentLength);
         headers.set(HttpHeaderNames.LAST_MODIFIED, httpDate(file.lastModified()));
-        headers.set(HttpHeaderNames.ETAG, etag(file, contentLength));
     }
 
     private void send(final ChannelHandlerContext ctx, final DefaultFullHttpResponse response) {

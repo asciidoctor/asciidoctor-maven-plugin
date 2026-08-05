@@ -120,10 +120,8 @@ class AsciidoctorHttpServerTest {
                 .isEqualTo(OK.code());
         assertThat(response.getMessage())
                 .isEqualTo(OK.reasonPhrase());
-        assertThat(response.getContentLength())
-                .isEqualTo(getResponse.getContentLength());
-        assertThat(response.getEtag())
-                .isEqualTo(getResponse.getEtag())
+        assertThat(response.getLastModified())
+                .isEqualTo(getResponse.getLastModified())
                 .isNotBlank();
         assertThat(response.getContentType())
                 .isEqualTo("text/html");
@@ -267,7 +265,7 @@ class AsciidoctorHttpServerTest {
 
             // due to HttpURLConnection returning FileNotFound exception on 404
             if (status == 404)
-                return HttpResponse.successful(status, connection.getResponseMessage(), null, -1, null, null);
+                return HttpResponse.successful(status, connection.getResponseMessage(), null, null, null);
 
             InputStream is = (status >= 200 && status < 206)
                     ? connection.getInputStream()
@@ -276,8 +274,7 @@ class AsciidoctorHttpServerTest {
                     status,
                     connection.getResponseMessage(),
                     connection.getContentType(),
-                    connection.getContentLength(),
-                    connection.getHeaderField("ETag"),
+                    connection.getHeaderField("Last-Modified"),
                     IOUtils.toString(is, StandardCharsets.UTF_8));
         } catch (Exception e) {
             return HttpResponse.withError(e);
@@ -289,22 +286,21 @@ class AsciidoctorHttpServerTest {
         Integer status;
         String message;
         String contentType;
-        long contentLength;
-        String etag;
+        String lastModified;
         String content;
 
         Exception error;
 
-        static HttpResponse successful(int status, String message, String contentType, long contentLength, String etag, String content) {
-            return new HttpResponse(status, message, contentType, contentLength, etag, content, null);
+        static HttpResponse successful(int status, String message, String contentType, String lastModified, String content) {
+            return new HttpResponse(status, message, contentType, lastModified, content, null);
         }
 
         static HttpResponse withError(Exception e) {
-            return new HttpResponse(null, null, null, -1, null, null, e);
+            return new HttpResponse(null, null, null, null, null, e);
         }
 
         static HttpResponse notFound() {
-            return successful(NOT_FOUND.code(), "Not Found", null, -1, null, null);
+            return successful(NOT_FOUND.code(), "Not Found", null, null, null);
         }
     }
 }
