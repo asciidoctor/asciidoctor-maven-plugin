@@ -62,6 +62,12 @@
             <artifactId>netty-codec-http</artifactId>
             <version>4.2.5.Final</version>
         </dependency>
+        <dependency>
+            <groupId>com.microsoft.playwright</groupId>
+            <artifactId>playwright</artifactId>
+            <version>1.54.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

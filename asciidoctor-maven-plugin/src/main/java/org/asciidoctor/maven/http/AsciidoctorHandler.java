@@ -4,6 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -57,15 +61,10 @@ class AsciidoctorHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
             return;
         }
 
-        // HEAD means we already loaded the page, so we know is HTML
+        // live.js polls with HEAD requests and compares Last-Modified across polls to detect changes.
         if (msg.method() == HttpMethod.HEAD) {
-            final DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.RESET_CONTENT);
-
-            final HttpHeaders headers = response.headers();
-            // Test if retuning any size works
-            headers.set(HttpHeaderNames.CONTENT_LENGTH, file.length());
-            headers.set(HttpHeaderNames.EXPIRES, 0);
-            headers.set(HttpHeaderNames.CONTENT_TYPE, HTML_MEDIA_TYPE);
+            final DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
+            setResponseHeaders(response.headers(), file);
             send(ctx, response);
             return;
         }
@@ -84,12 +83,21 @@ class AsciidoctorHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
         }
 
         final DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, body);
-        response.headers().set(HttpHeaders.Names.CONTENT_TYPE, mediaType(file.getName()));
+        setResponseHeaders(response.headers(), file);
         send(ctx, response);
     }
 
     private String addRefreshing(final String html) {
         return html.replace("</body>", "<script src=\"http://livejs.com/live.js#html\"></script></body>");
+    }
+
+    private String httpDate(final long millis) {
+        return DateTimeFormatter.RFC_1123_DATE_TIME.format(ZonedDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneOffset.UTC));
+    }
+
+    private void setResponseHeaders(final HttpHeaders headers, final File file) {
+        headers.set(HttpHeaderNames.CONTENT_TYPE, mediaType(file.getName()));
+        headers.set(HttpHeaderNames.LAST_MODIFIED, httpDate(file.lastModified()));
     }
 
     private void send(final ChannelHandlerContext ctx, final DefaultFullHttpResponse response) {

@@ -174,7 +174,7 @@ class AsciidoctorHttpMojoTest {
     }
 
     @Test
-    void should_return_205_when_method_is_HEAD_and_resource_exists() {
+    void should_return_200_when_method_is_HEAD_and_resource_exists() {
         // given
         File emptySrcDir = new File("some_path");
         File outputDir = TestFilesHelper.newOutputTestDirectory("http-mojo");
@@ -203,7 +203,7 @@ class AsciidoctorHttpMojoTest {
         // then
         userInput.waitForCompletion();
         assertThat(responseStatus("http://localhost:" + httpPort, "HEAD"))
-                .isEqualTo(205);
+                .isEqualTo(200);
 
         // cleanup
         userInput.stop();
