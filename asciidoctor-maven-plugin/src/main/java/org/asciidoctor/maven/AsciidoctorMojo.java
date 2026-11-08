@@ -211,51 +211,58 @@ public class AsciidoctorMojo extends AbstractMojo {
             }
         }
 
-        final Asciidoctor asciidoctor = asciidoctorJFactory.create(gemPath, getLog());
-
-        if (enableVerbose) {
-            asciidoctor.requireLibrary("enable_verbose.rb");
-        }
-        asciidoctor.requireLibraries(requires);
-
-        ExtensionRegistry extensionRegistry = new AsciidoctorJExtensionRegistry(asciidoctor);
-        for (ExtensionConfiguration extension : extensions) {
-            try {
-                extensionRegistry.register(extension.getClassName(), extension.getBlockName());
-            } catch (Exception e) {
-                throw new MojoExecutionException(e.getMessage(), e);
+        // Close the instance after the conversion to release the JRuby runtime.
+        // Otherwise, it (and through the LogHandler this mojo, the MavenProject and the MavenSession)
+        // stays reachable in long-lived JVMs such as the Maven Daemon (mvnd).
+        try (Asciidoctor asciidoctor = asciidoctorJFactory.create(gemPath, getLog())) {
+            if (enableVerbose) {
+                asciidoctor.requireLibrary("enable_verbose.rb");
             }
-        }
+            asciidoctor.requireLibraries(requires);
 
-        OptionsBuilder optionsBuilder = asciidoctorOptionsFactory.create(this, project, getLog());
-
-        // Copy output resources
-        final File sourceDir = sourceDirectoryCandidate.get();
-        resourcesProcessor.process(sourceDir, outputDirectory, this);
-
-        // register LogHandler to capture asciidoctor messages
-        final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(logHandler.getOutputToConsole(),
-            logRecord -> getLog().info(LogRecordFormatter.format(logRecord, sourceDir)));
-        asciidoctor.registerLogHandler(memoryLogHandler);
-        // disable default console output of AsciidoctorJ
-        Logger.getLogger("asciidoctor").setUseParentHandlers(false);
-
-        final Set<File> uniquePaths = new HashSet<>();
-        for (int i = 0; i < sourceFiles.size(); i++) {
-            final File source = sourceFiles.get(i);
-            final Destination destination = setDestinationPaths(source, optionsBuilder, sourceDir, this);
-            final File destinationPath = destination.path;
-            if (!uniquePaths.add(destinationPath)) {
-                String destinationFile = destinationPath.getAbsolutePath();
-                if (!destination.isOutput) {
-                    String baseName = FilenameUtils.getBaseName(destinationPath.getName());
-                    destinationFile = destinationPath.getParentFile().getAbsolutePath() + File.separator + baseName + ".*";
+            ExtensionRegistry extensionRegistry = new AsciidoctorJExtensionRegistry(asciidoctor);
+            for (ExtensionConfiguration extension : extensions) {
+                try {
+                    extensionRegistry.register(extension.getClassName(), extension.getBlockName());
+                } catch (Exception e) {
+                    throw new MojoExecutionException(e.getMessage(), e);
                 }
-                getLog().warn("Duplicated destination found: overwriting file: " + destinationFile);
             }
 
-            boolean processLogRecords = logHandler.getFailFast() || (i == (sourceFiles.size() - 1));
-            convertFile(asciidoctor, optionsBuilder.build(), source, sourceDir, memoryLogHandler, processLogRecords);
+            OptionsBuilder optionsBuilder = asciidoctorOptionsFactory.create(this, project, getLog());
+
+            // Copy output resources
+            final File sourceDir = sourceDirectoryCandidate.get();
+            resourcesProcessor.process(sourceDir, outputDirectory, this);
+
+            // register LogHandler to capture asciidoctor messages
+            final MemoryLogHandler memoryLogHandler = new MemoryLogHandler(logHandler.getOutputToConsole(),
+                logRecord -> getLog().info(LogRecordFormatter.format(logRecord, sourceDir)));
+            asciidoctor.registerLogHandler(memoryLogHandler);
+            // disable default console output of AsciidoctorJ
+            Logger.getLogger("asciidoctor").setUseParentHandlers(false);
+
+            try {
+                final Set<File> uniquePaths = new HashSet<>();
+                for (int i = 0; i < sourceFiles.size(); i++) {
+                    final File source = sourceFiles.get(i);
+                    final Destination destination = setDestinationPaths(source, optionsBuilder, sourceDir, this);
+                    final File destinationPath = destination.path;
+                    if (!uniquePaths.add(destinationPath)) {
+                        String destinationFile = destinationPath.getAbsolutePath();
+                        if (!destination.isOutput) {
+                            String baseName = FilenameUtils.getBaseName(destinationPath.getName());
+                            destinationFile = destinationPath.getParentFile().getAbsolutePath() + File.separator + baseName + ".*";
+                        }
+                        getLog().warn("Duplicated destination found: overwriting file: " + destinationFile);
+                    }
+
+                    boolean processLogRecords = logHandler.getFailFast() || (i == (sourceFiles.size() - 1));
+                    convertFile(asciidoctor, optionsBuilder.build(), source, sourceDir, memoryLogHandler, processLogRecords);
+                }
+            } finally {
+                asciidoctor.unregisterLogHandler(memoryLogHandler);
+            }
         }
     }
 

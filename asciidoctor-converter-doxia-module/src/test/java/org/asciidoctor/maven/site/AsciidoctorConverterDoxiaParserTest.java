@@ -6,20 +6,30 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.SneakyThrows;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.impl.AbstractTextSink;
 import org.apache.maven.project.MavenProject;
+import org.asciidoctor.Asciidoctor;
 import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import static org.asciidoctor.maven.site.AsciidoctorConverterDoxiaParser.ROLE_HINT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 class AsciidoctorConverterDoxiaParserTest {
@@ -243,6 +253,70 @@ class AsciidoctorConverterDoxiaParserTest {
         assertThat(throwable)
             .isInstanceOf(org.apache.maven.doxia.parser.ParseException.class)
             .hasMessageContaining("Found 4 issue(s) of severity WARN or higher during conversion");
+    }
+
+    @Test
+    void should_unregister_logHandler_and_close_asciidoctor_after_conversion() throws FileNotFoundException, ParseException {
+        final File srcAsciidoc = new File(TEST_DOCS_PATH, SAMPLE_ASCIIDOC);
+        final Sink sink = createSinkMock();
+        final AsciidoctorConverterDoxiaParser parser = mockAsciidoctorDoxiaParser();
+        final List<Asciidoctor> instances = new ArrayList<>();
+
+        try (MockedStatic<Asciidoctor.Factory> factory = recordAsciidoctorInstances(instances)) {
+            parser.parse(new FileReader(srcAsciidoc), sink);
+        }
+
+        assertThat(((TextProviderSink) sink).text)
+            .contains("<h1>Document Title</h1>");
+        assertThat(instances).hasSize(1);
+        assertReleased(instances.get(0));
+    }
+
+    @Test
+    void should_unregister_logHandler_and_close_asciidoctor_when_conversion_fails() throws FileNotFoundException {
+        final File srcAsciidoc = new File(TEST_DOCS_PATH, "errors/document-with-missing-include.adoc");
+        final Sink sink = createSinkMock();
+        final AsciidoctorConverterDoxiaParser parser = mockAsciidoctorDoxiaParser(
+            "<configuration>\n" +
+                "  <asciidoc>\n" +
+                "    <logHandler>\n" +
+                "      <failIf>\n" +
+                "        <severity>WARN</severity>\n" +
+                "      </failIf>\n" +
+                "    </logHandler>\n" +
+                "  </asciidoc>\n" +
+                "</configuration>");
+        final List<Asciidoctor> instances = new ArrayList<>();
+        final FileReader reader = new FileReader(srcAsciidoc);
+
+        Throwable throwable;
+        try (MockedStatic<Asciidoctor.Factory> factory = recordAsciidoctorInstances(instances)) {
+            throwable = catchThrowable(() -> parser.parse(reader, sink));
+        }
+
+        assertThat(throwable).isInstanceOf(ParseException.class);
+        assertThat(instances).hasSize(1);
+        assertReleased(instances.get(0));
+    }
+
+    /**
+     * Wraps every instance created with {@link Asciidoctor.Factory#create()} in a Mockito spy to verify its usage.
+     */
+    private static MockedStatic<Asciidoctor.Factory> recordAsciidoctorInstances(List<Asciidoctor> instances) {
+        final MockedStatic<Asciidoctor.Factory> factory = mockStatic(Asciidoctor.Factory.class, CALLS_REAL_METHODS);
+        factory.when(Asciidoctor.Factory::create).thenAnswer(invocation -> {
+            final Asciidoctor asciidoctor = spy((Asciidoctor) invocation.callRealMethod());
+            instances.add(asciidoctor);
+            return asciidoctor;
+        });
+        return factory;
+    }
+
+    private static void assertReleased(Asciidoctor asciidoctor) {
+        final InOrder inOrder = inOrder(asciidoctor);
+        inOrder.verify(asciidoctor).registerLogHandler(any());
+        inOrder.verify(asciidoctor).unregisterLogHandler(any());
+        inOrder.verify(asciidoctor).close();
     }
 
     @SneakyThrows
