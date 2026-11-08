@@ -17,6 +17,10 @@ Bug Fixes::
 
   * fix concurrency issue (#821)
 
+Bug Fixes (Site Modules)::
+
+  * Close Asciidoctor instance and unregister LogHandler after parsing each document to avoid memory leaks (#1116)
+
 Build / Infrastructure::
 
   * Set maven-compiler-plugin 'release' value to Java 11 (#1042)

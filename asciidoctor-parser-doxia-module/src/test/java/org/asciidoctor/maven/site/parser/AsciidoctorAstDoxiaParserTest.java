@@ -6,18 +6,23 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.SneakyThrows;
 import org.apache.maven.doxia.parser.AbstractTextParser;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.project.MavenProject;
+import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.maven.site.LogHandlerFactory;
 import org.asciidoctor.maven.site.SiteBaseDirResolver;
 import org.asciidoctor.maven.site.SiteConversionConfigurationParser;
 import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import static org.asciidoctor.maven.site.parser.AsciidoctorAstDoxiaParser.ROLE_HINT;
@@ -27,7 +32,12 @@ import static org.asciidoctor.maven.site.parser.processors.test.StringTestUtils.
 import static org.asciidoctor.maven.site.parser.processors.test.TestNodeProcessorFactory.createSink;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 class AsciidoctorAstDoxiaParserTest {
@@ -217,6 +227,71 @@ class AsciidoctorAstDoxiaParserTest {
         assertThat(throwable)
             .isInstanceOf(ParseException.class)
             .hasMessageContaining("Found 2 issue(s) of severity WARN or higher during conversion");
+    }
+
+    @Test
+    void should_unregister_logHandler_and_close_asciidoctor_after_sinking_the_document() throws FileNotFoundException, ParseException {
+        final File srcAsciidoc = new File(TEST_DOCS_PATH, "sample.asciidoc");
+        final AsciidoctorAstDoxiaParser parser = mockAsciidoctorDoxiaParser();
+        final List<Asciidoctor> instances = new ArrayList<>();
+
+        final String result;
+        try (MockedStatic<Asciidoctor.Factory> factory = recordAsciidoctorInstances(instances)) {
+            result = parse(parser, srcAsciidoc);
+        }
+
+        // the document is sunk completely before the instance is closed
+        assertThat(result)
+            .startsWith("<h1>Document Title</h1>")
+            .contains("<li>Item 3</li></ul>");
+        assertThat(instances).hasSize(1);
+        assertReleased(instances.get(0));
+    }
+
+    @Test
+    void should_unregister_logHandler_and_close_asciidoctor_when_conversion_fails() {
+        final String source = "= My Document\n\n" +
+            "include::unexistingdoc.adoc[]";
+        final AsciidoctorAstDoxiaParser parser = mockAsciidoctorDoxiaParser(
+            "<configuration>\n" +
+                "  <asciidoc>\n" +
+                "    <logHandler>\n" +
+                "      <failIf>\n" +
+                "        <severity>WARN</severity>\n" +
+                "      </failIf>\n" +
+                "    </logHandler>\n" +
+                "  </asciidoc>\n" +
+                "</configuration>");
+        final List<Asciidoctor> instances = new ArrayList<>();
+
+        Throwable throwable;
+        try (MockedStatic<Asciidoctor.Factory> factory = recordAsciidoctorInstances(instances)) {
+            throwable = catchThrowable(() -> parser.parse(new StringReader(source), sink));
+        }
+
+        assertThat(throwable).isInstanceOf(ParseException.class);
+        assertThat(instances).hasSize(1);
+        assertReleased(instances.get(0));
+    }
+
+    /**
+     * Wraps every instance created with {@link Asciidoctor.Factory#create()} in a Mockito spy to verify its usage.
+     */
+    private static MockedStatic<Asciidoctor.Factory> recordAsciidoctorInstances(List<Asciidoctor> instances) {
+        final MockedStatic<Asciidoctor.Factory> factory = mockStatic(Asciidoctor.Factory.class, CALLS_REAL_METHODS);
+        factory.when(Asciidoctor.Factory::create).thenAnswer(invocation -> {
+            final Asciidoctor asciidoctor = spy((Asciidoctor) invocation.callRealMethod());
+            instances.add(asciidoctor);
+            return asciidoctor;
+        });
+        return factory;
+    }
+
+    private static void assertReleased(Asciidoctor asciidoctor) {
+        final InOrder inOrder = inOrder(asciidoctor);
+        inOrder.verify(asciidoctor).registerLogHandler(any());
+        inOrder.verify(asciidoctor).unregisterLogHandler(any());
+        inOrder.verify(asciidoctor).close();
     }
 
     private String parse(AbstractTextParser parser, File source) throws FileNotFoundException, ParseException {
