@@ -27,6 +27,7 @@ jobs:
         java:
           - 17
           - 21
+          - 25
         maven:
           - 4.0.0-rc-3
     runs-on: ${{ matrix.os }}
