@@ -19,7 +19,6 @@ import org.mockito.Mockito;
 import static io.netty.handler.codec.http.HttpResponseStatus.METHOD_NOT_ALLOWED;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
-import static io.netty.handler.codec.http.HttpResponseStatus.RESET_CONTENT;
 import static org.asciidoctor.maven.io.TestFilesHelper.createFileWithContent;
 import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -100,11 +99,12 @@ class AsciidoctorHttpServerTest {
     }
 
     @Test
-    void should_return_205_when_method_is_HEAD_and_resource_exists() {
+    void should_return_200_when_method_is_HEAD_and_resource_exists() {
         // given
         int port = randomPort();
         final File outputDir = newOutputTestDirectory();
-        createFileWithContent(outputDir, "index.html");
+        final String testContent = "<body>Test HTML</body>";
+        createFileWithContent(outputDir, "index.html", testContent);
         final String existingResource = "http://localhost:" + port + "/index";
 
         // when
@@ -113,12 +113,18 @@ class AsciidoctorHttpServerTest {
                         .start();
 
         final HttpResponse response = doHttpHead(existingResource);
+        final HttpResponse getResponse = doHttpGet(existingResource);
 
         // then
         assertThat(response.getStatus())
-                .isEqualTo(RESET_CONTENT.code());
+                .isEqualTo(OK.code());
         assertThat(response.getMessage())
-                .isEqualTo(RESET_CONTENT.reasonPhrase());
+                .isEqualTo(OK.reasonPhrase());
+        assertThat(response.getLastModified())
+                .isEqualTo(getResponse.getLastModified())
+                .isNotBlank();
+        assertThat(response.getContentType())
+                .isEqualTo("text/html");
 
         // cleanup
         server.stop();
@@ -259,7 +265,7 @@ class AsciidoctorHttpServerTest {
 
             // due to HttpURLConnection returning FileNotFound exception on 404
             if (status == 404)
-                return HttpResponse.successful(status, connection.getResponseMessage(), null);
+                return HttpResponse.successful(status, connection.getResponseMessage(), null, null, null);
 
             InputStream is = (status >= 200 && status < 206)
                     ? connection.getInputStream()
@@ -267,6 +273,8 @@ class AsciidoctorHttpServerTest {
             return HttpResponse.successful(
                     status,
                     connection.getResponseMessage(),
+                    connection.getContentType(),
+                    connection.getHeaderField("Last-Modified"),
                     IOUtils.toString(is, StandardCharsets.UTF_8));
         } catch (Exception e) {
             return HttpResponse.withError(e);
@@ -277,20 +285,22 @@ class AsciidoctorHttpServerTest {
     static class HttpResponse {
         Integer status;
         String message;
+        String contentType;
+        String lastModified;
         String content;
 
         Exception error;
 
-        static HttpResponse successful(int status, String message, String content) {
-            return new HttpResponse(status, message, content, null);
+        static HttpResponse successful(int status, String message, String contentType, String lastModified, String content) {
+            return new HttpResponse(status, message, contentType, lastModified, content, null);
         }
 
         static HttpResponse withError(Exception e) {
-            return new HttpResponse(null, null, null, e);
+            return new HttpResponse(null, null, null, null, null, e);
         }
 
         static HttpResponse notFound() {
-            return successful(NOT_FOUND.code(), "Not Found", null);
+            return successful(NOT_FOUND.code(), "Not Found", null, null, null);
         }
     }
 }
