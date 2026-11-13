@@ -80,35 +80,40 @@ public class AsciidoctorConverterDoxiaParser extends AbstractTextParser {
         // We need to ensure certain elements are initialized only once to avoid errors.
         // Note, this cannot be done in the constructor because mavenProjectProvider in set after construction.
         // And overriding init and other methods form parent classes does not work.
-        final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
-
-        for (String require : conversionConfig.getRequires()) {
-            requireLibrary(asciidoctor, require);
-        }
-
-        final LogHandler logHandler = logHandlerFactory.getConfiguration(asciidocConfig);
-        final MemoryLogHandler memoryLogHandler = logHandlerFactory.create(asciidoctor, siteDirectory, logger);
-
-        final Result headerMetadata = siteConverter.process(asciidoctor, source, conversionConfig.getOptions());
-
-        try {
-            // process log messages according to mojo configuration
-            if (!memoryLogHandler.isEmpty()) {
-                logger.info("Issues found in: {}", reference);
-                if (logHandler.getOutputToConsole() && StringUtils.isNotBlank(reference)) {
-                    memoryLogHandler.processAll();
-                }
-                new LogRecordsProcessors(logHandler, siteDirectory, logger::error)
-                    .processLogRecords(memoryLogHandler);
+        // Close the instance after parsing to release its JRuby runtime, since a new one is created for every document.
+        try (Asciidoctor asciidoctor = Asciidoctor.Factory.create()) {
+            for (String require : conversionConfig.getRequires()) {
+                requireLibrary(asciidoctor, require);
             }
-        } catch (Exception exception) {
-            throw new ParseException(exception.getMessage(), exception);
+
+            final LogHandler logHandler = logHandlerFactory.getConfiguration(asciidocConfig);
+            final MemoryLogHandler memoryLogHandler = logHandlerFactory.create(asciidoctor, siteDirectory, logger);
+
+            try {
+                final Result headerMetadata = siteConverter.process(asciidoctor, source, conversionConfig.getOptions());
+
+                try {
+                    // process log messages according to mojo configuration
+                    if (!memoryLogHandler.isEmpty()) {
+                        logger.info("Issues found in: {}", reference);
+                        if (logHandler.getOutputToConsole() && StringUtils.isNotBlank(reference)) {
+                            memoryLogHandler.processAll();
+                        }
+                        new LogRecordsProcessors(logHandler, siteDirectory, logger::error)
+                            .processLogRecords(memoryLogHandler);
+                    }
+                } catch (Exception exception) {
+                    throw new ParseException(exception.getMessage(), exception);
+                }
+
+                new HeadParser(sink)
+                    .parse(headerMetadata.getHeaderMetadata());
+
+                sink.rawText(headerMetadata.getHtml());
+            } finally {
+                asciidoctor.unregisterLogHandler(memoryLogHandler);
+            }
         }
-
-        new HeadParser(sink)
-            .parse(headerMetadata.getHeaderMetadata());
-
-        sink.rawText(headerMetadata.getHtml());
     }
 
     private void requireLibrary(Asciidoctor asciidoctor, String require) {

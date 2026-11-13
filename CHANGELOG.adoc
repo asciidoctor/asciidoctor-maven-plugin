@@ -16,6 +16,11 @@ For a detailed view of what has changed, refer to the {uri-repo}/commits/main[co
 Bug Fixes::
 
   * fix concurrency issue (#821)
+  * Close Asciidoctor instance and unregister LogHandler after conversion to avoid memory leaks in long-lived JVMs like mvnd (#1116)
+
+Bug Fixes (Site Modules)::
+
+  * Close Asciidoctor instance and unregister LogHandler after parsing each document to avoid memory leaks (#1116)
 
 Build / Infrastructure::
 
