@@ -26,6 +26,7 @@ Build / Infrastructure::
 
   * Set maven-compiler-plugin 'release' value to Java 11 (#1042)
   * Add Java 25 to CI builds
+  * Set minimal Maven version to 3.9.11
 
 == v3.2.0 (2025-03-28)
 

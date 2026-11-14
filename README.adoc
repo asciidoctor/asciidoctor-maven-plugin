@@ -136,7 +136,7 @@ You can find examples ready to copy-paste in the {uri-examples}[Asciidoctor Mave
 == Supported version
 
 // 1-year-old versions + most recent minor
-asciidoctor-maven-plugin comes in two versions with support for Maven 3.8.8+ and 3.9.x versions.
+asciidoctor-maven-plugin comes in two versions with support for Maven 3.9.11+ versions.
 
 * Version 3.x.x: current development branch.
 New features and fixes will be added as minor/patch releases.
