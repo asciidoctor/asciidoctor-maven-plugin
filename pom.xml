@@ -75,7 +75,7 @@
         <doxia.sitetools.version>2.0.0</doxia.sitetools.version>
         <plexus-component-metadata.version>2.2.0</plexus-component-metadata.version>
         <plexus-utils.version>3.6.0</plexus-utils.version>
-        <asciidoctorj.version>3.0.0</asciidoctorj.version>
+        <asciidoctorj.version>3.0.1</asciidoctorj.version>
         <jruby.version>9.4.12.0</jruby.version>
         <lombok.version>1.18.46</lombok.version>
     </properties>
