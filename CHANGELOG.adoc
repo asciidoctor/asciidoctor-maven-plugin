@@ -17,6 +17,7 @@ Bug Fixes::
 
   * fix concurrency issue (#821)
   * Close Asciidoctor instance and unregister LogHandler after conversion to avoid memory leaks in long-lived JVMs like mvnd (#1116)
+  * Fix browser live reload in `asciidoctor:http` by returning the `HEAD` response metadata required for change detection (#1101)
 
 Bug Fixes (Site Modules)::
 
