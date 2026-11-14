@@ -23,12 +23,13 @@ The minimal version is the newest Maven release that is at least 12 months old. 
    - `asciidoctor-maven-plugin/pom.xml`: `<prerequisites><maven>`.
    - `README.adoc`: the "Supported version" sentence.
    - `docs/modules/plugin/pages/compatibility-matrix.adoc`: the list of compatible Maven versions.
-   - `.github/workflows/build.yaml`: in the first `maven` matrix (the build job), replace the old minimal version with `<MIN>`.
+   - `.github/workflows/build.yaml`: in every job (`build`, `javadocs`, `signature`), replace each `maven` matrix value that is lower than `<MIN>` with `<MIN>`. In the `build` job, the old minimal version is the first entry. Make sure the file has no old version left.
    - `CHANGELOG.adoc`: in "Unreleased", under "Build / Infrastructure", add `Set minimal Maven version to <MIN>`.
 4. Do NOT change these items. They are the "current" version and the user keeps them:
    - the `maven.version` property in `pom.xml`
    - `.mvn/wrapper/maven-wrapper.properties`
-   - the current version entry in the CI matrix, and the `maven` values in the other CI jobs
+   - the current version entry (for example 3.10.0) in the `build` job matrix
+   - the `maven` values in `.github/workflows/build-maven-4.yaml` and `.github/workflows/release.yaml`
 5. Warn the user: if the current version (wrapper, `maven.version`, CI) is lower than `<MIN>`, the enforcer rule fails the build with that version. Ask how to handle it.
 6. Run `./mvnw clean verify`. Never use `install`.
 7. Do not commit unless the user asks.
