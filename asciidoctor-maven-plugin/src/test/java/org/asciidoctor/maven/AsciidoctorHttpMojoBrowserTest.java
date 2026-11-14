@@ -3,6 +3,9 @@ package org.asciidoctor.maven;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.Page;
@@ -23,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AsciidoctorHttpMojoBrowserTest {
 
     private static final String TEST_DIR = "http-mojo-browser";
+    private static final int UPDATES = 3;
 
     @Test
     void should_reload_page_in_browser_when_source_is_updated() throws IOException {
@@ -43,19 +47,25 @@ class AsciidoctorHttpMojoBrowserTest {
             final Page page = browser.newPage();
             page.navigate("http://localhost:" + httpPort + "/index");
             assertThat(page.textContent("body"))
-                    .contains("Initial content.");
+                .contains("Initial content.");
 
-            // when
-            FileUtils.write(sourceFile, "= Document Title\n\nUpdated content.", UTF_8);
-            consoleHolder.awaitProcessingSource();
+            final List<String> expectedContents = new ArrayList<>();
+            expectedContents.add("Initial content.");
+            for (int i = 0; i < UPDATES; i++) {
+                // when
+                final String newContent = "Updated content " + UUID.randomUUID();
+                FileUtils.write(sourceFile, "\n\n" + newContent, UTF_8, true);
+                consoleHolder.awaitProcessingSource();
 
-            // then
-            page.waitForSelector("text=Updated content.",
+                // then
+                page.waitForSelector("text=" + newContent,
                     new Page.WaitForSelectorOptions()
-                            .setState(WaitForSelectorState.VISIBLE)
-                            .setTimeout(15_000));
-            assertThat(page.textContent("body"))
-                    .doesNotContain("Initial content.");
+                        .setState(WaitForSelectorState.VISIBLE)
+                        .setTimeout(5_000));
+                expectedContents.add(newContent);
+                assertThat(page.textContent("body"))
+                    .contains(expectedContents);
+            }
         } finally {
             consoleHolder.input("exit");
             consoleHolder.release();
@@ -81,8 +91,7 @@ class AsciidoctorHttpMojoBrowserTest {
         return mojoThread;
     }
 
-    @SneakyThrows
-    private int getAvailablePort() {
+    private int getAvailablePort() throws IOException {
         try (ServerSocket socket = new ServerSocket(0)) {
             return socket.getLocalPort();
         }
