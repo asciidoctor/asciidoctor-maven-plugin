@@ -17,6 +17,10 @@ updates:
     commit-message:
       prefix: "(main)"
     target-branch: "main"
+    groups:
+      maven-plugins:
+        patterns:
+          - "org.apache.maven.plugins:*"
     ignore:
       - dependency-name: org.codehaus.plexus:plexus-utils
         update-types:
