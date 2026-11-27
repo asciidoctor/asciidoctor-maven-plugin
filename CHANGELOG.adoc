@@ -29,6 +29,7 @@ Build / Infrastructure::
   * Add Java 25 to CI builds
   * Set minimal Maven version to 3.9.11
   * Migrate release process to Sonatype Central Portal (#1146)
+  * Announce releases in Zulip from the release workflow (#761)
 
 == v3.2.0 (2025-03-28)
 
