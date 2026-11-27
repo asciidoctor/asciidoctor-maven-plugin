@@ -26,7 +26,8 @@ jobs:
             [{
               "id": "central",
               "username": "${{ secrets.CENTRAL_TOKEN_USERNAME }}",
-              "password": "${{ secrets.CENTRAL_TOKEN_PASSWORD }}"
+              "password": "${{ secrets.CENTRAL_TOKEN_PASSWORD }}",
+              "repositoryOrigins": ["https://central.sonatype.com"]
             }]
       - name: Configure Git user
         run: |
