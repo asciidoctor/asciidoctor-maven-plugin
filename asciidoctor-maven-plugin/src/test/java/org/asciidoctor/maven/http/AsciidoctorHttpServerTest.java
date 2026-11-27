@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.ServerSocket;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Random;
 import java.util.UUID;
 
 import lombok.SneakyThrows;
@@ -25,9 +25,6 @@ import static org.asciidoctor.maven.io.TestFilesHelper.newOutputTestDirectory;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AsciidoctorHttpServerTest {
-
-    private static final Random RANDOM = new Random();
-
 
     @Test
     void should_start_and_stop_server() {
@@ -232,9 +229,11 @@ class AsciidoctorHttpServerTest {
         server.stop();
     }
 
-
+    @SneakyThrows
     private int randomPort() {
-        return 1000 + RANDOM.nextInt(8000);
+        try (ServerSocket socket = new ServerSocket(0)) {
+            return socket.getLocalPort();
+        }
     }
 
     private HttpResponse doHttpGet(String url) {
