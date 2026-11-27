@@ -12,6 +12,9 @@ jobs:
       GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.release-info.outputs.tag }}
+      version: ${{ steps.release-info.outputs.version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -39,7 +42,36 @@ jobs:
         run: ./mvnw clean verify -e -B -Prelease -Dmaven.test.skip
       - name: Publish artifacts
         run: ./mvnw release:prepare release:perform -e -B -Darguments="-Prelease -Dmaven.test.skip"
-      - name: Release completed
+      - name: Get release information
+        id: release-info
+        continue-on-error: true
         run: |
-          echo "Release completed 🎉"
-          echo "Check the deployment status at https://central.sonatype.com/publishing/deployments"
+          tag="$(git describe --tags --abbrev=0)"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          version="$(./mvnw -N -q -f target/checkout/pom.xml help:evaluate -Dexpression=project.version -DforceStdout)"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - name: Release published
+        run: |
+          {
+            echo "Release completed 🎉"
+            echo
+            echo "Check the deployment status at https://central.sonatype.com/publishing/deployments"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+  announce:
+    needs: release
+    environment: announce
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Announce release in Zulip
+        env:
+          RELEASE_TAG: ${{ needs.release.outputs.tag }}
+          RELEASE_VERSION: ${{ needs.release.outputs.version }}
+          ZULIP_BOT_EMAIL: ${{ vars.ZULIP_BOT_EMAIL }}
+          ZULIP_API_KEY: ${{ secrets.ZULIP_API_KEY }}
+          ZULIP_CHANNEL_ID: ${{ vars.ZULIP_CHANNEL_ID }}
+        run: .github/scripts/announce-zulip.sh
